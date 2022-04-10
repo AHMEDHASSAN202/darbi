@@ -1,0 +1,13 @@
+{
+    "name": "SearchModule",
+    "alias": "searchmodule",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\SearchModule\\Providers\\SearchModuleServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

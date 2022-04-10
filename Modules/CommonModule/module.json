@@ -1,0 +1,13 @@
+{
+    "name": "CommonModule",
+    "alias": "commonmodule",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\CommonModule\\Providers\\CommonModuleServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

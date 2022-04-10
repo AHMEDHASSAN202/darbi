@@ -1,0 +1,13 @@
+{
+    "name": "PortModule",
+    "alias": "portmodule",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\PortModule\\Providers\\PortModuleServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

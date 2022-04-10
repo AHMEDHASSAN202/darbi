@@ -1,0 +1,14 @@
+{
+    "CommonModule": true,
+    "UserModule": true,
+    "DashboardModule": true,
+    "BookingModule": true,
+    "VendorModule": true,
+    "CarModule": true,
+    "YachtModule": true,
+    "PortModule": true,
+    "CurrencyModule": true,
+    "SettingModule": true,
+    "AdminModule": true,
+    "SearchModule": true
+}

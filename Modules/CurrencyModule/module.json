@@ -1,0 +1,13 @@
+{
+    "name": "CurrencyModule",
+    "alias": "currencymodule",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\CurrencyModule\\Providers\\CurrencyModuleServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
