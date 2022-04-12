@@ -1,0 +1,13 @@
+{
+    "name": "ProfileModule",
+    "alias": "profilemodule",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ProfileModule\\Providers\\ProfileModuleServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

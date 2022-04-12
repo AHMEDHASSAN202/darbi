@@ -1,0 +1,13 @@
+{
+    "name": "TelescopeModule",
+    "alias": "telescopemodule",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\TelescopeModule\\Providers\\TelescopeModuleServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

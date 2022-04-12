@@ -10,5 +10,8 @@
     "CurrencyModule": true,
     "SettingModule": true,
     "AdminModule": true,
-    "SearchModule": true
+    "SearchModule": true,
+    "TelescopeModule": true,
+    "AuthModule": true,
+    "ProfileModule": true
 }

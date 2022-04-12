@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\TelescopeModule\Providers\TelescopeServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {

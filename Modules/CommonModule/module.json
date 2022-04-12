@@ -8,6 +8,8 @@
         "Modules\\CommonModule\\Providers\\CommonModuleServiceProvider"
     ],
     "aliases": {},
-    "files": [],
+    "files": [
+        "Helpers/MainHelper.php"
+    ],
     "requires": []
 }
