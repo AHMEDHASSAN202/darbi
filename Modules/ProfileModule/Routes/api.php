@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/profilemodule', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => 'dashboard/profile', 'middleware' => 'auth:admin_api'], function () {
+    Route::get('', 'AdminProfileController@getProfile');
+    Route::put('', 'AdminProfileController@updateProfile');
 });

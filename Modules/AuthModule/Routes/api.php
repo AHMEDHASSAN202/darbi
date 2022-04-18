@@ -14,18 +14,18 @@ use Illuminate\Http\Request;
 */
 
 
-Route::group(['prefix' => 'dashboard'], function () {
+Route::group(['prefix' => 'dashboard/auth'], function () {
     Route::post('login', 'AuthDashboardController@login');
 });
 
 
-//api/v1/auth/vendor
-Route::group(['prefix' => 'vendor'], function () {
+//api/v1/vendor/auth
+Route::group(['prefix' => 'vendor/auth'], function () {
 
 });
 
 
-//api/v1/auth/user
-Route::group(['prefix' => 'user'], function () {
+//api/v1/vendor/auth
+Route::group(['prefix' => 'user/auth'], function () {
 
 });

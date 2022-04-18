@@ -2,78 +2,107 @@
 
 namespace Modules\AdminModule\Http\Controllers;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\AdminModule\Http\Requests\CreateAdminRequest;
+use Modules\AdminModule\Http\Requests\UpdateAdminPasswordRequest;
+use Modules\AdminModule\Http\Requests\UpdateAdminRequest;
+use Modules\AdminModule\Services\AdminService;
+use Modules\CommonModule\Traits\ApiResponseTrait;
 
+/**
+ * @group Admins
+ *
+ * Management Admins
+ */
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
-    public function index()
+    use ApiResponseTrait;
+
+    private $adminService;
+
+    public function __construct(AdminService $adminService)
     {
-        return view('adminmodule::index');
+        $this->adminService = $adminService;
     }
 
     /**
-     * Show the form for creating a new resource.
-     * @return Renderable
+     * List of admins
+     *
+     * @queryParam q string
+     * get admins. If everything is okay, you'll get a 200 OK response.
+     * Otherwise, the request will fail with a 400 || 422 || 500 error
      */
-    public function create()
+    public function index(Request $request)
     {
-        return view('adminmodule::create');
+        $result = $this->adminService->list($request);
+
+        return $this->apiResponse($result);
     }
 
     /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
+     * Create admin
+     *
+     * @bodyParam role_id int required
+     * @bodyParam name string required
+     * @bodyParam email string required
+     * @bodyParam password string required
+     * @bodyParam password_confirmation string required
+     * create new admin. If everything is okay, you'll get a 200 OK response.
+     * Otherwise, the request will fail with a 400 || 422 || 500 error
      */
-    public function store(Request $request)
+    public function store(CreateAdminRequest $createAdminRequest)
     {
-        //
+        $admin = $this->adminService->create($createAdminRequest);
+
+        return $this->apiResponse(compact('admin'), 201, __('Data has been added successfully'));
     }
 
     /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
+     * Update Admin
+     *
+     * @param $adminId
+     * @bodyParam role_id int required
+     * @bodyParam name string required
+     * @bodyParam email string required
+     * update admin. If everything is okay, you'll get a 200 OK response.
+     * Otherwise, the request will fail with a 400 || 422 || 500 error
      */
-    public function show($id)
+    public function update($adminId, UpdateAdminRequest $updateAdminRequest)
     {
-        return view('adminmodule::show');
+        $admin = $this->adminService->update($adminId, $updateAdminRequest);
+
+        return $this->apiResponse(compact('admin'), 200, __('Data has been updated successfully'));
     }
 
     /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
+     * Update admin password
+     *
+     * @param $adminId
+     * @param UpdateAdminPasswordRequest $updateAdminPasswordRequest
+     * @bodyParam password string required
+     * @bodyParam password_confirmation string required
+     * update admin password. If everything is okay, you'll get a 200 OK response.
+     * Otherwise, the request will fail with a 400 || 422 || 500 error
      */
-    public function edit($id)
+    public function updatePassword($adminId, UpdateAdminPasswordRequest $updateAdminPasswordRequest)
     {
-        return view('adminmodule::edit');
+        $admin = $this->adminService->updatePassword($adminId, $updateAdminPasswordRequest);
+
+        return $this->apiResponse(compact('admin'), 200, __('Data has been updated successfully'));
     }
 
     /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
+     * Delete admin
+     *
+     * @param $adminId
+     * delete admin. If everything is okay, you'll get a 200 OK response.
+     * Otherwise, the request will fail with a 400 || 422 || 500 error
      */
-    public function update(Request $request, $id)
+    public function destroy($adminId)
     {
-        //
-    }
+        $this->adminService->destroy($adminId);
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
+        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
     }
 }

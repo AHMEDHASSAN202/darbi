@@ -13,5 +13,7 @@
     "SearchModule": true,
     "TelescopeModule": true,
     "AuthModule": true,
-    "ProfileModule": true
+    "ProfileModule": true,
+    "Middleware": true,
+    "PermissionMeddleware": true
 }

@@ -5,7 +5,8 @@
     "keywords": [],
     "priority": 0,
     "providers": [
-        "Modules\\AdminModule\\Providers\\AdminModuleServiceProvider"
+        "Modules\\AdminModule\\Providers\\AdminModuleServiceProvider",
+        "Modules\\AdminModule\\Providers\\EventServiceProvider"
     ],
     "aliases": {},
     "files": [],

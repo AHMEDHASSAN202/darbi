@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\AuthModule\Transformers;
+namespace Modules\ProfileModule\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\AdminModule\Transformers\RoleResource;
 
-class AuthAdminResource extends JsonResource
+class AdminProfileResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

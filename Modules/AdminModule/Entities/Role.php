@@ -4,10 +4,11 @@ namespace Modules\AdminModule\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
 class Role extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = [];
 
@@ -15,6 +16,13 @@ class Role extends Model
         'permissions'       => 'array'
     ];
 
+
+    //============= relations ==============\\
+    public function admins()
+    {
+        return $this->hasMany(Admin::class);
+    }
+    //============= #END# relations ==============\\
 
     //============= scopes ==============\\
     public function scopeAdminSearch($query)

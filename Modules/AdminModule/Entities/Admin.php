@@ -17,6 +17,7 @@ class Admin extends Authenticatable implements JWTSubject
 
     protected $hidden = ['password', 'deleted_at'];
 
+    protected $with = ['role'];
 
     public function getJWTIdentifier()
     {
@@ -34,4 +35,25 @@ class Admin extends Authenticatable implements JWTSubject
         return $this->belongsTo(Role::class);
     }
     //============= #END# Relations ===================\\
+
+    //============= scopes ==============\\
+    public function scopeAdminSearch($query)
+    {
+        if ($q = request()->q) {
+            return $query->where('name', 'LIKE', '%' . $q .'%');
+        }
+    }
+    //============= #END# scopes ==============\\
+
+    public function hasPermissions($permission)
+    {
+        $permissions = is_array($permission) ? $permission : [$permission];
+        $myPermissions = json_decode(optional($this->role)->permissions) ?? [];
+        foreach ($permissions as $per) {
+            if (!in_array($per, $myPermissions)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

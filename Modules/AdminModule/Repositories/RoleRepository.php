@@ -17,10 +17,12 @@ class RoleRepository
         $this->model = $model;
     }
 
+
     public function create($data)
     {
         return $this->model->create($data);
     }
+
 
     public function list($limit = 20, $searchMethod = null, $moreScopeMethod = null)
     {
@@ -43,13 +45,24 @@ class RoleRepository
         return $query->get();
     }
 
+
     public function update($id, $data)
     {
-        return $this->model->find($id)->update($data);
+        $role = $this->model->findOrFail($id);
+        $role->update($data);
+        $role->refresh();
+        return $role;
     }
+
 
     public function destroy($id)
     {
-        return $this->model->find($id)->delete();
+        return $this->model->findOrFail($id)->delete();
+    }
+
+
+    public function find($id)
+    {
+        return $this->model->findOrFail($id);
     }
 }

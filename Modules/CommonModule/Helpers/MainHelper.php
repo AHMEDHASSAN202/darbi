@@ -16,3 +16,13 @@ function getFirstError($errors) {
 
     return $err;
 }
+
+function getCurrentGuard() {
+    if (auth('admin_api')->check()) {
+        return 'admin_api';
+    }
+    if (auth('vendor_api')->check()) {
+        return 'vendor_api';
+    }
+    return null;
+}

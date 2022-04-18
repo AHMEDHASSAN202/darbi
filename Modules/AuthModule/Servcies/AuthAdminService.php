@@ -9,7 +9,7 @@ namespace Modules\AuthModule\Servcies;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Modules\AuthModule\Repositories\AuthAdminRepository;
-use Modules\AuthModule\Transformers\AuthAdminResource;
+use Modules\ProfileModule\Transformers\AdminProfileResource;
 
 class AuthAdminService
 {
@@ -36,13 +36,13 @@ class AuthAdminService
             !$me || !Hash::check($request->password, $me->password)
         ) {
             $response['statusCode'] = 401;
-            $response['message'] = __('authmodule::auth.admin not found');
+            $response['message'] = __('Your email or password is incorrect.');
         }
 
         try {
             $response['data'] = [
                 'token'     => auth($this->guardName)->login($me),
-                'profile'   => new AuthAdminResource($me)
+                'profile'   => new AdminProfileResource($me)
             ];
         }catch (\Exception $exception) {
             $response['data'] = [];
