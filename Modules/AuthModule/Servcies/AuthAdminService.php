@@ -36,7 +36,7 @@ class AuthAdminService
             !$me || !Hash::check($request->password, $me->password)
         ) {
             $response['statusCode'] = 401;
-            $response['message'] = __('Your email or password is incorrect.');
+            $response['message'] = __('Your email or password is incorrect. try again');
         }
 
         try {

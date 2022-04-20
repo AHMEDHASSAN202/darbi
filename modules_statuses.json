@@ -8,12 +8,11 @@
     "YachtModule": true,
     "PortModule": true,
     "CurrencyModule": true,
-    "SettingModule": true,
     "AdminModule": true,
     "SearchModule": true,
     "TelescopeModule": true,
     "AuthModule": true,
     "ProfileModule": true,
     "Middleware": true,
-    "PermissionMeddleware": true
+    "PermissionMiddleware": true
 }

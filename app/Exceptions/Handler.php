@@ -43,7 +43,6 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
-
         $this->renderable(function (\Throwable $e, $request) {
             if ($request->is('api*')) {
                 if ($e instanceof HttpException) {

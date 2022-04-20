@@ -14,7 +14,10 @@ use Illuminate\Http\Request;
 */
 
 //dashboard routes roles
-Route::group(['prefix' => 'roles', 'middleware' => ['auth:admin_api', 'permission:manage-roles']], function () {
+Route::group([
+    'prefix' => 'roles',
+    'middleware' => ['auth:admin_api', 'permission:manage-roles']
+], function () {
     Route::get(''                       , 'RoleController@index');
     Route::post(''                      , 'RoleController@store');
     Route::put('{role}'                 , 'RoleController@update');
@@ -22,12 +25,18 @@ Route::group(['prefix' => 'roles', 'middleware' => ['auth:admin_api', 'permissio
 });
 
 //permissions list
-Route::group(['prefix' => 'permissions', 'middleware' => ['auth:admin_api', 'permission:manage-roles']], function () {
+Route::group([
+    'prefix' => 'permissions',
+    'middleware' => ['auth:admin_api', 'permission:manage-roles']
+], function () {
     Route::get(''                       , 'PermissionController@index');
 });
 
 //dashboard routes admins
-Route::group(['prefix' => 'admins', 'middleware' => ['auth:admin_api', 'permission:manage-admins']], function () {
+Route::group([
+    'prefix' => 'admins',
+    'middleware' => ['auth:admin_api', 'permission:manage-admins']
+], function () {
     Route::get(''                       , 'AdminController@index');
     Route::post(''                      , 'AdminController@store');
     Route::put('{admin}'                , 'AdminController@update');

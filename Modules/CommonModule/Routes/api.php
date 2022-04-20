@@ -12,3 +12,13 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
+//dashboard settings
+Route::group([
+    'prefix' => 'dashboard/settings',
+    'middleware' => ['auth:admin_api', 'permission:manage-settings']
+], function () {
+    Route::get(''           , 'SettingController@index');
+    Route::post(''          , 'SettingController@update');
+});

@@ -48,7 +48,8 @@ class Admin extends Authenticatable implements JWTSubject
     public function hasPermissions($permission)
     {
         $permissions = is_array($permission) ? $permission : [$permission];
-        $myPermissions = json_decode(optional($this->role)->permissions) ?? [];
+        $rolePermissions = optional($this->role)->permissions;
+        $myPermissions = is_array($rolePermissions) ? $rolePermissions : (json_decode($rolePermissions) ?? []);
         foreach ($permissions as $per) {
             if (!in_array($per, $myPermissions)) {
                 return false;
