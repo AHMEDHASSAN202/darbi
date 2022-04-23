@@ -48,10 +48,11 @@ class Handler extends ExceptionHandler
                 if ($e instanceof HttpException) {
                     return $this->apiResponse([], $e->getStatusCode());
                 }elseif ($e instanceof ValidationException) {
-                    return $this->apiResponse([], 422, null, getFirstError($e->errors()));
+                    return $this->apiResponse([], 400, null, $e->errors());
                 }elseif ($e instanceof AuthenticationException) {
                     return $this->apiResponse([], 401, 'Unauthenticated.');
                 }else {
+                    dd($e);
                     return $this->apiResponse([], 500, app()->environment('local') ? $e->getMessage() : null);
                 }
             }

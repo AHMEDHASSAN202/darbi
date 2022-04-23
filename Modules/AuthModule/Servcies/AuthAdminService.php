@@ -37,6 +37,7 @@ class AuthAdminService
         ) {
             $response['statusCode'] = 401;
             $response['message'] = __('Your email or password is incorrect. try again');
+            return $response;
         }
 
         try {

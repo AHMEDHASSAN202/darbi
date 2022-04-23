@@ -1,0 +1,15 @@
+{
+    "name": "FileManagerModule",
+    "alias": "filemanagermodule",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\FileManagerModule\\Providers\\FileManagerModuleServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "Helpers/FileHelper.php"
+    ],
+    "requires": []
+}

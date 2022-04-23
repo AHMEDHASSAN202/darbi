@@ -14,5 +14,6 @@
     "AuthModule": true,
     "ProfileModule": true,
     "Middleware": true,
-    "PermissionMiddleware": true
+    "PermissionMiddleware": true,
+    "FileManagerModule": true
 }

@@ -2,5 +2,6 @@
     "Data has been added successfully": "تم إضافة البيانات بنجاح",
     "Data has been updated successfully": "تم تحديث البيانات بنجاح",
     "Data has been deleted successfully": "تم حذف البيانات بنجاح",
-    "Deletion is not allowed": "الحذف غير مسموح"
+    "Deletion is not allowed": "الحذف غير مسموح",
+    "sometimes error!": "حدث خطأ اثناء المعالجة"
 }
