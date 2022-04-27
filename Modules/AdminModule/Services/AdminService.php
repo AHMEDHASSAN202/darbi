@@ -9,8 +9,10 @@ namespace Modules\AdminModule\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Modules\AdminModule\Repositories\AdminRepository;
+use Modules\AdminModule\Transformers\ActivityResource;
 use Modules\AdminModule\Transformers\AdminResource;
 use Modules\AdminModule\Transformers\RoleCollection;
+use Modules\CommonModule\Services\ActivityService;
 use Modules\CommonModule\Transformers\PaginateResource;
 
 class AdminService
@@ -65,5 +67,13 @@ class AdminService
     public function destroy($adminId)
     {
         $this->adminRepository->destroy($adminId);
+    }
+
+    public function getActivities($adminId, $request)
+    {
+        $limit = $request->get('limit', 20);
+        $activities = app(ActivityService::class)->getAdminActivities($adminId, $limit);
+
+        return new PaginateResource(ActivityResource::collection($activities));
     }
 }

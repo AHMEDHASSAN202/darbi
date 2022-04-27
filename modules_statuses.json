@@ -15,5 +15,7 @@
     "ProfileModule": true,
     "Middleware": true,
     "PermissionMiddleware": true,
-    "FileManagerModule": true
+    "FileManagerModule": true,
+    "Controller": true,
+    "ActivityController": true
 }

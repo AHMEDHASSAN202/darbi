@@ -9,6 +9,11 @@ use Modules\CommonModule\Http\Requests\UpdateSettingRequest;
 use Modules\CommonModule\Services\SettingService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
+/**
+ * @group
+ *
+ * Management Settings System
+ */
 class SettingController extends Controller
 {
     use ApiResponseTrait;
@@ -20,6 +25,12 @@ class SettingController extends Controller
         $this->settingService = $settingService;
     }
 
+    /**
+     * Get all settings with groups
+     *
+     * get settings. If everything is okay, you'll get a 200 OK response.
+     * Otherwise, the request will fail with a 400 || 422 || 500 error
+     */
     public function index()
     {
         return $this->apiResponse([
@@ -27,6 +38,13 @@ class SettingController extends Controller
         ]);
     }
 
+    /**
+     * Update option
+     *
+     * @bodyParam option key as name and new value as value
+     * If everything is okay, you'll get a 200 OK response.
+     * Otherwise, the request will fail with a 400 || 422 || 500 error
+     */
     public function update(Request $request)
     {
         $settings = $this->settingService->updateSetting($request);

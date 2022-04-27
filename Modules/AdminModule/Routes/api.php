@@ -44,4 +44,13 @@ Route::group([
     Route::delete('{admin}'             , 'AdminController@destroy');
 });
 
+//dashboard admin activities
+Route::group([
+    'prefix' => 'activities',
+    'middleware' => ['auth:admin_api', 'permission:manage-admins']
+], function () {
+    Route::get('{admin}'                , 'ActivityController@show');
+});
+
+
 

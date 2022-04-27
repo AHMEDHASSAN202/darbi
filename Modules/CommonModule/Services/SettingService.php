@@ -41,7 +41,9 @@ class SettingService
                         continue;
                     }
                 }else {
-                    $setting->update(['value' => $value]);
+                    if ($value != $setting->value) {
+                        $setting->update(['value' => $value]);
+                    }
                 }
             }
         }

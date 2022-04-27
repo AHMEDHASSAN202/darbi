@@ -26,3 +26,7 @@ function getCurrentGuard() {
     }
     return null;
 }
+
+function activities() {
+    return app(\Modules\CommonModule\Repositories\ActivityRepository::class);
+}
