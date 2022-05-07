@@ -52,7 +52,6 @@ class Handler extends ExceptionHandler
                 }elseif ($e instanceof AuthenticationException) {
                     return $this->apiResponse([], 401, 'Unauthenticated.');
                 }else {
-                    dd($e);
                     return $this->apiResponse([], 500, app()->environment('local') ? $e->getMessage() : null);
                 }
             }

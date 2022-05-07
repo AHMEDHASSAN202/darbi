@@ -48,6 +48,10 @@ return [
             'driver' => 'jwt',
             'provider' => 'admins',
         ],
+        'vendor_api' => [
+            'driver' => 'jwt',
+            'provider' => 'vendor',
+        ],
     ],
 
     /*
@@ -75,6 +79,10 @@ return [
         'admins' => [
             'driver' => 'eloquent',
             'model' => \Modules\AdminModule\Entities\Admin::class,
+        ],
+        'vendor' => [
+            'driver' => 'eloquent',
+            'model' => \Modules\VendorModule\Entities\Vendor::class
         ],
 
         // 'users' => [

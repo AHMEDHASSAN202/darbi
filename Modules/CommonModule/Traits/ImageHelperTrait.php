@@ -59,4 +59,9 @@ trait ImageHelperTrait
 
         return $imagePaths;
     }
+
+    public function uploadAvatar(UploadedFile $avatar, $folder = 'avatars', $sizes =  ['300x200'])
+    {
+        return $this->uploadImage($folder, $avatar, $sizes);
+    }
 }

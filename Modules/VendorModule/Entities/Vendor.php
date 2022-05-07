@@ -1,14 +1,15 @@
 <?php
 
-namespace Modules\AdminModule\Entities;
+namespace Modules\VendorModule\Entities;
 
-use Jenssegers\Mongodb\Auth\User as Authenticatable;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use Modules\CommonModule\Traits\RoleHelperTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Admin extends Authenticatable implements JWTSubject
+class Vendor extends Authenticatable implements JWTSubject
 {
     use HasFactory, SoftDeletes, RoleHelperTrait;
 
@@ -33,13 +34,4 @@ class Admin extends Authenticatable implements JWTSubject
     //============= Relations ===================\\
 
     //============= #END# Relations ===================\\
-
-    //============= scopes ==============\\
-    public function scopeAdminSearch($query)
-    {
-        if ($q = request()->q) {
-            return $query->where('name', 'LIKE', '%' . $q .'%');
-        }
-    }
-    //============= #END# scopes ==============\\
 }

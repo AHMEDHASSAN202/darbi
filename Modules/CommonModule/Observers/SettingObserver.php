@@ -30,7 +30,6 @@ class SettingObserver
         try {
             activities()->log('update', $setting, 'Update Settings');
         }catch (\Exception $exception) {
-            dd($exception);
             Log::error("Can't log update setting", $setting->toArray());
         }
     }

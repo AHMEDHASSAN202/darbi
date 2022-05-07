@@ -2,6 +2,7 @@
 
 namespace Modules\AdminModule\Observers;
 
+use Illuminate\Support\Facades\Log;
 use Modules\AdminModule\Entities\Role;
 
 class RoleObserver
@@ -14,7 +15,26 @@ class RoleObserver
      */
     public function created(Role $role)
     {
+        try {
+            activities()->log('create', $role, 'Create Role');
+        }catch (\Exception $exception) {
+            Log::error("Can't log create role", $role->toArray());
+        }
+    }
 
+    /**
+     * Handle the Setting "updated" event.
+     *
+     * @param  Modules\AdminModule\Entities\Role  $role
+     * @return void
+     */
+    public function updated(Role $role)
+    {
+        try {
+            activities()->log('update', $role, 'Update Role');
+        }catch (\Exception $exception) {
+            Log::error("Can't log update role", $role->toArray());
+        }
     }
 
     /**
@@ -36,7 +56,11 @@ class RoleObserver
      */
     public function deleted(Role $role)
     {
-
+        try {
+            activities()->log('delete', $role, 'Delete Role');
+        }catch (\Exception $exception) {
+            Log::error("Can't log delete role", $role->toArray());
+        }
     }
 
 

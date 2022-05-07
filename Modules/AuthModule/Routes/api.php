@@ -25,7 +25,7 @@ Route::group([
 Route::group([
     'prefix' => 'vendor/auth'
 ], function () {
-
+    Route::post('login', 'AuthVendorController@login');
 });
 
 

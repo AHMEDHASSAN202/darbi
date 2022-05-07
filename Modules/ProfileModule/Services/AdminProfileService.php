@@ -26,6 +26,6 @@ class AdminProfileService
         $me->email = $request->email;
         $me->password = $request->password;
         $me->save();
-        return $me;
+        return (new AdminProfileResource($me));
     }
 }

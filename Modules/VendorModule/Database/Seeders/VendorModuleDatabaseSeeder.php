@@ -16,6 +16,6 @@ class VendorModuleDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+         $this->call(VendorTableSeeder::class);
     }
 }

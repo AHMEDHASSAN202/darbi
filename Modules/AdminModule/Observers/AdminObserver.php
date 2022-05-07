@@ -2,8 +2,8 @@
 
 namespace Modules\AdminModule\Observers;
 
+use Illuminate\Support\Facades\Log;
 use Modules\AdminModule\Entities\Admin;
-use Modules\CommonModule\Traits\ApiResponseTrait;
 
 class AdminObserver
 {
@@ -13,9 +13,28 @@ class AdminObserver
      * @param  Modules\AdminModule\Entities\Admin  $admin
      * @return void
      */
-    public function created(Admin $role)
+    public function created(Admin $admin)
     {
+        try {
+            activities()->log('create', $admin, 'Create Admin');
+        }catch (\Exception $exception) {
+            Log::error("Can't log create admin", $admin->toArray());
+        }
+    }
 
+    /**
+     * Handle the Setting "updated" event.
+     *
+     * @param  Modules\AdminModule\Entities\Admin  $admin
+     * @return void
+     */
+    public function updated(Admin $admin)
+    {
+        try {
+            activities()->log('update', $admin, 'Update Admin');
+        }catch (\Exception $exception) {
+            Log::error("Can't log update admin", $admin->toArray());
+        }
     }
 
     /**
@@ -37,9 +56,12 @@ class AdminObserver
      */
     public function deleted(Admin $admin)
     {
-
+        try {
+            activities()->log('delete', $admin, 'Delete Admin');
+        }catch (\Exception $exception) {
+            Log::error("Can't log delete admin", $admin->toArray());
+        }
     }
-
 
     /**
      * Handle the Role "restored" event.

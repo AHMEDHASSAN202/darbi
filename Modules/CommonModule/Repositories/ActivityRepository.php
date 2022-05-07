@@ -31,7 +31,8 @@ class ActivityRepository
 
         $changes = [];
         foreach($model->getDirty() as $key => $value) {
-            if (!in_array($key, $model->preventActivityLog)) {
+            $preventActivityLog = ($model->preventActivityLog ?? []) + ['updated_at'];
+            if (!in_array($key, $preventActivityLog)) {
                 $original = $model->getOriginal($key);
                 $changes[$key] = ['old' => $original, 'new' => $value];
             }

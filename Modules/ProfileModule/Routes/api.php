@@ -20,3 +20,12 @@ Route::group([
     Route::get('', 'AdminProfileController@getProfile');
     Route::put('', 'AdminProfileController@updateProfile');
 });
+
+
+Route::group([
+    'prefix' => 'vendor/profile',
+    'middleware' => 'auth:vendor_api'
+], function () {
+    Route::get('', 'VendorProfileController@getProfile');
+    Route::put('', 'VendorProfileController@updateProfile');
+});
