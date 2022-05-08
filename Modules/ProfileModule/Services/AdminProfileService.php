@@ -6,6 +6,7 @@
 
 namespace Modules\ProfileModule\Services;
 
+use Illuminate\Support\Facades\Hash;
 use Modules\ProfileModule\Transformers\AdminProfileResource;
 
 class AdminProfileService
@@ -24,7 +25,7 @@ class AdminProfileService
         $me = auth($this->guardName)->user();
         $me->name = $request->name;
         $me->email = $request->email;
-        $me->password = $request->password;
+        $me->password = Hash::make($request->password);
         $me->save();
         return (new AdminProfileResource($me));
     }

@@ -26,8 +26,7 @@ class VendorProfileResource extends JsonResource
             'markup'    => $this->markup,
             'is_yacht_provider' => (bool)$this->is_yacht_provider,
             'info'      => $this->info,
-            'settings'  => is_string($this->settings) ? json_decode($this->settings) : $this->settings,
-            'role'      =>  new RoleResource($this->role)
+            'settings'  => is_string($this->settings) ? json_decode($this->settings) : $this->settings
         ];
     }
 }

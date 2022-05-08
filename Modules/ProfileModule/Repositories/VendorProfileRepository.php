@@ -7,6 +7,7 @@
 namespace Modules\ProfileModule\Repositories;
 
 
+use Illuminate\Support\Facades\Hash;
 use Modules\CommonModule\Traits\ImageHelperTrait;
 use Modules\ProfileModule\Http\Requests\UpdateInfoVendorProfile;
 use Modules\ProfileModule\Http\Requests\UpdateVendorProfile;
@@ -30,7 +31,7 @@ class VendorProfileRepository
         $me = auth($this->guardName)->user();
         $me->name = $updateVendorProfile->name;
         $me->email = $updateVendorProfile->email;
-        $me->password = $updateVendorProfile->password;
+        $me->password = Hash::make($updateVendorProfile->password);
         $me->save();
         return $me;
     }
@@ -42,7 +43,7 @@ class VendorProfileRepository
         $me->city = $updateInfoVendorProfile->city;
         $me->phone = $updateInfoVendorProfile->phone;
         if ($updateInfoVendorProfile->hasFile('image')) {
-            $me->image = $updateInfoVendorProfile->image;
+            $me->image = $this->uploadAvatar($updateInfoVendorProfile->image);
         }
         $me->save();
         return $me;

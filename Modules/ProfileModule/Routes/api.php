@@ -28,4 +28,5 @@ Route::group([
 ], function () {
     Route::get('', 'VendorProfileController@getProfile');
     Route::put('', 'VendorProfileController@updateProfile');
+    Route::put('info', 'VendorProfileController@updateInfo');
 });

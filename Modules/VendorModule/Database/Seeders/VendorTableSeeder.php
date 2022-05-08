@@ -24,13 +24,11 @@ class VendorTableSeeder extends Seeder
                'name'       => 'vendor',
                'email'      => 'vendor@vendor.com',
                'password'   => Hash::make(123456),
-               'role_id'    => Role::where('guard', 'vendor_api')->first()->id,
                'phone'      => null
            ], [
                 'name'       => 'vendor support',
                 'email'      => 'support@vendor.com',
                 'password'   => Hash::make(123456),
-                'role_id'    => Role::where('guard', 'vendor_api')->latest()->first()->id,
                 'phone'      => null
             ],
         ];

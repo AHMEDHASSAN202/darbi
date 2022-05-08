@@ -18,9 +18,9 @@ class UpdateInfoVendorProfile extends FormRequest
 
         return [
             'phone'     => ['required', 'numeric', 'digits_between:8,15', Rule::unique('vendors')->ignore($me->phone, 'phone')],
-            'image'     => 'sometimes|image|size:5120', //5m
-            'country'   => 'required|string|max:100',
-            'city'      => 'required|string|max:100'
+            'image'     => 'nullable|image|max:5120', //5m
+            'country'   => 'required|string|size:2',
+            'city'      => 'required|string|size:2'
         ];
     }
 

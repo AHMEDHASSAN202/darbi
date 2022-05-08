@@ -30,3 +30,15 @@ function getCurrentGuard() {
 function activities() {
     return app(\Modules\CommonModule\Repositories\ActivityRepository::class);
 }
+
+function kebabToWords($str){
+    if(empty($str)) return $str;
+    $pieces = preg_split('/(?=[A-Z])/', $str);
+    $string = implode(' ', $pieces);
+    $string = ucwords($string);
+    return $string;
+}
+
+function assetsHelper() {
+    return \Modules\CommonModule\Helpers\Assets::instance();
+}

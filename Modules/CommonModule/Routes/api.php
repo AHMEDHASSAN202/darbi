@@ -22,3 +22,12 @@ Route::group([
     Route::get(''           , 'SettingController@index');
     Route::post(''          , 'SettingController@update');
 });
+
+
+//common routes
+Route::group([
+    'prefix' => 'commons'
+], function () {
+    Route::get('countries'       , 'CountryController@index');
+    Route::get('countries/{iso}' , 'CountryController@show');
+});

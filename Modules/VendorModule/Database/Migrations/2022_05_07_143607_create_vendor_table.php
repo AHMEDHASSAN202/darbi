@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('vendors', function (Blueprint $table) {
             $table->unique('email');
             $table->index('phone');
-            $table->index('role_id');
             $table->softDeletes();
             $table->timestamps();
         });
