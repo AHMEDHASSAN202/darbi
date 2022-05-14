@@ -6,26 +6,34 @@
 
 namespace Modules\CommonModule\Services;
 
+use Illuminate\Http\Request;
+use Modules\CommonModule\Repositories\CityRepository;
+use Modules\CommonModule\Repositories\CountryRepository;
+use Modules\CommonModule\Repositories\StartUpImageRepository;
+use Modules\CommonModule\Transformers\CityResource;
+use Modules\CommonModule\Transformers\CountryResource;
+use Modules\CommonModule\Transformers\StartUpImageResource;
+
 class CommonService
 {
-    private $assets;
-
-    public function __construct()
+    public function countries(Request $request)
     {
-        $this->assets = assetsHelper();
+        $countries = app(CountryRepository::class)->list($request);
+
+        return CountryResource::collection($countries);
     }
 
-    public function countries()
+    public function cities(Request $request)
     {
-        return $this->assets->countries();
+        $cities = app(CityRepository::class)->list($request);
+
+        return CityResource::collection($cities);
     }
 
-    public function country($iso)
+    public function getStartUpImages(Request $request)
     {
-        $country = $this->assets->country($iso);
+        $startUpImages = app(StartUpImageRepository::class)->list($request->get('limit'));
 
-        abort_if(empty($country['iso']), 404);
-
-        return $country;
+        return StartUpImageResource::collection($startUpImages);
     }
 }

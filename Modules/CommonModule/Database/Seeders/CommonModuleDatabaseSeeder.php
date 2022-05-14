@@ -4,6 +4,8 @@ namespace Modules\CommonModule\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\CommonModule\Entities\Region;
+use Modules\CommonModule\Entities\StartUpImage;
 
 class CommonModuleDatabaseSeeder extends Seeder
 {
@@ -16,6 +18,10 @@ class CommonModuleDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
+        $this->call(CountryTableSeeder::class);
+        $this->call(CityTableSeeder::class);
+        Region::factory(20)->create();
         $this->call(SettingTableSeeder::class);
+        StartUpImage::factory(5)->create();
     }
 }

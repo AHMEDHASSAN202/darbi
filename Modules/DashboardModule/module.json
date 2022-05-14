@@ -3,7 +3,7 @@
     "alias": "dashboardmodule",
     "description": "",
     "keywords": [],
-    "priority": 0,
+    "priority": 12,
     "providers": [
         "Modules\\DashboardModule\\Providers\\DashboardModuleServiceProvider"
     ],

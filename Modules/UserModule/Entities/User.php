@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\UserModule\Database\factories\UserFactory;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Model implements JWTSubject
@@ -15,10 +16,11 @@ class User extends Model implements JWTSubject
 
     protected $guarded = [];
 
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'deleted_at'];
 
     protected $casts = ['email_verified_at' => 'datetime'];
 
+    public $preventActivityLog = ['password', 'remember_token'];
 
     public function getJWTIdentifier()
     {
@@ -29,4 +31,22 @@ class User extends Model implements JWTSubject
     {
         return [];
     }
+
+    protected static function newFactory()
+    {
+        return UserFactory::new();
+    }
+
+    //============= Relations ===================\\
+
+    //============= #END# Relations ===================\\
+
+    //============= scopes ==============\\
+    public function scopeAdminSearch($query)
+    {
+        if ($q = request()->q) {
+            return $query->where('name', 'LIKE', '%' . $q .'%');
+        }
+    }
+    //============= #END# scopes ==============\\
 }

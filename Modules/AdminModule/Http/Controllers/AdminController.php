@@ -35,9 +35,9 @@ class AdminController extends Controller
      */
     public function index(Request $request)
     {
-        $result = $this->adminService->list($request);
+        $admins = $this->adminService->list($request);
 
-        return $this->apiResponse($result);
+        return $this->apiResponse(compact('admins'));
     }
 
     /**

@@ -3,7 +3,7 @@
     "alias": "authmodule",
     "description": "",
     "keywords": [],
-    "priority": 0,
+    "priority": 11,
     "providers": [
         "Modules\\AuthModule\\Providers\\AuthModuleServiceProvider"
     ],

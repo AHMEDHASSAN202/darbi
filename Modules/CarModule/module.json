@@ -3,7 +3,7 @@
     "alias": "carmodule",
     "description": "",
     "keywords": [],
-    "priority": 0,
+    "priority": 7,
     "providers": [
         "Modules\\CarModule\\Providers\\CarModuleServiceProvider"
     ],

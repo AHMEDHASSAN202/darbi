@@ -3,6 +3,8 @@
 namespace Modules\VendorModule\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class UpdateVendorRequest extends FormRequest
 {
@@ -13,8 +15,16 @@ class UpdateVendorRequest extends FormRequest
      */
     public function rules()
     {
+        $id = $this->route('id');
+
         return [
-            //
+            'name'      => 'required|max:100',
+            'email'     => ['required', 'email', Rule::unique('vendors')->ignore($id, '_id')],
+            'password'  => ['required', 'max:100', Password::min(8)->letters()],
+            'phone'     => ['required', 'numeric', 'digits_between:8,15', Rule::unique('vendors')->ignore($id, '_id')],
+            'image'     => 'nullable|image|max:5120', //5m
+            'country'   => 'required|string|size:2',
+            'city'      => 'required|string|size:2'
         ];
     }
 

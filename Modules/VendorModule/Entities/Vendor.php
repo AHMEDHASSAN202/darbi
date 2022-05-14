@@ -6,12 +6,12 @@ namespace Modules\VendorModule\Entities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
-use Modules\CommonModule\Traits\RoleHelperTrait;
+use Modules\VendorModule\Database\factories\VendorFactory;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Vendor extends Authenticatable implements JWTSubject
 {
-    use HasFactory, SoftDeletes, RoleHelperTrait;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = [];
 
@@ -19,7 +19,6 @@ class Vendor extends Authenticatable implements JWTSubject
 
     public $preventActivityLog = ['password'];
 
-    protected $with = ['role'];
 
     public function getJWTIdentifier()
     {
@@ -31,7 +30,26 @@ class Vendor extends Authenticatable implements JWTSubject
         return [];
     }
 
+    protected static function newFactory()
+    {
+        return VendorFactory::new();
+    }
+
     //============= Relations ===================\\
 
+    public function branches()
+    {
+        return $this->hasMany(Branch::class);
+    }
+
     //============= #END# Relations ===================\\
+
+    //============= scopes ==============\\
+    public function scopeAdminSearch($query)
+    {
+        if ($q = request()->q) {
+            return $query->where('name', 'LIKE', '%' . $q .'%');
+        }
+    }
+    //============= #END# scopes ==============\\
 }

@@ -20,17 +20,10 @@ class CountryController extends Controller
         $this->commonService = $commonService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $countries = $this->commonService->countries();
+        $countries = $this->commonService->countries($request);
 
         return $this->apiResponse(compact('countries'));
-    }
-
-    public function show($iso)
-    {
-        $country = $this->commonService->country($iso);
-
-        return $this->apiResponse(compact('country'));
     }
 }

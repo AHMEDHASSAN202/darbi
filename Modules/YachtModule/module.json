@@ -3,7 +3,7 @@
     "alias": "yachtmodule",
     "description": "",
     "keywords": [],
-    "priority": 0,
+    "priority": 8,
     "providers": [
         "Modules\\YachtModule\\Providers\\YachtModuleServiceProvider"
     ],

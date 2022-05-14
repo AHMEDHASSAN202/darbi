@@ -4,6 +4,9 @@ namespace Modules\VendorModule\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\VendorModule\Entities\Branch;
+use Modules\VendorModule\Entities\Subscription;
+use Modules\VendorModule\Entities\Vendor;
 
 class VendorModuleDatabaseSeeder extends Seeder
 {
@@ -16,6 +19,8 @@ class VendorModuleDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-         $this->call(VendorTableSeeder::class);
+        Subscription::factory(5)->create();
+        Vendor::factory(100)->create();
+        Branch::factory(200)->create();
     }
 }

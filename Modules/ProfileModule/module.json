@@ -3,7 +3,7 @@
     "alias": "profilemodule",
     "description": "",
     "keywords": [],
-    "priority": 0,
+    "priority": 3,
     "providers": [
         "Modules\\ProfileModule\\Providers\\ProfileModuleServiceProvider"
     ],

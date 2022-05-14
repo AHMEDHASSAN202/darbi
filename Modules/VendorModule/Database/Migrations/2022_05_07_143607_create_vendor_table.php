@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('vendors', function (Blueprint $table) {
-            $table->unique('email');
-            $table->index('phone');
+            $table->index('subscription_id');
+            $table->index('country_id');
             $table->softDeletes();
             $table->timestamps();
         });

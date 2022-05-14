@@ -35,9 +35,9 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $result = $this->roleService->getList($request);
+        $roles = $this->roleService->getList($request);
 
-        return $this->apiResponse($result);
+        return $this->apiResponse(compact('roles'));
     }
 
     /**

@@ -7,7 +7,6 @@
     "CarModule": true,
     "YachtModule": true,
     "PortModule": true,
-    "CurrencyModule": true,
     "AdminModule": true,
     "SearchModule": true,
     "TelescopeModule": true,
@@ -17,5 +16,7 @@
     "PermissionMiddleware": true,
     "FileManagerModule": true,
     "Controller": true,
-    "ActivityController": true
+    "ActivityController": true,
+    "AddonsModule": true,
+    "NotificationsCenterModule": true
 }

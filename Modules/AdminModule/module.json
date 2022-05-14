@@ -3,7 +3,7 @@
     "alias": "adminmodule",
     "description": "",
     "keywords": [],
-    "priority": 0,
+    "priority": 1,
     "providers": [
         "Modules\\AdminModule\\Providers\\AdminModuleServiceProvider",
         "Modules\\AdminModule\\Providers\\EventServiceProvider"

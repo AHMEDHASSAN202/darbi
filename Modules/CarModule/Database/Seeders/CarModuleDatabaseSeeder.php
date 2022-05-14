@@ -4,6 +4,7 @@ namespace Modules\CarModule\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\CarModule\Entities\Car;
 
 class CarModuleDatabaseSeeder extends Seeder
 {
@@ -16,6 +17,6 @@ class CarModuleDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        Car::factory(100)->create();
     }
 }

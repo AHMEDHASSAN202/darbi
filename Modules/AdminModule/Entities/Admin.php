@@ -5,6 +5,7 @@ namespace Modules\AdminModule\Entities;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Modules\AdminModule\Database\factories\AdminFactory;
 use Modules\CommonModule\Traits\RoleHelperTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -28,6 +29,11 @@ class Admin extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    protected static function newFactory()
+    {
+        return AdminFactory::new();
     }
 
     //============= Relations ===================\\

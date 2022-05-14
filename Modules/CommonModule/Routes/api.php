@@ -24,10 +24,9 @@ Route::group([
 });
 
 
-//common routes
-Route::group([
-    'prefix' => 'commons'
-], function () {
-    Route::get('countries'       , 'CountryController@index');
-    Route::get('countries/{iso}' , 'CountryController@show');
-});
+Route::get('init'           , 'InitController@index');
+Route::get('start-up-images', 'StartUpImageController@index');
+
+Route::get('countries'      , 'CountryController@index');
+Route::get('cities'         , 'CityController@index');
+Route::get('region'         , 'RegionController@index');
