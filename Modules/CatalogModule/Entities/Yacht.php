@@ -43,6 +43,17 @@ class Yacht extends Model
         return $this->belongsTo(Port::class);
     }
 
+    public function model()
+    {
+        return $this->belongsTo(\Modules\CatalogModule\Entities\Model::class);
+    }
+
+    public function plugins()
+    {
+        return $this->belongsToMany(Plugin::class, null, 'entity_ids','plugin_ids');
+    }
+
+
     //=============== #END# relation =====================\\
 
 

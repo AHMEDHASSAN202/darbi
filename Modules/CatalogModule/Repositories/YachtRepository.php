@@ -29,4 +29,10 @@ class YachtRepository
                            ->latest()
                            ->paginate($request->get('limit', 20));
     }
+
+
+    public function findYachtWithDetailsById($yachtId)
+    {
+        return $this->model->with(['model', 'port', 'plugins' => function ($query) { $query->active(); }])->find($yachtId);
+    }
 }

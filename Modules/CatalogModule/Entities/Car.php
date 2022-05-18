@@ -48,7 +48,7 @@ class Car extends \Jenssegers\Mongodb\Eloquent\Model
 
     public function plugins()
     {
-        return $this->belongsToMany(Plugin::class, null, 'car_ids','plugin_ids');
+        return $this->belongsToMany(Plugin::class, null, 'entity_ids','plugin_ids');
     }
 
     //=============== #END# relation =====================\\
