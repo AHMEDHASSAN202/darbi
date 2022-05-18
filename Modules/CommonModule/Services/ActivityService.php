@@ -5,7 +5,7 @@
  */
 
 namespace Modules\CommonModule\Services;
-use Modules\AdminModule\Entities\Admin;
+use Modules\AuthModule\Entities\Admin;
 use Modules\CommonModule\Repositories\ActivityRepository;
 
 class ActivityService

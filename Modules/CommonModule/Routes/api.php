@@ -13,20 +13,14 @@ use Illuminate\Http\Request;
 |
 */
 
-
-//dashboard settings
-Route::group([
-    'prefix' => 'dashboard/settings',
-    'middleware' => ['auth:admin_api', 'permission:manage-settings']
-], function () {
-    Route::get(''           , 'SettingController@index');
-    Route::post(''          , 'SettingController@update');
-});
-
-
 Route::get('init'           , 'InitController@index');
-Route::get('start-up-images', 'StartUpImageController@index');
 
-Route::get('countries'      , 'CountryController@index');
-Route::get('cities'         , 'CityController@index');
-Route::get('region'         , 'RegionController@index');
+
+Route::group([
+    'namespace' => 'Location'
+], function () {
+    Route::get('countries'      , 'CountryController@index');
+    Route::get('cities'         , 'CityController@index');
+    Route::get('regions'        , 'RegionController@index');
+    Route::get('regions/find'   , 'RegionController@findRegionByLatAndLng');
+});

@@ -373,9 +373,14 @@ class SettingTableSeeder extends Seeder
         $settings = [
             'time_interval_vendor_accept_min'       => 22,
             'time_interval_user_accept_min'         => 22,
-            'walk_through_images'                   => [],
-            'home_main_theme'                       => '',
-            'specs_keys'                            => ['engine_type']
+            'walk_through_images'                   => [
+                ['title' => ['ar' => 'هذا النص هو مثال', 'en' => 'Lorem Ipsum'], 'desc' => ['ar' => 'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى', 'en' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'], 'image' => 'https://via.placeholder.com/300x600'],
+                ['title' => ['ar' => 'هذا النص هو مثال', 'en' => 'Lorem Ipsum'], 'desc' => ['ar' => 'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى', 'en' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'], 'image' => 'https://via.placeholder.com/300x600']
+            ],
+            'home_main_theme'                       => 'https://via.placeholder.com/400x300',
+            'specs_keys'                            => ['engine_type'],
+            'android_app_version'                   => '1.0',
+            'ios_app_version'                       => '1.0',
         ];
 
         Setting::create($settings);

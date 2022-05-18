@@ -3,7 +3,7 @@
     "alias": "commonmodule",
     "description": "",
     "keywords": [],
-    "priority": 0,
+    "priority": 1,
     "providers": [
         "Modules\\CommonModule\\Providers\\CommonModuleServiceProvider",
         "Modules\\CommonModule\\Providers\\EventServiceProvider"

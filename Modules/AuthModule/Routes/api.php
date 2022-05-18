@@ -13,25 +13,3 @@ use Illuminate\Http\Request;
 |
 */
 
-
-Route::group([
-    'prefix' => 'dashboard/auth'
-], function () {
-    Route::post('login', 'AuthDashboardController@login');
-});
-
-
-//api/v1/vendor/auth
-Route::group([
-    'prefix' => 'vendor/auth'
-], function () {
-    Route::post('login', 'AuthVendorController@login');
-});
-
-
-//api/v1/vendor/auth
-Route::group([
-    'prefix' => 'user/auth'
-], function () {
-
-});

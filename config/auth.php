@@ -74,15 +74,15 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => \Modules\UserModule\Entities\User::class,
+            'model' => \Modules\AuthModule\Entities\User::class,
         ],
         'admins' => [
             'driver' => 'eloquent',
-            'model' => \Modules\AdminModule\Entities\Admin::class,
+            'model' => \Modules\AuthModule\Entities\Admin::class,
         ],
         'vendor' => [
             'driver' => 'eloquent',
-            'model' => \Modules\VendorModule\Entities\Vendor::class
+            'model' => \Modules\CatalogModule\Entities\Vendor::class
         ],
 
         // 'users' => [

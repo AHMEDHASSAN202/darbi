@@ -3,7 +3,7 @@
     "alias": "telescopemodule",
     "description": "",
     "keywords": [],
-    "priority": 0,
+    "priority": 6,
     "providers": [
         "Modules\\TelescopeModule\\Providers\\TelescopeModuleServiceProvider"
     ],

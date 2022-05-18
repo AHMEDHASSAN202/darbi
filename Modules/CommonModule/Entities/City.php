@@ -22,15 +22,20 @@ class City extends Model
 
     public function scopeSearch($query, Request $request)
     {
-        if (!$request->get('q')) return;
+        $q = $request->get('q');
 
-        return $query->where('name', 'LIKE', '%'.$request->get('q').'%');
+        if (!$q) return $query;
+
+        return $query->where(function ($query) use ($q) {
+            $q = '%'. $q .'%';
+            return $query->where('name.en', 'LIKE', $q)->orWhere('name.ar', 'LIKE', $q);
+        });
     }
 
     public function scopeFilter($query, Request $request)
     {
-        if ($countryCode = $request->get('country')) {
-            $query->where('country_code', $countryCode);
+        if ($countryId = $request->get('country')) {
+            $query->where('country_id', $countryId);
         }
     }
 
@@ -45,7 +50,7 @@ class City extends Model
 
     public function country()
     {
-        return $this->belongsTo(Country::class, 'country_code', 'code');
+        return $this->belongsTo(Country::class);
     }
 
     //=============== #END# =====================\\

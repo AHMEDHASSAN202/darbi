@@ -28,9 +28,14 @@ class Country extends Model
 
     public function scopeSearch($query, Request $request)
     {
-        if (!$request->get('q')) return;
+        $q = $request->get('q');
 
-        return $query->where('name', 'LIKE', '%'.$request->get('q').'%');
+        if (!$q) return $query;
+
+        return $query->where(function ($query) use ($q) {
+            $q = '%'. $q .'%';
+            $query->where('name.en', 'LIKE', $q)->orWhere('name.ar', 'LIKE', $q);
+        });
     }
 
     //========== #END# Scopes ==================\\

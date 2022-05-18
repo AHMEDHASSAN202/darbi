@@ -20,8 +20,8 @@ class CommonModuleDatabaseSeeder extends Seeder
 
         $this->call(CountryTableSeeder::class);
         $this->call(CityTableSeeder::class);
-        Region::factory(20)->create();
+        Region::factory()->count(20)->create();
         $this->call(SettingTableSeeder::class);
-        StartUpImage::factory(5)->create();
+        StartUpImage::factory()->count(5)->create();
     }
 }

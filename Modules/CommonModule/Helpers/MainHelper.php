@@ -31,7 +31,7 @@ function activities() {
     return app(\Modules\CommonModule\Repositories\ActivityRepository::class);
 }
 
-function kebabToWords($str){
+function kebabToWords($str) {
     if(empty($str)) return $str;
     $pieces = preg_split('/(?=[A-Z])/', $str);
     $string = implode(' ', $pieces);
@@ -41,4 +41,31 @@ function kebabToWords($str){
 
 function assetsHelper() {
     return \Modules\CommonModule\Helpers\Assets::instance();
+}
+
+function imageUrl(?string $image, $dir = '') {
+    if (!$image) return '';
+    return filter_var($image, FILTER_VALIDATE_URL) ? $image : asset($dir . $image);
+}
+
+function translateAttribute(?array $attribute, $locale = null) {
+    if (!$attribute) {
+        return '';
+    }
+
+    if (!$locale) {
+        $locale = app()->getLocale();
+    }
+
+    return $attribute[$locale] ?? $attribute['en'];
+}
+
+function generatePriceLabelFromPrice(?float $price, $priceUnit) : string
+{
+    if (!$price) {
+        \Illuminate\Support\Facades\Log::error('Why Price is Null!!');
+        return '';
+    }
+
+    return sprintf("%.2f %s / %s", $price, __('SAR'), __($priceUnit));
 }

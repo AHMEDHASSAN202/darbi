@@ -3,7 +3,7 @@
     "alias": "bookingmodule",
     "description": "",
     "keywords": [],
-    "priority": 10,
+    "priority": 4,
     "providers": [
         "Modules\\BookingModule\\Providers\\BookingModuleServiceProvider"
     ],

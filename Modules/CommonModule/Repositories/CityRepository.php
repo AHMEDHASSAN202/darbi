@@ -29,6 +29,10 @@ class CityRepository
             }
         }
 
+        if ($request->has('paginated')) {
+            return $query->paginate($request->get('limit', 20));
+        }
+
         return $query->get();
     }
 }

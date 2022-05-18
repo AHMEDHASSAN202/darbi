@@ -3,9 +3,10 @@
     "alias": "authmodule",
     "description": "",
     "keywords": [],
-    "priority": 11,
+    "priority": 2,
     "providers": [
-        "Modules\\AuthModule\\Providers\\AuthModuleServiceProvider"
+        "Modules\\AuthModule\\Providers\\AuthModuleServiceProvider",
+        "Modules\\AuthModule\\Providers\\EventServiceProvider"
     ],
     "aliases": {},
     "files": [],

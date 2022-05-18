@@ -15,9 +15,10 @@ class CityResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'country_code'      => $this->country_code,
+            'id'                => $this->_id,
+            'country_id'        => $this->country_id,
             'city_code'         => $this->code,
-            'name'              => $this->name,
+            'name'              => translateAttribute($this->name),
             $this->mergeWhen($this->relationLoaded('country'), [
                 'country'       => new CountryResource($this->country)
             ])

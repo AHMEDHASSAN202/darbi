@@ -1,0 +1,37 @@
+<?php
+
+namespace Modules\AuthModule\Entities;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Http\Request;
+use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use function request;
+
+class Role extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $guarded = [];
+
+    protected $casts = [
+        'permissions'       => 'array'
+    ];
+
+
+    //============= relations ==============\\
+    public function admins()
+    {
+        return $this->hasMany(Admin::class);
+    }
+    //============= #END# relations ==============\\
+
+    //============= scopes ==============\\
+    public function scopeAdminSearch(Request $request, $query)
+    {
+        if ($q = $request->get('q')) {
+            return $query->where('name', 'LIKE', '%' . $q .'%');
+        }
+    }
+    //============= #END# scopes ==============\\
+}

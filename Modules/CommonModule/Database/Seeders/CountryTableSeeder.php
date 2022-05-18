@@ -17,8 +17,7 @@ class CountryTableSeeder extends Seeder
     {
         Model::unguard();
 
-        Country::create(['name' => 'Saudi Arabia', 'code' => 'SA', 'iso3' => 'SAU', 'capital' => 'Riyadh', 'calling_code' => '966', 'currency_code' => 'SAR', 'currency' => 'riyal', 'is_active' => true]);
-        Country::create(['name' => 'Egypt', 'code' => 'EG', 'iso3' => 'EGY', 'capital' => 'Cairo', 'calling_code' => '20', 'currency_code' => 'EGP', 'currency' => 'Egyptian pound', 'is_active' => true]);
-        Country::create(['name' => 'United Arab Emirates', 'code' => 'AE', 'iso3' => 'ARE', 'capital' => 'Abu Dhabi', 'calling_code' => '971', 'currency_code' => 'AED', 'currency' => 'UAE dirham', 'is_active' => true]);
+        Country::create(['name' => ['ar' => 'السعودية', 'en' => 'Saudi Arabia'], 'code' => 'SA', 'iso3' => 'cU', 'capital' => 'Riyadh', 'calling_code' => '966', 'currency_code' => 'SAR', 'currency' => 'riyal', 'is_active' => true]);
+        Country::create(['name' => ['ar' => 'الامارات', 'en' => 'United Arab Emirates'], 'code' => 'AE', 'iso3' => 'ARE', 'capital' => 'Abu Dhabi', 'calling_code' => '971', 'currency_code' => 'AED', 'currency' => 'UAE dirham', 'is_active' => true]);
     }
 }

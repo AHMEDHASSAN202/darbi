@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->unique('code');
-            $table->index('country_code');
             $table->softDeletes();
             $table->timestamps();
         });
