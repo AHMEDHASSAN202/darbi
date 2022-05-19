@@ -21,6 +21,7 @@ Route::group([
 ], function () {
     Route::get(''               , 'CarController@index');
     Route::get('{car}'          , 'CarController@show');
+    Route::get('{car}/plugins'  , 'PluginController@findAllPluginByCar');
 });
 
 

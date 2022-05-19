@@ -4,6 +4,8 @@ namespace Modules\BookingModule\Database\Seeders;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
+use Modules\BookingModule\Entities\Booking;
+use Modules\BookingModule\Entities\Cart;
 
 class BookingModuleDatabaseSeeder extends Seeder
 {
@@ -15,6 +17,7 @@ class BookingModuleDatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-        // $this->call("OthersTableSeeder");
+        Cart::factory()->count(200)->create();
+        Booking::factory()->count(400)->create();
     }
 }

@@ -7,20 +7,9 @@ use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
-class Car extends \Jenssegers\Mongodb\Eloquent\Model
+class Car extends Entity
 {
-    use HasFactory, SoftDeletes, EntityTrait;
-
-    protected $table = 'entities';
-
-    protected $collection = 'entities';
-
-    protected $guarded = [];
-
-    protected $casts = [
-        'is_active'         => 'boolean',
-        'is_available'      => 'boolean'
-    ];
+    use HasFactory;
 
     protected static function newFactory()
     {
@@ -33,25 +22,6 @@ class Car extends \Jenssegers\Mongodb\Eloquent\Model
             $builder->where('type', 'car');
         });
     }
-
-    //=============== Relations =====================\\
-
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class);
-    }
-
-    public function model()
-    {
-        return $this->belongsTo(Model::class);
-    }
-
-    public function plugins()
-    {
-        return $this->belongsToMany(Plugin::class, null, 'entity_ids','plugin_ids');
-    }
-
-    //=============== #END# relation =====================\\
 
     //================ Scopes =========================\\
 

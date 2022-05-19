@@ -4,6 +4,7 @@ namespace Modules\NotificationsModule\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\NotificationsModule\Entities\NotificationsCenter;
 
 class NotificationsModuleDatabaseSeeder extends Seeder
 {
@@ -16,6 +17,6 @@ class NotificationsModuleDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        NotificationsCenter::factory()->count(200)->create();
     }
 }

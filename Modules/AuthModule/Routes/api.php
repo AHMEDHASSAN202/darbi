@@ -13,3 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
+
+//places routes
+Route::group([
+    'prefix'    => 'places',
+    'namespace' => 'User'
+], function () {
+    Route::get(''               , 'SavedPlaceController@findAll');
+});

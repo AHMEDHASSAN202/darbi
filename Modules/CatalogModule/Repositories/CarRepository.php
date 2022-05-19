@@ -8,7 +8,6 @@ namespace Modules\CatalogModule\Repositories;
 
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Entities\Car;
-use Modules\CatalogModule\Entities\Plugin;
 
 class CarRepository
 {

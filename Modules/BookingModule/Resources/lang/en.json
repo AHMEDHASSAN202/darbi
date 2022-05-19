@@ -1,0 +1,12 @@
+{
+    "paid": "Paid",
+    "pending": "pending",
+    "accepted": "Accepted",
+    "cancelled_before_accept": "Cancelled before accept",
+    "cancelled_after_accept": "Cancelled after accept",
+    "rejected": "Rejected",
+    "picked_up": "Picked up",
+    "dropped": "Dropped",
+    "completed": "Completed",
+    "force_cancelled": "Force cancelled"
+}

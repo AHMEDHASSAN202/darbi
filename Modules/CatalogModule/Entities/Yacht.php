@@ -9,18 +9,9 @@ use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Modules\CommonModule\Entities\Country;
 
-class Yacht extends Model
+class Yacht extends Entity
 {
-    use HasFactory, EntityTrait;
-
-    protected $table = 'entities';
-
-    protected $guarded = [];
-
-    protected $casts = [
-        'is_active'         => 'boolean',
-        'is_available'      => 'boolean'
-    ];
+    use HasFactory;
 
     protected static function newFactory()
     {
@@ -42,17 +33,6 @@ class Yacht extends Model
     {
         return $this->belongsTo(Port::class);
     }
-
-    public function model()
-    {
-        return $this->belongsTo(\Modules\CatalogModule\Entities\Model::class);
-    }
-
-    public function plugins()
-    {
-        return $this->belongsToMany(Plugin::class, null, 'entity_ids','plugin_ids');
-    }
-
 
     //=============== #END# relation =====================\\
 

@@ -12,3 +12,12 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+//booking routes
+Route::group([
+    'prefix'    => 'bookings',
+    'namespace' => 'User'
+], function () {
+    Route::get(''               , 'BookingController@findAllByUser');
+    Route::get('{bookingId}'    , 'BookingController@find');
+});

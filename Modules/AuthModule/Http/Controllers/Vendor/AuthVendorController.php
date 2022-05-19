@@ -4,7 +4,7 @@ namespace Modules\AuthModule\Http\Controllers\Vendor;
 
 use Illuminate\Routing\Controller;
 use Modules\AuthModule\Http\Requests\Admin\LoginToAdminRequest;
-use Modules\AuthModule\Servcies\AuthVendorService;
+use Modules\AuthModule\Services\AuthVendorService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
 /**
