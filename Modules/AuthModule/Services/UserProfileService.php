@@ -36,12 +36,7 @@ class UserProfileService
     {
         $me = auth('api')->user();
         $me->name = $updateProfileRequest->name;
-
-        $redirectTo = 'NEXT';
-
-        if ($updateProfileRequest->email) {
-            $me->email = $updateProfileRequest->email;
-        }
+        $me->note = $updateProfileRequest->note;
 
         if ($updateProfileRequest->hasFile('identity_frontside_image')) {
             $me->identity->frontside_image = $this->uploadImage('identities', $updateProfileRequest->identity_frontside_image);
@@ -51,29 +46,15 @@ class UserProfileService
             $me->identity->backside_image = $this->uploadImage('identities', $updateProfileRequest->identity_backside_image);
         }
 
-        if ($updateProfileRequest->phone && ($updateProfileRequest->phone != $me->phone)) {
-            $me->pending_phone = $updateProfileRequest->phone;
-            $me->verification_code = generateOTPCode();
-            $redirectTo = 'OTP_SCREEN';
-        }
-
         //save data
         $me->save();
-
-        if ($me->wasChanged('email')) {
-            //send verification code here
-            event(new UserUpdateMailEvent($me));
-        }
-
-        if ($me->wasChanged('pending_phone')) {
-            //send otp to new updated phone
-            SendOtpJob::dispatch($updateProfileRequest->phone, $me->phone_code, $me->verification_code)->afterResponse();
-        }
 
         return [
             'message'   => __('Your account has been updated'),
             'statusCode'=>  200,
-            'data'      => ['redirectTo' => $redirectTo]
+            'data'      => [
+                'profile'       => new UserProfileResource($me)
+            ]
         ];
     }
 

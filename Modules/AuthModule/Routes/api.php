@@ -31,7 +31,7 @@ Route::post('signin-with-otp'   , 'AuthController@signinWithOtp')->middleware('t
 //profile
 Route::get('profile'            , 'ProfileController@getProfile')->middleware('auth:api');
 Route::put('profile'            , 'ProfileController@updateProfile')->middleware('auth:api');
-Route::put('profile/phone'      , 'ProfileController@updateProfilePhone')->middleware('auth:api');
+//Route::put('profile/phone'      , 'ProfileController@updateProfilePhone')->middleware('auth:api');
 
 
 //device token

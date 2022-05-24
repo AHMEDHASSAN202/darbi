@@ -27,19 +27,13 @@ class UserProfileResource extends JsonResource
             'phone'         => $this->phone,
             'phone_code'    => $this->phone_code,
             'country_name'  => translateAttribute($this->country->name),
-            'name'          => translateAttribute($this->name),
+            'name'          => $this->name,
             'identity'      => [
-//                'type'              => optional($this->identity)->type,
-//                'value'             => optional($this->identity)->value,
                 'frontside_image'   => optional($this->identity)->frontside_image,
                 'backside_image'    => optional($this->identity)->backside_image
             ],
-//            'driving_license' => [
-//                'frontside_image'   => optional($this->driving_license)->frontside_image,
-//                'backside_image'    => optional($this->driving_license)->backside_image,
-//                'value'             => optional($this->identity)->value,
-//            ],
-            'image'           => $this->defaultImage
+            'image'           => $this->defaultImage,
+            'note'            => $this->note
         ];
     }
 }

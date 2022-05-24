@@ -15,12 +15,9 @@ class UpdateProfileRequest extends FormRequest
      */
     public function rules()
     {
-        $me = app(UserAuthService::class)->authUser();
-
         return [
             'name'                      => 'required|min:3,max:50',
-            'phone'                     => ['required', 'numeric', 'digits_between:8,11', Rule::unique('users', 'phone')->where('phone_code', $me->phone_code)->ignore($me->_id, '_id')],
-            'email'                     => 'sometimes|nullable|email|unique:users',
+            'note'                      => 'sometimes|nullable|min:3|max:500',
             'identity_frontside_image'  => 'sometimes|nullable|image|max:5120', //5m
             'identity_backside_image'   => 'sometimes|nullable|image|max:5120', //5m
         ];

@@ -100,8 +100,7 @@ class UserAuthService
 
         //sendOTP
         //we will execute this code after response as a background job
-        $phone = ($sendOtpRequest->action == 'UPDATE_PHONE') ? $me->pending_phone : $me->phone;
-        SendOtpJob::dispatch($phone, $me->phone_code, $me->verification_code)->afterResponse();
+        SendOtpJob::dispatch($me->phone, $me->phone_code, $me->verification_code)->afterResponse();
 
         $response['message'] = __('OTP is successfully sent');
 
