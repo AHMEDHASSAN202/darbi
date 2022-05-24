@@ -4,10 +4,10 @@ namespace Modules\AuthModule\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\AuthModule\Http\Requests\Admin\CreateAdminRequest;
+use Modules\AuthModule\Http\Requests\Admin\UpdateAdminPasswordRequest;
+use Modules\AuthModule\Http\Requests\Admin\UpdateAdminRequest;
 use Modules\AuthModule\Services\AdminService;
-use Modules\AuthModule\Requests\Admin\CreateAdminRequest;
-use Modules\AuthModule\Requests\Admin\UpdateAdminPasswordRequest;
-use Modules\AuthModule\Requests\Admin\UpdateAdminRequest;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
 /**

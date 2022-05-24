@@ -4,6 +4,7 @@ namespace Modules\CatalogModule\Database\factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\CatalogModule\Entities\Brand;
+use MongoDB\BSON\ObjectId;
 
 class ModelFactory extends Factory
 {
@@ -25,7 +26,7 @@ class ModelFactory extends Factory
         $brand = Brand::all()->random(1)->first();
 
         return [
-            'brand_id'      => $brand->_id,
+            'brand_id'      => new ObjectId($brand->_id),
             'name'          => ['ar' => $arFaker->companySuffix(), 'en' => $this->faker->companySuffix()],
             'images'        => [
                 $this->faker->imageUrl(300, 300, null, false, 'Model'),

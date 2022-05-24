@@ -4,7 +4,7 @@
  * User: ahmed hasssan
  */
 
-namespace Modules\AuthModule\Repositories\Role;
+namespace Modules\AuthModule\Repositories\Admin;
 
 use Illuminate\Http\Request;
 use Modules\AuthModule\Entities\Role;

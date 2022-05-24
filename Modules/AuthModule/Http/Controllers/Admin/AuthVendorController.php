@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\AuthModule\Http\Controllers\Vendor;
+namespace Modules\AuthModule\Http\Controllers\Admin;
 
 use Illuminate\Routing\Controller;
 use Modules\AuthModule\Http\Requests\Admin\LoginToAdminRequest;
-use Modules\AuthModule\Services\AuthVendorService;
+use Modules\AuthModule\Services\VendorAuthService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
 /**
@@ -18,7 +18,7 @@ class AuthVendorController extends Controller
     private $authVendorService;
 
 
-    public function __construct(AuthVendorService $authVendorService)
+    public function __construct(VendorAuthService $authVendorService)
     {
         $this->authVendorService = $authVendorService;
     }

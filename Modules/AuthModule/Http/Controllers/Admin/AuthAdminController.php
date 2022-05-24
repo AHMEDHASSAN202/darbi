@@ -5,7 +5,7 @@ namespace Modules\AuthModule\Http\Controllers\Admin;
 
 use Illuminate\Routing\Controller;
 use Modules\AuthModule\Http\Requests\Admin\LoginToAdminRequest;
-use Modules\AuthModule\Services\AuthAdminService;
+use Modules\AuthModule\Services\AdminAuthService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
 /**
@@ -19,7 +19,7 @@ class AuthAdminController extends Controller
     private $authAdminService;
 
 
-    public function __construct(AuthAdminService $authAdminService)
+    public function __construct(AdminAuthService $authAdminService)
     {
         $this->authAdminService = $authAdminService;
     }

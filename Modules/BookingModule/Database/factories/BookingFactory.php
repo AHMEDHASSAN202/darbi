@@ -8,6 +8,7 @@ use Modules\CatalogModule\Entities\Car;
 use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Entities\Country;
 use Modules\CommonModule\Entities\Region;
+use MongoDB\BSON\ObjectId;
 
 class BookingFactory extends Factory
 {
@@ -33,10 +34,11 @@ class BookingFactory extends Factory
         $pluginPrice = $this->faker->randomFloat(2,3);
 
         return [
-            'vendor_id'             => $vendor->_id,
-            'branch_id'             => $branch?->_id,
-            'country_id'            => $country->_id,
-            'entity_id'             => $ent->_id,
+            'vendor_id'             => new ObjectId($vendor->_id),
+            'branch_id'             => $branch ? new ObjectId($branch->_id): null,
+            'country_id'            => new ObjectId($country->_id),
+            'entity_id'             => new ObjectId($ent->_id),
+            'entity_type'           => $ent->type,
             'start_booking_at'      => now()->subDay()->timestamp,
             'end_booking_at'        => now()->addMonth()->timestamp,
             'pickup_location_address'   => [
@@ -46,7 +48,7 @@ class BookingFactory extends Factory
                 'city'              => $this->faker->city,
                 'country'           => $this->faker->country,
                 'state'             => $this->faker->streetAddress,
-                'region_id'         => $region->_id
+                'region_id'         => new ObjectId($region->_id)
             ],
             'drop_location_address'  => [
                 'lat'               => $this->faker->latitude,
@@ -55,13 +57,17 @@ class BookingFactory extends Factory
                 'city'              => $this->faker->city,
                 'country'           => $this->faker->country,
                 'state'             => $this->faker->streetAddress,
-                'region_id'         => $region->_id
+                'region_id'         => new ObjectId($region->_id)
             ],
             'entity_details'         => [
-                [
-                    'price_per_day' => $pluginPrice,
-                    'plugins' => [['name' => ['ar' => $this->faker->text(10), 'en' => $this->faker->text(10)], 'price_per_day' => $pluginPrice]]
-                ]
+                'price'         => $ent->price,
+                'price_unit'    => $ent->price_unit,
+                'image'         =>  $this->faker->imageUrl(300, 300, 'car', false, 'Car'),
+                'model_id'      => new ObjectId($ent->model_id),
+                'model_name'    => ['ar' => translateAttribute($ent->model->name, 'ar'), 'en' => translateAttribute($ent->model->name, 'en')],
+                'brand_id'      => new ObjectId($ent->brand_id),
+                'brand_name'    => ['ar' => translateAttribute($ent->brand->name), 'en' => translateAttribute($ent->model->name, 'en')],
+                'plugins'       => [['name' => ['ar' => $this->faker->text(10), 'en' => $this->faker->text(10)], 'price_per_day' => $pluginPrice]]
             ],
             'invoice_number'         => \Str::random(),
             'price_summary'          => [
@@ -78,12 +84,14 @@ class BookingFactory extends Factory
             ],
             'status' => ['pending','accepted','paid','cancelled_before_accept','cancelled_after_accept','rejected','picked_up','dropped','completed','force_cancelled'][mt_rand(0,9)],
             'status_change_log' => [
-                'old_status'    => '',
-                'new_status'    => '',
-                'created_at'    => '',
-                'changed_by'    => [
-                    'id'    => '',
-                    'model' => ''
+                [
+                    'old_status'    => '',
+                    'new_status'    => '',
+                    'created_at'    => '',
+                    'changed_by'    => [
+                        'id'    => '',
+                        'model' => ''
+                    ]
                 ]
             ],
             'booking_dates_change_requests' => [],

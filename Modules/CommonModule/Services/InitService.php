@@ -8,45 +8,42 @@ namespace Modules\CommonModule\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Modules\CommonModule\Entities\Setting;
-use Modules\CommonModule\Repositories\CityRepository;
-use Modules\CommonModule\Repositories\CountryRepository;
-use Modules\CommonModule\Repositories\StartUpImageRepository;
-use Modules\CommonModule\Transformers\CityResource;
-use Modules\CommonModule\Transformers\CountryResource;
-use Modules\CommonModule\Transformers\StartUpImageResource;
+use Modules\CommonModule\Transformers\CategoryResource;
+use Modules\CommonModule\Transformers\WalkThroughImageResource;
 
 class InitService
 {
+    private $settings;
+
+
+    public function __construct(SettingService $settingService)
+    {
+        $this->settings = $settingService->getSettings();
+    }
+
+
     public function initData(Request $request)
     {
-        $setting = app(SettingService::class)->getSettings();
-
         $walkThroughImages = [];
 
-        if ($setting->walk_through_images && is_array($setting->walk_through_images)) {
-            foreach ($setting->walk_through_images as $throughImage) {
-                $walkThroughImages[] = [
-                    'title' => translateAttribute($throughImage['title']),
-                    'image' => imageUrl($throughImage['image']),
-                    'desc'  => translateAttribute($throughImage['desc'])
-                ];
-            }
+        if ($this->settings->walk_through_images && is_array($this->settings->walk_through_images)) {
+            $walkThroughImages = WalkThroughImageResource::collection($this->settings->walk_through_images);
         }
 
         return [
-            'home_main_theme'       => $setting->home_main_theme ? (filter_var($setting->home_main_theme, FILTER_VALIDATE_URL) ?  $setting->home_main_theme : asset($setting->home_main_theme)) : '',
+            'home_main_theme'       => imageUrl($this->settings->home_main_theme),
             'walk_through_images'   => $walkThroughImages,
-            'time_interval_user_accept_min' => $setting->time_interval_user_accept_min,
+            'time_interval_user_accept_min' => $this->settings->time_interval_user_accept_min,
+            'booking_running'       => [],
+            'categories'            => CategoryResource::collection($this->settings->categories),
             'need_update'           => $this->checkIfAppNeedUpdated($request->version, $request->platform),
         ];
     }
 
+
     private function checkIfAppNeedUpdated($userVersion, $platform)
     {
-        $setting = app(SettingService::class)->getSettings();
-
-        $currentVersion = ['android' => $setting->android_app_version, 'ios' => $setting->ios_app_version][$platform];
+        $currentVersion = ['android' => $this->settings->android_app_version, 'ios' => $this->settings->ios_app_version][$platform];
 
         if (!$currentVersion) {
             Log::alert('sometimes error when get current app version');

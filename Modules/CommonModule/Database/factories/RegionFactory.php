@@ -4,6 +4,7 @@ namespace Modules\CommonModule\Database\factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\CommonModule\Entities\City;
+use MongoDB\BSON\ObjectId;
 
 class RegionFactory extends Factory
 {
@@ -26,8 +27,8 @@ class RegionFactory extends Factory
 
         return [
             'name'      => ['ar' => $arFaker->streetAddress(), 'en' => $this->faker->streetAddress()],
-            'city_id'   => $city->_id,
-            'country_id'=> $city->country->_id,
+            'city_id'   => new ObjectId($city->_id),
+            'country_id'=> new ObjectId($city->country->_id),
             'location'  => [
                 'type'          => 'Polygon',
                 'coordinates'   => [

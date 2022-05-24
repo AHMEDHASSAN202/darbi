@@ -1,12 +1,14 @@
 <?php
 
-namespace Modules\AuthModule\Http\Controllers\Vendor;
+namespace Modules\AuthModule\Http\Controllers\Admin;
 
 use Illuminate\Routing\Controller;
+use Modules\AuthModule\Http\Controllers\Vendor\UpdateVendorProfile;
 use Modules\AuthModule\Http\Requests\Vendor\UpdateInfoVendorProfile;
 use Modules\AuthModule\Http\Requests\Vendor\UpdateVendorPcrofile;
 use Modules\AuthModule\Services\VendorProfileService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
+use function __;
 
 
 class VendorProfileController extends Controller

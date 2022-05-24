@@ -15,7 +15,10 @@ return new class extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-
+            $table->index('vendor_id');
+            $table->index('branch_id');
+            $table->index('country_id');
+            $table->index('entity_id');
             $table->timestamps();
         });
     }

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Modules\AuthModule\Repositories\Admin\AuthAdminRepository;
 use Modules\AuthModule\Transformers\AdminProfileResource;
 
-class AuthAdminService
+class AdminAuthService
 {
     private $authAdminRepository;
 

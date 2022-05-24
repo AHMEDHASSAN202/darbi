@@ -4,7 +4,7 @@
  * User: ahmed hasssan
  */
 
-namespace Modules\AuthModule\Repositories\Vendor;
+namespace Modules\AuthModule\Repositories\Admin;
 
 
 use Illuminate\Support\Facades\Hash;

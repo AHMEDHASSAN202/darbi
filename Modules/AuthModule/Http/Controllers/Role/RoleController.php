@@ -4,9 +4,9 @@ namespace Modules\AuthModule\Http\Controllers\Role;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\AuthModule\Http\Requests\Admin\CreateRoleRequest;
+use Modules\AuthModule\Http\Requests\Admin\UpdateRoleRequest;
 use Modules\AuthModule\Services\RoleService;
-use Modules\AuthModule\Requests\Role\CreateRoleRequest;
-use Modules\AuthModule\Requests\Role\UpdateRoleRequest;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
 /**

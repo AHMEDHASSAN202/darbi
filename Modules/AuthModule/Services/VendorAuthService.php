@@ -8,10 +8,10 @@ namespace Modules\AuthModule\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Modules\AuthModule\Repositories\Vendor\AuthVendorRepository;
+use Modules\AuthModule\Repositories\Admin\AuthVendorRepository;
 use Modules\AuthModule\Transformers\VendorProfileResource;
 
-class AuthVendorService
+class VendorAuthService
 {
     private $authVendorRepository;
 

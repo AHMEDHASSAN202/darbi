@@ -5,6 +5,7 @@ namespace Modules\CatalogModule\Database\factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Entities\Region;
+use MongoDB\BSON\ObjectId;
 
 class BranchFactory extends Factory
 {
@@ -27,7 +28,7 @@ class BranchFactory extends Factory
         $arFaker = \Faker\Factory::create('ar_EG');
 
         return [
-            'vendor_id'     => $vendor->_id,
+            'vendor_id'     => new ObjectId($vendor->_id),
             'name'          => ['ar' => $arFaker->company, 'en' => $this->faker->company],
             'cover_images'  => [
                 $this->faker->imageUrl(800, 400, null, false, 'Cover'),

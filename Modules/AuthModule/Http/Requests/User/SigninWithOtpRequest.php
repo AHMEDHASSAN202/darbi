@@ -1,11 +1,10 @@
 <?php
 
-namespace Modules\AuthModule\Requests\Role;
+namespace Modules\AuthModule\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
-use function config;
 
-class UpdateRoleRequest extends FormRequest
+class SigninWithOtpRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,12 +13,10 @@ class UpdateRoleRequest extends FormRequest
      */
     public function rules()
     {
-        $permissions = config('adminmodule.permissions');
-
         return [
-            'name'          => 'required|max:100',
-            'permissions'   => 'required|array',
-            'permissions.*' => 'required|in:'.implode(',', $permissions)
+            'phone'         => 'required|numeric|digits_between:8,11',
+            'country_id'    => 'required|exists:countries,_id',
+            'otp'           => 'required|numeric'
         ];
     }
 

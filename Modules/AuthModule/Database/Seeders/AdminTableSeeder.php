@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Modules\AuthModule\Entities\Admin;
 use Modules\AuthModule\Entities\Role;
+use MongoDB\BSON\ObjectId;
 
 class AdminTableSeeder extends Seeder
 {
@@ -24,7 +25,7 @@ class AdminTableSeeder extends Seeder
                'name'       => 'ahemd',
                'email'      => 'ahemd@gmail.com',
                'password'   => Hash::make(123456),
-               'role_id'    => Role::first()->id
+               'role_id'    => new ObjectId(Role::first()->id)
            ]
         ];
 

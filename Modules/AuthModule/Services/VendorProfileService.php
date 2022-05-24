@@ -7,7 +7,7 @@
 namespace Modules\AuthModule\Services;
 
 use Modules\AuthModule\Http\Requests\Vendor\UpdateInfoVendorProfile;
-use Modules\AuthModule\Repositories\Vendor\VendorProfileRepository;
+use Modules\AuthModule\Repositories\Admin\VendorProfileRepository;
 use Modules\AuthModule\Transformers\VendorProfileResource;
 use function auth;
 

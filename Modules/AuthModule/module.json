@@ -6,7 +6,8 @@
     "priority": 2,
     "providers": [
         "Modules\\AuthModule\\Providers\\AuthModuleServiceProvider",
-        "Modules\\AuthModule\\Providers\\EventServiceProvider"
+        "Modules\\AuthModule\\Providers\\EventServiceProvider",
+        "Modules\\AuthModule\\Providers\\FacadesServiceProvider"
     ],
     "aliases": {},
     "files": [],

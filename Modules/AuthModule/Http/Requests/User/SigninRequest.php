@@ -1,11 +1,10 @@
 <?php
 
-namespace Modules\AuthModule\Requests\Admin;
+namespace Modules\AuthModule\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UpdateAdminRequest extends FormRequest
+class SigninRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -15,9 +14,8 @@ class UpdateAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'          => 'required|max:100',
-            'email'         => ['required', 'email', Rule::unique('admins')->ignore($this->route('admin'), '_id')],
-            'role_id'       => 'required|exists:roles,_id'
+            'phone'         => 'required|numeric|digits_between:8,11',
+            'country_id'    => 'required|exists:countries,_id'
         ];
     }
 

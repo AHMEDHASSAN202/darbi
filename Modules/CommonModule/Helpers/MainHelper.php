@@ -69,3 +69,8 @@ function generatePriceLabelFromPrice(?float $price, $priceUnit) : string
 
     return sprintf("%.2f %s / %s", $price, __('SAR'), __($priceUnit));
 }
+
+function generateOTPCode()
+{
+    return mt_rand(1000,9999);
+}

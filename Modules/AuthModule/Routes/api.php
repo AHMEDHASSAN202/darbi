@@ -16,8 +16,23 @@ use Illuminate\Http\Request;
 
 //places routes
 Route::group([
-    'prefix'    => 'places',
-    'namespace' => 'User'
+    'prefix'    => 'places'
 ], function () {
     Route::get(''               , 'SavedPlaceController@findAll');
 });
+
+
+//sign in routes
+Route::post('signin'            , 'AuthController@signin')->middleware('throttle:auth');
+Route::post('send-otp'          , 'AuthController@sendOtp')->middleware('throttle:auth');
+Route::post('signin-with-otp'   , 'AuthController@signinWithOtp')->middleware('throttle:auth');
+
+
+//profile
+Route::get('profile'            , 'ProfileController@getProfile')->middleware('auth:api');
+Route::put('profile'            , 'ProfileController@updateProfile')->middleware('auth:api');
+Route::put('profile/phone'      , 'ProfileController@updateProfilePhone')->middleware('auth:api');
+
+
+//device token
+Route::post('device-token'      , 'UserDeviceTokenController@storeDeviceToken')->middleware('auth:api');

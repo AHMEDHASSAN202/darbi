@@ -8,7 +8,7 @@ namespace Modules\AuthModule\Services;
 
 use Illuminate\Http\Request;
 use Modules\AdminModule\Transformers\RoleCollection;
-use Modules\AuthModule\Repositories\Role\RoleRepository;
+use Modules\AuthModule\Repositories\Admin\RoleRepository;
 use Modules\AuthModule\Transformers\RoleResource;
 use Modules\CommonModule\Transformers\PaginateResource;
 

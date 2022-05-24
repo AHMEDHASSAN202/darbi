@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\AuthModule\Database\factories\UserFactory;
+use Modules\CommonModule\Entities\Country;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use function request;
 
@@ -40,6 +41,11 @@ class User extends Model implements JWTSubject
 
     //============= Relations ===================\\
 
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
     //============= #END# Relations ===================\\
 
     //============= scopes ==============\\
@@ -50,4 +56,13 @@ class User extends Model implements JWTSubject
         }
     }
     //============= #END# scopes ==============\\
+
+    //=================== helpers ===================\\
+
+    public function isNotActive()
+    {
+        return $this->is_active !== true;
+    }
+
+    //=================== #END# helpers ===================\\
 }

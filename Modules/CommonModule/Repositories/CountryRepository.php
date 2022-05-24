@@ -22,4 +22,9 @@ class CountryRepository
     {
         return $this->model->active()->search($request)->get();
     }
+
+    public function find($countryId)
+    {
+        return $this->model->active()->find($countryId);
+    }
 }

@@ -5,6 +5,7 @@ namespace Modules\CatalogModule\Database\factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\CatalogModule\Entities\Subscription;
 use Modules\CommonModule\Entities\Country;
+use MongoDB\BSON\ObjectId;
 
 class VendorFactory extends Factory
 {
@@ -30,9 +31,9 @@ class VendorFactory extends Factory
             'name'      => ['ar' => $arFaker->company, 'en' => $this->faker->company],
             'image'     => $this->faker->imageUrl(400, 400, null, false, 'Vendor'),
             'is_active' => $this->faker->boolean,
-            'subscription_id'       => $subscription->_id,
+            'subscription_id'       => new ObjectId($subscription->_id),
             'darbi_percentage'      => $this->faker->randomFloat(1, 1, 100),
-            'country_id'            => $country->_id,
+            'country_id'            => new ObjectId($country->_id),
             'require_activation'    => $this->faker->boolean
         ];
     }

@@ -7,6 +7,7 @@ use Modules\CatalogModule\Entities\Car;
 use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Entities\Country;
 use Modules\CommonModule\Entities\Region;
+use MongoDB\BSON\ObjectId;
 
 class CartFactory extends Factory
 {
@@ -32,10 +33,10 @@ class CartFactory extends Factory
         $arFaker = \Faker\Factory::create('ar_EG');
 
         return [
-            'vendor_id'             => $vendor->_id,
-            'branch_id'             => $branch?->_id,
-            'country_id'            => $country->_id,
-            'entity_id'             => $ent->_id,
+            'vendor_id'             => new ObjectId($vendor->_id),
+            'branch_id'             => $branch ? new ObjectId($branch->_id) : null,
+            'country_id'            => new ObjectId($country->_id),
+            'entity_id'             => new ObjectId($ent->_id),
             'start_booking_at'      => now()->subDay()->timestamp,
             'end_booking_at'        => now()->addMonth()->timestamp,
             'pickup_location_address'   => [
@@ -45,17 +46,15 @@ class CartFactory extends Factory
                 'city'              => $this->faker->city,
                 'country'           => $this->faker->country,
                 'state'             => $this->faker->streetAddress,
-                'region_id'         => $region->_id
+                'region_id'         => new ObjectId($region->_id)
             ],
             'items_details'         => [
-                [
-                    'name'          => ['ar' => $arFaker->text(10), 'en' => $this->faker->text(10)],
-                    'price_per_day' => $this->faker->randomFloat(100, 500),
-                    'plugins'       => [
-                        [
-                            'name'   => ['ar' => $arFaker->text(8), 'en' => $this->faker->text(10)],
-                            'price_per_day' => $this->faker->randomFloat(100,500)
-                        ]
+                'name'          => ['ar' => $arFaker->text(10), 'en' => $this->faker->text(10)],
+                'price_per_day' => $this->faker->randomFloat(100, 500),
+                'plugins'       => [
+                    [
+                        'name'   => ['ar' => $arFaker->text(8), 'en' => $this->faker->text(10)],
+                        'price_per_day' => $this->faker->randomFloat(100,500)
                     ]
                 ]
             ],
@@ -72,12 +71,14 @@ class CartFactory extends Factory
                 'charge_shop'   => ''
             ],
             'status_change_log' => [
-                'old_status'    => '',
-                'new_status'    => '',
-                'created_at'    => '',
-                'changed_by'    => [
-                    'id'    => '',
-                    'model' => ''
+                [
+                    'old_status'    => '',
+                    'new_status'    => '',
+                    'created_at'    => '',
+                    'changed_by'    => [
+                        'id'    => '',
+                        'model' => ''
+                    ]
                 ]
             ],
         ];

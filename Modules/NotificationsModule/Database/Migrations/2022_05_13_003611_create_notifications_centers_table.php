@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('notifications_centers', function (Blueprint $table) {
             $table->id();
-
+            $table->index('triggered_by.user_id');
+            $table->index('receiver.user_id');
             $table->timestamps();
         });
     }

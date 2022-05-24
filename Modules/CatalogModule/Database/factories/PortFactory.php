@@ -4,6 +4,7 @@ namespace Modules\CatalogModule\Database\factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\CommonModule\Entities\Country;
+use MongoDB\BSON\ObjectId;
 
 class PortFactory extends Factory
 {
@@ -26,7 +27,7 @@ class PortFactory extends Factory
 
         return [
             'name'      => ['ar' => $arFaker->company(), 'en' => $this->faker->company()],
-            'country_id'=> $country->_id,
+            'country_id'=> new ObjectId($country->_id),
             'lat'       => $this->faker->latitude,
             'lng'       => $this->faker->longitude,
             'is_active' => $this->faker->boolean

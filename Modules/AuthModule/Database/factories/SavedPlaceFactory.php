@@ -5,6 +5,7 @@ namespace Modules\AuthModule\Database\factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\AuthModule\Entities\User;
 use Modules\CommonModule\Entities\Region;
+use MongoDB\BSON\ObjectId;
 
 class SavedPlaceFactory extends Factory
 {
@@ -23,12 +24,12 @@ class SavedPlaceFactory extends Factory
     public function definition()
     {
         return [
-            'user_id'       => User::all()->random(1)->first()->_id,
+            'user_id'       => new ObjectId(User::all()->random(1)->first()->_id),
             'lat'           => $this->faker->latitude(),
             'lng'           => $this->faker->longitude(),
             'city'          => $this->faker->city(),
             'country'       => $this->faker->country(),
-            'region_id'     => Region::all()->random(1)->first()->_id
+            'region_id'     => new ObjectId(Region::all()->random(1)->first()->_id)
         ];
     }
 }

@@ -61,9 +61,24 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::prefix('api/v1')
+        Route::prefix('api/mobile/v1')
             ->middleware('api')
             ->namespace($this->moduleNamespace)
             ->group(module_path('BookingModule', '/Routes/api.php'));
+    }
+
+    /**
+     * Define the "api" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiAdminRoutes()
+    {
+        Route::prefix('api/admin/v1')
+            ->middleware('api')
+            ->namespace($this->moduleNamespace)
+            ->group(module_path('BookingModule', '/Routes/admin.php'));
     }
 }

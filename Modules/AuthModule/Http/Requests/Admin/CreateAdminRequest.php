@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\AuthModule\Requests\Admin;
+namespace Modules\AuthModule\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
-class UpdateAdminPasswordRequest extends FormRequest
+class CreateAdminRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -15,6 +15,9 @@ class UpdateAdminPasswordRequest extends FormRequest
     public function rules()
     {
         return [
+            'name'          => 'required|max:100',
+            'email'         => 'required|email|unique:admins',
+            'role_id'       => 'required|exists:roles,_id',
             'password'      => ['required', Password::min(8)->letters(), 'confirmed']
         ];
     }

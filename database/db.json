@@ -1,0 +1,95 @@
+{
+    "Users":{
+        "_id": "",
+        "phone":"000",
+        "country_code":"966",
+        "country_id":"",
+        "identity":{
+            "type":"passport-national_id",
+            "value":"039839393",
+            "frontside_image":"",
+            "backside_image":""
+        },
+        "driving_license":{
+            "frontside_image":"",
+            "backside_image":"",
+            "value":""
+        },
+        "name":{
+            "ar":"",
+            "en":""
+        },
+        "is_active":false,
+        "is_verified":true,
+        "verification_code":12332
+    },
+    "saved_places":{
+        "user_id": "",
+        "lat":22.22,
+        "lng":22.22,
+        "fully_addressed":"",
+        "city":"",
+        "country":"",
+        "state":"",
+        "region_id":""
+    },
+    "Brands":{
+        "name":{
+            "ar":"",
+            "en":""
+        },
+        "logo":""
+    },
+    "Models":{
+        "brand_id":"",
+        "name":{
+            "ar":"",
+            "en":""
+        },
+        "images":[""],
+        "specs":{
+            "engine_type":{
+                "name":{
+                    "ar":"",
+                    "en":""
+                },
+                "image":"",
+                "order_weight":1.7,
+                "group_details":{"ar":"","en":"","key":""}}}},
+    "Entity":{"model_id":"","brand_id":"","images":[""],"is_active":true,"is_available":true,"vendor_id":"","branch_ids":["",""],"state":"'free','reserved','pending'","plugins_ids":[""],"country_id":"","require_activation":true,"type":"'car','yachts'"},
+    "Plugins":{"name":{"ar":"","en":""},"price_per_day":"","is_active":"true"},
+    "Vendors":{"name":{"ar":"","en":""},"image":"","is_active":"true","subscription_id":"","darbi_percentage":4.5,"country_id":"","require_activation":true},
+    "Subscriptions":{"start_at":"","end_at":"","created_by":{"id":"","on_model":""}},
+    "Branches":{"vendor_id": "", "name":{"ar":"","en":""},"cover_images":[""],"is_active":"true","is_open":"","phones":[{"phone":"000000","country_code":"966"}],"address":"","lat":33.33,"lng":22.22,"require_activation":true, "darbi_percentage": null,"region_ids":[], branch_times:[{day_number: 1, day_name:"Monday",from:"09:00",to:"05:00",is_active:false}]},
+    "Bookings":{"vendor_id":"","branch_id":"","country_id":"","entity_id":"","start_booking_at":"","end_booking_at":"","pickup_location_address":{"lat":22.22,"lng":22.22,"fully_addressed":"","city":"","country":"","state":"","region_id":""},"drop_location_address":{"lat":22.22,"lng":22.22,"fully_addressed":"","city":"","country":"","state":"","region_id":""},
+        "entity_details":[{"price_per_day":22.2,"plugins":[{"name":{"ar":   "","en":""},"price_per_day":33.2}]}],
+        "invoice_number":"",
+        "price_summary":{"total_discount":22.2,"discount_value":22,"total_price_before_discount_before_vat":23.3,"total_price_after_discount_before_vat":23.3,"total_vat":22.2,"vat_percentage":0.12,"total_price_after_discount_after_vat":23.3,"darbi_percentage":"","charge_cc":"","charge_shop":""},
+        "status":"'pending','accepted','paid','cancelled_before_accept','cancelled_after_accept','rejected','picked_up','dropped','completed','force_cancelled'",
+        "status_change_log":[{"old_status":"","new_status":"","created_at":"","changed_by":{"id":"","on_model":"'user','admin'"}}],
+        "booking_dates_change_requests":[{"old_start_at":"","new_start_at":"","old_end_at":"","new_end_at":"","price_per_day":22.3,"created_at":""}],
+        "pickup_location_change_requests":[{"old_address":"","new_address":"","created_at":""}],
+        "payment_method":{"type":"'cash','credit','applepay'","extra_info":{}}
+    },
+    "Cart":{"vendor_id":"","branch_id":"","country_id":"","entity_id":"","start_booking_at":"","end_booking_at":"","pickup_location_address":"","items_details":[{"name":{"ar":"","en":""},"price_per_day":22.2,"plugins":[{"name":{"ar":"","en":""},"price_per_day":33.2}]}],
+        "price_summary":{"total_discount":22.2,"discount_value":22,"total_price_before_discount_before_vat":23.3,"total_price_after_discount_before_vat":23.3,"total_vat":22.2,"vat_percentage":0.12,"total_price_after_discount_after_vat":23.3},
+        "status_change_log":[{"old_status":"","new_status":"","created_at":"","changed_by":{"id":"","on_model":"'user','admin'"}}]
+    },
+    "Admins":{"name":{"ar":"","en":""},"email":"","phone":{"phone":"000000","country_code":"966"},"hash_password":"","is_active":true,"role_id":""},
+    "Roles":{"name":""},
+    "Permissions":{"name":{"ar":"","en":""},"key":""},
+    "RolePermissions":{"role_id":"","permission_id":""},
+    "UserDeviceToken":{"phone_uuid":"","app_type":"'admin','vendor','user'","country_id":"","device_os":"'android','iphone'","lat":22.22,"lng":222.22,"region_id":"","user_details":{"id":"","on_model":"'admin','user'"}},
+    "NotificationsCenter":{"triggered_by":{"is_automatic":"","user_id":"","on_model":"'admin','user'"},"extra_data":{},"read_at":"","receiver":{"user_id":"","on_model":"'admin','user'"},"notification_type":"'offer','booking',....","title":{"ar":"","en":""},"message":{"ar":"","en":""}},
+    "Settings":{"time_interval_vendor_accept_min":22,"time_interval_user_accept_min":22,"walk_through_images":[{"title":{"ar":"","en":""},"image":"","desc":{"ar":"","en":""}}],"home_main_theme":"","specs_keys":["engine_type"]},
+    "StartUpImages":{"image":"","is_active":true,"valid_from":"","valid_to":""},
+    "BookingPaymentTransactions":{"booking_id":"","req":"","res":"","status":"","payment_method":""},
+    "PendingActivitionLogs":{"before":{},"after":{},"on_model":"'Vendors','Branches','Entities'","state":"'approved','rejected','pending'"},
+
+    "Countries":{},
+    "Cities":{},
+    "Region":{"name":{"ar":"","en":""},"city_id":"","country_id":"","isActive":true,"location":{
+        "type": "Polygon",
+        "coordinates": [[["Number"]]]}
+    }
+}
