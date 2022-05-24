@@ -1,0 +1,98 @@
+pipeline {
+    agent any
+
+    environment{
+        DOCKER_PASSWORD = credentials('DOCKER_PASSWORD')
+        BITBUCKET_USER_APP = credentials('BITBUCKET_USER_APP')
+		BITBUCKET_PASS_APP = credentials('BITBUCKET_PASS_APP')
+        DEV_DB_PASSWORD = credentials('DEV_DB_PASSWORD')
+
+
+    }
+
+    stages {
+
+        stage('Slack-Started'){
+            steps{
+                slackSend channel: '#deployment',
+                color: 'good',
+                failOnError: true,
+                message: "${env.JOB_NAME} - [${currentBuild.displayName}] Started (<${currentBuild.absoluteUrl}|Open>)",
+                teamDomain: 'n-goworkspace',
+                tokenCredentialId: 'slack-token'
+            }
+        }
+
+        stage('Docker Build'){
+            steps{
+                sh "docker build -f ./.docker/dev/Dockerfile -t ngoco/darbi-dev:1.0.${BUILD_NUMBER} ."
+            }
+        }
+
+        stage('DB Migrate') {
+            steps{
+                sh script: '''
+                #!/bin/bash
+                docker run --env DB_READ_HOSTS=ngo-db-dev.cluster-ro-c1swfoza64gk.eu-west-1.rds.amazonaws.com --env DB_WRITE_HOSTS=ngo-db-dev.cluster-c1swfoza64gk.eu-west-1.rds.amazonaws.com --env DB_DATABASE=darbi_dev --env DB_PASSWORD=${DEV_DB_PASSWORD} --env DB_PORT=3306 --env DB_USERNAME=admin --env APP_ENV=jenkins ngoco/darbi-dev:1.0.${BUILD_NUMBER} php artisan migrate
+
+                '''
+            }
+        }
+
+        stage('Dockerhub Push') {
+            steps{
+                sh(script: """
+                docker login -u ngoco -p $DOCKER_PASSWORD
+                """, returnStdout: true)
+                sh "docker push ngoco/darbi-dev:1.0.${BUILD_NUMBER} "
+            }
+        }
+
+        stage('Manifest Update'){
+            steps{
+                sh(script: """
+                    git config --global user.email "app.support@n-go.co"
+                    git config --global user.name "app-ngo"
+                    rm -Rf darbi-dev-manifest
+                    git clone https://$BITBUCKET_USER_APP:$BITBUCKET_PASS_APP@bitbucket.org/n-go-devops/darbi-dev-manifest.git
+                    cd darbi-dev-manifest/
+                    sed -i 's/darbi-dev:.*/darbi-dev:1.0.${BUILD_NUMBER}/g' Darbi/darbi-dev-deployment.yaml
+                    git add .
+                    git commit -m 'Update to the latest version'
+                    git push origin master
+                """)
+            }
+        }
+
+        stage('Cleanup Workspace') {
+            steps{
+                sh(script: """
+                    docker image rm -f ngoco/darbi-dev:1.0.${BUILD_NUMBER}
+                """)
+
+            }
+        }
+        
+        stage('Deployment') {
+            steps{
+                sh(script: """
+                    echo 'waiting for Deployment'
+                    sleep 30
+                """)
+
+            }
+        }
+    }
+
+  post {
+        success {
+                  slackSend (color: '#00FF00', message: "${env.JOB_NAME} - [${currentBuild.displayName}] SUCCESS after ${currentBuild.durationString.replace(' and counting', '')} (<${currentBuild.absoluteUrl}|Open>)")
+        }
+        
+        failure {
+                 slackSend (color: '#FF0000', message: "${env.JOB_NAME} - [${currentBuild.displayName}] FAILED (<${currentBuild.absoluteUrl}|Open>)")
+        }    
+    }
+        
+}
+        

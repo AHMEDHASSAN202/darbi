@@ -1,0 +1,101 @@
+pipeline {
+    agent any
+
+    environment{
+        DOCKER_PASSWORD = credentials('DOCKER_PASSWORD')
+        BITBUCKET_USER_APP = credentials('BITBUCKET_USER_APP')
+		BITBUCKET_PASS_APP = credentials('BITBUCKET_PASS_APP')
+        PROD_DB_PASSWORD = credentials('PROD_DB_PASSWORD')
+
+
+    }
+
+    stages {
+
+        stage('Slack-Started'){
+            steps{
+                script {
+                    env.GIT_AUTHOR = sh (script: 'git log -1 --pretty=%cn ${GIT_COMMIT}', returnStdout: true).trim()
+                    env.GIT_COMMIT_MSG = sh (script: 'git log -1 --pretty=%B ${GIT_COMMIT}', returnStdout: true).trim()
+                }
+                slackSend channel: '#deployment',
+                color: 'good',
+                failOnError: true,
+                message: "${env.JOB_NAME} - [${currentBuild.displayName}] Started by ${env.GIT_AUTHOR} with commit message: '${env.GIT_COMMIT_MSG}' (<${currentBuild.absoluteUrl}|Open>)",
+                teamDomain: 'n-goworkspace',
+                tokenCredentialId: 'slack-token'
+            }
+        }
+
+        stage('Docker Build'){
+            steps{
+                sh "docker build -f ./.docker/prod/Dockerfile -t ngoco/ngo-catalog-prod:1.0.${BUILD_NUMBER} ."
+            }
+        }
+
+        stage('DB Migrate') {
+            steps{
+                sh script: '''
+                #!/bin/bash
+                docker run --env DB_READ_HOSTS=proddb.ckslljjwf5mg.eu-west-3.rds.amazonaws.com --env DB_WRITE_HOSTS=proddb.ckslljjwf5mg.eu-west-3.rds.amazonaws.com --env DB_DATABASE=ngolivedb --env DB_PASSWORD=${PROD_DB_PASSWORD} --env DB_PORT=3306 --env DB_USERNAME=admin --env APP_ENV=jenkins ngoco/ngo-catalog-prod:1.0.${BUILD_NUMBER} php artisan migrate
+
+                '''
+            }
+        }
+
+        stage('Dockerhub Push') {
+            steps{
+                sh(script: """
+                docker login -u ngoco -p $DOCKER_PASSWORD
+                """, returnStdout: true)
+                sh "docker push ngoco/ngo-catalog-prod:1.0.${BUILD_NUMBER} "
+            }
+        }
+
+        stage('Manifest Update'){
+            steps{
+                sh(script: """
+                    git config --global user.email "app.support@n-go.co"
+                    git config --global user.name "app-ngo"
+                    rm -Rf ngo-prod-manifest
+                    git clone https://$BITBUCKET_USER_APP:$BITBUCKET_PASS_APP@bitbucket.org/n-go-devops/ngo-prod-manifest.git
+                    cd ngo-prod-manifest/
+                    sed -i 's/ngo-catalog-prod:.*/ngo-catalog-prod:1.0.${BUILD_NUMBER}/g' NGO-Catalog/NGO-Catalog-prod-deployment.yaml
+                    git add .
+                    git commit -m 'Update to the latest version'
+                    git push origin master
+                """)
+            }
+        }
+
+        stage('Cleanup Workspace') {
+            steps{
+                sh(script: """
+                    docker image rm -f ngoco/ngo-catalog-prod:1.0.${BUILD_NUMBER}
+                """)
+
+            }
+        }
+
+        stage('Deployment') {
+            steps{
+                sh(script: """
+                    echo 'waiting for Deployment'
+                    sleep 30
+                """)
+
+            }
+        }
+    }
+
+  post {
+        success {
+                  slackSend (color: 'good', message: "${env.JOB_NAME} - [${currentBuild.displayName}] SUCCESS by ${env.GIT_AUTHOR} after ${currentBuild.durationString.replace(' and counting', '')} (<${currentBuild.absoluteUrl}|Open>)")
+        }
+
+        failure {
+                 slackSend (color: '#FF0000', message: "${env.JOB_NAME} - [${currentBuild.displayName}] FAILED by ${env.GIT_AUTHOR} (<${currentBuild.absoluteUrl}|Open>)")
+        }
+    }
+
+}
