@@ -6,10 +6,8 @@
 
 namespace Modules\AuthModule\Services;
 
-use Modules\AuthModule\Events\UserUpdateMailEvent;
 use Modules\AuthModule\Http\Requests\User\UpdateProfilePhoneRequest;
 use Modules\AuthModule\Http\Requests\User\UpdateProfileRequest;
-use Modules\AuthModule\Jobs\SendOtpJob;
 use Modules\AuthModule\Repositories\User\UserRepository;
 use Modules\AuthModule\Transformers\UserProfileResource;
 use Modules\CommonModule\Traits\ImageHelperTrait;
