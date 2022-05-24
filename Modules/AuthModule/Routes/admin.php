@@ -84,7 +84,7 @@ Route::group([
 Route::group([
     'prefix'     => 'vendor/profile',
     'middleware' => 'auth:vendor_api',
-    'namespace'  => 'Vendor'
+    'namespace'  => 'Admin'
 ], function () {
     Route::get(''                       , 'VendorProfileController@getProfile');
     Route::put(''                       , 'VendorProfileController@updateProfile');
@@ -95,7 +95,7 @@ Route::group([
 //vendor auth
 Route::group([
     'prefix'     => 'vendor/auth',
-    'namespace'  => 'Vendor'
+    'namespace'  => 'Admin'
 ], function () {
     Route::post('login'                 , 'AuthVendorController@login');
 });
