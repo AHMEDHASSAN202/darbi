@@ -13,7 +13,7 @@ class OTP implements OTPInterface
     public function send($phone, $phoneCode, $otp)
     {
         try {
-
+            Log::info('OTP: ' . $otp);
         }catch (\Exception $exception) {
             Log::error('Signin OTP exception: ' . $exception->getMessage());
         }

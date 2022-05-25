@@ -46,11 +46,11 @@ class UserDeviceTokenService
             $this->deviceTokenRepository->create([
                 'phone_uuid'        => $storeDeviceTokenRequest->phone_uuid,
                 'app_type'          => $appType,
-                'country_id'        => $countryId,
+                'country_id'        => new ObjectId($countryId),
                 'device_os'         => $storeDeviceTokenRequest->device_os,
                 'lat'               => $storeDeviceTokenRequest->lat,
                 'lng'               => $storeDeviceTokenRequest->lng,
-                'region_id'         => new ObjectId($storeDeviceTokenRequest->region_id),
+                'region_id'         => $storeDeviceTokenRequest->region_id ? new ObjectId($storeDeviceTokenRequest->region_id) : null,
                 'user_details'      => [
                     'id'                => new ObjectId($user->_id),
                     'on_model'          => get_class($user)

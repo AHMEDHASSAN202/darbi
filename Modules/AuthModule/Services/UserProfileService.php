@@ -6,8 +6,8 @@
 
 namespace Modules\AuthModule\Services;
 
-use Modules\AuthModule\Http\Requests\User\UpdateProfilePhoneRequest;
 use Modules\AuthModule\Http\Requests\User\UpdateProfileRequest;
+use Modules\AuthModule\Http\Requests\User\UploadIdentityImageRequest;
 use Modules\AuthModule\Repositories\User\UserRepository;
 use Modules\AuthModule\Transformers\UserProfileResource;
 use Modules\CommonModule\Traits\ImageHelperTrait;
@@ -36,13 +36,17 @@ class UserProfileService
         $me->name = $updateProfileRequest->name;
         $me->note = $updateProfileRequest->note;
 
+        $identity = (array)$me->identity ?? [];
+
         if ($updateProfileRequest->hasFile('identity_frontside_image')) {
-            $me->identity->frontside_image = $this->uploadImage('identities', $updateProfileRequest->identity_frontside_image);
+            $identity['frontside_image'] = $this->uploadImage('identities', $updateProfileRequest->identity_frontside_image);
         }
 
         if ($updateProfileRequest->hasFile('identity_backside_image')) {
-            $me->identity->backside_image = $this->uploadImage('identities', $updateProfileRequest->identity_backside_image);
+            $identity['backside_image'] = $this->uploadImage('identities', $updateProfileRequest->identity_backside_image);
         }
+
+        $me->identity = $identity;
 
         //save data
         $me->save();
@@ -57,35 +61,48 @@ class UserProfileService
     }
 
 
-    public function updatePhone(UpdateProfilePhoneRequest $updateProfilePhoneRequest)
+    public function updateIdentityProfile(UploadIdentityImageRequest $identityImageRequest, $type)
     {
-        $response['data'] = [];
-        $response['statusCode'] = 200;
-        $response['message'] = null;
-        $response['errors'] = [];
+        $me = auth('api')->user();
 
-        //get country
-        $country = $this->countryRepository->find($updateProfilePhoneRequest->country_id);
-        $phoneCode = $country->calling_code;
+        $identity = ['front' => 'frontside_image', 'back' => 'backside_image'];
+        $property = $identity[$type];
 
-        //get user if exists
-        $me = $this->userRepository->findByMobile($updateProfilePhoneRequest->phone, $phoneCode);
+        $myIdentity = (array)$me->identity ?? [];
+        $path = $myIdentity[$property] = $this->uploadImage('identities', $identityImageRequest->image);
 
-        //if invalid otp
-        if ($me->verification_code != $updateProfilePhoneRequest->otp) {
-            $response['statusCode'] = 422;
-            $response['message'] = __('Invalid OTP');
-            return $response;
-        }
-
-        $me->phone = $me->pending_phone;
-        $me->verification_code = null;
-        $me->pending_phone = null;
+        $me->identity = $myIdentity;
         $me->save();
 
-        $response['statusCode'] = 200;
-        $response['message'] = __('Your mobile number has been updated');
+        return [
+            'message'    => __('Identity has been uploaded successfully'),
+            'statusCode'=>  200,
+            'data'      => [
+                'image'       => imageUrl($path)
+            ]
+        ];
+    }
 
-        return $response;
+
+    public function removeIdentityProfile($type)
+    {
+        $me = auth('api')->user();
+
+        $identity = ['front' => 'frontside_image', 'back' => 'backside_image'];
+        $property = $identity[$type];
+
+        $myIdentity = (array)$me->identity ?? [];
+        $myIdentity[$property] = null;
+
+        $me->identity = $myIdentity;
+        $me->save();
+
+        return [
+            'message'    => __('Identity removed successfully'),
+            'statusCode'=>  200,
+            'data'      => [
+                'image'       => null
+            ]
+        ];
     }
 }

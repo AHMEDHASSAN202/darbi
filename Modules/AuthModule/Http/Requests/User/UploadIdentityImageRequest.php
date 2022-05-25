@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\AuthModule\Http\Requests;
+namespace Modules\AuthModule\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreDeviceTokenRequest extends FormRequest
+class UploadIdentityImageRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,11 +14,7 @@ class StoreDeviceTokenRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_uuid'      => 'required',
-            'device_os'       => 'required|in:android,iphone',
-            'lat'             => 'required',
-            'lng'             => 'required',
-            'region_id'       => 'sometimes|nullable|exists:regions,_id'
+            'image'         => 'required|image|max:5120',
         ];
     }
 

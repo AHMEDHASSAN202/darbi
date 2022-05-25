@@ -12,6 +12,7 @@ use Modules\AuthModule\Http\Requests\User\SendOtpRequest;
 use Modules\AuthModule\Http\Requests\User\SigninRequest;
 use Modules\AuthModule\Http\Requests\User\SigninWithOtpRequest;
 use Modules\AuthModule\Jobs\SendOtpJob;
+use Modules\AuthModule\Repositories\User\OTPVerificationCodeRepository;
 use Modules\AuthModule\Repositories\User\UserRepository;
 use Modules\AuthModule\Transformers\UserProfileResource;
 use Modules\CommonModule\Repositories\CountryRepository;
@@ -21,11 +22,13 @@ class UserAuthService
     private $authGuard = 'api';
     private $userRepository;
     private $countryRepository;
+    private $OTPVerificationCodeRepository;
 
-    public function __construct(UserRepository $userRepository, CountryRepository $countryRepository)
+    public function __construct(UserRepository $userRepository, CountryRepository $countryRepository, OTPVerificationCodeRepository $OTPVerificationCodeRepository)
     {
         $this->userRepository = $userRepository;
         $this->countryRepository = $countryRepository;
+        $this->OTPVerificationCodeRepository = $OTPVerificationCodeRepository;
     }
 
 
@@ -40,37 +43,25 @@ class UserAuthService
         $country = $this->countryRepository->find($signinRequest->country_id);
         $phoneCode = $country->calling_code;
 
-        //get user if exists
-        $me = $this->userRepository->findByMobile($signinRequest->phone, $phoneCode);
+        //get otp if exists
+        $otp = $this->OTPVerificationCodeRepository->findByMobileAndCode($signinRequest->phone, $phoneCode);
 
         //if not exists
-        //we will create new user
-        if (!$me) {
-            $me = $this->userRepository->createUserFromSignin($signinRequest->phone, $country);
+        //we will create new otp
+        if (!$otp) {
+            $otp = $this->OTPVerificationCodeRepository->createNewOTP($signinRequest->phone, $country);
         }
 
         //when can't create new user
-        if (!$me) {
-            Log::error("(singin) can't get user by mobile and can't create it");
+        if (!$otp) {
+            Log::error("(singin) can't get otp by mobile and can't create it");
             $response['statusCode'] = 500;
             return $response;
         }
 
-        //if user blocked
-        if ($me->isNotActive()) {
-            $response['statusCode'] = 422;
-            $response['message'] = __('Your account has been locked. Contact your support person to unlock it, then try again.');
-            return $response;
-        }
-
-        //regenerate OTP code
-        $me->verification_code = generateOTPCode();
-        $me->save();
-//        $me->refresh();
-
         //sendOTP
         //we will execute this code after response as a background job
-        SendOtpJob::dispatch($me->phone, $me->phone_code, $me->verification_code)->afterResponse();
+        SendOtpJob::dispatch($otp->phone, $otp->phone_code, $otp->verification_code)->afterResponse();
 
         $response['message'] = __('OTP is successfully sent');
 
@@ -89,18 +80,21 @@ class UserAuthService
         $country = $this->countryRepository->find($sendOtpRequest->country_id);
         $phoneCode = $country->calling_code;
 
-        //get user if exists
-        $me = $this->userRepository->findByMobile($sendOtpRequest->phone, $phoneCode);
+        //get otp if exists
+        $otp = $this->OTPVerificationCodeRepository->findByMobileAndCode($sendOtpRequest->phone, $phoneCode);
 
-        if (!$me) {
+        if (!$otp) {
             $response['statusCode'] = 422;
             $response['message'] = __('Mobile not found');
             return $response;
         }
 
+        //update expired at
+        $this->OTPVerificationCodeRepository->updateExpiredAtFromOTPObject($otp);
+
         //sendOTP
         //we will execute this code after response as a background job
-        SendOtpJob::dispatch($me->phone, $me->phone_code, $me->verification_code)->afterResponse();
+        SendOtpJob::dispatch($otp->phone, $otp->phone_code, $otp->verification_code)->afterResponse();
 
         $response['message'] = __('OTP is successfully sent');
 
@@ -119,8 +113,33 @@ class UserAuthService
         $country = $this->countryRepository->find($signinWithOtpRequest->country_id);
         $phoneCode = $country->calling_code;
 
-        //get user if exists
-        $me = $this->userRepository->findByMobile($signinWithOtpRequest->phone, $phoneCode, ['country']);
+        //get otp if exists
+        $otp = $this->OTPVerificationCodeRepository->findByMobileAndCode($signinWithOtpRequest->phone, $phoneCode);
+
+        //if invalid otp
+        if (!$otp || ($otp->verification_code != $signinWithOtpRequest->otp)) {
+            $response['statusCode'] = 422;
+            $response['message'] = __('Invalid OTP');
+            return $response;
+        }
+
+        //if otp expired
+        if ($otp->isExpired()) {
+            $response['statusCode'] = 422;
+            $response['message'] = __('Please re-send the verification code to try again');
+            return $response;
+        }
+
+        //remove otp
+        $this->OTPVerificationCodeRepository->remove($otp->_id);
+
+        //get user
+        $me = $this->userRepository->findByMobile($signinWithOtpRequest->phone, $phoneCode);
+
+        //create new user if not exists
+        if (!$me) {
+            $me = $this->userRepository->createUserFromSignin($signinWithOtpRequest->phone, $country);
+        }
 
         //if user blocked
         if ($me->isNotActive()) {
@@ -129,14 +148,6 @@ class UserAuthService
             return $response;
         }
 
-        //if invalid otp
-        if ($me->verification_code != $signinWithOtpRequest->otp) {
-            $response['statusCode'] = 422;
-            $response['message'] = __('Invalid OTP');
-            return $response;
-        }
-
-        $me->verification_code = null;
         $me->last_login = now();
         $me->save();
 

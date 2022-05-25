@@ -36,7 +36,7 @@ class UserFactory extends Factory
             'name'          => $this->faker->name(),
             'email'         => $this->faker->email,
             'is_active'     => $this->faker->boolean(),
-            'verification_code' => (int)$this->faker->unique()->numerify('#####'),
+//            'verification_code' => (int)$this->faker->unique()->numerify('#####'),
             'note'          => ''
         ];
     }

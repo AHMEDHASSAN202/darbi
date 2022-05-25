@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\AuthModule\Http\Requests\User\UpdateProfilePhoneRequest;
 use Modules\AuthModule\Http\Requests\User\UpdateProfileRequest;
+use Modules\AuthModule\Http\Requests\User\UploadIdentityImageRequest;
 use Modules\AuthModule\Services\UserProfileService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
@@ -39,10 +40,18 @@ class ProfileController extends Controller
     }
 
 
-    public function updateProfilePhone(UpdateProfilePhoneRequest $updateProfilePhoneRequest)
+    public function updateIdentityProfile(UploadIdentityImageRequest $uploadIdentityImageRequest, $type)
     {
-        $result = $this->userProfileService->updatePhone($updateProfilePhoneRequest);
+        $result = $this->userProfileService->updateIdentityProfile($uploadIdentityImageRequest, $type);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message'], $result['errors']);
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+    }
+
+
+    public function deleteIdentityProfile($type)
+    {
+        $result = $this->userProfileService->removeIdentityProfile($type);
+
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
     }
 }

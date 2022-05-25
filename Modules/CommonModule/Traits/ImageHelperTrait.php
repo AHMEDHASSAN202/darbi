@@ -35,7 +35,7 @@ trait ImageHelperTrait
 
     public function uploadImage($folder, UploadedFile $image, $resizes = [], $disc = 'public')
     {
-        $imagePath = $image->store($folder, ['disc' => $disc]);
+        $imagePath = $image->store($folder, $disc);
 
         if (!empty($resizes)) {
             $folderPath = Storage::disk($disc)->path($folder);

@@ -29,8 +29,7 @@ class UserRepository
                 'phone'         => $phone,
                 'phone_code'    => $country->calling_code,
                 'country_id'    => new ObjectId($country->_id),
-                'is_active'     => true,
-                'is_verified'   => true
+                'is_active'     => true
             ]);
     }
 }
