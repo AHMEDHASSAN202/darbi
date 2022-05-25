@@ -29,9 +29,14 @@ Route::post('signin-with-otp'   , 'AuthController@signinWithOtp')->middleware('t
 
 
 //profile
-Route::get('profile'            , 'ProfileController@getProfile')->middleware('auth:api');
-Route::put('profile'            , 'ProfileController@updateProfile')->middleware('auth:api');
-Route::put('profile/phone'      , 'ProfileController@updateProfilePhone')->middleware('auth:api');
+Route::group([
+    'prefix'    => 'profile'
+], function () {
+    Route::get(''               , 'ProfileController@getProfile')->middleware('auth:api');
+    Route::put(''               , 'ProfileController@updateProfile')->middleware('auth:api');
+    Route::put('identity/{type}'    , 'ProfileController@updateIdentityProfile')->whereIn('type', ['front', 'back'])->middleware('auth:api');
+    Route::delete('identity/{type}' , 'ProfileController@deleteIdentityProfile')->whereIn('type', ['front', 'back'])->middleware('auth:api');
+});
 
 
 //device token

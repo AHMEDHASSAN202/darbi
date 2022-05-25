@@ -96,6 +96,7 @@ return [
         'mongodb' => [
             'driver' => 'mongodb',
             'host' => env('DB_MONGO_HOST', '127.0.0.1'),
+            'dsn'   => env('DB_MONGO_DSN'),
             'port' => env('DB_MONGO_PORT', 27017),
             'database' => env('DB_MONGO_DATABASE', 'homestead'),
             'username' => env('DB_MONGO_USERNAME', 'homestead'),

@@ -4,14 +4,13 @@ namespace Modules\AuthModule\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\AuthModule\Database\factories\UserFactory;
 use Modules\CommonModule\Entities\Country;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use function request;
 
-class User extends Model implements JWTSubject
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -21,6 +20,8 @@ class User extends Model implements JWTSubject
     protected $hidden = ['password', 'remember_token', 'deleted_at'];
 
     protected $casts = ['email_verified_at' => 'datetime'];
+
+    protected $dates = ['last_login'];
 
     public $preventActivityLog = ['password', 'remember_token'];
 

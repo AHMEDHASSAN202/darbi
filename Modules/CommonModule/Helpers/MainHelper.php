@@ -45,7 +45,7 @@ function assetsHelper() {
 
 function imageUrl(?string $image, $dir = '') {
     if (!$image) return '';
-    return filter_var($image, FILTER_VALIDATE_URL) ? $image : asset($dir . $image);
+    return filter_var($image, FILTER_VALIDATE_URL) ? $image : asset('storage/'. $dir . $image);
 }
 
 function translateAttribute(?array $attribute, $locale = null) {
