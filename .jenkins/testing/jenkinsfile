@@ -6,6 +6,8 @@ pipeline {
         BITBUCKET_USER_APP = credentials('BITBUCKET_USER_APP')
 		BITBUCKET_PASS_APP = credentials('BITBUCKET_PASS_APP')
         DEV_DB_PASSWORD = credentials('DEV_DB_PASSWORD')
+
+
     }
 
     stages {
@@ -23,7 +25,7 @@ pipeline {
 
         stage('Docker Build'){
             steps{
-                sh "docker build -f ./.docker/devops/Dockerfile -t ngoco/ngo-catalog-devops:1.0.${BUILD_NUMBER} ."
+                sh "docker build -f ./.docker/dev/Dockerfile -t ngoco/darbi-new-testing:1.0.${BUILD_NUMBER} ."
             }
         }
 
@@ -31,7 +33,7 @@ pipeline {
             steps{
                 sh script: '''
                 #!/bin/bash
-                docker run --env DB_READ_HOSTS=ngo-db-dev.cluster-ro-c1swfoza64gk.eu-west-1.rds.amazonaws.com --env DB_WRITE_HOSTS=ngo-db-dev.cluster-c1swfoza64gk.eu-west-1.rds.amazonaws.com --env DB_DATABASE=ngo_devops --env DB_PASSWORD=${DEV_DB_PASSWORD} --env DB_PORT=3306 --env DB_USERNAME=admin --env APP_ENV=jenkins ngoco/ngo-catalog-devops:1.0.${BUILD_NUMBER} php artisan migrate
+                docker run --env DB_READ_HOSTS=ngo-db-dev.cluster-ro-c1swfoza64gk.eu-west-1.rds.amazonaws.com --env DB_WRITE_HOSTS=ngo-db-dev.cluster-c1swfoza64gk.eu-west-1.rds.amazonaws.com --env DB_DATABASE=darbi_dev --env DB_PASSWORD=${DEV_DB_PASSWORD} --env DB_PORT=3306 --env DB_USERNAME=admin --env APP_ENV=jenkins ngoco/darbi-dev:1.0.${BUILD_NUMBER} php artisan migrate
 
                 '''
             }
@@ -42,7 +44,7 @@ pipeline {
                 sh(script: """
                 docker login -u ngoco -p $DOCKER_PASSWORD
                 """, returnStdout: true)
-                sh "docker push ngoco/ngo-catalog-devops:1.0.${BUILD_NUMBER} "
+                sh "docker push ngoco/darbi-new-testing:1.0.${BUILD_NUMBER} "
             }
         }
 
@@ -51,13 +53,15 @@ pipeline {
                 sh(script: """
                     git config --global user.email "app.support@n-go.co"
                     git config --global user.name "app-ngo"
-                    rm -Rf ngo-devops-manifest
-                    git clone https://$BITBUCKET_USER_APP:$BITBUCKET_PASS_APP@bitbucket.org/n-go-devops/ngo-devops-manifest.git
-                    cd ngo-devops-manifest/
-                    sed -i 's/ngo-catalog-devops:.*/ngo-catalog-devops:1.0.${BUILD_NUMBER}/g' NGO-Catalog/NGO-Catalog-devops-deployment.yaml
+                    rm -Rf darbi-testing-manifest
+                    git clone https://$BITBUCKET_USER_APP:$BITBUCKET_PASS_APP@bitbucket.org/n-go-devops/darbi-testing-manifest.git
+                    cd darbi-testing-manifest/
+                    sed -i 's/darbi-new-testing:.*/darbi-new-testing:1.0.${BUILD_NUMBER}/g' Darbi-New/darbi-new-testing-deployment.yaml
                     git add .
                     git commit -m 'Update to the latest version'
                     git push origin master
+                    cd ..
+                    rm -Rf darbi-testing-manifest
                 """)
             }
         }
@@ -65,7 +69,7 @@ pipeline {
         stage('Cleanup Workspace') {
             steps{
                 sh(script: """
-                    docker image rm -f ngoco/ngo-catalog-devops:1.0.${BUILD_NUMBER}
+                    docker image rm -f ngoco/darbi-new-testing:1.0.${BUILD_NUMBER}
                 """)
 
             }
@@ -93,3 +97,4 @@ pipeline {
     }
         
 }
+        
