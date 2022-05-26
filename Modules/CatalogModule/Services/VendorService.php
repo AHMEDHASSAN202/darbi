@@ -7,12 +7,11 @@
 namespace Modules\CatalogModule\Services;
 
 use Illuminate\Http\Request;
+use Modules\AuthModule\Http\Requests\User\CreateUserRequest;
+use Modules\AuthModule\Http\Requests\User\UpdateUserRequest;
+use Modules\CatalogModule\Repositories\VendorRepository;
 use Modules\CommonModule\Traits\ImageHelperTrait;
 use Modules\CommonModule\Transformers\PaginateResource;
-use Modules\VendorModule\Http\Requests\CreateUserRequest;
-use Modules\VendorModule\Http\Requests\UpdateUserRequest;
-use Modules\VendorModule\Repositories\UserRepository;
-use Modules\VendorModule\Transformers\UserResource;
 
 class VendorService
 {
@@ -20,7 +19,7 @@ class VendorService
 
     private $vendorRepository;
 
-    public function __construct(UserRepository $vendorRepository)
+    public function __construct(VendorRepository $vendorRepository)
     {
         $this->vendorRepository = $vendorRepository;
     }

@@ -11,8 +11,6 @@ class StartUpImage extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['image_full_path'];
-
     protected $dates = ['valid_from', 'valid_to'];
 
     protected static function newFactory()
@@ -33,14 +31,4 @@ class StartUpImage extends Model
     }
 
     //========== #END# Scopes ==================\\
-
-
-    //========== Appends =======================\\
-
-   public function getImageFullPathAttribute()
-   {
-       return filter_var($this->image, FILTER_VALIDATE_URL) ? $this->image : asset($this->image);
-   }
-
-    //=============#END# Appends ====================\\
 }

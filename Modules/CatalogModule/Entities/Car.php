@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use MongoDB\BSON\ObjectId;
 
 class Car extends Entity
 {
@@ -19,7 +20,7 @@ class Car extends Entity
     protected static function booted()
     {
         static::addGlobalScope('car', function (Builder $builder) {
-            $builder->where('type', 'car');
+//            $builder->where('type', 'car');
         });
     }
 
@@ -41,19 +42,19 @@ class Car extends Entity
     public function scopeFilter($query, Request $request)
     {
         if ($brand = $request->get('brand')) {
-            $query->where('brand_id', $brand);
+            $query->where('brand_id', new ObjectId($brand));
         }
 
         if ($model = $request->get('model')) {
-            $query->where('model_id', $model);
+            $query->where('model_id', new ObjectId($model));
         }
 
         if ($city = $request->get('city')) {
-            $query->where('city_id', $city);
+            $query->where('city_id', new ObjectId($city));
         }
 
         if ($country = $request->get('country')) {
-            $query->where('country_id', $country);
+            $query->where('country_id', new ObjectId($country));
         }
     }
 

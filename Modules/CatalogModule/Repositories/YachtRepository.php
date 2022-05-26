@@ -24,7 +24,7 @@ class YachtRepository
                            ->active()
                            ->available()
                            ->free()
-                           ->whereHas('port', function ($query) { $query->active(); })
+//                           ->whereHas('port', function ($query) { $query->active(); })
                            ->with('plugins')
                            ->latest()
                            ->paginate($request->get('limit', 20));

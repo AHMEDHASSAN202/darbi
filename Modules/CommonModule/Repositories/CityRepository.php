@@ -20,14 +20,7 @@ class CityRepository
 
     public function list(Request $request)
     {
-        $query = $this->model->active()->search($request)->filter($request);
-
-        if ($embedParam = $request->get('embed')) {
-            $embed = explode(',', $embedParam);
-            if (in_array('country', $embed)) {
-                $query->with('country');
-            }
-        }
+        $query = $this->model->active()->search($request)->filter($request)->when(hasEmbed('country'), function ($q) { $q->with('country'); });
 
         if ($request->has('paginated')) {
             return $query->paginate($request->get('limit', 20));

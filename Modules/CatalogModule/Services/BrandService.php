@@ -9,15 +9,8 @@ namespace Modules\CatalogModule\Services;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Repositories\BrandRepository;
-use Modules\CatalogModule\Repositories\CarRepository;
 use Modules\CatalogModule\Transformers\BrandResource;
-use Modules\CatalogModule\Transformers\CarResource;
-use Modules\CommonModule\Traits\ImageHelperTrait;
 use Modules\CommonModule\Transformers\PaginateResource;
-use Modules\VendorModule\Http\Requests\CreateUserRequest;
-use Modules\VendorModule\Http\Requests\UpdateUserRequest;
-use Modules\VendorModule\Repositories\UserRepository;
-use Modules\VendorModule\Transformers\UserResource;
 
 class BrandService
 {

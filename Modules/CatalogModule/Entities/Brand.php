@@ -39,6 +39,6 @@ class Brand extends \Jenssegers\Mongodb\Eloquent\Model
             $query->where('name.en', 'LIKE', $q)->orWhere('name.ar', 'LIKE', $q);
         });
     }
-    
+
     //================ #END# scopes =========================\\
 }

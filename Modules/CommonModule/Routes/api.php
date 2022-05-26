@@ -13,14 +13,14 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('init'           , 'InitController@index');
+Route::get('init'                   , 'InitController@index');
 
 
 Route::group([
     'namespace' => 'Location'
 ], function () {
-    Route::get('countries'      , 'CountryController@index');
-    Route::get('cities'         , 'CityController@index');
-    Route::get('regions'        , 'RegionController@index');
-    Route::get('regions/find'   , 'RegionController@findRegionByLatAndLng');
+    Route::get('countries'          , 'CountryController@index');
+    Route::get('cities'             , 'CityController@index');
+    Route::get('regions'            , 'RegionController@index');
+    Route::get('regions/nearme'     , 'RegionController@findRegionsByNorthEastAndSouthWest');
 });

@@ -8,7 +8,6 @@ namespace Modules\CatalogModule\Services;
 
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Repositories\YachtRepository;
-use Modules\CatalogModule\Transformers\CarDetailsResource;
 use Modules\CatalogModule\Transformers\YachtDetailsResource;
 use Modules\CatalogModule\Transformers\YachtResource;
 use Modules\CommonModule\Transformers\PaginateResource;

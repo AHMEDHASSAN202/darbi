@@ -8,7 +8,7 @@ namespace Modules\CommonModule\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Modules\CommonModule\Http\Requests\GetRegionByLatAndLngRequest;
+use Modules\CommonModule\Http\Requests\GetRegionsByNorthEastAndSouthWestRequest;
 use Modules\CommonModule\Repositories\RegionRepository;
 use Modules\CommonModule\Transformers\PaginateResource;
 use Modules\CommonModule\Transformers\RegionResource;
@@ -33,14 +33,20 @@ class RegionService
         return RegionResource::collection($regions);
     }
 
-    public function findRegionByLatAndLng(GetRegionByLatAndLngRequest $getRegionByLatAndLngRequest)
+    public function findRegionsByNorthEastAndSouthWest(GetRegionsByNorthEastAndSouthWestRequest $getRegionsByNorthEastAndSouthWest)
     {
-        $region = $this->regionRepository->findRegionByLatAndLng($getRegionByLatAndLngRequest);
+        $mapBounds = $getRegionsByNorthEastAndSouthWest->mapBounds;
 
-        if (!$region) {
-            return null;
-        }
+        $coordinates = [
+            [(float)$mapBounds['northEast']['lng'], (float)$mapBounds['northEast']['lat']],
+            [(float)$mapBounds['northEast']['lng'], (float)$mapBounds['southWest']['lat']],
+            [(float)$mapBounds['southWest']['lng'], (float)$mapBounds['southWest']['lat']],
+            [(float)$mapBounds['southWest']['lng'], (float)$mapBounds['northEast']['lat']],
+            [(float)$mapBounds['northEast']['lng'], (float)$mapBounds['northEast']['lat']],
+        ];
 
-        return new RegionResource($region);
+        $regions = $this->regionRepository->findRegionsByNorthEastAndSouthWest($coordinates);
+
+        return RegionResource::collection($regions);
     }
 }

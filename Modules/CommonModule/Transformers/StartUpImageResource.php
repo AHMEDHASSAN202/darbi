@@ -16,7 +16,7 @@ class StartUpImageResource extends JsonResource
     {
         return [
             'id'        => $this->id,
-            'image'     => $this->image_full_path,
+            'image'     => imageUrl($this->image),
         ];
     }
 }

@@ -25,7 +25,7 @@ class BrandFactory extends Factory
         return [
             'name'      => ['ar' => $arFaker->company(), 'en' => $this->faker->company()],
             'logo'      => $this->faker->imageUrl(150, 150, 'logo', false, 'Logo'),
-            'is_active' => $this->faker->boolean
+            'is_active' => true//$this->faker->boolean
         ];
     }
 }

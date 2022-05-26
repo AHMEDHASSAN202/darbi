@@ -5,7 +5,7 @@ namespace Modules\CommonModule\Http\Controllers\Location;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\CommonModule\Http\Requests\GetRegionByLatAndLngRequest;
+use Modules\CommonModule\Http\Requests\GetRegionsByNorthEastAndSouthWestRequest;
 use Modules\CommonModule\Services\RegionService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 use function view;
@@ -28,16 +28,12 @@ class RegionController extends Controller
         ]);
     }
 
-    public function findRegionByLatAndLng(GetRegionByLatAndLngRequest $getRegionByLatAndLngRequest)
+    public function findRegionsByNorthEastAndSouthWest(GetRegionsByNorthEastAndSouthWestRequest $getRegionsByNorthEastAndSouthWestRequest)
     {
-        $region = $this->regionService->findRegionByLatAndLng($getRegionByLatAndLngRequest);
-
-        if (!$region) {
-            return $this->apiResponse([], 404, __('Region Not Found'));
-        }
+        $regions = $this->regionService->findRegionsByNorthEastAndSouthWest($getRegionsByNorthEastAndSouthWestRequest);
 
         return $this->apiResponse([
-            'region'    => $region
+            'regions'    => $regions
         ]);
     }
 }

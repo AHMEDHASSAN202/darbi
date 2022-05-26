@@ -27,7 +27,6 @@ class PluginFactory extends Factory
             'price'         => $this->faker->numberBetween(1500, 6000),
             'price_unit'    => ['day', 'hour'][mt_rand(0,1)],
             'is_active'     => $this->faker->boolean(),
-            'car_ids'       => []
         ];
     }
 }

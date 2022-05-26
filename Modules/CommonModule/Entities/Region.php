@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use MongoDB\BSON\ObjectId;
 
 class Region extends Model
 {
@@ -35,11 +36,11 @@ class Region extends Model
     public function scopeFilter($query, Request $request)
     {
         if ($countryId = $request->get('country')) {
-            $query->where('country_id', $countryId);
+            $query->where('country_id', new ObjectId($countryId));
         }
 
         if ($cityId = $request->get('city')) {
-            $query->where('city_id', $cityId);
+            $query->where('city_id', new ObjectId($cityId));
         }
     }
 
