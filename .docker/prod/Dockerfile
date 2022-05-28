@@ -26,7 +26,7 @@ RUN docker-php-ext-install zip
 # # RUN pecl install xdebug
 
 # # Configure Nginx
-RUN apk --no-cache add nginx
+RUN apk --no-cache add nginx supervisor curl nano bash
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
 # RUN ln -s /usr/bin/php8 /usr/bin/php
 # RUN pickle install apcu
@@ -43,7 +43,7 @@ COPY .docker/nginx.conf /etc/nginx/nginx.conf
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # # Configure Supervisord
-# COPY .docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY .docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # # Configure Wkhtmltopdf
 # RUN mv /usr/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
@@ -80,4 +80,4 @@ RUN composer install
 # Expose Port
 EXPOSE 80
 
-# CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
