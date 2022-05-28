@@ -26,7 +26,7 @@ RUN docker-php-ext-install zip
 # # RUN pecl install xdebug
 
 # # Configure Nginx
-RUN apk --no-cache add nginx supervisor curl nano bash
+RUN apt-get install nginx supervisor curl nano bash
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
 # RUN ln -s /usr/bin/php8 /usr/bin/php
 # RUN pickle install apcu
