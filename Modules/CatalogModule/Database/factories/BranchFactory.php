@@ -35,7 +35,7 @@ class BranchFactory extends Factory
                 $this->faker->imageUrl(800, 400, null, false, 'Cover'),
                 $this->faker->imageUrl(800, 400, null, false, 'Cover'),
             ],
-            'is_active'     => $this->faker->boolean,
+            'is_active'     => true,//$this->faker->boolean,
             'is_open'       => $this->faker->boolean,
             'phones'        => [
                 [

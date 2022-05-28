@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Modules\CommonModule\Entities\Country;
+use MongoDB\BSON\ObjectId;
 
 class Yacht extends Entity
 {
@@ -54,11 +55,11 @@ class Yacht extends Entity
     public function scopeFilter($query, Request $request)
     {
         if ($city = $request->get('city')) {
-            $query->where('city_id', $city);
+            $query->where('city_id', new ObjectId($city));
         }
 
         if ($country = $request->get('country')) {
-            $query->where('country_id', $country);
+            $query->where('country_id', new ObjectId($country));
         }
     }
 

@@ -19,8 +19,8 @@ class BrandRepository
     public function listOfBrands(Request $request)
     {
         $query = $this->model->search($request)
-                      ->active()
-                      ->latest();
+                             ->active()
+                             ->latest();
 
         if ($request->has('paginated')) {
             return $query->paginate($request->get('limit', 20));

@@ -20,10 +20,10 @@ class CarRepository
     {
         return $this->model->search($request)
                            ->with(['model', 'brand'])
+//                           ->whereHas('model', function ($query) { $query->active(); })
+//                           ->whereHas('brand', function ($query) { $query->active(); })
                            ->filter($request)
                            ->active()
-                           ->whereHas('model', function ($query) { $query->active(); })
-                           ->whereHas('brand', function ($query) { $query->active(); })
                            ->available()
                            ->free()
                            ->latest()

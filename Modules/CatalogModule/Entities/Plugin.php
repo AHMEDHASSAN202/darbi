@@ -21,9 +21,9 @@ class Plugin extends \Jenssegers\Mongodb\Eloquent\Model
     }
 
     //================== Relations ==================\\
-    public function cars()
+    public function entities()
     {
-        return $this->belongsToMany(Car::class, null, 'plugin_ids', 'car_ids');
+        return $this->belongsToMany(Entity::class, null, 'entity_ids', 'plugin_ids');
     }
     //===================#END# Relation ==============\\
 

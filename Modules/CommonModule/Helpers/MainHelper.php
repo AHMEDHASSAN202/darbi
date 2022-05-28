@@ -5,18 +5,6 @@
  */
 
 
-function getFirstError($errors) {
-    if (!is_array($errors) || empty($errors)) return [];
-
-    $err = [];
-
-    foreach ($errors as $key => $error) {
-        $err[$key] = $error[0];
-    }
-
-    return $err;
-}
-
 function getCurrentGuard() {
     if (auth('admin_api')->check()) {
         return 'admin_api';
@@ -73,4 +61,13 @@ function generatePriceLabelFromPrice(?float $price, $priceUnit) : string
 function generateOTPCode()
 {
     return mt_rand(1000,9999);
+}
+
+function hasEmbed($param) : bool
+{
+    if ($embedParam = request('embed')) {
+        $embed = explode(',', $embedParam);
+        return in_array($param, $embed);
+    }
+    return false;
 }

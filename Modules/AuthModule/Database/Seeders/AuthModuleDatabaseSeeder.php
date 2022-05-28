@@ -24,6 +24,6 @@ class AuthModuleDatabaseSeeder extends Seeder
         $this->call(AdminTableSeeder::class);
         Admin::factory()->count(10)->create();
         User::factory()->count(50)->create();
-        SavedPlace::factory()->count(100)->create();
+        SavedPlace::factory()->count(50)->create();
     }
 }

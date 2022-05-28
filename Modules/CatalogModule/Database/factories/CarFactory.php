@@ -42,11 +42,11 @@ class CarFactory extends Factory
                 $this->faker->imageUrl(300, 300, 'car', false, 'Car'),
                 $this->faker->imageUrl(300, 300, 'car', false, 'Car')
             ],
-            'is_active'         => $this->faker->boolean,
+            'is_active'         => true,//$this->faker->boolean,
             'is_available'      => $this->faker->boolean,
             'vendor_id'         => new ObjectId($vendor->_id),
             'branch_ids'        => $branches,
-            'state'             => ['free', 'reserved', 'pending'][mt_rand(0,2)],
+            'state'             => 'free',//['free', 'reserved', 'pending'][mt_rand(0,2)],
             'plugin_ids'        => [],
             'country_id'        => new ObjectId($country->_id),
             'city_id'           => new ObjectId($city->_id),

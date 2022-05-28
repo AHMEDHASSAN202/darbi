@@ -3,8 +3,6 @@
 namespace Modules\AuthModule\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Modules\AuthModule\Services\UserAuthService;
 
 class UpdateProfileRequest extends FormRequest
 {

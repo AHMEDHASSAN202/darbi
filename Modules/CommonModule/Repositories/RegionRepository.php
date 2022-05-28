@@ -8,7 +8,7 @@ namespace Modules\CommonModule\Repositories;
 
 use Illuminate\Http\Request;
 use Modules\CommonModule\Entities\Region;
-use Modules\CommonModule\Http\Requests\GetRegionByLatAndLngRequest;
+use Modules\CommonModule\Http\Requests\GetRegionsByNorthEastAndSouthWestRequest;
 
 class RegionRepository
 {
@@ -21,26 +21,9 @@ class RegionRepository
 
     public function list(Request $request)
     {
-        $query = $this->model->active()->search($request)->filter($request);
-
-        if ($embedParam = $request->get('embed')) {
-
-            $embeds = explode(',', $embedParam);
-            $with = [];
-
-            foreach ($embeds as $embed) {
-                switch ($embed) {
-                    case 'country':
-                        $with[] = 'country';
-                        break;
-                    case 'city':
-                        $with[] = 'city';
-                        break;
-                }
-            }
-
-            $query->with($with);
-        }
+        $query = $this->model->active()->search($request)->filter($request)
+                             ->when(hasEmbed('country'), function ($q) { $q->with('country'); })
+                             ->when(hasEmbed('city'), function ($q) { $q->with('city'); });
 
         if ($request->has('paginated')) {
             return $query->paginate($request->get('limit', 20));
@@ -49,13 +32,16 @@ class RegionRepository
         return $query->get();
     }
 
-    public function findRegionByLatAndLng(GetRegionByLatAndLngRequest $getRegionByLatAndLngRequest)
+    public function findRegionsByNorthEastAndSouthWest($coordinates)
     {
-        return Region::where('location', 'geoIntersects', [
-                    '$geometry' => [
-                        'type' => 'Point',
-                        'coordinates' => [(float)$getRegionByLatAndLngRequest->lat, (float)$getRegionByLatAndLngRequest->lng],
-                    ],
-                ])->first();
+        return $this->model->where('location', 'geoIntersects', [
+                                '$geometry' => [
+                                    'type'          => 'Polygon',
+                                    'coordinates'   => [$coordinates],
+                                ],
+                            ])
+                            ->when(hasEmbed('country'), function ($q) { $q->with('country'); })
+                            ->when(hasEmbed('city'), function ($q) { $q->with('city'); })
+                            ->get();
     }
 }
