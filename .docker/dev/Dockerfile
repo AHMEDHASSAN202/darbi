@@ -1,27 +1,51 @@
-FROM alpine:3.14
+FROM php:8.1-fpm
+RUN apt-get update
+RUN docker-php-ext-install pdo pdo_mysql mysqli
+
+RUN apt-get install -y autoconf pkg-config libssl-dev nginx supervisor
+RUN pecl install mongodb
+RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/mongodb.ini
+# RUN apt-get install zip unzip php8.1-zip
+RUN apt-get update && apt-get install -y \
+    zlib1g-dev \
+    libzip-dev \
+    unzip
+RUN docker-php-ext-install zip
 
 # Install Packages
-RUN apk --no-cache add php7 php7-fpm php7-opcache php7-mysqli php7-json php7-openssl php7-curl \
-    php7-simplexml php7-iconv php7-tokenizer php7-pdo php7-fileinfo php7-xmlwriter php7-zip php7-gd \
-    php7-zlib php7-xml php7-phar php7-intl php7-dom php7-xmlreader php7-ctype php7-session php7-mbstring \
-    php7-pdo_mysql php7-redis libzip-dev libpng-dev musl-locales musl-locales-lang nginx supervisor curl nano bash \
-    wkhtmltopdf libstdc++ libx11 libxrender libxext ca-certificates fontconfig freetype ttf-dejavu ttf-droid ttf-freefont ttf-liberation php7-gmp
+# RUN apk --no-cache add php8 php8-fpm php8-opcache php8-mysqli php8-json php8-openssl php8-curl \
+#     php8-simplexml php8-iconv php8-tokenizer php8-pdo php8-fileinfo php8-xmlwriter php8-zip php8-gd \
+#     php8-zlib php8-xml php8-phar php8-intl php8-dom php8-xmlreader php8-ctype php8-session php8-mbstring \
+#     php8-pdo_mysql php8-redis libzip-dev libpng-dev musl-locales musl-locales-lang nginx supervisor curl nano bash \
+#     wkhtmltopdf libstdc++ libx11 libxrender libxext ca-certificates fontconfig freetype ttf-dejavu ttf-droid ttf-freefont ttf-liberation php8-gmp
 
-# Configure Nginx
+# RUN wget https://github.com/FriendsOfPHP/pickle/releases/download/v0.6.0/pickle.phar && mv pickle.phar /usr/local/bin/pickle
+# RUN chmod +x /usr/local/bin/pickle
+
+# # RUN apk --no-cache add php7-pear php7-dev gcc musl-dev make
+# # RUN pecl install xdebug
+
+# # Configure Nginx
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
+# RUN ln -s /usr/bin/php8 /usr/bin/php
+# RUN pickle install apcu
+# RUN pickle install mongodb
 
-# Configure PHP-FPM
-COPY .docker/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
-COPY .docker/php.ini /etc/php7/conf.d/custom.ini
+# # RUN ls /usr/bin/php8
+# RUN echo "extension=mongodb.so" >> /etc/php8/conf.d/mongodb.ini
 
-# Configure Composer
+# # Configure PHP-FPM
+# COPY .docker/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
+# COPY .docker/php.ini /etc/php7/conf.d/custom.ini
+
+# # Configure Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Configure Supervisord
-COPY .docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# # Configure Supervisord
+# COPY .docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Configure Wkhtmltopdf
-RUN mv /usr/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
+# # Configure Wkhtmltopdf
+# RUN mv /usr/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
 
 # Create Working Dir
 RUN mkdir -p /var/www/html
@@ -38,7 +62,8 @@ RUN mkdir -p /var/www/html/storage/framework/cache/data && \
     mkdir -p /var/www/html/storage/framework/views
 
 # Configure User
-RUN addgroup -S system && adduser -S system -G system && \
+# RUN adduser --system --group system
+RUN adduser --system --group system && \
     chown -R system.system /var/www/html && \
     chown -R system.system /run && \
     chown -R system.system /var/lib/nginx && \
@@ -54,4 +79,4 @@ RUN composer install
 # Expose Port
 EXPOSE 80
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
