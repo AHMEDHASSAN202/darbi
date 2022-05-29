@@ -1,83 +1,63 @@
-FROM php:8.1-fpm
-RUN apt-get update
-RUN docker-php-ext-install pdo pdo_mysql mysqli
+FROM php:8.0-fpm
 
-RUN apt-get install -y autoconf pkg-config libssl-dev nginx supervisor
-RUN pecl install mongodb
-RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/mongodb.ini
-# RUN apt-get install zip unzip php8.1-zip
+# Set working directory
+WORKDIR /var/www
+
+# Add docker php ext repo
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+# Install php extensions
+RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
+    install-php-extensions mbstring pdo_mysql zip exif pcntl gd memcached
+
+# Install dependencies
 RUN apt-get update && apt-get install -y \
-    zlib1g-dev \
-    libzip-dev \
-    unzip
-RUN docker-php-ext-install zip
+    build-essential \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    unzip \
+    git \
+    curl \
+    lua-zlib-dev \
+    libmemcached-dev \
+    nginx
 
-# Install Packages
-# RUN apk --no-cache add php8 php8-fpm php8-opcache php8-mysqli php8-json php8-openssl php8-curl \
-#     php8-simplexml php8-iconv php8-tokenizer php8-pdo php8-fileinfo php8-xmlwriter php8-zip php8-gd \
-#     php8-zlib php8-xml php8-phar php8-intl php8-dom php8-xmlreader php8-ctype php8-session php8-mbstring \
-#     php8-pdo_mysql php8-redis libzip-dev libpng-dev musl-locales musl-locales-lang nginx supervisor curl nano bash \
-#     wkhtmltopdf libstdc++ libx11 libxrender libxext ca-certificates fontconfig freetype ttf-dejavu ttf-droid ttf-freefont ttf-liberation php8-gmp
+# Install supervisor
+RUN apt-get install -y supervisor
 
-# RUN wget https://github.com/FriendsOfPHP/pickle/releases/download/v0.6.0/pickle.phar && mv pickle.phar /usr/local/bin/pickle
-# RUN chmod +x /usr/local/bin/pickle
-
-# # RUN apk --no-cache add php7-pear php7-dev gcc musl-dev make
-# # RUN pecl install xdebug
-
-# # Configure Nginx
-RUN apt-get -y install nginx supervisor curl nano bash
-COPY .docker/nginx.conf /etc/nginx/nginx.conf
-# RUN ln -s /usr/bin/php8 /usr/bin/php
-# RUN pickle install apcu
-# RUN pickle install mongodb
-
-# # RUN ls /usr/bin/php8
-# RUN echo "extension=mongodb.so" >> /etc/php8/conf.d/mongodb.ini
-
-# # Configure PHP-FPM
-COPY .docker/fpm-pool.conf /usr/local/etc/php/php-fpm.d/www.conf
-COPY .docker/php.ini /usr/local/etc/php/conf.d/custom.ini
-
-# # Configure Composer
+# Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# # Configure Supervisord
-COPY .docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# # Configure Wkhtmltopdf
-# RUN mv /usr/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
+# Add user for laravel application
+RUN groupadd -g 1000 www
+RUN useradd -u 1000 -ms /bin/bash -g www www
 
-# Create Working Dir
-RUN mkdir -p /var/www/html
+# Copy code to /var/www
+COPY --chown=www:www-data . /var/www
 
-# Add Application
-WORKDIR /var/www/html
-COPY . /var/www/html/
-COPY .env.example /var/www/html/.env
+# add root to www group
+RUN chmod -R ug+w /var/www/storage
 
-# Ceate Sub Directories
-RUN mkdir -p /var/www/html/storage/framework/cache/data && \
-    mkdir -p /var/www/html/storage/framework/sessions && \
-    mkdir -p /var/www/html/storage/framework/testing && \
-    mkdir -p /var/www/html/storage/framework/views
+# Copy nginx/php/supervisor configs
+RUN cp docker/supervisor.conf /etc/supervisord.conf
+RUN cp docker/php.ini /usr/local/etc/php/conf.d/app.ini
+RUN cp docker/nginx.conf /etc/nginx/sites-enabled/default
 
-# Configure User
-# RUN adduser --system --group system
-RUN adduser --system --group system && \
-    chown -R system.system /var/www/html && \
-    chown -R system.system /run && \
-    chown -R system.system /var/lib/nginx && \
-    chown -R system.system /var/log/nginx
+# PHP Error Log Files
+RUN mkdir /var/log/php
+RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 
-# Switch To User
-USER system
+# Deployment steps
+RUN composer require mongodb/mongodb --ignore-platform-reqs && composer require jenssegers/mongodb --ignore-platform-reqs
+RUN composer install --ignore-platform-reqs
+RUN chmod +x /var/www/docker/run.sh
 
-# Composer Install
-RUN composer self-update --stable
-RUN composer install
-
-# Expose Port
 EXPOSE 80
-
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+ENTRYPOINT ["/var/www/docker/run.sh"]
