@@ -26,6 +26,9 @@ RUN apt-get update && apt-get install -y \
     libmemcached-dev \
     nginx
 
+# Install Mongodb 
+RUN pecl install mongodb
+
 # Install supervisor
 RUN apt-get install -y supervisor
 
@@ -40,10 +43,10 @@ RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy code to /var/www
-COPY . /var/www
+COPY --chown=www:www-data . /var/www
 
 # add root to www group
-RUN chmod -R 755 /var/www/storage
+RUN chmod -R ug+w /var/www/storage
 
 # Copy nginx/php/supervisor configs
 RUN cp docker/supervisor.conf /etc/supervisord.conf
