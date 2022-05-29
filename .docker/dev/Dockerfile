@@ -49,6 +49,7 @@ COPY --chown=www:www-data . /var/www
 # add root to www group
 RUN chmod -R ug+w /var/www/storage
 RUN chmod -R 777 storage
+RUN chmod -R 777 /var/www/storage/logs/laravel.log
 RUN chmod -R 777 bootstrap/cache
 RUN chown -R $USER:www-data storage
 RUN chown -R $USER:www-data bootstrap/cache
