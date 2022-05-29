@@ -44,11 +44,11 @@ RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy code to /var/www
-COPY --chown=www:www-data . /var/www
+COPY . /var/www
 
 # add root to www group
 RUN chmod -R ug+w /var/www/storage
-RUN chmod -R 777 storage
+RUN chmod 777 storage
 RUN chmod -R 777 /var/www/storage/logs/
 RUN chmod -R 777 bootstrap/cache
 RUN chown -R $USER:www-data storage
