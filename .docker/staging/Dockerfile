@@ -26,6 +26,10 @@ RUN apt-get update && apt-get install -y \
     libmemcached-dev \
     nginx
 
+# Install Mongodb 
+RUN pecl install mongodb
+RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/php.ini
+
 # Install supervisor
 RUN apt-get install -y supervisor
 
