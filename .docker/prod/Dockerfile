@@ -36,8 +36,8 @@ COPY .docker/nginx.conf /etc/nginx/nginx.conf
 # RUN echo "extension=mongodb.so" >> /etc/php8/conf.d/mongodb.ini
 
 # # Configure PHP-FPM
-# COPY .docker/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
-# COPY .docker/php.ini /etc/php7/conf.d/custom.ini
+COPY .docker/fpm-pool.conf /usr/local/etc/php/php-fpm.d/www.conf
+COPY .docker/php.ini /usr/local/etc/php/conf.d/custom.ini
 
 # # Configure Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
