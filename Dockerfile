@@ -55,7 +55,7 @@ RUN mkdir /var/log/php
 RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 
 # Deployment steps
-Run composer require mongodb/mongodb --ignore-platform-reqs && composer require jenssegers/mongodb --ignore-platform-reqs
+RUN composer require mongodb/mongodb --ignore-platform-reqs && composer require jenssegers/mongodb --ignore-platform-reqs
 RUN composer install --ignore-platform-reqs
 RUN chmod +x /var/www/docker/run.sh
 
