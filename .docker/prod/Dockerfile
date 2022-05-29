@@ -1,7 +1,7 @@
 FROM php:8.0-fpm
 
 # Set working directory
-WORKDIR /var/www/html/
+WORKDIR /var/www
 
 # Add docker php ext repo
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
@@ -44,10 +44,10 @@ RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy code to /var/www
-COPY --chown=www:www-data . /var/www/html/
+COPY --chown=www:www-data . /var/www
 
 # add root to www group
-RUN chmod -R ug+w /var/www/html/storage
+RUN chmod -R ug+w /var/www/storage
 
 # Copy nginx/php/supervisor configs
 RUN cp docker/supervisor.conf /etc/supervisord.conf
@@ -61,7 +61,7 @@ RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 # Deployment steps
 RUN composer require mongodb/mongodb --ignore-platform-reqs && composer require jenssegers/mongodb --ignore-platform-reqs
 RUN composer install --ignore-platform-reqs
-RUN chmod +x /var/www/html/docker/run.sh
+RUN chmod +x /var/www/docker/run.sh
 
 EXPOSE 80
-ENTRYPOINT ["/var/www/html/docker/run.sh"]
+ENTRYPOINT ["/var/www/docker/run.sh"]
