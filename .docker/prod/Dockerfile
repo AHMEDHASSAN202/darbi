@@ -43,7 +43,7 @@ RUN useradd -u 1000 -ms /bin/bash -g www www
 COPY . /var/www
 
 # add root to www group
-RUN chmod -R u+rwx /var/www/storage
+RUN chmod -R 755 /var/www/storage
 
 # Copy nginx/php/supervisor configs
 RUN cp docker/supervisor.conf /etc/supervisord.conf
