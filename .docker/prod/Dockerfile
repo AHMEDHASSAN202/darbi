@@ -43,7 +43,6 @@ RUN useradd -u 1000 -ms /bin/bash -g www www
 COPY --chown=www:www-data . /var/www
 
 # add root to www group
-USER www
 RUN chmod -R u+rwx /var/www/storage
 
 # Copy nginx/php/supervisor configs
@@ -61,4 +60,5 @@ RUN composer install --ignore-platform-reqs
 RUN chmod +x /var/www/docker/run.sh
 
 EXPOSE 80
+USER www
 ENTRYPOINT ["/var/www/docker/run.sh"]
