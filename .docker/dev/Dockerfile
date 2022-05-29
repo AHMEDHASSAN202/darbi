@@ -69,4 +69,4 @@ RUN chmod +x /var/www/docker/run.sh
 
 EXPOSE 80
 ENTRYPOINT ["/var/www/docker/run.sh"]
-USER www
+USER root
