@@ -51,8 +51,7 @@ RUN chmod -R ug+w /var/www/storage
 RUN chmod 777 storage
 RUN chmod -R 777 /var/www/storage/logs/
 RUN chmod -R 777 bootstrap/cache
-RUN chown -R $USER:www-data storage
-RUN chown -R $USER:www-data bootstrap/cache
+
 
 # Copy nginx/php/supervisor configs
 RUN cp docker/supervisor.conf /etc/supervisord.conf
