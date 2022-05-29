@@ -40,7 +40,7 @@ RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy code to /var/www
-COPY --chown=www:www-data . /var/www
+COPY . /var/www
 
 # add root to www group
 RUN chmod -R u+rwx /var/www/storage
@@ -60,5 +60,4 @@ RUN composer install --ignore-platform-reqs
 RUN chmod +x /var/www/docker/run.sh
 
 EXPOSE 80
-USER www
 ENTRYPOINT ["/var/www/docker/run.sh"]
