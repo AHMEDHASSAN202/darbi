@@ -39,31 +39,30 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
-
-# Copy code to /var/www
-WORKDIR /var/www
-COPY . /var/www
-
-RUN chown -R www-data:www-data /var/www
-
-
-
-
 
 
 # COPY --chown=www:www-data . /var/www
-
-# # add root to www group
-RUN chmod 777 /var/www/storage
-RUN chmod 777 /var/www/storage/logs
+WORKDIR /var/www
+COPY . /var/www
 
 # Copy nginx/php/supervisor configs
 RUN cp docker/supervisor.conf /etc/supervisord.conf
 RUN cp docker/php.ini /usr/local/etc/php/conf.d/app.ini
 RUN cp docker/nginx.conf /etc/nginx/sites-enabled/default
+
+# Add user for laravel application
+RUN groupadd -g 1000 www
+RUN useradd -u 1000 -ms /bin/bash -g www www
+
+# Copy code to /var/www
+
+
+RUN chown -R www:www /var/www
+# # add root to www group
+RUN chmod 777 /var/www/storage
+RUN chmod 777 /var/www/storage/logs
+
+USER www
 
 # PHP Error Log Files
 # RUN mkdir /var/log/php
