@@ -2,7 +2,7 @@ FROM php:8.0-fpm
 
 # Set working directory
 WORKDIR /var/www
-USER root
+
 # Add docker php ext repo
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
@@ -47,7 +47,7 @@ RUN useradd -u 1000 -ms /bin/bash -g www www
 COPY --chown=www:www-data . /var/www
 
 # add root to www group
-RUN chmod -R ug+w /var/www/storage
+RUN chmod -R ugo+rwX /var/www/storage
 
 # Copy nginx/php/supervisor configs
 RUN cp docker/supervisor.conf /etc/supervisord.conf
