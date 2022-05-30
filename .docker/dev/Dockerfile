@@ -1,8 +1,5 @@
 FROM php:8.0-fpm
 
-# Set working directory
-# WORKDIR /var/www
-
 # Add docker php ext repo
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
@@ -42,10 +39,10 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-
-
-# COPY --chown=www:www-data . /var/www
+# Set working directory
 WORKDIR /var/www
+
+# Copy project files to container
 COPY . /var/www
 
 # Copy nginx/php/supervisor configs
@@ -57,33 +54,33 @@ RUN cp docker/nginx.conf /etc/nginx/sites-enabled/default
 RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
-# Copy code to /var/www
-
-
+# Change ownership to www for project
 RUN chown -R www:www /var/www
+
 # # add root to www group
 RUN chmod 777 /var/www/storage
 RUN chmod 777 /var/www/storage/logs
 
-
+# change ownership for directories to www
 RUN chown -R www /var/www/html && \
     chown -R www /run && \
     chown -R www /var/lib/nginx && \
     chown -R www /var/log/nginx && \
     chown -R www /var/log/
 
+# Switch user to www
 USER www
 
 # PHP Error Log Files
-# RUN mkdir /var/log/php
-# RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
+RUN mkdir /var/log/php
+RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 
 # Deployment steps
 RUN composer require mongodb/mongodb --ignore-platform-reqs && composer require jenssegers/mongodb --ignore-platform-reqs
 RUN composer install --ignore-platform-reqs
 RUN chmod +x /var/www/docker/run.sh
 
-
-
+# open port 80
 EXPOSE 80
+
 ENTRYPOINT ["/var/www/docker/run.sh"]
