@@ -47,18 +47,11 @@ RUN useradd -u 1000 -ms /bin/bash -g www www
 WORKDIR /var/www
 COPY . /var/www
 
-RUN mkdir -p /var/www/storage/framework/cache/data && \
-    mkdir -p /var/www/storage/framework/sessions && \
-    mkdir -p /var/www/storage/framework/testing && \
-    mkdir -p /var/www/storage/framework/views
+RUN chown -R www-data:www-data /var/www
 
-RUN addgroup -S system && adduser -S system -G system && \
-    chown -R system.system /var/www/html && \
-    chown -R system.system /run && \
-    chown -R system.system /var/lib/nginx && \
-    chown -R system.system /var/log/nginx
 
-USER system
+
+
 
 
 # COPY --chown=www:www-data . /var/www
