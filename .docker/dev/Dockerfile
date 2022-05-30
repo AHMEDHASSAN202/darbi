@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     lua-zlib-dev \
     libmemcached-dev \
+    libssl-dev pkg-config \
     nginx
 
 # Install Mongodb 
