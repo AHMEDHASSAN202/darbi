@@ -1,7 +1,7 @@
 FROM php:8.0-fpm
 
 # Set working directory
-WORKDIR /var/www
+# WORKDIR /var/www
 
 # Add docker php ext repo
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
@@ -44,10 +44,27 @@ RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy code to /var/www
-COPY --chown=www:www-data . /var/www
+WORKDIR /var/www
+COPY . /var/www
 
-# add root to www group
-RUN chmod -R ugo+rwX /var/www/storage
+RUN mkdir -p /var/www/storage/framework/cache/data && \
+    mkdir -p /var/www/storage/framework/sessions && \
+    mkdir -p /var/www/storage/framework/testing && \
+    mkdir -p /var/www/storage/framework/views
+
+RUN addgroup -S system && adduser -S system -G system && \
+    chown -R system.system /var/www/html && \
+    chown -R system.system /run && \
+    chown -R system.system /var/lib/nginx && \
+    chown -R system.system /var/log/nginx
+
+USER system
+
+
+# COPY --chown=www:www-data . /var/www
+
+# # add root to www group
+# RUN chmod -R ugo+rwX /var/www/storage
 
 # Copy nginx/php/supervisor configs
 RUN cp docker/supervisor.conf /etc/supervisord.conf
@@ -55,8 +72,8 @@ RUN cp docker/php.ini /usr/local/etc/php/conf.d/app.ini
 RUN cp docker/nginx.conf /etc/nginx/sites-enabled/default
 
 # PHP Error Log Files
-RUN mkdir /var/log/php
-RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
+# RUN mkdir /var/log/php
+# RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 
 # Deployment steps
 RUN composer require mongodb/mongodb --ignore-platform-reqs && composer require jenssegers/mongodb --ignore-platform-reqs
