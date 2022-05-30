@@ -29,6 +29,8 @@ RUN apt-get update && apt-get install -y \
 
 # Install Mongodb 
 RUN pecl install mongodb
+RUN pecl install redis
+
 RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/php.ini
 
 # Install supervisor
