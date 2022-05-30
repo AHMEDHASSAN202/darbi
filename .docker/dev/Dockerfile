@@ -62,12 +62,14 @@ RUN chown -R www:www /var/www
 RUN chmod 777 /var/www/storage
 RUN chmod 777 /var/www/storage/logs
 
-USER www
 
 RUN chown -R www /var/www/html && \
     chown -R www /run && \
     chown -R www /var/lib/nginx && \
     chown -R www /var/log/nginx
+
+USER www
+
 # PHP Error Log Files
 # RUN mkdir /var/log/php
 # RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
