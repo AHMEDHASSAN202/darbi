@@ -66,7 +66,8 @@ RUN chmod 777 /var/www/storage/logs
 RUN chown -R www /var/www/html && \
     chown -R www /run && \
     chown -R www /var/lib/nginx && \
-    chown -R www /var/log/nginx
+    chown -R www /var/log/nginx && \
+    chown -R www /var/log/
 
 USER www
 
