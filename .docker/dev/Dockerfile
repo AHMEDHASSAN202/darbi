@@ -64,6 +64,10 @@ RUN chmod 777 /var/www/storage/logs
 
 USER www
 
+RUN chown -R www /var/www/html && \
+    chown -R www /run && \
+    chown -R www /var/lib/nginx && \
+    chown -R www /var/log/nginx
 # PHP Error Log Files
 # RUN mkdir /var/log/php
 # RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
@@ -72,6 +76,8 @@ USER www
 RUN composer require mongodb/mongodb --ignore-platform-reqs && composer require jenssegers/mongodb --ignore-platform-reqs
 RUN composer install --ignore-platform-reqs
 RUN chmod +x /var/www/docker/run.sh
+
+
 
 EXPOSE 80
 ENTRYPOINT ["/var/www/docker/run.sh"]
