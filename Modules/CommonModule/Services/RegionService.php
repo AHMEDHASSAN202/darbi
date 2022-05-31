@@ -49,4 +49,13 @@ class RegionService
 
         return RegionResource::collection($regions);
     }
+
+    public function findRegionByLatAndLng($lat, $lng)
+    {
+        $region = $this->regionRepository->findRegionByLatAndLng($lat, $lng);
+
+        if (!$region) return null;
+
+        return new RegionResource($region);
+    }
 }

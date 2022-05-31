@@ -2,11 +2,11 @@
 
 namespace Modules\BookingModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model;
 use Modules\CatalogModule\Entities\Entity;
 
-class Booking extends Model
+class Booking extends Base
 {
     use HasFactory;
 

@@ -16,9 +16,10 @@ use Illuminate\Http\Request;
 
 //places routes
 Route::group([
-    'prefix'    => 'places'
+    'prefix'    => 'places',
 ], function () {
-    Route::get(''               , 'SavedPlaceController@findAll');
+    Route::get(''               , 'SavedPlaceController@findAll')->middleware('auth:api');
+    Route::post(''              , 'SavedPlaceController@store')->middleware('auth:api');
 });
 
 

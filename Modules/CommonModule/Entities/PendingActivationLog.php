@@ -2,10 +2,10 @@
 
 namespace Modules\CommonModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model;
 
-class PendingActivationLog extends Model
+class PendingActivationLog extends Base
 {
     use HasFactory;
 

@@ -42,6 +42,17 @@ class RegionRepository
                             ])
                             ->when(hasEmbed('country'), function ($q) { $q->with('country'); })
                             ->when(hasEmbed('city'), function ($q) { $q->with('city'); })
+                            ->active()
                             ->get();
+    }
+
+    public function findRegionByLatAndLng($lat, $lng)
+    {
+        return $this->model->active()->where('location', 'near', [
+            '$geometry' => [
+                'type' => 'Point',
+                'coordinates' => [(float)$lat, (float)$lng],
+            ],
+        ])->with(['country', 'city'])->first();
     }
 }

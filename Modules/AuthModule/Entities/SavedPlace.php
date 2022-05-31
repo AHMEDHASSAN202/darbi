@@ -2,12 +2,11 @@
 
 namespace Modules\AuthModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model;
-use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Entities\Region;
 
-class SavedPlace extends Model
+class SavedPlace extends Base
 {
     use HasFactory;
 

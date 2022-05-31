@@ -2,10 +2,12 @@
 
 namespace Modules\CatalogModule\Entities;
 
+use App\Casts\ObjectIdCast;
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
-class Model extends \Jenssegers\Mongodb\Eloquent\Model
+class Model extends Base
 {
     use HasFactory, SoftDeletes;
 

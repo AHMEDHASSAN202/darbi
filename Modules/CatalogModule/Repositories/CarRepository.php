@@ -20,8 +20,12 @@ class CarRepository
     {
         return $this->model->search($request)
                            ->with(['model', 'brand'])
-//                           ->whereHas('model', function ($query) { $query->active(); })
-//                           ->whereHas('brand', function ($query) { $query->active(); })
+                           ->whereHas('model', function ($query) { $query->active(); })
+                           ->whereHas('brand', function ($query) { $query->active(); })
+                           ->when($request->region, function ($query) use ($request) {
+                               $branchIds = app(BranchesRepository::class)->findAllBranchesByRegion($request->region, true)->pluck('_id')->toArray();
+                               $query->where('branch_ids', 'all', $branchIds);
+                           })
                            ->filter($request)
                            ->active()
                            ->available()
@@ -33,6 +37,6 @@ class CarRepository
 
     public function findCarWithDetailsById($carId)
     {
-        return $this->model->with(['model', 'brand', 'plugins' => function ($query) { $query->active(); }])->find($carId);
+        return $this->model->with(['model', 'brand', 'plugins' => function ($query) { $query->active(); }])->findOrFail($carId);
     }
 }

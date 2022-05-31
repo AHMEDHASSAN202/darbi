@@ -3,14 +3,14 @@
 namespace Modules\CatalogModule\Entities;
 
 
+use App\Eloquent\BaseAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Modules\CatalogModule\Database\factories\VendorFactory;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use function request;
 
-class Vendor extends Authenticatable implements JWTSubject
+
+class Vendor extends BaseAuthenticatable implements JWTSubject
 {
     use HasFactory, SoftDeletes;
 

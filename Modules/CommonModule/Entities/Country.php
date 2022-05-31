@@ -3,12 +3,12 @@
 namespace Modules\CommonModule\Entities;
 
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
-use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
-class Country extends Model
+class Country extends Base
 {
     use HasFactory, SoftDeletes;
 

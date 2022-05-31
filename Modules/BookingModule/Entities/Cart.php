@@ -2,10 +2,10 @@
 
 namespace Modules\BookingModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model;
 
-class Cart extends Model
+class Cart extends Base
 {
     use HasFactory;
 

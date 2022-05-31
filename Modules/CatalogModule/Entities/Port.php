@@ -2,11 +2,12 @@
 
 namespace Modules\CatalogModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Modules\CommonModule\Entities\Country;
 
-class Port extends \Jenssegers\Mongodb\Eloquent\Model
+class Port extends Base
 {
     use HasFactory, SoftDeletes;
 

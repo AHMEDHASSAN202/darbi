@@ -1,10 +1,11 @@
 <?php
 
-namespace Modules\CatalogModule\Http\Controllers;
+namespace Modules\CatalogModule\Http\Controllers\User;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use function view;
 
 class PortController extends Controller
 {

@@ -2,11 +2,12 @@
 
 namespace Modules\CatalogModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
-class Brand extends \Jenssegers\Mongodb\Eloquent\Model
+class Brand extends Base
 {
     use HasFactory, SoftDeletes;
 
