@@ -1,10 +1,11 @@
 <?php
 
-namespace Modules\BookingModule\Http\Controllers;
+namespace Modules\BookingModule\Http\Controllers\User;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use function view;
 
 class CartController extends Controller
 {

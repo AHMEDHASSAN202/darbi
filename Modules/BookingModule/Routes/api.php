@@ -18,6 +18,10 @@ Route::group([
     'prefix'    => 'bookings',
     'namespace' => 'User'
 ], function () {
-    Route::get(''               , 'BookingController@findAllByUser');
-    Route::get('{bookingId}'    , 'BookingController@find');
+    Route::get(''                       , 'BookingController@findAllByUser')->middleware('auth:api');
+    Route::post('rent'                  , 'BookingController@rent')->middleware('auth:api');
+    Route::put('{bookingId}'            , 'BookingController@addBookDetails')->middleware('auth:api');
+    Route::get('{bookingId}'            , 'BookingController@find')->middleware('auth:api');
+    Route::post('{bookingId}/cancel'    , 'BookingController@cancel')->middleware('auth:api');
+    Route::post('{bookingId}/checkout'  , 'BookingController@checkout')->middleware('auth:api');
 });

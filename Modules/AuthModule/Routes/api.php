@@ -33,8 +33,8 @@ Route::post('signin-with-otp'   , 'AuthController@signinWithOtp')->middleware('t
 Route::group([
     'prefix'    => 'profile'
 ], function () {
-    Route::get(''               , 'ProfileController@getProfile')->middleware('auth:api');
-    Route::put(''               , 'ProfileController@updateProfile')->middleware('auth:api');
+    Route::get(''                   , 'ProfileController@getProfile')->middleware('auth:api');
+    Route::put(''                   , 'ProfileController@updateProfile')->middleware('auth:api');
     Route::put('identity/{type}'    , 'ProfileController@updateIdentityProfile')->whereIn('type', ['front', 'back'])->middleware('auth:api');
     Route::delete('identity/{type}' , 'ProfileController@deleteIdentityProfile')->whereIn('type', ['front', 'back'])->middleware('auth:api');
 });

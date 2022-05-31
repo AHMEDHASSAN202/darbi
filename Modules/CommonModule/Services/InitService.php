@@ -34,9 +34,12 @@ class InitService
             'home_main_theme'       => imageUrl($this->settings->home_main_theme),
             'walk_through_images'   => $walkThroughImages,
             'time_interval_user_accept_min' => $this->settings->time_interval_user_accept_min,
+            'time_interval_vendor_accept_min' => $this->settings->time_interval_vendor_accept_min,
             'booking_running'       => [],
             'categories'            => CategoryResource::collection($this->settings->categories),
             'need_update'           => $this->checkIfAppNeedUpdated($request->version, $request->platform),
+            'default_country'       => $this->settings->default_country,
+            'default_city'          => $this->settings->default_city
         ];
     }
 

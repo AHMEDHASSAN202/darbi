@@ -2,8 +2,13 @@
 
 namespace Modules\BookingModule\Http\Controllers\User;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\BookingModule\Entities\Booking;
+use Modules\BookingModule\Http\Requests\AddBookDetailsRequest;
+use Modules\BookingModule\Http\Requests\CheckoutRequest;
+use Modules\BookingModule\Http\Requests\RentRequest;
+use Modules\BookingModule\Services\BookingService;
 use Modules\BookingModule\Transformers\BookingDetailsResource;
 use Modules\BookingModule\Transformers\BookingResource;
 use Modules\CatalogModule\Entities\Entity;
@@ -14,10 +19,19 @@ class BookingController extends Controller
 {
     use ApiResponseTrait;
 
-    public function findAllByUser()
+    private $bookingService;
+
+
+    public function __construct(BookingService $bookingService)
+    {
+        $this->bookingService = $bookingService;
+    }
+
+
+    public function findAllByUser(Request $request)
     {
         return $this->apiResponse([
-            'bookings'  => new PaginateResource(BookingResource::collection(Booking::with('entity')->paginate()))
+            'bookings'  => $this->bookingService->findAllByAuth($request)
         ]);
     }
 
@@ -27,5 +41,29 @@ class BookingController extends Controller
         return $this->apiResponse([
             'booking'   => new BookingDetailsResource(Booking::with('entity')->find($bookingId))
         ]);
+    }
+
+
+    public function rent(RentRequest $rentRequest)
+    {
+
+    }
+
+
+    public function addBookDetails(AddBookDetailsRequest $addBookDetailsRequest)
+    {
+
+    }
+
+
+    public function checkout(CheckoutRequest $checkoutRequest)
+    {
+
+    }
+
+
+    public function cancel()
+    {
+
     }
 }

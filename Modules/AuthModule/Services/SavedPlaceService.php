@@ -8,7 +8,6 @@ namespace Modules\AuthModule\Services;
 
 
 use Illuminate\Support\Facades\Log;
-use Modules\AuthModule\Entities\SavedPlace;
 use Modules\AuthModule\Entities\User;
 use Modules\AuthModule\Http\Requests\CreatePlaceRequest;
 use Modules\AuthModule\Repositories\User\SavedUserRepository;
