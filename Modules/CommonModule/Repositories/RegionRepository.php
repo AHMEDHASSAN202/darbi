@@ -19,6 +19,7 @@ class RegionRepository
         $this->model = $model;
     }
 
+
     public function list(Request $request)
     {
         $query = $this->model->active()->search($request)->filter($request)
@@ -31,6 +32,7 @@ class RegionRepository
 
         return $query->get();
     }
+
 
     public function findRegionsByNorthEastAndSouthWest($coordinates)
     {
@@ -46,13 +48,26 @@ class RegionRepository
                             ->get();
     }
 
+
+    public function findRegionByLatAndLngWithCountryAndCity($lat, $lng)
+    {
+        return $this->_findRegionByLatLng($lat, $lng, ['country', 'city']);
+    }
+
+
     public function findRegionByLatAndLng($lat, $lng)
     {
+        return $this->_findRegionByLatLng($lat, $lng);
+    }
+
+
+    private function _findRegionByLatLng($lat, $lng, $with = [])
+    {
         return $this->model->active()->where('location', 'near', [
-            '$geometry' => [
-                'type' => 'Point',
-                'coordinates' => [(float)$lat, (float)$lng],
-            ],
-        ])->with(['country', 'city'])->first();
+                        '$geometry' => [
+                            'type' => 'Point',
+                            'coordinates' => [(float)$lng, (float)$lat],
+                        ],
+                    ])->with($with)->first();
     }
 }

@@ -37,7 +37,7 @@ class SavedPlaceService
         $result['statusCode'] = 200;
         $result['message'] = '';
 
-        $region = app(RegionService::class)->findRegionByLatAndLng($createPlaceRequest->lat, $createPlaceRequest->lng);
+        $region = app(RegionService::class)->findRegionByLatAndLngWithCountryAndCity($createPlaceRequest->lat, $createPlaceRequest->lng);
 
         if (!$region) {
             $result['message'] = __('region not found!');
@@ -60,7 +60,6 @@ class SavedPlaceService
             $result['message'] = __('Successful created place');
 
         }catch (\Exception $exception) {
-            dd($exception);
             $result['message'] = __('something error!');
             $result['statusCode'] = 500;
             Log::error('createPlace: ' . $exception->getMessage());

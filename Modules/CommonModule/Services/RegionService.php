@@ -58,4 +58,13 @@ class RegionService
 
         return new RegionResource($region);
     }
+
+    public function findRegionByLatAndLngWithCountryAndCity($lat, $lng)
+    {
+        $region = $this->regionRepository->findRegionByLatAndLngWithCountryAndCity($lat, $lng);
+
+        if (!$region) return null;
+
+        return new RegionResource($region);
+    }
 }
