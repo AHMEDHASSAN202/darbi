@@ -2,13 +2,12 @@
 
 namespace Modules\AuthModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
-use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
-use function request;
 
-class Role extends Model
+class Role extends Base
 {
     use HasFactory, SoftDeletes;
 

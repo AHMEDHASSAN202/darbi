@@ -24,7 +24,7 @@ class BranchFactory extends Factory
     public function definition()
     {
         $vendor = Vendor::all()->random(1)->first();
-        $regions = Region::all()->random(3)->pluck('_id')->toArray();
+        $regions = Region::all()->random(3)->map(function ($region) { return new ObjectId($region->_id); })->toArray();
         $arFaker = \Faker\Factory::create('ar_EG');
 
         return [

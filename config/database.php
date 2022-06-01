@@ -136,7 +136,18 @@ return [
 
     'redis' => [
 
-        'client' => env('REDIS_CLIENT', 'predis'),
+        'client' => env('REDIS_CLIENT', 'phpredis'),
+
+        'clusters' => [
+            'default' => [
+                [
+                    'host' => 'ngo-redis-dev.guxohi.ng.0001.euw1.cache.amazonaws.com',//env('REDIS_HOST', 'ngo-redis-dev.guxohi.ng.0001.euw1.cache.amazonaws.com'),
+                    'password' => env('REDIS_PASSWORD'),
+                    'port' => env('REDIS_PORT', 6379),
+                    'database' => 0,
+                ],
+            ],
+        ],
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),

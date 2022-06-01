@@ -3,9 +3,9 @@
 namespace Modules\CommonModule\Entities;
 
 
-use Jenssegers\Mongodb\Eloquent\Model;
+use App\Eloquent\Base;
 
-class Setting extends Model
+class Setting extends Base
 {
     protected $guarded = [];
 

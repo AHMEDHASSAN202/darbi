@@ -2,6 +2,7 @@
 
 namespace Modules\CatalogModule\Database\factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\CatalogModule\Entities\Brand;
 use Modules\CatalogModule\Entities\Model;
@@ -53,7 +54,8 @@ class CarFactory extends Factory
             'require_activation'=> $this->faker->boolean,
             'price'             => $this->faker->randomFloat(2, 2000, 10000),
             'price_unit'        => 'day', //day or hour
-            'type'              => 'car'
+            'type'              => 'car',
+            'unavailable_date'  => $this->faker->boolean ? ['from' => new \MongoDB\BSON\UTCDateTime(now()->subDay()->toDateTime()), 'to' => new \MongoDB\BSON\UTCDateTime(now()->addMonth()->toDateTime())] : null
         ];
     }
 }

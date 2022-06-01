@@ -6,9 +6,10 @@
 
 namespace Modules\CatalogModule\Entities;
 
+use App\Eloquent\Base;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
-class Entity extends \Jenssegers\Mongodb\Eloquent\Model
+class Entity extends Base
 {
     use SoftDeletes;
 
@@ -17,9 +18,11 @@ class Entity extends \Jenssegers\Mongodb\Eloquent\Model
     protected $guarded = [];
 
     protected $casts = [
-        'is_active'         => 'boolean',
-        'is_available'      => 'boolean'
+        'is_active'             => 'boolean',
+        'is_available'          => 'boolean'
     ];
+
+    protected $dates = ['unavailable_date.from', 'unavailable_date.to'];
 
     //================ Scopes =========================\\
     public function scopeActive($query)
@@ -67,5 +70,4 @@ class Entity extends \Jenssegers\Mongodb\Eloquent\Model
     }
 
     //=============== #END# relation =====================\\
-
 }

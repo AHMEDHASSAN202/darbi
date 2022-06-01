@@ -2,10 +2,10 @@
 
 namespace Modules\AuthModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model;
 
-class UserDeviceToken extends Model
+class UserDeviceToken extends Base
 {
     use HasFactory;
 

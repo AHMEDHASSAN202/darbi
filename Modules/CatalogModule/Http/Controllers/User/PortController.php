@@ -1,12 +1,13 @@
 <?php
 
-namespace Modules\BookingModule\Http\Controllers;
+namespace Modules\CatalogModule\Http\Controllers\User;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use function view;
 
-class BookingPaymentTransactionController extends Controller
+class PortController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,7 @@ class BookingPaymentTransactionController extends Controller
      */
     public function index()
     {
-        return view('bookingmodule::index');
+        return view('catalogmodule::index');
     }
 
     /**
@@ -23,7 +24,7 @@ class BookingPaymentTransactionController extends Controller
      */
     public function create()
     {
-        return view('bookingmodule::create');
+        return view('catalogmodule::create');
     }
 
     /**
@@ -43,7 +44,7 @@ class BookingPaymentTransactionController extends Controller
      */
     public function show($id)
     {
-        return view('bookingmodule::show');
+        return view('catalogmodule::show');
     }
 
     /**
@@ -53,7 +54,7 @@ class BookingPaymentTransactionController extends Controller
      */
     public function edit($id)
     {
-        return view('bookingmodule::edit');
+        return view('catalogmodule::edit');
     }
 
     /**

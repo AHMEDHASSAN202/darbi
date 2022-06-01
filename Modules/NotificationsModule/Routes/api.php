@@ -13,8 +13,8 @@
 
 //notification routes
 Route::group([
-    'prefix'    => 'notifications',
-    'namespace' => 'User'
+    'prefix'     => 'notifications',
+    'namespace'  => 'User'
 ], function () {
-    Route::get(''               , 'NotificationController@findAll');
+    Route::get(''               , 'NotificationController@findAll')->middleware('auth:api');
 });

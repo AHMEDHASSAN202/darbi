@@ -3,10 +3,10 @@
 namespace Modules\AuthModule\Entities;
 
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model;
 
-class OTPVerificationCode extends Model
+class OTPVerificationCode extends Base
 {
     use HasFactory;
 

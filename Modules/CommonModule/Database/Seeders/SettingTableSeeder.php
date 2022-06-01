@@ -30,6 +30,8 @@ class SettingTableSeeder extends Seeder
             'specs_keys'                            => ['engine_type'],
             'android_app_version'                   => '1.0',
             'ios_app_version'                       => '1.0',
+            'default_country'                       => 'AE',
+            'default_city'                          => 'DU',
         ];
 
         Setting::create($settings);

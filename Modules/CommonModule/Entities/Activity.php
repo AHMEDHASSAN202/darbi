@@ -3,10 +3,10 @@
 namespace Modules\CommonModule\Entities;
 
 
-use Jenssegers\Mongodb\Eloquent\Model;
+use App\Eloquent\Base;
 
 
-class Activity extends Model
+class Activity extends Base
 {
     protected $table = 'activity_log';
 

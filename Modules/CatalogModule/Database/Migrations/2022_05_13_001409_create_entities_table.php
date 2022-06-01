@@ -20,6 +20,8 @@ return new class extends Migration
             $table->index('vendor_id');
             $table->index('country_id');
             $table->index('city_id');
+            $table->index('unavailable_date.from');
+            $table->index('unavailable_date.to');
             $table->softDeletes();
             $table->timestamps();
         });

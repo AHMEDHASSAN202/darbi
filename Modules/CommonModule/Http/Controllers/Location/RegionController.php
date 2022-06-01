@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\CommonModule\Http\Requests\GetRegionsByNorthEastAndSouthWestRequest;
+use Modules\CommonModule\Http\Requests\ValidateLatAndLngRequest;
 use Modules\CommonModule\Services\RegionService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 use function view;
@@ -34,6 +35,15 @@ class RegionController extends Controller
 
         return $this->apiResponse([
             'regions'    => $regions
+        ]);
+    }
+
+    public function findRegionByLatAndLng(ValidateLatAndLngRequest $latAndLngRequest)
+    {
+        $region = $this->regionService->findRegionByLatAndLng($latAndLngRequest->lat, $latAndLngRequest->lng);
+
+        return $this->apiResponse([
+            'region'     => $region
         ]);
     }
 }

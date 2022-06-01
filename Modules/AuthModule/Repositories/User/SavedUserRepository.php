@@ -24,4 +24,9 @@ class SavedUserRepository
     {
         return $this->model->where('user_id', $userId)->with('region')->latest()->limit($limit)->get();
     }
+
+    public function create($data)
+    {
+        return $this->model->create($data);
+    }
 }

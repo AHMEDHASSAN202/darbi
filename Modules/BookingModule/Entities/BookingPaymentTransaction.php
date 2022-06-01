@@ -2,10 +2,10 @@
 
 namespace Modules\BookingModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model;
 
-class BookingPaymentTransaction extends Model
+class BookingPaymentTransaction extends Base
 {
     use HasFactory;
 

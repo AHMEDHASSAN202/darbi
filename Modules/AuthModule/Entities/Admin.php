@@ -2,15 +2,15 @@
 
 namespace Modules\AuthModule\Entities;
 
+use App\Eloquent\BaseAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
-use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Modules\AuthModule\Database\factories\AdminFactory;
 use Modules\AuthModule\Traits\RoleHelperTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Admin extends Authenticatable implements JWTSubject
+class Admin extends BaseAuthenticatable implements JWTSubject
 {
     use HasFactory, SoftDeletes, RoleHelperTrait;
 
