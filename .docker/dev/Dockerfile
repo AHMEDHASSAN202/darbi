@@ -30,6 +30,11 @@ RUN pecl install redis
 
 RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/php.ini
 
+# Install redis extension
+RUN pecl install -o -f redis \
+&&  rm -rf /tmp/pear \
+&&  docker-php-ext-enable redis
+
 # Install supervisor
 RUN apt-get install -y supervisor
 
