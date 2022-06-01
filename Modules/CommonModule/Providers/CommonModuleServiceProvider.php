@@ -37,6 +37,7 @@ class CommonModuleServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        include_once( dirname(__DIR__).'/Helpers/MainHelper.php' );
         $this->app->register(RouteServiceProvider::class);
     }
 
