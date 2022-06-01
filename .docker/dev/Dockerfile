@@ -30,6 +30,11 @@ RUN pecl install redis
 
 RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/php.ini
 
+# Install redis extension
+RUN pecl install -o -f redis \
+&&  rm -rf /tmp/pear \
+&&  docker-php-ext-enable redis
+
 # Install supervisor
 RUN apt-get install -y supervisor
 
@@ -79,6 +84,7 @@ RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 RUN composer require mongodb/mongodb --ignore-platform-reqs && composer require jenssegers/mongodb --ignore-platform-reqs
 RUN composer install --ignore-platform-reqs
 RUN chmod +x /var/www/docker/run.sh
+RUN composer dump-autoload
 
 # open port 80
 EXPOSE 80
