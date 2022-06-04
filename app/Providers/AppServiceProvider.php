@@ -20,9 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        Builder::macro('whereHas', function () {
-            dd($this);
-        });
+
     }
 
     /**

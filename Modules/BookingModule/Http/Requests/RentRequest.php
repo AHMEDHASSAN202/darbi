@@ -14,7 +14,9 @@ class RentRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'entity_id'         => 'required',
+            'entity_type'       => 'required|in:car,yacht',
+            'plugins'           => 'nullable|array',
         ];
     }
 

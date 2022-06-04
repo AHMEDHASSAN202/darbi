@@ -46,7 +46,7 @@ class BookingController extends Controller
 
     public function rent(RentRequest $rentRequest)
     {
-
+        $result = $this->bookingService->rent($rentRequest);
     }
 
 
