@@ -19,7 +19,7 @@ class PluginResource extends JsonResource
             'name'          => translateAttribute($this->name),
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
-            'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit)
+//            'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit)
         ];
     }
 }

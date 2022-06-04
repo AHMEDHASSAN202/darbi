@@ -23,24 +23,18 @@ class BookingResource extends JsonResource
             'date_label'    => $this->getDateLabel(),
             'status_label'  => $this->getState(),
             'status'        => $this->status,
-            'type'          => optional($this->entity)->type,
-            'image'         => $this->getImage(),
+            'type'          => $this->entity_type,
+            'image'         => imageUrl(@$this->entity_details->images[0] ?? $this->defaultImage),
+            'plugins'       => $this->entity_details->plugins
         ];
     }
 
     private function getName()
     {
-        $entity = $this->entity;
-
-        if (!$entity) {
-            Log::error('entity not found in booking', ['bookingId' => $this->_id]);
-            return;
-        }
-
-        if ($entity->isCarType()) {
-            return translateAttribute(optional($entity->brand)->name) . ' ' . translateAttribute(optional($entity->model)->name);
+        if ($this->entity_type == 'car') {
+            return translateAttribute(optional($this->entity_details)->brand_name) . ' ' . translateAttribute(optional($this->entity_details)->model_name);
         }else {
-            return translateAttribute($entity->name);
+            return translateAttribute($this->entity_details->name);
         }
     }
 
@@ -61,19 +55,5 @@ class BookingResource extends JsonResource
     public function getState()
     {
         return __($this->status);
-    }
-
-    public function getImage()
-    {
-        $entityMainImage = @$this->entity->images[0];
-
-        if (!$entityMainImage) {
-            $modelImages = optional($this->entity->model)->images;
-            if ($modelImages && is_array($modelImages)) {
-                $entityMainImage = $modelImages[0];
-            }
-        }
-
-        return imageUrl($entityMainImage ?? $this->defaultImage);
     }
 }

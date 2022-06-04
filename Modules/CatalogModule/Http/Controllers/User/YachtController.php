@@ -31,7 +31,7 @@ class YachtController extends Controller
     public function show($yachtId)
     {
         return $this->apiResponse([
-            'car'       => $this->yachtService->find($yachtId)
+            'yacht'       => $this->yachtService->find($yachtId)
         ]);
     }
 }

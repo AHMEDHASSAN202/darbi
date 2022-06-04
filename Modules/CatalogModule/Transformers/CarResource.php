@@ -23,7 +23,7 @@ class CarResource extends JsonResource
             'model'         => translateAttribute(optional($this->model)->name),
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
-            'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit),
+//            'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit),
             'state'         => $this->state
         ];
     }

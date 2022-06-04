@@ -8,6 +8,7 @@ namespace Modules\CommonModule\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Modules\CommonModule\Classes\GoogleFindLocation;
 use Modules\CommonModule\Http\Requests\GetRegionsByNorthEastAndSouthWestRequest;
 use Modules\CommonModule\Repositories\RegionRepository;
 use Modules\CommonModule\Transformers\PaginateResource;
@@ -55,6 +56,8 @@ class RegionService
         $region = $this->regionRepository->findRegionByLatAndLng($lat, $lng);
 
         if (!$region) return null;
+
+//        $location = new GoogleFindLocation($lat, $lng);
 
         return new RegionResource($region);
     }

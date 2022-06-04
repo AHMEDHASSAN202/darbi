@@ -21,7 +21,7 @@ Route::group([
 ], function () {
     Route::get(''               , 'CarController@index');
     Route::get('{car}'          , 'CarController@show');
-    Route::get('{car}/plugins'  , 'PluginController@findAllPluginByCar');
+    Route::get('{car}/plugins'  , 'PluginController@findAllPlugin');
 });
 
 
@@ -33,6 +33,7 @@ Route::group([
 ], function () {
     Route::get(''               , 'YachtController@index');
     Route::get('{yacht}'        , 'YachtController@show');
+    Route::get('{yacht}/plugins', 'PluginController@findAllPlugin');
 });
 
 
@@ -42,4 +43,22 @@ Route::group([
     'namespace' => 'User'
 ], function () {
     Route::get(''               , 'BrandController@index');
+});
+
+
+//entity routes [used as microservice]
+Route::group([
+    'prefix'    => 'entities',
+    'namespace' => 'User'
+], function () {
+    Route::get('{entity}'        , 'EntityController@show');
+});
+
+
+//brand routes
+Route::group([
+    'prefix'    => 'ports',
+    'namespace' => 'User'
+], function () {
+    Route::get(''               , 'PortController@index');
 });

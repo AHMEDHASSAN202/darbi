@@ -60,7 +60,7 @@ function generatePriceLabelFromPrice(?float $price, $priceUnit) : string
 
 function generateOTPCode()
 {
-    return mt_rand(1000,9999);
+    return (!app()->environment('production')) ? 1234 : mt_rand(1000,9999);
 }
 
 function hasEmbed($param) : bool
@@ -70,4 +70,9 @@ function hasEmbed($param) : bool
         return in_array($param, $embed);
     }
     return false;
+}
+
+function entityIsFree($state) : bool
+{
+    return ($state === 'free');
 }

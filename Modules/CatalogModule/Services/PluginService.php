@@ -18,9 +18,9 @@ class PluginService
         $this->pluginRepository = $pluginRepository;
     }
 
-    public function findAllPluginByCar($carId)
+    public function findAllPlugin($entityId)
     {
-        $plugins = $this->pluginRepository->findAllPluginByCar($carId);
+        $plugins = $this->pluginRepository->findAllPlugin($entityId);
 
         return PluginResource::collection($plugins);
     }

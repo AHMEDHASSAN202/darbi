@@ -24,7 +24,7 @@ class Plugin extends Base
     //================== Relations ==================\\
     public function entities()
     {
-        return $this->belongsToMany(Entity::class, null, 'entity_ids', 'plugin_ids');
+        return $this->belongsToMany(Entity::class, null, 'plugin_ids', 'entity_ids');
     }
     //===================#END# Relation ==============\\
 

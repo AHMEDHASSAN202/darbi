@@ -39,5 +39,12 @@ class Port extends Base
         return $query->where('is_active', true);
     }
 
+    public function scopeSearch($query, $request)
+    {
+        if ($countryId = $request->get('country_id')) {
+            $query->where('country_id', $countryId);
+        }
+    }
+
     //================ #END# scopes =========================\\
 }

@@ -9,6 +9,7 @@ namespace Modules\CatalogModule\Repositories;
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Entities\Brand;
 use Modules\CatalogModule\Entities\Plugin;
+use MongoDB\BSON\ObjectId;
 
 class PluginRepository
 {
@@ -19,8 +20,8 @@ class PluginRepository
         $this->model = $model;
     }
 
-    public function findAllPluginByCar($carId)
+    public function findAllPlugin($entityId)
     {
-        return $this->model->active()->whereHas('entities', function ($query) use ($carId) { $query->where('_id', $carId); })->get();
+        return $this->model->active()->whereHas('entities', function ($query) use ($entityId) { $query->where('_id', new ObjectId($entityId)); })->get();
     }
 }

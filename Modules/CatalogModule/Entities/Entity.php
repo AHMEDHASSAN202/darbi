@@ -8,6 +8,8 @@ namespace Modules\CatalogModule\Entities;
 
 use App\Eloquent\Base;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Modules\CommonModule\Entities\City;
+use Modules\CommonModule\Entities\Country;
 
 class Entity extends Base
 {
@@ -69,5 +71,14 @@ class Entity extends Base
         return $this->belongsToMany(Plugin::class, null, 'entity_ids','plugin_ids');
     }
 
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
     //=============== #END# relation =====================\\
 }

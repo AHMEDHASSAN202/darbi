@@ -21,10 +21,10 @@ class PluginController extends Controller
         $this->pluginService = $pluginService;
     }
 
-    public function findAllPluginByCar($carId)
+    public function findAllPlugin($entityId)
     {
         return $this->apiResponse([
-            'plugins'   => $this->pluginService->findAllPluginByCar($carId)
+            'plugins'   => $this->pluginService->findAllPlugin($entityId)
         ]);
     }
 }

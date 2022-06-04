@@ -47,12 +47,16 @@ class BookingController extends Controller
     public function rent(RentRequest $rentRequest)
     {
         $result = $this->bookingService->rent($rentRequest);
+
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
     }
 
 
-    public function addBookDetails(AddBookDetailsRequest $addBookDetailsRequest)
+    public function addBookDetails($bookingId, AddBookDetailsRequest $addBookDetailsRequest)
     {
+        $result = $this->bookingService->addBookDetails($bookingId, $addBookDetailsRequest);
 
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
     }
 
 
