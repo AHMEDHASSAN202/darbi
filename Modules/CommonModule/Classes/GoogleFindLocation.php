@@ -14,15 +14,16 @@ class GoogleFindLocation
     private $lat;
     private $lng;
     private $data = [];
+    private $key = 'AIzaSyCpDF8paUkoqSGXA5nYQ3-qJ8SfE02wKG0';
 
     public function __construct($lat, $lng)
     {
         $this->lat = $lat;
         $this->lng = $lng;
-        $url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&sensor=false";
+        $url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&sensor=false&key=".$this->key;
 //        try {
             $this->data = Http::get($url)->json();
-//            dd($this->data);
+            dd($this->data);
 //        }catch (\Exception $exception) {
 //            Log::error('google can\'t get location: ' . $exception->getMessage());
 //        }

@@ -138,40 +138,34 @@ return [
 
         'client' => env('REDIS_CLIENT', 'phpredis'),
 
-        'cluster' => env('REDIS_CLUSTER_ENABLED', false),
+        'default' => [
+//            'scheme' => 'tls',
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => env('REDIS_DB', 0),
+        ],
 
         'clusters' => [
             'default' => [
                 [
-                    'host' => env('REDIS_HOST', 'ngo-redis-dev.guxohi.ng.0001.euw1.cache.amazonaws.com'),
-                    'password' => env('REDIS_PASSWORD'),
-                    'port' => env('REDIS_PORT', 6379),
-                    'database' => 0,
+                    'scheme'   => env('REDIS_SCHEME', 'tcp'),
+                    'host'     => env('REDIS_HOST', 'localhost'),
+                    'password' => env('REDIS_PASSWORD', null),
+                    'port'     => env('REDIS_PORT', 6379),
+                    'database' => env('REDIS_DATABASE', 0),
                 ],
             ],
-        ],
-
-        'options' => [
-            'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
-        ],
-
-        'default' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'username' => env('REDIS_USERNAME'),
-            'password' => env('REDIS_PASSWORD'),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_DB', '0'),
+            'options' => [ // Clustering specific options
+                'cluster' => 'redis', // This tells Redis Client lib to follow redirects (from cluster)
+            ]
         ],
 
         'cache' => [
-            'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
-            'username' => env('REDIS_USERNAME'),
             'password' => env('REDIS_PASSWORD'),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => env('REDIS_CACHE_DB', 1),
         ],
 
     ],

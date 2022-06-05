@@ -33,7 +33,8 @@ class UserProfileResource extends JsonResource
                 'backside_image'    => imageUrl(@$this->identity['backside_image'])
             ],
             'image'           => $this->defaultImage,
-            'note'            => $this->note ?? ""
+            'note'            => $this->note ?? "",
+            'is_profile_completed' => (!empty($this->name) && !empty(@$this->identity['frontside_image']) && !empty(@$this->identity['backside_image']))
         ];
     }
 }

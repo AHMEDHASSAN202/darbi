@@ -66,8 +66,10 @@ class BookingController extends Controller
     }
 
 
-    public function cancel()
+    public function cancel($bookingId)
     {
+        $result = $this->bookingService->cancel($bookingId);
 
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
     }
 }

@@ -140,19 +140,19 @@ class BookingService
         $pickupLocationAddress = [
             'lat'       => $addBookDetailsRequest->pickup_location->lat,
             'lng'       => $addBookDetailsRequest->pickup_location->lng,
-            'fully_addressed' => '',
-            'city'          => '',
-            'country'       => '',
-            'state'         => '',
+            'fully_addressed' => $addBookDetailsRequest->pickup_location->fully_addressed,
+            'city'          => $addBookDetailsRequest->pickup_location->city,
+            'country'       => $addBookDetailsRequest->pickup_location->country,
+            'state'         => $addBookDetailsRequest->pickup_location->state,
             'region_id'     => $addBookDetailsRequest->pickup_location->region_id,
         ];
         $dropLocationAddress = [
             'lat'       => $addBookDetailsRequest->drop_location->lat,
             'lng'       => $addBookDetailsRequest->drop_location->lat,
-            'fully_addressed' => '',
-            'city'          => '',
-            'country'       => '',
-            'state'         => '',
+            'fully_addressed' => $addBookDetailsRequest->drop_location->fully_addressed,
+            'city'          => $addBookDetailsRequest->drop_location->city,
+            'country'       => $addBookDetailsRequest->drop_location->country,
+            'state'         => $addBookDetailsRequest->drop_location->state,
             'region_id'     => $addBookDetailsRequest->drop_location->region_id,
         ];
 
@@ -167,6 +167,35 @@ class BookingService
             'data'          => [],
             'message'       => '',
             'statusCode'    => 200
+        ];
+    }
+
+
+    public function cancel($bookingId)
+    {
+        $userId = auth('api')->id();
+
+        $booking = $this->bookingRepository->findByUser($userId, $bookingId);
+
+        abort_if(is_null($booking), 404);
+
+        if (!in_array($booking->status, [BookingStatus::INIT, BookingStatus::PENDING])) {
+            return [
+                'data'      => [],
+                'message'   => __('cancel booking not allowed'),
+                'statusCode'=> 400
+            ];
+        }
+
+        $booking->status = BookingStatus::CANCELLED_BEFORE_ACCEPT;
+        $booking->save();
+
+        return [
+            'data'       => [
+                'booking_id'    => $bookingId
+            ],
+            'message'    => '',
+            'statusCode' => 200
         ];
     }
 }

@@ -18,6 +18,7 @@ class YachtDetailsResource extends JsonResource
     {
         return [
             'id'            => $this->_id,
+            'name'          => translateAttribute($this->name),
             'images'        => $this->getImagesFullPath(),
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,

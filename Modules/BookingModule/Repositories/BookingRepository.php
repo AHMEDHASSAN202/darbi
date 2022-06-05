@@ -19,12 +19,14 @@ class BookingRepository
 
     public function findAllByUser($userId, $limit = 20)
     {
-        return $this->booking->where('user_id', $userId)->with('entity')->paginate($limit);
+        //->where('user_id', $userId)
+        return $this->booking->with('entity')->paginate($limit);
     }
 
     public function findByUser($userId, $bookingId)
     {
-        return $this->booking->where('user_id', $userId)->where('id', $bookingId)->first();
+        //->where('user_id', $userId)
+        return $this->booking->where('id', $bookingId)->first();
     }
 
     public function create($data)

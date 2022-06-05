@@ -22,6 +22,7 @@ class NotificationRepository
     {
         $me = auth()->user();
 
-        return $this->notificationsCenter->where('receiver.user_id', new ObjectId($me->_id))->where('receiver.on_model', 'user')->latest()->paginate($request->get('limit', 20));
+        //->where('receiver.user_id', new ObjectId($me->_id))->where('receiver.on_model', 'user')
+        return $this->notificationsCenter->latest()->paginate($request->get('limit', 20));
     }
 }
