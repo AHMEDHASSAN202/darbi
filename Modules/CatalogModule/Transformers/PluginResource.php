@@ -22,4 +22,5 @@ class PluginResource extends JsonResource
 //            'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit)
         ];
     }
+
 }

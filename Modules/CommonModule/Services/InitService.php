@@ -39,7 +39,8 @@ class InitService
             'categories'            => CategoryResource::collection($this->settings->categories),
             'need_update'           => $this->checkIfAppNeedUpdated($request->version, $request->platform),
             'default_country'       => $this->settings->default_country,
-            'default_city'          => $this->settings->default_city
+            'default_city'          => $this->settings->default_city,
+            'push_version'          => 1
         ];
     }
 

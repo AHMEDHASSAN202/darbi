@@ -9,7 +9,7 @@ use Modules\CatalogModule\Transformers\YachtResource;
 
 class BookingDetailsResource extends JsonResource
 {
-    private $defaultImage = '';
+    private $defaultImage;
 
     /**
      * Transform the resource into an array.
@@ -26,10 +26,12 @@ class BookingDetailsResource extends JsonResource
             'entity'        => $this->getEntity(),
             'start'         => ['month' => $this->start_booking_at->format('m F'), 'time' => $this->start_booking_at->format('H:s A')],
             'end'           => ['month' => $this->end_booking_at->format('m F'), 'time' => $this->end_booking_at->format('H:s A')],
-            'plugins'       => $this->entityDetailsTransform(),
+            'plugins'       => $this->pluginsTransform(),
             'location'      => $this->pickup_location_address,
             'location_label'=> $this->getPickupLocationAddressLabel(),
-            'payment_method'=> @$this->payment_method['type'] ?? ""
+            'payment_method'=> @$this->payment_method['type'] ?? "",
+            'image'         => imageUrl(@$this->entity_details['images'][0] ?? $this->defaultImage),
+            'created_at'    => $this->created_at
         ];
     }
 
@@ -54,27 +56,15 @@ class BookingDetailsResource extends JsonResource
         return __($this->status);
     }
 
-    private function pluginsTransform($plugins) : array
+    private function pluginsTransform() : array
     {
+        $plugins = @$this->entity_details['plugins'] ?? [];
+
         if (empty($plugins) || !is_array($plugins)) return [];
 
         return array_map(function ($plugin) {
             return ['name' => translateAttribute($plugin['name']), 'price' => number_format($plugin['price_per_day'], 2)];
         }, $plugins);
-    }
-
-    private function entityDetailsTransform()
-    {
-        if (empty($this->entity_details)) return [];
-
-        $entityDetails = [];
-
-        foreach ($this->entity_details as $key => $detail) {
-            $entityDetails[$key]['price'] = @number_format($detail['price_per_day'], 2);
-            $entityDetails[$key]['plugins'] = $this->pluginsTransform(@$detail['plugins']);
-        }
-
-        return $entityDetails;
     }
 
     private function getPickupLocationAddressLabel() : string

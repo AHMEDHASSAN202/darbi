@@ -24,7 +24,7 @@ class CarDetailsResource extends JsonResource
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
 //            'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit),
-            'plugins'       => PluginResource::collection($this->plugins),
+            'plugins'       => $this->getPlugins(),
             'state'         => $this->state,
             'specs'         => SpecsResource::collection($this->model->addons)
         ];

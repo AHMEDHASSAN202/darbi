@@ -8,7 +8,6 @@ namespace Modules\BookingModule\Proxy;
 
 use App\Proxy\BaseProxy;
 use Modules\BookingModule\Proxy\Actions\GetEntityHttpProxyAction;
-use Modules\BookingModule\Proxy\Actions\GetCarRedisProxyAction;
 
 class BookingProxy extends BaseProxy
 {

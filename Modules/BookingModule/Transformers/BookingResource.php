@@ -24,17 +24,16 @@ class BookingResource extends JsonResource
             'status_label'  => $this->getState(),
             'status'        => $this->status,
             'type'          => $this->entity_type,
-            'image'         => imageUrl(@$this->entity_details->images[0] ?? $this->defaultImage),
-            'plugins'       => $this->entity_details->plugins
+            'image'         => imageUrl(@$this->entity_details['images'][0] ?? $this->defaultImage)
         ];
     }
 
     private function getName()
     {
         if ($this->entity_type == 'car') {
-            return translateAttribute(optional($this->entity_details)->brand_name) . ' ' . translateAttribute(optional($this->entity_details)->model_name);
+            return translateAttribute(@$this->entity_details['brand_name']) . ' ' . translateAttribute(@$this->entity_details['model_name']);
         }else {
-            return translateAttribute($this->entity_details->name);
+            return translateAttribute(@$this->entity_details['name']);
         }
     }
 

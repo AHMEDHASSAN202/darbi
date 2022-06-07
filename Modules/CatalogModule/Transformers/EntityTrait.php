@@ -36,4 +36,15 @@ trait EntityTrait
 
         return array_map(function ($image) { return imageUrl($image); }, $entityMainImages);
     }
+
+
+    private function getPlugins()
+    {
+        $plugins = $this->plugins->map(function ($plugin) {
+            $plugin->price_unit = $this->price_unit;
+            return $plugin;
+        });
+
+        return PluginResource::collection($plugins);
+    }
 }

@@ -22,7 +22,21 @@ class YachtResource extends JsonResource
             'image'         => $this->getMainImage(),
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
+            'passengers'    => $this->passengers()
 //            'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit),
+        ];
+    }
+
+
+    private function passengers()
+    {
+        $passengers = @$this->model->specs['passengers'];
+        if (!$passengers) {
+            return null;
+        }
+        return [
+            'minimum'       => $passengers['value']['minimum'],
+            'maximum'       => $passengers['value']['maximum']
         ];
     }
 }

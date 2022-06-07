@@ -21,7 +21,8 @@ class SpecsResource extends JsonResource
                                             return [
                                                 'name' => translateAttribute($spec['name']),
                                                 'image'=> imageUrl($spec['image']),
-                                                'key'  => $spec['key']
+                                                'key'  => $spec['key'],
+                                                'value' => $spec['value']
                                             ];
                                         }, $this->resource['specs'])
         ];

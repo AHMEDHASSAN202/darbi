@@ -27,7 +27,7 @@ class BookingFactory extends Factory
     public function definition()
     {
         $vendor = Vendor::all()->random(1)->first();
-        $ent = Car::withoutGlobalScope('car')->get()->random(1)->first();
+        $ent = Car::withoutGlobalScope('car')->with(['model', 'brand', 'country', 'city', 'plugins'])->get()->random(1)->first();
         $branch = $vendor->branches()->first();
         $country = Country::all()->random(1)->first();
         $region = Region::active()->get()->random(1)->first();
@@ -60,14 +60,17 @@ class BookingFactory extends Factory
                 'region_id'         => new ObjectId($region->_id)
             ],
             'entity_details'         => [
-                'price'         => $ent->price,
-                'price_unit'    => $ent->price_unit,
-                'image'         =>  $this->faker->imageUrl(300, 300, 'car', false, 'Car'),
-                'model_id'      => new ObjectId($ent->model_id),
-                'model_name'    => ['ar' => translateAttribute($ent->model->name, 'ar'), 'en' => translateAttribute($ent->model->name, 'en')],
-                'brand_id'      => new ObjectId($ent->brand_id),
-                'brand_name'    => ['ar' => translateAttribute($ent->brand->name), 'en' => translateAttribute($ent->model->name, 'en')],
-                'plugins'       => [['name' => ['ar' => $this->faker->text(10), 'en' => $this->faker->text(10)], 'price_per_day' => $pluginPrice]]
+                'name'      => @$ent->name,
+                'price'     => @$ent->price,
+                'price_unit'=> @$ent->price_unit,
+                'images'    => @$ent->images,
+                'model_id'  => @$ent->model_id,
+                'model_name'=> @$ent->model->name,
+                'brand_id'  => @$ent->brand_id,
+                'brand_name'=> @$ent->brand->name,
+                'country'   => $ent->country->name,
+                'city'      => $ent->city->name,
+                'plugins'   => @$ent->plugins ?? [],
             ],
             'invoice_number'         => \Str::random(),
             'price_summary'          => [

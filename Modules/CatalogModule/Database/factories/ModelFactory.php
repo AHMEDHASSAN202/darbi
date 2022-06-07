@@ -37,14 +37,26 @@ class ModelFactory extends Factory
                 'engine_type'   => [
                     'name'          => ['ar' => 'automatic', 'en' => 'automatic'],
                     'image'         => $this->faker->imageUrl(100, 100, null, false, 'automatic'),
-                    'order_weight'  => 1,
-                    'group_details' => ['ar' => $arFaker->title(), 'en' => $this->faker->title(), 'key' => 'general']
+                    'order_weight'  => 2,
+                    'value'         => '',
+                    'group_details' => ['ar' => 'Details', 'en' => 'Details', 'key' => 'general']
                 ],
                 'seats'   => [
                     'name'          => ['ar' => 'seats', 'en' => 'seats'],
                     'image'         => $this->faker->imageUrl(100, 100, null, false, 'seats'),
-                    'order_weight'  => 2,
-                    'group_details' => ['ar' => $arFaker->title(), 'en' => $this->faker->title(), 'key' => 'general']
+                    'order_weight'  => 3,
+                    'value'         => 3,
+                    'group_details' => ['ar' => 'Details', 'en' => 'Details', 'key' => 'general']
+                ],
+                'passengers'   => [
+                    'name'          => ['ar' => 'passengers', 'en' => 'passengers'],
+                    'image'         => $this->faker->imageUrl(100, 100, null, false, 'passengers'),
+                    'order_weight'  => 1,
+                    'value'         => [
+                        'minimum'           => 4,
+                        'maximum'           => 10
+                    ],
+                    'group_details' => ['ar' => 'Details', 'en' => 'Details', 'key' => 'general']
                 ],
             ],
             'is_active'      => true

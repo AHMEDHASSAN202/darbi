@@ -18,6 +18,7 @@ class CategoryResource extends JsonResource
             'name'              => translateAttribute($this['name']),
             'desc'              => translateAttribute($this['desc']),
             'image'             => imageUrl($this['image']),
+            'template'          => $this['template']
         ];
     }
 }

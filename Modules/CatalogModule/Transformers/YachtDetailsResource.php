@@ -26,7 +26,7 @@ class YachtDetailsResource extends JsonResource
             'state'         => $this->state,
             'built_date'    => $this->built_date,
             'port'          => translateAttribute(optional($this->port)->name),
-            'plugins'       => PluginResource::collection($this->plugins),
+            'plugins'       => $this->getPlugins(),
             'specs'         => $this->model ? SpecsResource::collection($this->model->addons) : []
         ];
     }

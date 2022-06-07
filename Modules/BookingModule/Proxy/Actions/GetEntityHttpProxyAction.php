@@ -6,20 +6,26 @@
 
 namespace Modules\BookingModule\Proxy\Actions;
 
-use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 
 class GetEntityHttpProxyAction
 {
     public function __invoke($data)
     {
-        $url = env('MAIN_PROXY_URL') . '/api/mobile/v1/entities/' . $data['entity_id'];
+        $url = '/api/mobile/v1/entities/' . $data['entity_id'];
 
-        $res = Http::acceptJson()->withoutVerifying()->get($url);
+//        $res = Http::acceptJson()->withoutVerifying()->get($url);
 
-        if ($res->status() !== 200) {
-            return null;
-        }
+        $req = Request::create($url, 'GET');
 
-        return $res->json('data.entity');
+        $res = Route::dispatch($req);
+
+        if ($res->status() !== 200) { return null; }
+
+        $jsonData = json_decode($res->getContent(), true);
+
+        return @$jsonData['data']['entity'] ?? [];
     }
 }
