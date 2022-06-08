@@ -41,6 +41,10 @@ function translateAttribute(?array $attribute, $locale = null) {
         return '';
     }
 
+    if (empty($attribute)) {
+        return '';
+    }
+
     if (!$locale) {
         $locale = app()->getLocale();
     }

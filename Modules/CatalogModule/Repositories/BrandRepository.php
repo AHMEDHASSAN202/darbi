@@ -19,6 +19,7 @@ class BrandRepository
     public function listOfBrands(Request $request)
     {
         $query = $this->model->search($request)
+                             ->filters($request)
                              ->active()
                              ->latest();
 

@@ -26,14 +26,12 @@ class UserProfileResource extends JsonResource
             'id'            => $this->_id,
             'phone'         => $this->phone,
             'phone_code'    => $this->phone_code,
-            'country_name'  => translateAttribute($this->country->name),
             'name'          => $this->name ?? "",
             'identity'      => [
                 'frontside_image'   => imageUrl(@$this->identity['frontside_image']),
                 'backside_image'    => imageUrl(@$this->identity['backside_image'])
             ],
             'image'           => $this->defaultImage,
-            'note'            => $this->note ?? "",
             'is_profile_completed' => (!empty($this->name) && !empty(@$this->identity['frontside_image']) && !empty(@$this->identity['backside_image']))
         ];
     }

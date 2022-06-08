@@ -34,11 +34,11 @@ class UserDeviceTokenService
     {
         $me = app(UserAuthService::class)->authUser();
 
-        return $this->storeDeviceToken($storeDeviceTokenRequest, 'user', $me, $me->country_id);
+        return $this->storeDeviceToken($storeDeviceTokenRequest, 'user', $me);
     }
 
 
-    private function storeDeviceToken(StoreDeviceTokenRequest $storeDeviceTokenRequest, $appType, Model $user, $countryId)
+    private function storeDeviceToken(StoreDeviceTokenRequest $storeDeviceTokenRequest, $appType, Model $user)
     {
         $exists = $this->deviceTokenRepository->exists($storeDeviceTokenRequest->phone_uuid, $storeDeviceTokenRequest->device_os);
 
@@ -46,7 +46,6 @@ class UserDeviceTokenService
             $this->deviceTokenRepository->create([
                 'phone_uuid'        => $storeDeviceTokenRequest->phone_uuid,
                 'app_type'          => $appType,
-                'country_id'        => new ObjectId($countryId),
                 'device_os'         => $storeDeviceTokenRequest->device_os,
                 'lat'               => $storeDeviceTokenRequest->lat,
                 'lng'               => $storeDeviceTokenRequest->lng,

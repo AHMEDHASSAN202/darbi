@@ -50,7 +50,7 @@ class BookingFactory extends Factory
                 'state'             => $this->faker->streetAddress,
                 'region_id'         => new ObjectId($region->_id)
             ],
-            'drop_location_address'  => [
+            'drop_location_address' => [
                 'lat'               => $this->faker->latitude,
                 'lng'               => $this->faker->longitude,
                 'fully_addressed'   => $this->faker->address,

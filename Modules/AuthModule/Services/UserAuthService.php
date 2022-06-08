@@ -39,17 +39,13 @@ class UserAuthService
         $response['message'] = null;
         $response['errors'] = [];
 
-        //get country
-        $country = $this->countryRepository->find($signinRequest->country_id);
-        $phoneCode = $country->calling_code;
-
         //get otp if exists
-        $otp = $this->OTPVerificationCodeRepository->findByMobileAndCode($signinRequest->phone, $phoneCode);
+        $otp = $this->OTPVerificationCodeRepository->findByMobileAndCode($signinRequest->phone, $signinRequest->phone_code);
 
         //if not exists
         //we will create new otp
         if (!$otp) {
-            $otp = $this->OTPVerificationCodeRepository->createNewOTP($signinRequest->phone, $country);
+            $otp = $this->OTPVerificationCodeRepository->createNewOTP($signinRequest->phone, $signinRequest->phone_code);
         }
 
         //when can't create new user
@@ -76,12 +72,8 @@ class UserAuthService
         $response['message'] = null;
         $response['errors'] = [];
 
-        //get country
-        $country = $this->countryRepository->find($sendOtpRequest->country_id);
-        $phoneCode = $country->calling_code;
-
         //get otp if exists
-        $otp = $this->OTPVerificationCodeRepository->findByMobileAndCode($sendOtpRequest->phone, $phoneCode);
+        $otp = $this->OTPVerificationCodeRepository->findByMobileAndCode($sendOtpRequest->phone, $sendOtpRequest->phone_code);
 
         if (!$otp) {
             $response['statusCode'] = 422;
@@ -109,12 +101,8 @@ class UserAuthService
         $response['message'] = null;
         $response['errors'] = [];
 
-        //get country
-        $country = $this->countryRepository->find($signinWithOtpRequest->country_id);
-        $phoneCode = $country->calling_code;
-
         //get otp if exists
-        $otp = $this->OTPVerificationCodeRepository->findByMobileAndCode($signinWithOtpRequest->phone, $phoneCode);
+        $otp = $this->OTPVerificationCodeRepository->findByMobileAndCode($signinWithOtpRequest->phone, $signinWithOtpRequest->phone_code);
 
         //if invalid otp
         if (!$otp || ($otp->verification_code != $signinWithOtpRequest->otp)) {
@@ -134,11 +122,11 @@ class UserAuthService
         $this->OTPVerificationCodeRepository->remove($otp->_id);
 
         //get user
-        $me = $this->userRepository->findByMobile($signinWithOtpRequest->phone, $phoneCode);
+        $me = $this->userRepository->findByMobile($signinWithOtpRequest->phone, $signinWithOtpRequest->phone_code);
 
         //create new user if not exists
         if (!$me) {
-            $me = $this->userRepository->createUserFromSignin($signinWithOtpRequest->phone, $country);
+            $me = $this->userRepository->createUserFromSignin($signinWithOtpRequest->phone, $signinWithOtpRequest->phone_code);
         }
 
         //if user blocked

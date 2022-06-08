@@ -23,12 +23,11 @@ class UserRepository
         return $this->model->where('phone', $phone)->where('phone_code', $phoneCode)->with($with)->first();
     }
 
-    public function createUserFromSignin($phone, $country)
+    public function createUserFromSignin($phone, $phoneCode)
     {
         return $this->model->create([
                 'phone'         => $phone,
-                'phone_code'    => $country->calling_code,
-                'country_id'    => new ObjectId($country->_id),
+                'phone_code'    => $phoneCode,
                 'is_active'     => true
             ]);
     }

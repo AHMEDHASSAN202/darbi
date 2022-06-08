@@ -17,6 +17,7 @@ class PluginResource extends JsonResource
         return [
             'id'            => $this->_id,
             'name'          => translateAttribute($this->name),
+            'desc'          => translateAttribute($this->desc),
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
 //            'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit)

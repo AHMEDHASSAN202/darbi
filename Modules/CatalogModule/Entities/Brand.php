@@ -41,5 +41,12 @@ class Brand extends Base
         });
     }
 
+    public function scopeFilters($query, Request $request)
+    {
+        if ($entityType = $request->get('entity_type')) {
+            $query->where('entity_type', $entityType);
+        }
+    }
+
     //================ #END# scopes =========================\\
 }

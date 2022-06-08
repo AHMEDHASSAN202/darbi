@@ -24,7 +24,7 @@ class CatalogModuleDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        Brand::factory(50)->create();
+        Brand::factory(100)->create();
         \Modules\CatalogModule\Entities\Model::factory(50)->create();
         Plugin::factory(100)->create();
         Subscription::factory(5)->create();

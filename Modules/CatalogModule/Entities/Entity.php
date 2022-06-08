@@ -27,6 +27,7 @@ class Entity extends Base
     protected $dates = ['unavailable_date.from', 'unavailable_date.to'];
 
     //================ Scopes =========================\\
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

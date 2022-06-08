@@ -34,7 +34,6 @@ class UserProfileService
     {
         $me = auth('api')->user();
         $me->name = $updateProfileRequest->name;
-        $me->note = $updateProfileRequest->note;
 
         $identity = (array)$me->identity ?? [];
 

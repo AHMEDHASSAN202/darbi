@@ -15,7 +15,6 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'name'                      => 'required|min:3,max:50',
-            'note'                      => 'sometimes|nullable|min:3|max:200',
             'identity_frontside_image'  => 'sometimes|nullable|image|max:5120', //5m
             'identity_backside_image'   => 'sometimes|nullable|image|max:5120', //5m
         ];

@@ -31,12 +31,11 @@ class OTPVerificationCodeRepository
     }
 
 
-    public function createNewOTP($phone, Country $country)
+    public function createNewOTP($phone, $phoneCode)
     {
         return $this->model->create([
             'phone'             => $phone,
-            'phone_code'        => $country->calling_code,
-            'country_id'        => new ObjectId($country->_id),
+            'phone_code'        => $phoneCode,
             'verification_code' => generateOTPCode(),
             'expired_at'        => now()->addSeconds($this->expired_at)->timestamp
         ]);

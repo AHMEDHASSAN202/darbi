@@ -15,7 +15,7 @@ class SigninRequest extends FormRequest
     {
         return [
             'phone'         => 'required|numeric|digits_between:8,11',
-            'country_id'    => 'required|exists:countries,_id'
+            'phone_code'    => 'required'
         ];
     }
 

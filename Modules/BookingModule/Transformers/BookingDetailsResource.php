@@ -31,6 +31,7 @@ class BookingDetailsResource extends JsonResource
             'location_label'=> $this->getPickupLocationAddressLabel(),
             'payment_method'=> @$this->payment_method['type'] ?? "",
             'image'         => imageUrl(@$this->entity_details['images'][0] ?? $this->defaultImage),
+            'note'          => $this->note ?? "",
             'created_at'    => $this->created_at
         ];
     }

@@ -33,6 +33,7 @@ class AddBookDetailsRequest extends FormRequest
             'drop_location.country' => 'required|string',
             'drop_location.state' => 'required|string',
             'drop_location.region_id' => ['required', new MongoIdRule()],
+            'note'               => 'sometimes|nullable|max:500'
         ];
     }
 

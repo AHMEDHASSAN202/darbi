@@ -28,7 +28,6 @@ class UserFactory extends Factory
         return [
             'phone'         => str_replace('+', '', $this->faker->unique()->e164PhoneNumber()),
             'phone_code'    => $country->calling_code,
-            'country_id'    => new ObjectId($country->_id),
             'identity'      => [
                 'frontside_image'   => $this->faker->imageUrl(500, 250, null, false, 'FrontSide'),
                 'backside_image'    => $this->faker->imageUrl(500, 250, null, false, 'BackSide')
