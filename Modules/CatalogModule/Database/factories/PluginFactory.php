@@ -25,8 +25,8 @@ class PluginFactory extends Factory
         return [
             'name'          => ['ar' => $arFaker->text(50), 'en' => $this->faker->text(50)],
             'desc'          => [['ar' => $arFaker->text(50), 'en' => $this->faker->text(50)], ['ar' => '', 'en' => '']][mt_rand(0,1)],
-            'price'         => $this->faker->numberBetween(1500, 5000),
-            'is_active'     => $this->faker->boolean(),
+            'price'         => $this->faker->numberBetween(1500, 2000),
+            'is_active'     => $this->faker->boolean(), 
         ];
     }
 }
