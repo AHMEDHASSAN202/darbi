@@ -6,13 +6,13 @@
 
 namespace Modules\AuthModule\Services;
 
-
+use App\Proxy\Proxy;
 use Illuminate\Support\Facades\Log;
-use Modules\AuthModule\Entities\User;
 use Modules\AuthModule\Http\Requests\CreatePlaceRequest;
+use Modules\AuthModule\Proxy\AuthProxy;
 use Modules\AuthModule\Repositories\User\SavedUserRepository;
 use Modules\AuthModule\Transformers\SavedPlaceResource;
-use Modules\CommonModule\Services\RegionService;
+use MongoDB\BSON\ObjectId;
 
 class SavedPlaceService
 {
@@ -25,7 +25,7 @@ class SavedPlaceService
 
     public function getUserPlaces()
     {
-        $userId = auth('api')->id() ?? User::first()->id;
+        $userId = auth('api')->id();
 
         return SavedPlaceResource::collection($this->savedUserRepository->listPlacesByUserId($userId));
     }
@@ -36,10 +36,18 @@ class SavedPlaceService
         $result['statusCode'] = 200;
         $result['message'] = '';
 
-        $region = app(RegionService::class)->findRegionByLatAndLngWithCountryAndCity($createPlaceRequest->lat, $createPlaceRequest->lng);
+        //get location
+        $location = (new Proxy(new AuthProxy('GET_LOCATION', ['lat' => $createPlaceRequest->lat, 'lng' => $createPlaceRequest->lng])))->result();
+        $region = (new Proxy(new AuthProxy('GET_REGION', ['lat' => $createPlaceRequest->lat, 'lng' => $createPlaceRequest->lng])))->result();
+
+        if (!$location) {
+            $result['message'] = __('location not found!');
+            $result['statusCode'] = 400;
+            return $result;
+        }
 
         if (!$region) {
-            $result['message'] = __('region not found!');
+            $result['message'] = __('region not supported!');
             $result['statusCode'] = 400;
             return $result;
         }
@@ -50,15 +58,16 @@ class SavedPlaceService
                 'user_id'       => auth('api')->user()->_id,
                 'lat'           => $createPlaceRequest->lat,
                 'lng'           => $createPlaceRequest->lng,
-                'country'       => translateAttribute(optional($region->country)->name),
-                'city'          => translateAttribute(optional($region->city)->name),
-                'region_id'     => $region->_id
+                'country'       => $location->country,
+                'city'          => $location->city,
+                'full_address'  => $location->full_address,
+                'region_id'     => new ObjectId($region->id)
             ]);
 
             $result['responseData'] = new SavedPlaceResource($created);
             $result['message'] = __('Successful created place');
 
-        }catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             $result['message'] = __('something error!');
             $result['statusCode'] = 500;
             Log::error('createPlace: ' . $exception->getMessage());

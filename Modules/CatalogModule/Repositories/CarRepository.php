@@ -27,6 +27,7 @@ class CarRepository
                                $query->where('branch_ids', 'all', $branchIds);
                            })
                            ->filter($request)
+                           ->filterDate($request)
                            ->active()
                            ->available()
                            ->free()

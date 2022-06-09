@@ -21,6 +21,7 @@ class YachtRepository
     {
         return $this->model->search($request)
                            ->filter($request)
+                           ->filterDate($request)
                            ->active()
                            ->available()
                            ->free()

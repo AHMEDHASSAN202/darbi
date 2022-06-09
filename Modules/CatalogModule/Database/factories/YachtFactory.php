@@ -42,11 +42,7 @@ class YachtFactory extends Factory
             'model_id'          => new ObjectId($model->_id),
             'brand_id'          => new ObjectId($brand->_id),
             'name'              => ['en' => $this->faker->company, 'ar' => $arFaker->company],
-            'images'            => [
-                $this->faker->imageUrl(300, 300, 'car', false, 'Car'),
-                $this->faker->imageUrl(300, 300, 'car', false, 'Car'),
-                $this->faker->imageUrl(300, 300, 'car', false, 'Car')
-            ],
+            'images'            => getRandomImages(getYatchTestImages(), mt_rand(1, 5)),
             'is_active'         => $this->faker->boolean,
             'is_available'      => $this->faker->boolean,
             'vendor_id'         => new ObjectId($vendor->_id),

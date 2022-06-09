@@ -38,11 +38,7 @@ class CarFactory extends Factory
         return [
             'model_id'          => new ObjectId($model->_id),
             'brand_id'          => new ObjectId($brand->_id),
-            'images'            => [
-                $this->faker->imageUrl(300, 300, 'car', false, 'Car'),
-                $this->faker->imageUrl(300, 300, 'car', false, 'Car'),
-                $this->faker->imageUrl(300, 300, 'car', false, 'Car')
-            ],
+            'images'            => getRandomImages(getCarTestImages(), mt_rand(1, 5)),
             'is_active'         => true,//$this->faker->boolean,
             'is_available'      => $this->faker->boolean,
             'vendor_id'         => new ObjectId($vendor->_id),

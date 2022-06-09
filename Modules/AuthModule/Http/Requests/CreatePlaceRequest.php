@@ -2,6 +2,7 @@
 
 namespace Modules\AuthModule\Http\Requests;
 
+use App\Rules\MongoIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreatePlaceRequest extends FormRequest
@@ -15,7 +16,7 @@ class CreatePlaceRequest extends FormRequest
     {
         return [
             'lat'           => 'required|numeric',
-            'lng'           => 'required|numeric',
+            'lng'           => 'required|numeric'
         ];
     }
 

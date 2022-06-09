@@ -6,12 +6,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserProfileResource extends JsonResource
 {
-    private $defaultImage;
-
     public function __construct($resource)
     {
         parent::__construct($resource);
-        $this->defaultImage = 'https://via.placeholder.com/250x250.png';
     }
 
     /**
@@ -22,6 +19,9 @@ class UserProfileResource extends JsonResource
      */
     public function toArray($request)
     {
+        $avatars = getAvatarTestImages();
+        $image = $avatars[mt_rand(0, (count($avatars) - 1))];
+
         return [
             'id'            => $this->_id,
             'phone'         => $this->phone,
@@ -31,7 +31,7 @@ class UserProfileResource extends JsonResource
                 'frontside_image'   => imageUrl(@$this->identity['frontside_image']),
                 'backside_image'    => imageUrl(@$this->identity['backside_image'])
             ],
-            'image'           => $this->defaultImage,
+            'image'           => $image,
             'is_profile_completed' => (!empty($this->name) && !empty(@$this->identity['frontside_image']) && !empty(@$this->identity['backside_image']))
         ];
     }

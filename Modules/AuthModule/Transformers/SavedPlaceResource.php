@@ -17,11 +17,11 @@ class SavedPlaceResource extends JsonResource
     {
         return [
             'id'            => $this->_id,
-            'place_label'   => translateAttribute($this->region->name) . ', ' . $this->city . ', ' . $this->country,
             'lat'           => $this->lat,
             'lng'           => $this->lng,
             'city'          => $this->city,
             'country'       => $this->country,
+            'full_address'  => $this->full_address,
             'region'        => translateAttribute($this->region->name),
             'region_id'     => $this->region_id
         ];
