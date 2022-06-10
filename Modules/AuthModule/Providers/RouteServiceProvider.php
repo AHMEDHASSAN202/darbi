@@ -86,4 +86,20 @@ class RouteServiceProvider extends ServiceProvider
             ->namespace($this->moduleNamespace)
             ->group(module_path('AuthModule', '/Routes/admin.php'));
     }
+
+
+    /**
+     * Define the "api vendor" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiVendorRoutes()
+    {
+        Route::prefix('api/vendor/v1')
+            ->middleware('api')
+            ->namespace($this->moduleNamespace)
+            ->group(module_path('AuthModule', '/Routes/vendor.php'));
+    }
 }
