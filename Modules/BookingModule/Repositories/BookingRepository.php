@@ -27,7 +27,7 @@ class BookingRepository
     public function findByUser($userId, $bookingId)
     {
         //->where('user_id', $userId)
-        return $this->booking->where('_id', new ObjectId($bookingId))->first();
+        return $this->booking->where('_id', new ObjectId($bookingId))->firstOrFail();
     }
 
     public function create($data)

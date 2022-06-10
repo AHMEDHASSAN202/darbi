@@ -46,4 +46,9 @@ class AdminRepository
     {
         return $this->model->findOrFail($id);
     }
+
+    public function findByEmail($email)
+    {
+        return $this->model->where('email', $email)->first();
+    }
 }

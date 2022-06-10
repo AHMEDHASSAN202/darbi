@@ -15,10 +15,11 @@ class AdminProfileResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'        =>  $this->_id,
-            'name'      =>  $this->name,
-            'email'     =>  $this->email,
-            'role'      =>  new RoleResource($this->role)
+            'id'        => $this->_id,
+            'name'      => $this->name,
+            'email'     => $this->email,
+            'role'      => new RoleResource($this->role),
+            'vendor'    => new VendorResource($this->vendor)
         ];
     }
 }

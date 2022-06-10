@@ -8,19 +8,18 @@ namespace Modules\AuthModule\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Modules\AuthModule\Repositories\Admin\AuthAdminRepository;
+use Modules\AuthModule\Repositories\Admin\AdminRepository;
+use Modules\AuthModule\Repositories\Admin\AuthVendorRepository;
 use Modules\AuthModule\Transformers\AdminProfileResource;
+use Modules\AuthModule\Transformers\VendorResource;
 
 class AdminAuthService
 {
-    private $authAdminRepository;
+    private $adminRepository;
 
-    private $guardName = 'admin_api';
-
-
-    public function __construct(AuthAdminRepository $authAdminRepository)
+    public function __construct(AdminRepository $adminRepository)
     {
-        $this->authAdminRepository = $authAdminRepository;
+        $this->adminRepository = $adminRepository;
     }
 
     public function login(Request $request)
@@ -30,7 +29,7 @@ class AdminAuthService
         $response['message'] = null;
         $response['errors'] = [];
 
-        $me = $this->authAdminRepository->find($request->email);
+        $me = $this->adminRepository->findByEmail($request->email);
 
         if (
             !$me || !Hash::check($request->password, $me->password)
@@ -42,7 +41,7 @@ class AdminAuthService
 
         try {
             $response['data'] = [
-                'token'     => auth($this->guardName)->login($me),
+                'token'     => auth($me->role->guard)->login($me),
                 'profile'   => new AdminProfileResource($me)
             ];
         }catch (\Exception $exception) {

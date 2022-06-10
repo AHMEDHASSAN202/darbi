@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\AuthModule\Http\Controllers\Role;
+namespace Modules\AuthModule\Http\Controllers\Admin\Role;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -8,6 +8,7 @@ use Modules\AuthModule\Http\Requests\Admin\CreateRoleRequest;
 use Modules\AuthModule\Http\Requests\Admin\UpdateRoleRequest;
 use Modules\AuthModule\Services\RoleService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
+use function __;
 
 /**
  * @group Roles

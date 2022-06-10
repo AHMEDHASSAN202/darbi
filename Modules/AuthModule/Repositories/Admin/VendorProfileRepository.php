@@ -8,8 +8,8 @@ namespace Modules\AuthModule\Repositories\Admin;
 
 
 use Illuminate\Support\Facades\Hash;
-use Modules\AuthModule\Http\Requests\Vendor\UpdateInfoVendorProfile;
-use Modules\AuthModule\Http\Requests\Vendor\UpdateVendorProfile;
+use Modules\AuthModule\Http\Requests\Admin\UpdateInfoVendorProfile;
+use Modules\AuthModule\Http\Requests\Admin\UpdateVendorProfile;
 use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Traits\ImageHelperTrait;
 use function auth;

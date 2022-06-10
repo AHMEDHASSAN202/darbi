@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 
 //admin routes roles
 Route::group([
-    'prefix'     => 'admin/roles',
+    'prefix'     => 'roles',
     'middleware' => ['auth:admin_api', 'permission:manage-roles'],
     'namespace'  => 'Role'
 ], function () {
@@ -29,7 +29,7 @@ Route::group([
 
 //permissions list
 Route::group([
-    'prefix'     => 'admin/permissions',
+    'prefix'     => 'permissions',
     'middleware' => ['auth:admin_api', 'permission:manage-roles'],
     'namespace'  => 'Role'
 ], function () {
@@ -39,7 +39,7 @@ Route::group([
 
 //admin routes admins
 Route::group([
-    'prefix'     => 'admin/admins',
+    'prefix'     => 'admins',
     'middleware' => ['auth:admin_api', 'permission:manage-admins'],
     'namespace'  => 'Admin'
 ], function () {
@@ -53,7 +53,7 @@ Route::group([
 
 //admin activities
 Route::group([
-    'prefix'     => 'admin/activities',
+    'prefix'     => 'activities',
     'middleware' => ['auth:admin_api', 'permission:manage-admins'],
 ], function () {
     Route::get('{admin}'                , 'ActivityController@show');
@@ -62,7 +62,7 @@ Route::group([
 
 //admin auth
 Route::group([
-    'prefix'     => 'admin/auth',
+    'prefix'     => 'auth',
     'namespace'  => 'Admin'
 ], function () {
     Route::post('login'                 , 'AuthAdminController@login');
@@ -71,7 +71,7 @@ Route::group([
 
 //admin profile
 Route::group([
-    'prefix'     => 'admin/profile',
+    'prefix'     => 'profile',
     'middleware' => 'auth:admin_api',
     'namespace'  => 'Admin'
 ], function () {

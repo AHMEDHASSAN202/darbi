@@ -3,33 +3,19 @@
 namespace Modules\CatalogModule\Entities;
 
 
-use App\Eloquent\BaseAuthenticatable;
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Modules\CatalogModule\Database\factories\VendorFactory;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
 
-class Vendor extends BaseAuthenticatable implements JWTSubject
+class Vendor extends Base
 {
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
 
-    protected $hidden = ['password', 'deleted_at'];
-
-    public $preventActivityLog = ['password'];
-
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
+    protected $hidden = ['deleted_at'];
 
     protected static function newFactory()
     {

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Modules\AuthModule\Database\factories\AdminFactory;
 use Modules\AuthModule\Traits\RoleHelperTrait;
+use Modules\CatalogModule\Entities\Vendor;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Admin extends BaseAuthenticatable implements JWTSubject
@@ -38,6 +39,11 @@ class Admin extends BaseAuthenticatable implements JWTSubject
     }
 
     //============= Relations ===================\\
+
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class);
+    }
 
     //============= #END# Relations ===================\\
 

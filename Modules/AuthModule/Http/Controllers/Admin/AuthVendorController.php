@@ -4,7 +4,7 @@ namespace Modules\AuthModule\Http\Controllers\Admin;
 
 use Illuminate\Routing\Controller;
 use Modules\AuthModule\Http\Requests\Admin\LoginToAdminRequest;
-use Modules\AuthModule\Services\VendorAuthService;
+use Modules\AuthModule\Services\AdminAuthService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
 /**
@@ -15,12 +15,12 @@ class AuthVendorController extends Controller
 {
     use ApiResponseTrait;
 
-    private $authVendorService;
+    private $adminAuthService;
 
 
-    public function __construct(VendorAuthService $authVendorService)
+    public function __construct(AdminAuthService $adminAuthService)
     {
-        $this->authVendorService = $authVendorService;
+        $this->adminAuthService = $adminAuthService;
     }
 
     /**
@@ -35,7 +35,7 @@ class AuthVendorController extends Controller
      */
     public function login(LoginToAdminRequest $loginToDashboardRequest)
     {
-        $result = $this->authVendorService->login($loginToDashboardRequest);
+        $result = $this->adminAuthService->login($loginToDashboardRequest);
 
         return $this->apiResponse($result['data'], $result['statusCode'], $result['message'], @$result['errors']);
     }

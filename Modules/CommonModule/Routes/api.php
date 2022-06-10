@@ -26,8 +26,3 @@ Route::group([
     Route::get('regions/find'       , 'RegionController@findRegionByLatAndLng');
     Route::get('locations/find'     , 'LocationController@find');
 });
-
-
-Route::get('health-check', function () {
-    return response()->json([]);
-});
