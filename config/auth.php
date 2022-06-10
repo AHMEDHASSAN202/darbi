@@ -82,7 +82,7 @@ return [
         ],
         'vendor' => [
             'driver' => 'eloquent',
-            'model' => \Modules\CatalogModule\Entities\Vendor::class
+            'model' => \Modules\AuthModule\Entities\Admin::class
         ],
 
         // 'users' => [

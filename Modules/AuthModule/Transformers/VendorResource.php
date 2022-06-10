@@ -17,7 +17,7 @@ class VendorResource extends JsonResource
     {
         return [
             'id'        => $this->_id,
-            'name'      => $this->name,
+            'name'      => translateAttribute($this->name),
             'email'     => $this->email,
             'phone'     => $this->phone,
             'image'     => $this->image ? asset($this->image) : null

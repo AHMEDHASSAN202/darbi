@@ -5,7 +5,6 @@ namespace Modules\AuthModule\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
-use function auth;
 
 class UpdateAdminProfile extends FormRequest
 {
