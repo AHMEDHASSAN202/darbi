@@ -32,7 +32,10 @@ pipeline {
             steps{
                 sh script: '''
                 #!/bin/bash
-                docker run --env DB_READ_HOSTS=ngo-db-dev.cluster-ro-c1swfoza64gk.eu-west-1.rds.amazonaws.com --env DB_WRITE_HOSTS=ngo-db-dev.cluster-c1swfoza64gk.eu-west-1.rds.amazonaws.com --env DB_DATABASE=darbi_dev --env DB_PASSWORD=${DEV_DB_PASSWORD} --env DB_PORT=3306 --env DB_USERNAME=admin --env APP_ENV=jenkins ngoco/darbi-new-dev:1.0.${BUILD_NUMBER} php artisan migrate php artisan module:migrate-refresh php artisan module:seed
+                docker run --env DB_READ_HOSTS=ngo-db-dev.cluster-ro-c1swfoza64gk.eu-west-1.rds.amazonaws.com --env DB_WRITE_HOSTS=ngo-db-dev.cluster-c1swfoza64gk.eu-west-1.rds.amazonaws.com --env DB_DATABASE=darbi_dev --env DB_PASSWORD=${DEV_DB_PASSWORD} --env DB_PORT=3306 --env DB_USERNAME=admin --env APP_ENV=jenkins ngoco/darbi-new-dev:1.0.${BUILD_NUMBER} 
+		php artisan migrate 
+		php artisan module:migrate-refresh 
+		php artisan module:seed
 
                 '''
             }
