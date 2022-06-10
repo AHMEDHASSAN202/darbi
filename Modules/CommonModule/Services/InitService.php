@@ -40,7 +40,7 @@ class InitService
             'need_update'           => $this->checkIfAppNeedUpdated($request->version, $request->platform),
             'default_country'       => $this->settings->default_country,
             'default_city'          => $this->settings->default_city,
-            'push_version'          => 1
+            'push_version'          => 2
         ];
     }
 
