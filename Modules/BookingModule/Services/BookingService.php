@@ -8,14 +8,19 @@ namespace Modules\BookingModule\Services;
 
 use App\Proxy\Proxy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Modules\BookingModule\Classes\Payments\Payment;
 use Modules\BookingModule\Classes\Price;
 use Modules\BookingModule\Enums\BookingStatus;
 use Modules\BookingModule\Http\Requests\AddBookDetailsRequest;
+use Modules\BookingModule\Http\Requests\ProceedRequest;
 use Modules\BookingModule\Http\Requests\RentRequest;
 use Modules\BookingModule\Proxy\BookingProxy;
 use Modules\BookingModule\Repositories\BookingRepository;
+use Modules\BookingModule\Transformers\BookingDetailsResource;
 use Modules\BookingModule\Transformers\BookingResource;
 use Modules\CommonModule\Transformers\PaginateResource;
+use MongoDB\BSON\ObjectId;
 
 class BookingService
 {
@@ -44,7 +49,7 @@ class BookingService
 
         $booking = $this->bookingRepository->findByUser($userId, $bookingId);
 
-        return new BookingResource($booking);
+        return new BookingDetailsResource($booking);
     }
 
 
@@ -64,29 +69,30 @@ class BookingService
 
         $plugins = $this->getPlugins($entity, $rentRequest->plugins);
 
-        $priceSummary = (new Price($entity, $plugins))->getPriceSummary();
+        $priceSummary = (new Price($entity, $plugins, $rentRequest->start_at, $rentRequest->end_at))->getPriceSummary();
 
         $booking = $this->bookingRepository->create([
-            'vendor_id'     => @$entity['vendor_id'],
-            'branch_id'     => @$entity['branch_id'],
-            'city_id'       => @$entity['city_id'],
-            'entity_id'     => @$entity['id'],
+            'user_id'       => new ObjectId(auth('api')->id()),
+            'vendor_id'     => new ObjectId($entity['vendor_id']),
+            'entity_id'     => new ObjectId($entity['id']),
             'entity_type'   => @$entity['entity_type'],
             'entity_details' => [
-                'name'      => @$entity['name'],
+                'name'      => @$entity['name'] ?? "",
                 'price'     => @$entity['price'],
                 'price_unit'=> @$entity['price_unit'],
                 'images'    => @$entity['images'],
-                'model_id'  => @$entity['model_id'],
+                'model_id'  => isset($entity['model_id']) ? new ObjectId($entity['model_id']) : null,
                 'model_name'=> @$entity['model_name'],
-                'brand_id'  => @$entity['brand_id'],
+                'brand_id'  => isset($entity['brand_id']) ? new ObjectId($entity['brand_id']) : null,
                 'brand_name'=> @$entity['brand_name'],
                 'country'   => @$entity['country'],
                 'city'      => @$entity['city'],
             ],
             'status'        => BookingStatus::INIT,
             'plugins'       => $plugins,
-            'price_summary' => $priceSummary
+            'price_summary' => $priceSummary,
+            'start_booking_at' => $rentRequest->start_at,
+            'end_booking_at'   => $rentRequest->end_at
         ]);
 
         return [
@@ -137,30 +143,31 @@ class BookingService
             ];
         }
 
-        $pickupLocationAddress = [
-            'lat'       => $addBookDetailsRequest->pickup_location->lat,
-            'lng'       => $addBookDetailsRequest->pickup_location->lng,
-            'fully_addressed' => $addBookDetailsRequest->pickup_location->fully_addressed,
-            'city'          => $addBookDetailsRequest->pickup_location->city,
-            'country'       => $addBookDetailsRequest->pickup_location->country,
-            'state'         => $addBookDetailsRequest->pickup_location->state,
-            'region_id'     => $addBookDetailsRequest->pickup_location->region_id,
-        ];
-        $dropLocationAddress = [
-            'lat'       => $addBookDetailsRequest->drop_location->lat,
-            'lng'       => $addBookDetailsRequest->drop_location->lat,
-            'fully_addressed' => $addBookDetailsRequest->drop_location->fully_addressed,
-            'city'          => $addBookDetailsRequest->drop_location->city,
-            'country'       => $addBookDetailsRequest->drop_location->country,
-            'state'         => $addBookDetailsRequest->drop_location->state,
-            'region_id'     => $addBookDetailsRequest->drop_location->region_id,
-        ];
+        //        $pickupLocationAddress = [
+//            'id'        => $addBookDetailsRequest->pickup_location['id'],
+//            'lat'       => $addBookDetailsRequest->pickup_location['lat'],
+//            'lng'       => $addBookDetailsRequest->pickup_location['lng'],
+//            'fully_addressed' => $addBookDetailsRequest->pickup_location['fully_addressed'],
+//            'city'          => $addBookDetailsRequest->pickup_location['city'],
+//            'country'       => $addBookDetailsRequest->pickup_location['country'],
+//            'state'         => $addBookDetailsRequest->pickup_location['state'],
+//            'region_id'     => $addBookDetailsRequest->pickup_location['region_id'],
+//        ];
+//        $dropLocationAddress = [
+//            'id'        => $addBookDetailsRequest->pickup_location['id'],
+//            'lat'       => $addBookDetailsRequest->drop_location['lat'],
+//            'lng'       => $addBookDetailsRequest->drop_location['lat'],
+//            'fully_addressed' => $addBookDetailsRequest->drop_location['fully_addressed'],
+//            'city'          => $addBookDetailsRequest->drop_location['city'],
+//            'country'       => $addBookDetailsRequest->drop_location['country'],
+//            'state'         => $addBookDetailsRequest->drop_location['state'],
+//            'region_id'     => $addBookDetailsRequest->drop_location['region_id'],
+//        ];
 
-        $booking->start_booking_at = $addBookDetailsRequest->start_at;
-        $booking->end_booking_at = $addBookDetailsRequest->end_at;
-        $booking->pickup_location_address = $pickupLocationAddress;
-        $booking->drop_location_address = $dropLocationAddress;
+        $booking->pickup_location_address = $addBookDetailsRequest->pickup_location;
+        $booking->drop_location_address = $addBookDetailsRequest->drop_location;
         $booking->status = BookingStatus::PENDING;
+        $booking->note = $addBookDetailsRequest->note;
         $booking->save();
 
         return [
@@ -196,6 +203,50 @@ class BookingService
             ],
             'message'    => '',
             'statusCode' => 200
+        ];
+    }
+
+
+    public function proceed($bookingId, ProceedRequest $proceedRequest)
+    {
+        $userId = auth('api')->id();
+
+        $booking = $this->bookingRepository->findByUser($userId, $bookingId);
+
+        abort_if(is_null($booking), 404);
+
+        if ($booking->status != BookingStatus::ACCEPT) {
+            return [
+                'data'      => [],
+                'message'   => __('proceed booking not allowed'),
+                'statusCode'=> 400
+            ];
+        }
+
+        $payment = new Payment($proceedRequest->payment_method, $proceedRequest->all());
+
+        $booking->payment_method = [
+            'type'  => $proceedRequest->payment_method,
+            'extra_info' => $payment->storeData()
+        ];
+
+        if (!$payment->successTransaction()) {
+            $booking->save();
+            Log::error('payment failed', $booking->toArray());
+            return [
+                'statusCode'       => 400,
+                'message'          => __('something error'),
+                'data'             => []
+            ];
+        }
+
+        $booking->status = BookingStatus::PAID;
+        $booking->save();
+
+        return [
+            'statusCode'       => 200,
+            'message'          => __('payment successful'),
+            'data'             => []
         ];
     }
 }

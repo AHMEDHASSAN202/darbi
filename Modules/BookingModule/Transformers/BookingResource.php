@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Log;
 
 class BookingResource extends JsonResource
 {
+    use BookingTraitResource;
+
     private $defaultImage = '';
 
     /**
@@ -21,20 +23,11 @@ class BookingResource extends JsonResource
             'id'            => $this->_id,
             'name'          => $this->getName(),
             'date_label'    => $this->getDateLabel(),
-            'status_label'  => $this->getState(),
+            'status_label'  => __($this->status),
             'status'        => $this->status,
             'type'          => $this->entity_type,
             'image'         => imageUrl(@$this->entity_details['images'][0] ?? $this->defaultImage)
         ];
-    }
-
-    private function getName()
-    {
-        if ($this->entity_type == 'car') {
-            return translateAttribute(@$this->entity_details['brand_name']) . ' ' . translateAttribute(@$this->entity_details['model_name']);
-        }else {
-            return translateAttribute(@$this->entity_details['name']);
-        }
     }
 
     private function getDateLabel()
@@ -49,10 +42,5 @@ class BookingResource extends JsonResource
         }
 
         return $startMonth . ' ' . $startMonthName . ' - ' . $endMonth . ' ' . $endMonthName . ' ' . $this->end_booking_at->format('Y');
-    }
-
-    public function getState()
-    {
-        return __($this->status);
     }
 }

@@ -4,7 +4,6 @@ namespace Modules\BookingModule\Entities;
 
 use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\CatalogModule\Entities\Entity;
 
 class Booking extends Base
 {
@@ -12,20 +11,21 @@ class Booking extends Base
 
     protected $guarded = [];
 
-    protected $dates = ['start_booking_at', 'end_booking_at'];
+    protected $dates = ['start_booking_at', 'end_booking_at', 'start_trip_at', 'end_trip_at', 'accepted_at'];
+
+    protected $appends = ['expired_at'];
 
     protected static function newFactory()
     {
         return \Modules\BookingModule\Database\factories\BookingFactory::new();
     }
 
-
-    //=================== relations ====================\\
-
-    public function entity()
+    //=============== Appends =====================\\
+    public function getExpiredAtAttribute()
     {
-        return $this->belongsTo(Entity::class);
-    }
+        $time_interval_user_accept_min = getOption('time_interval_user_accept_min', 22);
 
-    //=================== #END# relations ====================\\
+        return optional($this->accepted_at)->addMinutes($time_interval_user_accept_min);
+    }
+    //=============== #END# Appends =====================\\
 }

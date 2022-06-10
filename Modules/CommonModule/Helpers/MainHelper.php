@@ -139,3 +139,10 @@ function getRandomImages(array $images, $length = 3)
     }
     return $imgs;
 }
+
+function getOption($option, $default = null)
+{
+    $settings = app(\Modules\CommonModule\Services\SettingService::class)->getSettings();
+
+    return @$settings->{$option} ?? $default;
+}

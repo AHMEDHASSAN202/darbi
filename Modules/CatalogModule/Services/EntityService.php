@@ -31,4 +31,23 @@ class EntityService
 
         return new EntityResource($entity);
     }
+
+    public function changeState($entityId, $state)
+    {
+        $changed = $this->entityRepository->changeState($entityId, $state);
+
+        if (!$changed) {
+            return [
+                'statusCode'       => 400,
+                'message'          => '',
+                'data'             => []
+            ];
+        }
+
+        return [
+            'statusCode'       => 200,
+            'message'          => '',
+            'data'             => []
+        ];
+    }
 }

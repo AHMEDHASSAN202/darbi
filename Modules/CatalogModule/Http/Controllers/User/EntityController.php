@@ -26,4 +26,11 @@ class EntityController extends Controller
             'entity'       => $this->entityService->find($entityId)
         ]);
     }
+
+    public function changeState($entityId, $state)
+    {
+        $result = $this->entityService->changeState($entityId, $state);
+
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+    }
 }

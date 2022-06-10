@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller;
 use Modules\BookingModule\Entities\Booking;
 use Modules\BookingModule\Http\Requests\AddBookDetailsRequest;
 use Modules\BookingModule\Http\Requests\CheckoutRequest;
+use Modules\BookingModule\Http\Requests\ProceedRequest;
 use Modules\BookingModule\Http\Requests\RentRequest;
 use Modules\BookingModule\Services\BookingService;
 use Modules\BookingModule\Transformers\BookingDetailsResource;
@@ -39,7 +40,7 @@ class BookingController extends Controller
     public function find($bookingId)
     {
         return $this->apiResponse([
-            'booking'   => new BookingDetailsResource(Booking::with('entity')->find($bookingId))
+            'booking'   => $this->bookingService->findByAuth($bookingId)
         ]);
     }
 
@@ -60,9 +61,11 @@ class BookingController extends Controller
     }
 
 
-    public function checkout(CheckoutRequest $checkoutRequest)
+    public function proceed($bookingId, ProceedRequest $proceedRequest)
     {
+        $result = $this->bookingService->proceed($bookingId, $proceedRequest);
 
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
     }
 
 

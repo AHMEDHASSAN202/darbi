@@ -9,6 +9,8 @@ use Modules\CatalogModule\Transformers\YachtResource;
 
 class BookingDetailsResource extends JsonResource
 {
+    use BookingTraitResource;
+
     private $defaultImage;
 
     /**
@@ -21,57 +23,44 @@ class BookingDetailsResource extends JsonResource
     {
         return [
             'id'            => $this->_id,
-            'status_label'  => $this->getState(),
+            'status_label'  => __($this->status),
             'status'        => $this->status,
-            'entity'        => $this->getEntity(),
+            'entity'        => $this->entity(),
             'start'         => ['month' => $this->start_booking_at->format('m F'), 'time' => $this->start_booking_at->format('H:s A')],
             'end'           => ['month' => $this->end_booking_at->format('m F'), 'time' => $this->end_booking_at->format('H:s A')],
-            'plugins'       => $this->pluginsTransform(),
-            'location'      => $this->pickup_location_address,
-            'location_label'=> $this->getPickupLocationAddressLabel(),
+            'plugins'       => $this->plugins ?? [],
+            'pickup_location_address' => $this->pickup_location_address,
+            'drop_location_address'   => $this->drop_location_address,
             'payment_method'=> @$this->payment_method['type'] ?? "",
-            'image'         => imageUrl(@$this->entity_details['images'][0] ?? $this->defaultImage),
             'note'          => $this->note ?? "",
-            'created_at'    => $this->created_at
+            'price'         => ['total_price' => @$this->price_summary['total_price']],
+            'created_at'    => $this->created_at,
+            'expired_at'    => $this->expired_at
         ];
     }
 
-    private function getEntity()
+
+    private function entity()
     {
-        $entity = $this->entity;
-
-        if (!$entity) {
-            Log::error('entity not found in booking', ['bookingId' => $this->_id]);
-            return;
-        }
-
-        if ($entity->isCarType()) {
-            return new CarResource($this->entity);
-        }else {
-            return new YachtResource($this->entity);
-        }
-    }
-
-    private function getState()
-    {
-        return __($this->status);
-    }
-
-    private function pluginsTransform() : array
-    {
-        $plugins = @$this->entity_details['plugins'] ?? [];
-
-        if (empty($plugins) || !is_array($plugins)) return [];
-
-        return array_map(function ($plugin) {
-            return ['name' => translateAttribute($plugin['name']), 'price' => number_format($plugin['price_per_day'], 2)];
-        }, $plugins);
-    }
-
-    private function getPickupLocationAddressLabel() : string
-    {
-        if (!$this->pickup_location_address || !is_array($this->pickup_location_address)) return '';
-
-        return $this->pickup_location_address['state'] . ' ' . $this->pickup_location_address['city'] . ' ' . $this->pickup_location_address['country'];
+        return [
+            'id'        => (string)$this->entity_id,
+            'entity_type' => $this->entity_type,
+            'name'      => $this->getName(),
+            'price'     => $this->entity_details['price'],
+            'price_unit' => $this->entity_details['price_unit'],
+            'images'        => $this->entity_details['images'],
+            'model_id'      => (string)$this->entity_details['model_id'],
+            'model_name'    => translateAttribute($this->entity_details['model_name']),
+            'brand_id'      => (string)$this->entity_details['brand_id'],
+            'brand_name'    => translateAttribute($this->entity_details['brand_name']),
+            'country'       => [
+                'id'            => @$this->entity_details['country']['_id'],
+                'name'          => translateAttribute(@$this->entity_details['country']['name'])
+            ],
+            'city'       => [
+                'id'            => @$this->entity_details['city']['_id'],
+                'name'          => translateAttribute(@$this->entity_details['city']['name'])
+            ],
+        ];
     }
 }

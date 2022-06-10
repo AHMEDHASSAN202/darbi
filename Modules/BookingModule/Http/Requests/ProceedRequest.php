@@ -4,7 +4,7 @@ namespace Modules\BookingModule\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RentRequest extends FormRequest
+class ProceedRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,11 +14,8 @@ class RentRequest extends FormRequest
     public function rules()
     {
         return [
-            'entity_id'         => 'required',
-            'entity_type'       => 'required|in:car,yacht',
-            'plugins'           => 'nullable|array',
-            'start_at'          => 'required|date|after_or_equal:today',
-            'end_at'            => 'required|date|after_or_equal:start_at',
+            'payment_method'        => 'required|in:cash,apple_pay',
+            'transaction'           => 'required_if:payment_method,apple_pay|array'
         ];
     }
 

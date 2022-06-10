@@ -6,21 +6,28 @@
 
 namespace Modules\BookingModule\Classes;
 
+use Carbon\Carbon;
+
 class Price
 {
     private $bookingEntity;
     private $bookingPlugins;
+    private $startedAt;
+    private $endedAt;
 
-    public function __construct($bookingEntity, $bookingPlugins = [])
+    public function __construct($bookingEntity, $bookingPlugins = [], $startedAt, $endedAt)
     {
         $this->bookingEntity = $bookingEntity;
         $this->bookingPlugins = $bookingPlugins;
+        $this->startedAt = Carbon::parse($startedAt);
+        $this->endedAt = Carbon::parse($endedAt);
     }
 
 
     public function getInitialPriceSummary()
     {
         return [
+            'total_price'           => $this->getTotalPrice(),
             'total_discount'        => $this->getTotalDiscount(),
             'discount_value'        => $this->getDiscountValue(),
             'total_price_before_discount_before_vat' => $this->getTotalPriceBeforeDiscountBeforeVat(),
@@ -38,6 +45,7 @@ class Price
     public function getPriceSummary()
     {
         return [
+            'total_price'           => $this->getTotalPrice(),
             'total_discount'        => $this->getTotalDiscount(),
             'discount_value'        => $this->getDiscountValue(),
             'total_price_before_discount_before_vat' => $this->getTotalPriceBeforeDiscountBeforeVat(),
@@ -49,6 +57,28 @@ class Price
             'charge_cc'             => $this->getChargeCC(),
             'charge_shop'           => $this->getChargeShop(),
         ];
+    }
+
+
+    public function getTotalPrice()
+    {
+        $entity = $this->bookingEntity['price'];
+        $pluginPrice = 0;
+        foreach ($this->bookingPlugins as $bookingPlugin) {
+            $pluginPrice += $bookingPlugin['price'];
+        }
+        $totalPriceUnit = $entity + $pluginPrice;
+        return $totalPriceUnit * $this->getUnitsCount();
+    }
+
+
+    private function getUnitsCount()
+    {
+        if ($this->bookingEntity['price_unit'] == 'day') {
+            return $this->startedAt->diffInDays($this->endedAt);
+        } else {
+            return $this->startedAt->diffInHours($this->endedAt);
+        }
     }
 
 

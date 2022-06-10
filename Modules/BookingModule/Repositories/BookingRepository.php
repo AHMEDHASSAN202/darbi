@@ -7,6 +7,7 @@
 namespace Modules\BookingModule\Repositories;
 
 use Modules\BookingModule\Entities\Booking;
+use MongoDB\BSON\ObjectId;
 
 class BookingRepository
 {
@@ -20,13 +21,13 @@ class BookingRepository
     public function findAllByUser($userId, $limit = 20)
     {
         //->where('user_id', $userId)
-        return $this->booking->with('entity')->paginate($limit);
+        return $this->booking->paginate($limit);
     }
 
     public function findByUser($userId, $bookingId)
     {
         //->where('user_id', $userId)
-        return $this->booking->where('id', $bookingId)->first();
+        return $this->booking->where('_id', new ObjectId($bookingId))->first();
     }
 
     public function create($data)

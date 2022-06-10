@@ -19,4 +19,10 @@ class BookingStatus
     const DROPPED = 'dropped';
     const COMPLETED = 'completed';
     const FORCE_CANCELLED = 'force_cancelled';
+
+    public static function getStatus()
+    {
+        $reflectionClass = new \ReflectionClass(static::class);
+        return $reflectionClass->getConstants();
+    }
 }

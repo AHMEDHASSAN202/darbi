@@ -16,8 +16,6 @@ class GetEntityHttpProxyAction
     {
         $url = '/api/mobile/v1/entities/' . $data['entity_id'];
 
-//        $res = Http::acceptJson()->withoutVerifying()->get($url);
-
         $req = Request::create($url, 'GET');
 
         $res = Route::dispatch($req);

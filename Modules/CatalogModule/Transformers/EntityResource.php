@@ -17,21 +17,23 @@ class EntityResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'            => $this->_id,
+            'id'            => (string)$this->_id,
             'images'        => $this->getImagesFullPath(),
             'name'          => $this->name,
             'brand_name'    => optional($this->brand)->name,
-            'brand_id'      => optional($this->brand)->id,
+            'brand_id'      => (string)optional($this->brand)->id,
             'model_name'    => optional($this->model)->name,
-            'model_id'      => optional($this->model)->id,
+            'model_id'      => (string)optional($this->model)->id,
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
             'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit),
-            'plugins'       => PluginResource::collection($this->plugins),
+            'plugins'       => $this->getPlugins(),
             'state'         => $this->state,
             'specs'         => SpecsResource::collection($this->model->addons),
             'country'       => $this->country,
-            'city'          => $this->city
+            'city'          => $this->city,
+            'vendor_id'     => (string)$this->vendor_id,
+            'entity_type'   => $this->type
         ];
     }
 }

@@ -46,12 +46,13 @@ Route::group([
 });
 
 
-//entity routes [used as microservice]
+//entity routes
 Route::group([
     'prefix'    => 'entities',
     'namespace' => 'User'
 ], function () {
     Route::get('{entity}'        , 'EntityController@show');
+    Route::put('{entity}/state/{state}' , 'EntityController@ changeState')->whereIn('state', ['free', 'reserved', 'pending']);
 });
 
 
