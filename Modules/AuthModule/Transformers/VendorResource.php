@@ -3,7 +3,7 @@
 namespace Modules\AuthModule\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use function asset;
+
 
 class VendorResource extends JsonResource
 {
@@ -18,9 +18,8 @@ class VendorResource extends JsonResource
         return [
             'id'        => $this->_id,
             'name'      => translateAttribute($this->name),
-            'email'     => $this->email,
-            'phone'     => $this->phone,
-            'image'     => $this->image ? asset($this->image) : null
+            'image'     => $this->image ? asset($this->image) : null,
+            'type'      => $this->type
         ];
     }
 }

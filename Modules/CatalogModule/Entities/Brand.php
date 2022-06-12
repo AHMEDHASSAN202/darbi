@@ -48,5 +48,15 @@ class Brand extends Base
         }
     }
 
+    public function scopeAdminSearch($query, Request $request)
+    {
+        return $this->scopeSearch($query, $request);
+    }
+
+    public function scopeAdminFilters($query, Request $request)
+    {
+        return $this->scopeFilters($query, $request);
+    }
+
     //================ #END# scopes =========================\\
 }

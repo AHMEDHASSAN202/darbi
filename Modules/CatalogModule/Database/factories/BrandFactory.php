@@ -24,7 +24,7 @@ class BrandFactory extends Factory
 
         return [
             'name'      => ['ar' => $arFaker->company(), 'en' => $this->faker->company()],
-            'logo'      => $this->faker->imageUrl(150, 150, 'logo', false, 'Logo'),
+            'logo'      => 'https://i.ibb.co/jf53hBr/carType0.png',
             'entity_type' => ['car', 'yacht'][mt_rand(0,1)],
             'is_active' => true//$this->faker->boolean
         ];

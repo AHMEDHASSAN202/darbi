@@ -35,5 +35,12 @@ class Plugin extends Base
         return $query->where('is_active', true);
     }
 
+    public function scopeFilters($query)
+    {
+        if ($entityType = request()->get('entity_type')) {
+            $query->where('entity_type', $entityType);
+        }
+    }
+
     //================ #END# Scopes =========================\\
 }

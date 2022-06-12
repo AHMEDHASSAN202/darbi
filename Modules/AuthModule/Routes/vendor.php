@@ -13,21 +13,33 @@ use Illuminate\Http\Request;
 |
 */
 
-//vendor profile
+//vendor auth
+Route::group([
+    'prefix'     => 'auth',
+    'namespace'  => 'Auth'
+], function () {
+    Route::post('login'                 , 'AuthVendorController@login');
+});
+
+
+
+//user vendor profile
 Route::group([
     'prefix'     => 'profile',
     'middleware' => 'auth:vendor_api',
-    'namespace'  => 'Admin'
+    'namespace'  => 'Profile'
 ], function () {
     Route::get(''                       , 'VendorProfileController@getProfile');
     Route::put(''                       , 'VendorProfileController@updateProfile');
 });
 
 
-//vendor auth
+//vendor profile
 Route::group([
-    'prefix'     => 'auth',
-    'namespace'  => 'Admin'
+    'prefix'     => 'vendor-profile',
+    'middleware' => 'auth:vendor_api',
+    'namespace'  => 'Profile'
 ], function () {
-    Route::post('login'                 , 'AuthVendorController@login');
+    Route::get(''                       , 'VendorProfileController@getVendor');
+    Route::put(''                       , 'VendorProfileController@updateVendor');
 });

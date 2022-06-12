@@ -1,9 +1,10 @@
 <?php
 
-namespace Modules\AuthModule\Http\Controllers\Admin;
+namespace Modules\AuthModule\Http\Controllers\Admin\Profile;
 
 use Illuminate\Routing\Controller;
 use Modules\AuthModule\Http\Requests\Admin\UpdateInfoVendorProfile;
+use Modules\AuthModule\Http\Requests\Admin\UpdateVendorInfoRequest;
 use Modules\AuthModule\Http\Requests\Admin\UpdateVendorProfile;
 use Modules\AuthModule\Services\VendorProfileService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
@@ -21,11 +22,7 @@ class VendorProfileController extends Controller
         $this->vendorProfileService = $vendorProfileService;
     }
 
-    /**
-     * Vendor Profile
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function getProfile()
     {
         $profile = $this->vendorProfileService->getProfile();
@@ -33,19 +30,27 @@ class VendorProfileController extends Controller
         return $this->apiResponse(compact('profile'));
     }
 
-    /**
-     * Update Vendor Profile
-     *
-     * @bodyParam name string required
-     * @bodyParam email string required
-     * @bodyParam password string required
-     * @param UpdateVendorProfile $updateVendorProfile
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function updateProfile(UpdateVendorProfile $updateVendorProfile)
     {
         $profile = $this->vendorProfileService->updateProfile($updateVendorProfile);
 
         return $this->apiResponse(compact('profile'), 200, __('Data has been updated successfully'));
+    }
+
+
+    public function getVendor()
+    {
+        $vendor = $this->vendorProfileService->getVendor();
+
+        return $this->apiResponse(compact('vendor'));
+    }
+
+
+    public function updateVendor(UpdateVendorInfoRequest $updateVendorInfoRequest)
+    {
+        $vendor = $this->vendorProfileService->updateVendor($updateVendorInfoRequest);
+
+        return $this->apiResponse(compact('vendor'), 200, __('Data has been updated successfully'));
     }
 }

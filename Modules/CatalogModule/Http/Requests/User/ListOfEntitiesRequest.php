@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\CatalogModule\Http\Requests;
+namespace Modules\CatalogModule\Http\Requests\User;
 
 use App\Rules\MongoIdRule;
 use Illuminate\Foundation\Http\FormRequest;

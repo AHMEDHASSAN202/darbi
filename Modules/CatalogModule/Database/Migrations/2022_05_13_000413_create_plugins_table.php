@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('plugins', function (Blueprint $table) {
             $table->id();
+            $table->index('entity_type');
+            $table->index('is_active');
             $table->softDeletes();
             $table->timestamps();
         });

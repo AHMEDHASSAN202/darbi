@@ -37,7 +37,8 @@ class VendorFactory extends Factory
             'darbi_percentage'      => $this->faker->randomFloat(1, 1, 100),
             'country_id'            => new ObjectId($country->_id),
             'require_activation'    => $this->faker->boolean,
-            'settings'              => []
+            'settings'              => [],
+            'type'                  => ['car', 'yacht'][mt_rand(0,1)],
         ];
     }
 }

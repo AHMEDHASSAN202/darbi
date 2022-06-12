@@ -4,8 +4,6 @@ namespace Modules\CatalogModule\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\CatalogModule\Http\Requests\ListOfEntitiesRequest;
-use Modules\CatalogModule\Services\CarService;
 use Modules\CatalogModule\Services\EntityService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 

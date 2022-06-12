@@ -14,12 +14,13 @@ class UpdateRoleRequest extends FormRequest
      */
     public function rules()
     {
-        $permissions = config('adminmodule.permissions');
+        $permissions = config('authmodule.permissions');
 
         return [
             'name'          => 'required|max:100',
             'permissions'   => 'required|array',
-            'permissions.*' => 'required|in:'.implode(',', $permissions)
+            'permissions.*' => 'required|in:'.implode(',', $permissions),
+            'guard'         => 'required|in:admin_api,vendor_api'
         ];
     }
 

@@ -23,10 +23,9 @@ class AdminRepository
         return $this->model->create($data);
     }
 
-    public function list(Request $request, $limit = 20)
+    public function list(Request $request, $type = 'admin', $limit = 20)
     {
-        //get all
-        return $this->model->search($request)->with('role:id,name')->paginate($limit);
+        return $this->model->search($request)->with('role:id,name')->where('type', $type)->paginate($limit);
     }
 
     public function update($id, $data)
@@ -47,8 +46,8 @@ class AdminRepository
         return $this->model->findOrFail($id);
     }
 
-    public function findByEmail($email)
+    public function findByEmail($email, $type, $with = [])
     {
-        return $this->model->where('email', $email)->first();
+        return $this->model->where('email', $email)->where('type', $type)->with($with)->first();
     }
 }

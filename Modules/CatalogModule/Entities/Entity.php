@@ -7,11 +7,13 @@
 namespace Modules\CatalogModule\Entities;
 
 use App\Eloquent\Base;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Modules\CommonModule\Entities\City;
 use Modules\CommonModule\Entities\Country;
+use MongoDB\BSON\ObjectId;
 
 class Entity extends Base
 {
@@ -68,6 +70,35 @@ class Entity extends Base
         }
     }
 
+    public function scopeFilter($query, Request $request)
+    {
+        if ($brand = $request->get('brand')) {
+            $query->where('brand_id', new ObjectId($brand));
+        }
+
+        if ($model = $request->get('model')) {
+            $query->where('model_id', new ObjectId($model));
+        }
+
+        if ($city = $request->get('city')) {
+            $query->where('city_id', new ObjectId($city));
+        }
+
+        if ($country = $request->get('country')) {
+            $query->where('country_id', new ObjectId($country));
+        }
+    }
+
+    public function scopeAdminFilter($query, Request $request)
+    {
+        return $this->scopeSearch($query, $request);
+    }
+
+    public function scopeAdminSearch($query, Request $request)
+    {
+        return $this->scopeFilter($query, $request);
+    }
+
     //================ #END# scopes =========================\\
 
     //================ Helpers ========================\\
@@ -75,6 +106,36 @@ class Entity extends Base
     public function isCarType() : bool
     {
         return ($this->type === 'car');
+    }
+
+    public function isYachtType() : bool
+    {
+        return ($this->type === 'yacht');
+    }
+
+    public function getPluginIdsAttribute($value)
+    {
+        if (empty($value)) return [];
+
+        return array_map(function ($id) { return (string)$id; }, $value);
+    }
+
+
+    public function getBranchIdsAttribute($value)
+    {
+        if (empty($value)) return [];
+
+        return array_map(function ($id) { return (string)$id; }, $value);
+    }
+
+
+    public function getUnavailableDateAttribute($value)
+    {
+        if (empty($value)) return [];
+        return [
+            'from'          => $value['from']->toDateTime(),
+            'to'            => $value['to']->toDateTime()
+        ];
     }
 
     //================ #END# Helpers ========================\\
@@ -95,6 +156,11 @@ class Entity extends Base
     public function plugins()
     {
         return $this->belongsToMany(Plugin::class, null, 'entity_ids','plugin_ids');
+    }
+
+    public function extras()
+    {
+        return $this->belongsToMany(Extra::class, null, 'entity_ids','extra_ids');
     }
 
     public function country()

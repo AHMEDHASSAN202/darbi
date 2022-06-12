@@ -31,7 +31,7 @@ class RoleService
 
     public function createRole($request)
     {
-        $role = $this->roleRepository->create(['name' => $request->name, 'permissions' => json_encode($request->permissions), 'guard' => 'admin_api']);
+        $role = $this->roleRepository->create(['name' => $request->name, 'permissions' => json_encode($request->permissions), 'guard' => $request->guard]);
 
         return new RoleResource($role);
     }

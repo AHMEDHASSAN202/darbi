@@ -15,22 +15,22 @@ trait CrudRepositoryTrait
         return $this->model->create($data);
     }
 
-    public function update($id, $data)
+    public function update($id, $data, $wheres = [])
     {
-        $row = $this->model->findOrFail($id);
+        $row = $this->model->where($wheres)->findOrFail($id);
         $row->update($data);
         $row->refresh();
         return $row;
     }
 
-    public function destroy($id)
+    public function destroy($id, $wheres = [])
     {
-        return $this->model->findOrFail($id)->delete();
+        return $this->model->where($wheres)->findOrFail($id)->delete();
     }
 
-    public function find($id)
+    public function find($id, $wheres = [])
     {
-        return $this->model->findOrFail($id);
+        return $this->model->where($wheres)->findOrFail($id);
     }
 
     public function list($limit = 20, $searchMethod = null, $moreScopeMethod = null, $with = [])
@@ -60,5 +60,12 @@ trait CrudRepositoryTrait
 
         //get all
         return $query->get();
+    }
+
+    public function _paginate($collection, $total, $limit, $page)
+    {
+        return new \Illuminate\Pagination\LengthAwarePaginator($collection, $total, $limit, $page, [
+            'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
+        ]);
     }
 }

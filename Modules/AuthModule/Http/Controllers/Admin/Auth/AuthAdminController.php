@@ -1,6 +1,7 @@
 <?php
 
-namespace Modules\AuthModule\Http\Controllers\Admin;
+namespace Modules\AuthModule\Http\Controllers\Admin\Auth;
+
 
 use Illuminate\Routing\Controller;
 use Modules\AuthModule\Http\Requests\Admin\LoginToAdminRequest;
@@ -8,34 +9,34 @@ use Modules\AuthModule\Services\AdminAuthService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
 /**
- * @group Auth Vendor
+ * @group Auth Dashboard
  *
  */
-class AuthVendorController extends Controller
+class AuthAdminController extends Controller
 {
     use ApiResponseTrait;
 
-    private $adminAuthService;
+    private $authAdminService;
 
 
-    public function __construct(AdminAuthService $adminAuthService)
+    public function __construct(AdminAuthService $authAdminService)
     {
-        $this->adminAuthService = $adminAuthService;
+        $this->authAdminService = $authAdminService;
     }
 
     /**
-     * Login Vendor
+     * Login Admin
      *
-     * Login vendor request. If everything is okay, you'll get a 200 OK response and user access token.
+     * Login admin request. If everything is okay, you'll get a 200 OK response and user access token.
      * Otherwise, the request will fail with a 400 || 422 || 401 || 500 error
-     * @bodyParam email string required the vendor mail.
-     * @bodyParam password string required the vendor password.
+     * @bodyParam email string required the admin mail.
+     * @bodyParam password string required the admin password.
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(LoginToAdminRequest $loginToDashboardRequest)
     {
-        $result = $this->adminAuthService->login($loginToDashboardRequest);
+        $result = $this->authAdminService->login($loginToDashboardRequest, 'admin');
 
         return $this->apiResponse($result['data'], $result['statusCode'], $result['message'], @$result['errors']);
     }

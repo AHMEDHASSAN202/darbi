@@ -29,4 +29,15 @@ class BrandRepository
 
         return $query->get();
     }
+
+    public function listOfBrandsForDashboard(Request $request, $wheres = [])
+    {
+        $query = $this->model->adminSearch($request)->adminFilters($request)->latest()->where($wheres);
+
+        if ($request->has('paginated')) {
+            return $query->paginate($request->get('limit', 20));
+        }
+
+        return $query->get();
+    }
 }

@@ -1,9 +1,8 @@
 <?php
 
-namespace Modules\CatalogModule\Transformers;
+namespace Modules\CatalogModule\Transformers\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use function asset;
 
 class VendorResource extends JsonResource
 {

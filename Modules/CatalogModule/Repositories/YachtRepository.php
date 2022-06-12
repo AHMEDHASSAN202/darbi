@@ -9,9 +9,13 @@ namespace Modules\CatalogModule\Repositories;
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Entities\Car;
 use Modules\CatalogModule\Entities\Yacht;
+use Modules\CommonModule\Traits\CrudRepositoryTrait;
+use MongoDB\BSON\ObjectId;
 
 class YachtRepository
 {
+    use CrudRepositoryTrait;
+
     public function __construct(Yacht $model)
     {
         $this->model = $model;
@@ -35,5 +39,21 @@ class YachtRepository
     public function findYachtWithDetailsById($yachtId)
     {
         return $this->model->with(['model', 'port', 'plugins' => function ($query) { $query->active(); }])->find($yachtId);
+    }
+
+    public function findAllByVendor(Request $request, $vendorId)
+    {
+        return $this->model->adminSearch($request)
+                            ->with(['port'])
+                            ->adminFilter($request)
+                            ->latest()
+                            ->where('vendor_id', new ObjectId($vendorId))
+                            ->paginate($request->get('limit', 20));
+    }
+
+
+    public function findByVendor($vendorId, $carId)
+    {
+        return $this->model->with(['model', 'port', 'extras'])->where('vendor_id', new ObjectId($vendorId))->findOrFail($carId);
     }
 }

@@ -2,13 +2,10 @@
 
 namespace Modules\CatalogModule\Http\Controllers\User;
 
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\CatalogModule\Http\Requests\ListOfEntitiesRequest;
+use Modules\CatalogModule\Http\Requests\User\ListOfEntitiesRequest;
 use Modules\CatalogModule\Services\YachtService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
-use function view;
 
 class YachtController extends Controller
 {

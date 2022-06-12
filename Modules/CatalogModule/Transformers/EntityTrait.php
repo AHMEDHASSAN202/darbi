@@ -42,9 +42,10 @@ trait EntityTrait
     {
         $plugins = $this->plugins->map(function ($plugin) {
             $plugin->price_unit = $this->price_unit;
+            $plugin->price = mt_rand(100, 2000);
             return $plugin;
         });
 
-        return PluginResource::collection($plugins);
+        return ExtraResource::collection($plugins);
     }
 }

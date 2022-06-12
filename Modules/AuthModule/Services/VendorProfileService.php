@@ -7,10 +7,11 @@
 namespace Modules\AuthModule\Services;
 
 use Modules\AuthModule\Http\Requests\Admin\UpdateInfoVendorProfile;
+use Modules\AuthModule\Http\Requests\Admin\UpdateVendorInfoRequest;
 use Modules\AuthModule\Repositories\Admin\VendorProfileRepository;
 use Modules\AuthModule\Transformers\AdminProfileResource;
-use Modules\AuthModule\Transformers\VendorResource;
-use function auth;
+use Modules\AuthModule\Transformers\VendorDetailsResource;
+
 
 class VendorProfileService
 {
@@ -37,10 +38,17 @@ class VendorProfileService
         return (new AdminProfileResource($me));
     }
 
-    public function updateInfo(UpdateInfoVendorProfile $updateInfoVendorProfile)
+    public function updateVendor(UpdateVendorInfoRequest $updateVendorInfoRequest)
     {
-        $me = $this->vendorProfileRepository->updateInfo($updateInfoVendorProfile);
+        $vendor = $this->vendorProfileRepository->updateInfo($updateVendorInfoRequest);
 
-        return (new AdminProfileResource($me));
+        return new VendorDetailsResource($vendor);
+    }
+
+    public function getVendor()
+    {
+        $vendor = auth($this->guardName)->user()->vendor;
+
+        return new VendorDetailsResource($vendor);
     }
 }

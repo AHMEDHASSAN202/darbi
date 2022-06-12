@@ -41,7 +41,7 @@ Route::group([
 Route::group([
     'prefix'     => 'admins',
     'middleware' => ['auth:admin_api', 'permission:manage-admins'],
-    'namespace'  => 'Admin'
+    'namespace'  => 'CURD'
 ], function () {
     Route::get(''                       , 'AdminController@index');
     Route::post(''                      , 'AdminController@store');
@@ -50,6 +50,34 @@ Route::group([
     Route::delete('{admin}'             , 'AdminController@destroy');
 });
 
+
+
+//admin routes admins
+Route::group([
+    'prefix'     => 'vendors',
+    'middleware' => ['auth:admin_api', 'permission:manage-admins'],
+    'namespace'  => 'CURD'
+], function () {
+    Route::get(''                       , 'VendorController@index');
+    Route::post(''                      , 'VendorController@store');
+    Route::put('{vendor}'               , 'VendorController@update');
+    Route::put('{vendor}/password'      , 'VendorController@updatePassword');
+    Route::delete('{vendor}'            , 'VendorController@destroy');
+});
+
+
+//admin routes admins
+Route::group([
+    'prefix'     => 'users',
+    'middleware' => ['auth:admin_api', 'permission:manage-admins'],
+    'namespace'  => 'CURD'
+], function () {
+    Route::get(''                       , 'UserController@index');
+    Route::post(''                      , 'UserController@store');
+    Route::put('{vendor}'               , 'UserController@update');
+    Route::put('{vendor}/password'      , 'UserController@updatePassword');
+    Route::delete('{vendor}'            , 'UserController@destroy');
+});
 
 //admin activities
 Route::group([
@@ -63,7 +91,7 @@ Route::group([
 //admin auth
 Route::group([
     'prefix'     => 'auth',
-    'namespace'  => 'Admin'
+    'namespace'  => 'Auth'
 ], function () {
     Route::post('login'                 , 'AuthAdminController@login');
 });
@@ -73,28 +101,8 @@ Route::group([
 Route::group([
     'prefix'     => 'profile',
     'middleware' => 'auth:admin_api',
-    'namespace'  => 'Admin'
+    'namespace'  => 'Profile'
 ], function () {
     Route::get(''                       , 'AdminProfileController@getProfile');
     Route::put(''                       , 'AdminProfileController@updateProfile');
-});
-
-
-//vendor profile
-Route::group([
-    'prefix'     => 'vendor/profile',
-    'middleware' => 'auth:vendor_api',
-    'namespace'  => 'Admin'
-], function () {
-    Route::get(''                       , 'VendorProfileController@getProfile');
-    Route::put(''                       , 'VendorProfileController@updateProfile');
-});
-
-
-//vendor auth
-Route::group([
-    'prefix'     => 'vendor/auth',
-    'namespace'  => 'Admin'
-], function () {
-    Route::post('login'                 , 'AuthVendorController@login');
 });

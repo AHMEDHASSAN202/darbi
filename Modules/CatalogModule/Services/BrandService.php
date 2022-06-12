@@ -31,4 +31,19 @@ class BrandService
 
         return BrandResource::collection($brands);
     }
+
+    public function findAllForDashboard(Request $request, $onlyActive = true)
+    {
+        $wheres = [];
+        if ($onlyActive) {
+            $wheres['is_active'] = true;
+        }
+        $brands = $this->brandRepository->listOfBrandsForDashboard($request, $wheres);
+
+        if ($brands instanceof LengthAwarePaginator) {
+            return new PaginateResource(\Modules\CatalogModule\Transformers\Admin\BrandResource::collection($brands));
+        }
+
+        return \Modules\CatalogModule\Transformers\Admin\BrandResource::collection($brands);
+    }
 }

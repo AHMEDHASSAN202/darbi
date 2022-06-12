@@ -26,7 +26,7 @@ class Role extends Base
     //============= #END# relations ==============\\
 
     //============= scopes ==============\\
-    public function scopeAdminSearch(Request $request, $query)
+    public function scopeAdminSearch($query, Request $request)
     {
         if ($q = $request->get('q')) {
             return $query->where('name', 'LIKE', '%' . $q .'%');

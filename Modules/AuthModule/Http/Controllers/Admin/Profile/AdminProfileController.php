@@ -1,11 +1,12 @@
 <?php
 
-namespace Modules\AuthModule\Http\Controllers\Admin;
+namespace Modules\AuthModule\Http\Controllers\Admin\Profile;
 
 use Illuminate\Routing\Controller;
 use Modules\AuthModule\Http\Requests\Admin\UpdateAdminProfile;
 use Modules\AuthModule\Services\AdminProfileService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
+use function __;
 
 /**
  * @gorup Admin Profile

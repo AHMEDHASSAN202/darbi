@@ -39,25 +39,5 @@ class Car extends Entity
                   ->orWhereHas('brand', function ($query) use ($q) { $query->where('name.en', 'LIKE', $q)->orWhere('name.ar', 'LIKE', $q); });
         });
     }
-
-    public function scopeFilter($query, Request $request)
-    {
-        if ($brand = $request->get('brand')) {
-            $query->where('brand_id', new ObjectId($brand));
-        }
-
-        if ($model = $request->get('model')) {
-            $query->where('model_id', new ObjectId($model));
-        }
-
-        if ($city = $request->get('city')) {
-            $query->where('city_id', new ObjectId($city));
-        }
-
-        if ($country = $request->get('country')) {
-            $query->where('country_id', new ObjectId($country));
-        }
-    }
-
     //================ #END# scopes =========================\\
 }

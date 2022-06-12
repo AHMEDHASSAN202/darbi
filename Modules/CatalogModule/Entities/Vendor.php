@@ -39,4 +39,19 @@ class Vendor extends Base
         }
     }
     //============= #END# scopes ==============\\
+
+    public function isNotActive() : bool
+    {
+        return ($this->is_active !== true);
+    }
+
+    public function isCar()
+    {
+        return $this->type === 'car';
+    }
+
+    public function isYacht()
+    {
+        return $this->type === 'yacht';
+    }
 }

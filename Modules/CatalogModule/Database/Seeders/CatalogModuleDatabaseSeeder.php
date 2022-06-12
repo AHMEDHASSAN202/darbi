@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Modules\CatalogModule\Entities\Branch;
 use Modules\CatalogModule\Entities\Brand;
 use Modules\CatalogModule\Entities\Car;
+use Modules\CatalogModule\Entities\Extra;
 use Modules\CatalogModule\Entities\Plugin;
 use Modules\CatalogModule\Entities\Port;
 use Modules\CatalogModule\Entities\Subscription;
@@ -27,6 +28,7 @@ class CatalogModuleDatabaseSeeder extends Seeder
         Brand::factory(100)->create();
         \Modules\CatalogModule\Entities\Model::factory(50)->create();
         Plugin::factory(100)->create();
+        Extra::factory(100)->create();
         Subscription::factory(5)->create();
         Vendor::factory(100)->create();
         Branch::factory(100)->create();

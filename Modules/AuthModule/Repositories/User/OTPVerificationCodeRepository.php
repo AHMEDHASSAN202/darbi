@@ -8,10 +8,6 @@ namespace Modules\AuthModule\Repositories\User;
 
 use Illuminate\Http\Request;
 use Modules\AuthModule\Entities\OTPVerificationCode;
-use Modules\AuthModule\Entities\User;
-use Modules\CommonModule\Entities\Country;
-use Modules\CommonModule\Traits\CrudRepositoryTrait;
-use MongoDB\BSON\ObjectId;
 
 class OTPVerificationCodeRepository
 {

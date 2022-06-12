@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\AuthModule\Http\Controllers\Admin;
+namespace Modules\AuthModule\Http\Controllers\Admin\CURD;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -9,13 +9,14 @@ use Modules\AuthModule\Http\Requests\Admin\UpdateAdminPasswordRequest;
 use Modules\AuthModule\Http\Requests\Admin\UpdateAdminRequest;
 use Modules\AuthModule\Services\AdminService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
+use function __;
 
 /**
  * @group Admins
  *
  * Management Admins
  */
-class AdminController extends Controller
+class VendorController extends Controller
 {
     use ApiResponseTrait;
 

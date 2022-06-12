@@ -9,21 +9,21 @@ namespace Modules\CommonModule\Traits;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Image;
 
 trait ImageHelperTrait
 {
     public function resizeImage($folder, $image, $sizes = ['400x400'])
     {
-        $imageResizeName = pathinfo($image, PATHINFO_FILENAME);
+        $imageInfo = pathinfo($image);
+        $imageResizeName = $imageInfo['filename'];
         foreach ($sizes as $size) {
             $s = explode('x', $size, 2);
             $width = $s[0];
             $height = $s[1];
-            $imageResizeName .= '-resize-' . $size;
+            $imageResizeName .= '-resize-' . $size . '.' . $imageInfo['extension'];
 
             try {
-                Image::make($image)->fit($width, $height)->save($folder);
+                \Image::make(Storage::path($image))->fit($width, $height)->save($folder . DIRECTORY_SEPARATOR . $imageResizeName);
             }catch (\Exception $exception) {
                 Log::error($exception->getMessage());
                 if (app()->environment('local')) {
@@ -60,7 +60,7 @@ trait ImageHelperTrait
         return $imagePaths;
     }
 
-    public function uploadAvatar(UploadedFile $avatar, $folder = 'avatars', $sizes =  ['300x200'])
+    public function uploadAvatar(UploadedFile $avatar, $folder = 'avatars', $sizes =  ['300x300'])
     {
         return $this->uploadImage($folder, $avatar, $sizes);
     }

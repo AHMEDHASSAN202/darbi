@@ -15,7 +15,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('telescope:prune')->daily();
+        if (env("TELESCOPE_ENABLED")) {
+            $schedule->command('telescope:prune')->daily();
+        }
     }
 
     /**
