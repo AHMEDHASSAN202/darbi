@@ -38,9 +38,9 @@ class VendorProfileService
         return (new AdminProfileResource($me));
     }
 
-    public function updateVendor(UpdateVendorInfoRequest $updateVendorInfoRequest)
+    public function updateVendorInfo(UpdateVendorInfoRequest $updateVendorInfoRequest)
     {
-        $vendor = $this->vendorProfileRepository->updateInfo($updateVendorInfoRequest);
+        $vendor = $this->vendorProfileRepository->updateVendorInfo($updateVendorInfoRequest);
 
         return new VendorDetailsResource($vendor);
     }

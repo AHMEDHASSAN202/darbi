@@ -96,8 +96,8 @@ class ExtraRepository
             [
                 '$match'        => [
                     'vendor_id'    => [ '$eq' => $vendorId ],
-                    '$expr'         => [
-                        '$in'             => ["plugin_id", array_values(generateObjectIdOfArrayValues($plugins))]
+                    'plugin_id'         => [
+                        '$in'             => array_values(generateObjectIdOfArrayValues($plugins))
                     ]
                 ]
             ]

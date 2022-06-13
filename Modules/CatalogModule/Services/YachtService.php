@@ -49,28 +49,10 @@ class YachtService
         return new YachtDetailsResource($yacht);
     }
 
-
-    public function findAllByVendor(Request $request)
-    {
-        $yachts = $this->repository->findAllByVendor($request, getVendorId());
-
-        return new PaginateResource(EntityResource::collection($yachts));
-    }
-
-
-    public function findByVendor($id)
-    {
-        $yacht = $this->repository->findByVendor(getVendorId(), $id);
-
-        return new EntityDetailsResource($yacht);
-    }
-
-
     public function create(CreateEntityRequest $createEntityRequest)
     {
         $data = [
             'port_id'       => new ObjectId($createEntityRequest->port_id),
-            'name'          => ['ar' => $createEntityRequest->name['ar'], 'en' => $createEntityRequest->name['en']]
         ];
 
         $yacht = $this->createEntity($createEntityRequest, $data);
@@ -84,8 +66,7 @@ class YachtService
     public function update($id, UpdateEntityRequest $updateEntityRequest)
     {
         $data = [
-            'port_id'       => new ObjectId($updateEntityRequest->port_id),
-            'name'          => ['ar' => $updateEntityRequest->name['ar'], 'en' => $updateEntityRequest->name['en']]
+            'port_id'       => new ObjectId($updateEntityRequest->port_id)
         ];
 
         $yacht = $this->updateEntity($id, $updateEntityRequest, $data);

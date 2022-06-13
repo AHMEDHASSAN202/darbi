@@ -6,6 +6,8 @@
 
 namespace Modules\CatalogModule\Transformers;
 
+use Modules\CatalogModule\Repositories\ExtraRepository;
+
 trait EntityTrait
 {
     private $defaultImage = '';
@@ -26,11 +28,11 @@ trait EntityTrait
     }
 
     //get entity images
-    private function getImagesFullPath() : array
+    private function getImagesFullPath($onlyEntityImages = false) : array
     {
         $entityMainImages = $this->images;
 
-        if (empty($entityMainImages)) {
+        if (empty($entityMainImages) && $onlyEntityImages !== true) {
             $entityMainImages = optional($this->model)->images ?? [$this->defaultImage];
         }
 
@@ -38,14 +40,15 @@ trait EntityTrait
     }
 
 
-    private function getPlugins()
+    private function getExtras()
     {
-        $plugins = $this->plugins->map(function ($plugin) {
-            $plugin->price_unit = $this->price_unit;
-            $plugin->price = mt_rand(100, 2000);
-            return $plugin;
-        });
+        $extras = app(ExtraRepository::class)->getPluginsPrice(array_values($this->plugin_ids), $this->vendor_id);
 
-        return ExtraResource::collection($plugins);
+        return ExtraResource::collection(
+            $extras->map(function ($extra) {
+                $extra->price_unit = $this->price_unit;
+                return $extra;
+            })
+        );
     }
 }

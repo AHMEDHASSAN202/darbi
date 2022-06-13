@@ -16,8 +16,7 @@ class BrandResource extends JsonResource
     {
         return [
             'id'        => $this->_id,
-            'name'      => $this->name,
-            'name_label'=> translateAttribute($this->name),
+            'name'      => $request->has('for-edit') ? $this->name : translateAttribute($this->name),
             'logo'      => imageUrl($this->logo),
             'is_active' => (boolean)$this->active
         ];

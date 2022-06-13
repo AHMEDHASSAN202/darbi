@@ -22,11 +22,10 @@ class YachtDetailsResource extends JsonResource
             'images'        => $this->getImagesFullPath(),
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
-//            'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit),
             'state'         => $this->state,
             'built_date'    => $this->built_date,
             'port'          => translateAttribute(optional($this->port)->name),
-            'plugins'       => $this->getPlugins(),
+            'plugins'       => $this->getExtras(),
             'specs'         => $this->model ? SpecsResource::collection($this->model->addons) : []
         ];
     }

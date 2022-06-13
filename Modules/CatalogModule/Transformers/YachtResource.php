@@ -23,7 +23,6 @@ class YachtResource extends JsonResource
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
             'passengers'    => $this->passengers()
-//            'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit),
         ];
     }
 

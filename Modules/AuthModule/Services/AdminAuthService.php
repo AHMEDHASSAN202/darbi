@@ -8,6 +8,7 @@ namespace Modules\AuthModule\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Modules\AuthModule\Repositories\Admin\AdminRepository;
 use Modules\AuthModule\Repositories\Admin\AuthVendorRepository;
 use Modules\AuthModule\Transformers\AdminProfileResource;
@@ -51,6 +52,7 @@ class AdminAuthService
                 'profile'   => new AdminProfileResource($me)
             ];
         }catch (\Exception $exception) {
+            Log::error($exception->getMessage());
             $response['data'] = [];
             $response['statusCode'] = 500;
             $response['message'] = null;

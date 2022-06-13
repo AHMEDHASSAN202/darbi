@@ -20,7 +20,8 @@ class EntityDetailsResource extends JsonResource
     {
         $res = [
             'id'            => $this->_id,
-            'images'        => $this->getImagesFullPath(),
+            'name'          => $request->has('for-edit') ? $this->name : translateAttribute($this->name),
+            'images'        => $this->getImagesFullPath(true),
             'brand'         => translateAttribute(optional($this->brand)->name),
             'brand_id'      => (string)$this->brand_id,
             'model'         => translateAttribute(optional($this->model)->name),
@@ -39,7 +40,6 @@ class EntityDetailsResource extends JsonResource
         if ($this->resource instanceof Yacht) {
             $res['port_id'] = (string)$this->port_id;
             $res['port']    = translateAttribute(optional($this->port)->name);
-            $res['name']    = $this->name;
         }
 
         return $res;

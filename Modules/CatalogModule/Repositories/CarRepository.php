@@ -42,7 +42,7 @@ class CarRepository
 
     public function findCarWithDetailsById($carId)
     {
-        return $this->model->with(['model', 'brand', 'plugins' => function ($query) { $query->active(); }])->findOrFail($carId);
+        return $this->model->with(['model', 'brand'])->findOrFail($carId);
     }
 
 

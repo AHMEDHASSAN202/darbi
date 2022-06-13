@@ -42,18 +42,10 @@ class CarService
     public function find($carId)
     {
         $car = $this->repository->findCarWithDetailsById($carId);
-//        $car->extras = app(ExtraRepository::class)->getPluginsPrice(array_values($car->plugin_ids), $car->vendor_id);
+
         abort_if(is_null($car), 404);
 
         return new CarDetailsResource($car);
-    }
-
-
-    public function findAllByVendor(Request $request)
-    {
-        $cars = $this->repository->findAllByVendor($request, getVendorId());
-
-        return new PaginateResource(EntityResource::collection($cars));
     }
 
 

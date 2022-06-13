@@ -38,7 +38,7 @@ class YachtRepository
 
     public function findYachtWithDetailsById($yachtId)
     {
-        return $this->model->with(['model', 'port', 'plugins' => function ($query) { $query->active(); }])->find($yachtId);
+        return $this->model->with(['model', 'port'])->find($yachtId);
     }
 
     public function findAllByVendor(Request $request, $vendorId)

@@ -9,6 +9,9 @@ namespace Modules\CatalogModule\Services;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Repositories\ModelRepository;
+use Modules\CatalogModule\Transformers\Admin\EntityDetailsResource;
+use Modules\CatalogModule\Transformers\Admin\EntityResource;
+use Modules\CommonModule\Transformers\PaginateResource;
 use MongoDB\BSON\ObjectId;
 
 trait EntityHelperService
@@ -56,6 +59,7 @@ trait EntityHelperService
         $unavailableDate = $this->prepareUnavailableDate($request->unavailable_date);
 
         $data = [
+                'name'          => ['ar' => $request->name['ar'], 'en' => $request->name['en']],
                 'vendor_id'     => new ObjectId(getVendorId()),
                 'model_id'      => new ObjectId($model->_id),
                 'brand_id'      => new ObjectId($model->brand_id),
@@ -88,6 +92,7 @@ trait EntityHelperService
         $unavailableDate = $this->prepareUnavailableDate($request->unavailable_date);
 
         $data = $data + [
+                'name'          => ['ar' => $request->name['ar'], 'en' => $request->name['en']],
                 'model_id'      => new ObjectId($model->_id),
                 'brand_id'      => new ObjectId($model->brand_id),
                 'images'        => $images,
@@ -110,5 +115,21 @@ trait EntityHelperService
     public function delete($id)
     {
         return $this->repository->destroy($id, ['vendor_id' => new ObjectId(getVendorId())]);
+    }
+
+
+    public function findAllByVendor(Request $request)
+    {
+        $cars = $this->repository->findAllByVendor($request, getVendorId());
+
+        return new PaginateResource(EntityResource::collection($cars));
+    }
+
+
+    public function findByVendor($id)
+    {
+        $yacht = $this->repository->findByVendor(getVendorId(), $id);
+
+        return new EntityDetailsResource($yacht);
     }
 }

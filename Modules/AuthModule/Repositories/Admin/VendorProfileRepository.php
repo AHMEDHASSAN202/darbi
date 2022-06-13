@@ -10,7 +10,7 @@ namespace Modules\AuthModule\Repositories\Admin;
 use Illuminate\Support\Facades\Hash;
 use Modules\AuthModule\Http\Requests\Admin\UpdateInfoVendorProfile;
 use Modules\AuthModule\Http\Requests\Admin\UpdateVendorInfoRequest;
-use Modules\AuthModule\Http\Requests\Admin\UpdateVendorProfile;
+use Modules\AuthModule\Http\Requests\Admin\UpdateVendorProfileRequest;
 use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Traits\ImageHelperTrait;
 use MongoDB\BSON\ObjectId;
@@ -29,7 +29,7 @@ class VendorProfileRepository
         $this->model = $model;
     }
 
-    public function updateProfile(UpdateVendorProfile $updateVendorProfile)
+    public function updateProfile(UpdateVendorProfileRequest $updateVendorProfile)
     {
         $me = auth($this->guardName)->user();
         $me->name = $updateVendorProfile->name;
@@ -42,7 +42,7 @@ class VendorProfileRepository
         return $me;
     }
 
-    public function updateInfo(UpdateVendorInfoRequest $updateVendorInfoRequest)
+    public function updateVendorInfo(UpdateVendorInfoRequest $updateVendorInfoRequest)
     {
         $vendor = auth($this->guardName)->user()->vendor;
         $vendor->name = $updateVendorInfoRequest->name;

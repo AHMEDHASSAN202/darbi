@@ -4,6 +4,7 @@ namespace Modules\CatalogModule\Database\factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\CatalogModule\Entities\Plugin;
+use Modules\CatalogModule\Entities\Vendor;
 use MongoDB\BSON\ObjectId;
 
 class ExtraFactory extends Factory
@@ -24,6 +25,7 @@ class ExtraFactory extends Factory
     {
         return [
             'plugin_id'      => new ObjectId(Plugin::all()->random(1)->first()->_id),
+            'vendor_id'      => new ObjectId(Vendor::all()->random(1)->first()->_id),
             'price'          => $this->faker->randomFloat(2, 200, 1000),
         ];
     }

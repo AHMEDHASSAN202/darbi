@@ -23,7 +23,7 @@ class CarDetailsResource extends JsonResource
             'model'         => translateAttribute(optional($this->model)->name),
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
-            'plugins'       => $this->getPlugins(),
+            'plugins'       => $this->getExtras(),
             'state'         => $this->state,
             'specs'         => SpecsResource::collection($this->model->addons)
         ];

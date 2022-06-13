@@ -20,6 +20,7 @@ class EntityResource extends JsonResource
     {
         $res = [
             'id'            => $this->_id,
+            'name'          => (string)translateAttribute($this->name),
             'image'         => $this->getMainImage(),
             'brand'         => translateAttribute(optional($this->brand)->name),
             'model'         => translateAttribute(optional($this->model)->name),
@@ -32,7 +33,6 @@ class EntityResource extends JsonResource
         if ($this->resource instanceof Yacht) {
             $res['port'] = translateAttribute(optional($this->port)->name);
             $res['port_id'] = (string)$this->port_id;
-            $res['name'] = (string)translateAttribute($this->name);
         }
 
         return $res;
