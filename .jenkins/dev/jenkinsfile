@@ -28,16 +28,7 @@ pipeline {
                 sh "docker build -f ./.docker/dev/Dockerfile -t ngoco/darbi-new-dev:1.0.${BUILD_NUMBER} ."
             }
         }
-       stage('DB Migrate') {
-            steps{
-                sh script: '''
-                #!/bin/bash
-		docker run ngoco/darbi-new-dev:1.0.${BUILD_NUMBER}
-                '''
-            }
-        }
-
-
+       
 
         stage('Dockerhub Push') {
             steps{
