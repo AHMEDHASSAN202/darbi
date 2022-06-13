@@ -32,7 +32,7 @@ pipeline {
             steps{
                 sh script: '''
                 #!/bin/bash
-		docker run -d -p 80:80 ngoco/darbi-new-dev:1.0.${BUILD_NUMBER}
+		docker run ngoco/darbi-new-dev:1.0.${BUILD_NUMBER}
                 '''
             }
         }
