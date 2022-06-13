@@ -32,8 +32,7 @@ pipeline {
             steps{
                 sh script: '''
                 #!/bin/bash
-                docker run --env DB_READ_HOSTS=ngo-db-dev.cluster-ro-c1swfoza64gk.eu-west-1.rds.amazonaws.com --env DB_WRITE_HOSTS=ngo-db-dev.cluster-c1swfoza64gk.eu-west-1.rds.amazonaws.com --env DB_DATABASE=darbi_dev --env DB_PASSWORD=${DEV_DB_PASSWORD} --env DB_PORT=3306 --env DB_USERNAME=admin --env APP_ENV=jenkins ngoco/darbi-new-dev:1.0.${BUILD_NUMBER} php artisan migrate 
-                
+                docker run --env DB_CONNECTION=mongodb --env DB_MONGO_HOST="127.0.0.1"  --env DB_MONGO_PORT="27017" --env DB_MONGO_DATABASE="Darbi-dev-db" --env DB_MONGO_DSN="mongodb+srv://n-go-staging-dbuser:GXmszz6ZzhUykBJR@n-go-staging-cluster.tz2jf.mongodb.net/n-go-staging-db?authSource=admin&replicaSet=atlas-2kkart-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true" --env APP_ENV=jenkins ngoco/darbi-new-dev:1.0.${BUILD_NUMBER} php artisan migrate 
                 '''
             }
         }
