@@ -68,7 +68,7 @@ class Price
             $pluginPrice += $bookingPlugin['price'];
         }
         $totalPriceUnit = $entity + $pluginPrice;
-        return $totalPriceUnit * $this->getUnitsCount();
+        return round($totalPriceUnit * $this->getUnitsCount(), 2);
     }
 
 

@@ -155,7 +155,14 @@ function getVendorId()
     return auth('vendor_api')->user()->vendor_id;
 }
 
-function generateObjectIdOfArrayValues($ids)
+function generateObjectIdOfArrayValues($ids) : array
 {
     return array_map(function ($id) { return new \MongoDB\BSON\ObjectId($id); }, $ids);
+}
+
+function locationInfoKeys() : array
+{
+    return [
+        'id', 'lat', 'lng', 'fully_addressed', 'city', 'country', 'state', 'region_id'
+    ];
 }

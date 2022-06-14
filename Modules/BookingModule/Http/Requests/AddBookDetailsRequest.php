@@ -29,7 +29,9 @@ class AddBookDetailsRequest extends FormRequest
 //            'drop_location.city' => 'required|string',
 //            'drop_location.country' => 'required|string',
 //            'drop_location.region_id' => ['required', new MongoIdRule()],
-            'note'               => 'sometimes|nullable|max:500'
+            'note'               => 'sometimes|nullable|max:500',
+            'start_at'          => 'required|date|after_or_equal:today',
+            'end_at'            => 'required|date|after_or_equal:start_at',
         ];
     }
 

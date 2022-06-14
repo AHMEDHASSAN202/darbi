@@ -19,7 +19,7 @@ class EntityRepository
 
     public function findById($entityId)
     {
-        return $this->model->with(['model', 'brand', 'plugins' => function ($query) { $query->active(); }, 'country', 'city'])->findOrFail($entityId);
+        return $this->model->with(['model', 'brand', 'country', 'city'])->findOrFail($entityId);
     }
 
     public function changeState($entityId, $state)

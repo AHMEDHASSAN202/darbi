@@ -22,7 +22,7 @@ class BookingResource extends JsonResource
         return [
             'id'            => $this->_id,
             'name'          => $this->getName(),
-            'date_label'    => $this->getDateLabel(),
+            'date'          => ['start_at' => $this->start_booking_at, 'end_at' => $this->end_booking_at],
             'status_label'  => __($this->status),
             'status'        => $this->status,
             'type'          => $this->entity_type,
@@ -30,17 +30,17 @@ class BookingResource extends JsonResource
         ];
     }
 
-    private function getDateLabel()
-    {
-        $startMonth = $this->start_booking_at->format('m');
-        $startMonthName = $this->start_booking_at->format('F');
-        $endMonth = $this->end_booking_at->format('m');
-        $endMonthName = $this->end_booking_at->format('F');
-
-        if ($startMonth == $endMonth) {
-            return $startMonth . ' - ' . $endMonth . ' ' . $startMonthName . ' ' . $this->end_booking_at->format('Y');
-        }
-
-        return $startMonth . ' ' . $startMonthName . ' - ' . $endMonth . ' ' . $endMonthName . ' ' . $this->end_booking_at->format('Y');
-    }
+//    private function getDateLabel()
+//    {
+//        $startMonth = $this->start_booking_at->format('m');
+//        $startMonthName = $this->start_booking_at->format('F');
+//        $endMonth = $this->end_booking_at->format('m');
+//        $endMonthName = $this->end_booking_at->format('F');
+//
+//        if ($startMonth == $endMonth) {
+//            return $startMonth . ' - ' . $endMonth . ' ' . $startMonthName . ' ' . $this->end_booking_at->format('Y');
+//        }
+//
+//        return $startMonth . ' ' . $startMonthName . ' - ' . $endMonth . ' ' . $endMonthName . ' ' . $this->end_booking_at->format('Y');
+//    }
 }

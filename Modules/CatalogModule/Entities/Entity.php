@@ -91,7 +91,8 @@ class Entity extends Base
 
     public function scopeAdminFilter($query, Request $request)
     {
-        if ($state = $request->get('state')) {
+        $state = $request->get('state');
+        if ($state && $state != 'all') {
             $query->where('state', $state);
         }
 

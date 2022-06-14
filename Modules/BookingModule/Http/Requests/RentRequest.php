@@ -16,9 +16,7 @@ class RentRequest extends FormRequest
         return [
             'entity_id'         => 'required',
             'entity_type'       => 'required|in:car,yacht',
-            'plugins'           => 'nullable|array',
-            'start_at'          => 'required|date|after_or_equal:today',
-            'end_at'            => 'required|date|after_or_equal:start_at',
+            'plugins'           => 'nullable|array'
         ];
     }
 

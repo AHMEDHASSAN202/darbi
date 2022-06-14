@@ -21,6 +21,7 @@ class PaginateResource extends JsonResource
             'hasMorePages'      => $resource->hasMorePages(),
             'items'             => $resource->items(),
             'total'             => $resource->total(),
+            'lastPage'          => $resource->lastPage()
         ];
     }
 }
