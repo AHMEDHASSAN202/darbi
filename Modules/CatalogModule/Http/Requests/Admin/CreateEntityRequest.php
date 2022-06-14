@@ -16,8 +16,8 @@ class CreateEntityRequest extends FormRequest
     {
         $res = [
             'name'              => 'required',
-            'name.ar'           => 'required|min:2|max:100',
             'name.en'           => 'required|min:2|max:100',
+            'name.ar'           => 'sometimes|min:2|max:100',
             'model_id'          => ['required', new MongoIdRule()],
             'images'            => 'nullable|sometimes|array',
             'images.*'          => 'nullable|sometimes|image|max:5120', //5m

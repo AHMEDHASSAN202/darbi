@@ -16,6 +16,9 @@ class UpdateEntityRequest extends FormRequest
     public function rules()
     {
         $res = [
+            'name'              => 'required',
+            'name.en'           => 'required|min:2|max:100',
+            'name.ar'           => 'sometimes|min:2|max:100',
             'model_id'          => ['required', new MongoIdRule()],
             'images'            => 'nullable|sometimes|array',
             'images.*'          => 'nullable|sometimes|image|max:5120', //5m
@@ -34,9 +37,6 @@ class UpdateEntityRequest extends FormRequest
 
         if (auth('vendor_api')->user()->vendor->isYacht()){
             $res['port_id']  = ['required', new MongoIdRule()];
-            $res['name']     = 'required|array';
-            $res['name.ar']  = 'required|min:2|max:100';
-            $res['name.en']  = 'required|min:2|max:100';
         }
 
         return $res;
