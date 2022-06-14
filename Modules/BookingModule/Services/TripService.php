@@ -33,7 +33,15 @@ class TripService
     {
         $booking = $this->bookingRepository->findByUser(auth('api')->id(), $bookingId);
 
-        abort_if(is_null($booking), 404);
+        abort_if((is_null($booking) || $booking->status != BookingStatus::PAID), 404);
+
+        if (!$booking->start_booking_at || $booking->start_booking_at->greaterThanOrEqualTo(now())) {
+            return [
+                'statusCode'    => 400,
+                'data'          => [],
+                'message'       => 'The booking start date has not started'
+            ];
+        }
 
         $booking->start_trip_at = now();
         $booking->save();

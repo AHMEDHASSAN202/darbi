@@ -127,7 +127,7 @@ class BookingService
 
         $booking = $this->bookingRepository->findByUser($meId, $bookingId);
 
-        abort_if(is_null($booking), 404);
+        abort_if((is_null($booking) || $booking->status != BookingStatus::INIT), 404);
 
         $entity = (new Proxy(new BookingProxy('GET_ENTITY', ['entity_id' => $booking->entity_id])))->result();
 
@@ -146,6 +146,8 @@ class BookingService
         $booking->pickup_location_address = Arr::only($addBookDetailsRequest->pickup_location, [...locationInfoKeys()]);
         $booking->drop_location_address = Arr::only($addBookDetailsRequest->drop_location, [...locationInfoKeys()]);
         $booking->status = BookingStatus::PENDING;
+        $booking->start_booking_at = $addBookDetailsRequest->start_at;
+        $booking->end_booking_at = $addBookDetailsRequest->end_at;
         $booking->note = $addBookDetailsRequest->note;
         $booking->save();
 
@@ -192,7 +194,7 @@ class BookingService
 
         $booking = $this->bookingRepository->findByUser($userId, $bookingId);
 
-        abort_if(is_null($booking), 404);
+        abort_if((is_null($booking) || $booking->status != BookingStatus::ACCEPT), 404);
 
         $booking->status = BookingStatus::PAID;
         $booking->save();
