@@ -69,8 +69,7 @@ trait EntityHelperService
                 'brand_id'      => new ObjectId($model->brand_id),
                 'images'        => $images,
                 'is_active'     => ($request->is_active === null) || (boolean)$request->is_active,
-                'branch_ids'    => generateObjectIdOfArrayValues($request->branch_ids),
-                'plugin_ids'    => generateObjectIdOfArrayValues($request->plugin_ids),
+                'extra_ids'     => generateObjectIdOfArrayValues($request->extra_ids),
                 'country_id'    => new ObjectId($request->country_id),
                 'city_id'       => new ObjectId($request->city_id),
                 'price'         => floatval($request->price),
@@ -89,7 +88,7 @@ trait EntityHelperService
 
         $model = app(ModelRepository::class)->find($request->model_id);
 
-        $images = $car->images ?? [];
+        $images = $entity->images ?? [];
 
         $images = $images + $this->handleImages($request->images, $this->uploadDirectory);
 
@@ -101,8 +100,7 @@ trait EntityHelperService
                 'brand_id'      => new ObjectId($model->brand_id),
                 'images'        => $images,
                 'is_active'     => ($request->is_active === null) || (boolean)$request->is_active,
-                'branch_ids'    => generateObjectIdOfArrayValues($request->branch_ids),
-                'plugin_ids'    => generateObjectIdOfArrayValues($request->plugin_ids),
+                'extra_ids'     => generateObjectIdOfArrayValues($request->extra_ids),
                 'country_id'    => new ObjectId($request->country_id),
                 'city_id'       => new ObjectId($request->city_id),
                 'price'         => floatval($request->price),

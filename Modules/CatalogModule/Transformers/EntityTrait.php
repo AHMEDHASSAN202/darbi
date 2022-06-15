@@ -42,6 +42,10 @@ trait EntityTrait
     //get entity extras
     private function getExtras()
     {
+        if (empty($this->extra_ids)) {
+            return [];
+        }
+
         $extras = app(ExtraRepository::class)->getExtras(@array_values($this->extra_ids), $this->vendor_id);
 
         return ExtraResource::collection(

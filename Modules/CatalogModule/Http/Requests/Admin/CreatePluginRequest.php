@@ -16,9 +16,9 @@ class CreatePluginRequest extends FormRequest
         return [
             'name'      => 'required|array',
             'name.ar'   => 'required|min:2|max:100',
-            'name.en'   => 'required|min:2|max:100',
+            'name.en'   => 'nullable|min:2|max:100',
             'desc.ar'   => 'required|min:2|max:500',
-            'desc.en'   => 'required|min:2|max:500',
+            'desc.en'   => 'nullable|min:2|max:500',
             'is_active' => 'nullable|boolean'
         ];
     }

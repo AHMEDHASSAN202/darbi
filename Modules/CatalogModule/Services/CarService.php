@@ -59,7 +59,9 @@ class CarService
 
     public function create(CreateEntityRequest $createCarRequest)
     {
-        $car = $this->createEntity($createCarRequest);
+        $car = $this->createEntity($createCarRequest, [
+            'branch_ids'    => generateObjectIdOfArrayValues($createCarRequest->branch_ids)
+        ]);
 
         return [
             'id'        => $car->_id
@@ -69,7 +71,9 @@ class CarService
 
     public function update($id, UpdateEntityRequest $updateCarRequest)
     {
-        $car = $this->updateEntity($id, $updateCarRequest);
+        $car = $this->updateEntity($id, $updateCarRequest, [
+            'branch_ids'    => generateObjectIdOfArrayValues($updateCarRequest->branch_ids)
+        ]);
 
         return [
             'id'        => $car->_id

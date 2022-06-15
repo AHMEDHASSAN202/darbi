@@ -3,6 +3,7 @@
 namespace Modules\CatalogModule\Transformers\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\CatalogModule\Entities\Car;
 use Modules\CatalogModule\Entities\Yacht;
 use Modules\CatalogModule\Transformers\EntityTrait;
 
@@ -33,13 +34,14 @@ class EntityDetailsResource extends JsonResource
             'unavailable_date'  => $this->unavailable_date,
             'country_id'    => (string)$this->country_id,
             'city_id'       => (string)$this->city_id,
-            'extras_ids'    => $this->extras_ids,
-            'branch_ids'    => $this->branch_ids
+            'extra_ids'     => $this->extra_ids ?? [],
         ];
 
         if ($this->resource instanceof Yacht) {
             $res['port_id'] = (string)$this->port_id;
             $res['port']    = translateAttribute(optional($this->port)->name);
+        }elseif ($this->resource instanceof Car) {
+            $res['branch_ids'] = $this->branch_ids;
         }
 
         return $res;

@@ -22,14 +22,14 @@ class UpdateEntityRequest extends FormRequest
             'model_id'          => ['required', new MongoIdRule()],
             'images'            => 'nullable|sometimes|array',
             'images.*'          => 'nullable|sometimes|image|max:5120', //5m
-            'plugin_ids'        => 'required|array',
-            'plugin_ids.*'      => ['required', new MongoIdRule()],
+            'extra_ids'         => 'nullable|array',
+            'extra_ids.*'       => ['nullable', new MongoIdRule()],
             'country_id'        => ['required', new MongoIdRule()],
             'city_id'           => ['required', new MongoIdRule()],
             'price'             => 'required|numeric',
             'price_unit'        => 'required|in:day,hour',
-            'unavailable_date'  => 'required|array',
-            'unavailable_date.*' => 'required|date',
+            'unavailable_date'  => 'nullable|array',
+            'unavailable_date.*' => 'nullable|date',
             'is_active'         => 'nullable|sometimes|boolean'
         ];
     }

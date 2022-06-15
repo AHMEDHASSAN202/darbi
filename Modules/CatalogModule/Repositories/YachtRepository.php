@@ -54,6 +54,6 @@ class YachtRepository
 
     public function findByVendor($vendorId, $carId)
     {
-        return $this->model->with(['model', 'port', 'extras'])->where('vendor_id', new ObjectId($vendorId))->findOrFail($carId);
+        return $this->model->with(['model', 'port'])->where('vendor_id', new ObjectId($vendorId))->findOrFail($carId);
     }
 }

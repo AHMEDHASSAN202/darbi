@@ -175,6 +175,10 @@ function getVendorId()
 
 function generateObjectIdOfArrayValues($ids) : array
 {
+    if (empty($ids)) {
+        return [];
+    }
+
     return array_map(function ($id) { return new \MongoDB\BSON\ObjectId($id); }, $ids);
 }
 

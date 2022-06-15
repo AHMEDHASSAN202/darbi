@@ -15,9 +15,9 @@ class UpdatePluginRequest extends FormRequest
     {
         return [
             'name'      => 'required|array',
-            'name.ar'   => 'required|min:2|max:100',
+            'name.ar'   => 'nullable|min:2|max:100',
             'name.en'   => 'required|min:2|max:100',
-            'desc.ar'   => 'required|min:2|max:500',
+            'desc.ar'   => 'nullable|min:2|max:500',
             'desc.en'   => 'required|min:2|max:500',
             'is_active' => 'nullable|boolean'
         ];

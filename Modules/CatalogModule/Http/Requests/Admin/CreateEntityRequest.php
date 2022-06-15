@@ -21,8 +21,8 @@ class CreateEntityRequest extends FormRequest
             'model_id'          => ['required', new MongoIdRule()],
             'images'            => 'nullable|sometimes|array',
             'images.*'          => 'nullable|sometimes|image|max:5120', //5m
-            'plugin_ids'        => 'required|array',
-            'plugin_ids.*'      => ['required', new MongoIdRule()],
+            'extra_ids'         => 'nullable|array',
+            'extra_ids.*'       => ['nullable', new MongoIdRule()],
             'country_id'        => ['required', new MongoIdRule()],
             'city_id'           => ['required', new MongoIdRule()],
             'price'             => 'required|numeric',
