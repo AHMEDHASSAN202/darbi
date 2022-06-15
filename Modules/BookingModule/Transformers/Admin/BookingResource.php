@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\BookingModule\Transformers;
+namespace Modules\BookingModule\Transformers\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Log;
+use Modules\BookingModule\Transformers\BookingTraitResource;
 
 class BookingResource extends JsonResource
 {
@@ -22,6 +22,7 @@ class BookingResource extends JsonResource
         return [
             'id'            => $this->_id,
             'name'          => $this->getName(),
+            'user'          => $this->user,
             'date'          => ['start_at' => $this->start_booking_at, 'end_at' => $this->end_booking_at],
             'status_label'  => __($this->status),
             'status'        => $this->status,

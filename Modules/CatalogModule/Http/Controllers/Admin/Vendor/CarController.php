@@ -5,8 +5,10 @@ namespace Modules\CatalogModule\Http\Controllers\Admin\Vendor;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\CatalogModule\Http\Requests\Admin\CreateCarRequest;
 use Modules\CatalogModule\Http\Requests\Admin\CreateEntityRequest;
 use Modules\CatalogModule\Http\Requests\Admin\CreateExtraRequest;
+use Modules\CatalogModule\Http\Requests\Admin\UpdateCarRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateEntityRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateExtraRequest;
 use Modules\CatalogModule\Services\CarService;
@@ -20,6 +22,7 @@ class CarController extends Controller
     use ApiResponseTrait;
 
     private $carService;
+
 
     public function __construct(CarService $carService)
     {
@@ -40,21 +43,19 @@ class CarController extends Controller
         return $this->apiResponse(compact('car'));
     }
 
-    public function store(CreateEntityRequest $createCarRequest)
+    public function store(CreateCarRequest $createCarRequest)
     {
         $car = $this->carService->create($createCarRequest);
 
         return $this->apiResponse(compact('car'), 201, __('Data has been added successfully'));
     }
 
-
-    public function update($id, UpdateEntityRequest $updateCarRequest)
+    public function update($id, UpdateCarRequest $updateCarRequest)
     {
         $car = $this->carService->update($id, $updateCarRequest);
 
         return $this->apiResponse(compact('car'), 200, __('Data has been updated successfully'));
     }
-
 
     public function destroy($id)
     {
@@ -62,7 +63,6 @@ class CarController extends Controller
 
         return $this->apiResponse([], 200, __('Data has been deleted successfully'));
     }
-
 
     public function deleteImage($id, $imageIndex)
     {

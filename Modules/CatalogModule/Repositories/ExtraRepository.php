@@ -78,10 +78,10 @@ class ExtraRepository
     }
 
 
-    public function getPluginsPrice(array $plugins, ObjectId $vendorId)
+    public function getExtras(array $extraIds, ObjectId $vendorId)
     {
         //get plugins with price
-        return $this->model->raw(function ($collection) use ($plugins, $vendorId) { return $collection->aggregate([
+        return $this->model->raw(function ($collection) use ($extraIds, $vendorId) { return $collection->aggregate([
             [
                 '$lookup'   => [
                     'from'          => 'plugins',
@@ -96,8 +96,8 @@ class ExtraRepository
             [
                 '$match'        => [
                     'vendor_id'    => [ '$eq' => $vendorId ],
-                    'plugin_id'         => [
-                        '$in'             => array_values(generateObjectIdOfArrayValues($plugins))
+                    '_id'          => [
+                        '$in'             => array_values(generateObjectIdOfArrayValues($extraIds))
                     ]
                 ]
             ]

@@ -39,10 +39,10 @@ trait EntityTrait
         return array_map(function ($image) { return imageUrl($image); }, $entityMainImages);
     }
 
-
+    //get entity extras
     private function getExtras()
     {
-        $extras = app(ExtraRepository::class)->getPluginsPrice(array_values($this->plugin_ids), $this->vendor_id);
+        $extras = app(ExtraRepository::class)->getExtras(@array_values($this->extra_ids), $this->vendor_id);
 
         return ExtraResource::collection(
             $extras->map(function ($extra) {

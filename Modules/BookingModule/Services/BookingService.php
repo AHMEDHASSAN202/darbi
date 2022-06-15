@@ -68,10 +68,11 @@ class BookingService
             ];
         }
 
-        $plugins = $this->getPlugins($entity, $rentRequest->plugins);
+        $extras = $this->getExtras($entity, $rentRequest->extras);
 
         $booking = $this->bookingRepository->create([
             'user_id'       => new ObjectId(auth('api')->id()),
+            'user'          => auth('api')->user()->only(['_id', 'phone', 'phone_code', 'name', 'email']),
             'vendor_id'     => new ObjectId($entity['vendor_id']),
             'entity_id'     => new ObjectId($entity['id']),
             'entity_type'   => @$entity['entity_type'],
@@ -84,11 +85,9 @@ class BookingService
                 'model_name'=> @$entity['model_name'],
                 'brand_id'  => isset($entity['brand_id']) ? new ObjectId($entity['brand_id']) : null,
                 'brand_name'=> @$entity['brand_name'],
-                'country'   => @$entity['country'],
-                'city'      => @$entity['city'],
             ],
             'status'        => BookingStatus::INIT,
-            'plugins'       => $plugins,
+            'extras'        => $extras,
             'start_booking_at' => $rentRequest->start_at,
             'end_booking_at'   => $rentRequest->end_at
         ]);
@@ -103,21 +102,21 @@ class BookingService
     }
 
 
-    private function getPlugins($entity, $plugins) : array
+    private function getExtras($entity, $plugins) : array
     {
-        $entityPlugins = @$entity['plugins'];
+        $entityExtras = @$entity['extras'];
 
-        if (!is_array($plugins) || empty($plugins) || empty($entity) || !is_array($entityPlugins)) return [];
+        if (!is_array($plugins) || empty($plugins) || empty($entity) || !is_array($entityExtras)) return [];
 
-        $bookingPlugins = [];
+        $bookingExtras = [];
 
-        foreach ($entityPlugins as $entityPlugin) {
-            if (in_array($entityPlugin['id'], $plugins)) {
-                $bookingPlugins[] = $entityPlugin;
+        foreach ($entityExtras as $entityExtra) {
+            if (in_array($entityExtra['id'], $plugins)) {
+                $bookingExtras[] = $entityExtra;
             }
         }
 
-        return $bookingPlugins;
+        return $bookingExtras;
     }
 
 
@@ -141,7 +140,7 @@ class BookingService
             ];
         }
 
-        $priceSummary = (new Price($entity, $booking->plugins, $addBookDetailsRequest->start_at, $addBookDetailsRequest->end_at))->getPriceSummary();
+        $priceSummary = (new Price($entity, $booking->extras, $addBookDetailsRequest->start_at, $addBookDetailsRequest->end_at))->getPriceSummary();
         $booking->price_summary = $priceSummary;
         $booking->pickup_location_address = Arr::only($addBookDetailsRequest->pickup_location, [...locationInfoKeys()]);
         $booking->drop_location_address = Arr::only($addBookDetailsRequest->drop_location, [...locationInfoKeys()]);
@@ -176,6 +175,64 @@ class BookingService
         }
 
         $booking->status = BookingStatus::CANCELLED_BEFORE_ACCEPT;
+        $booking->save();
+
+        return [
+            'data'       => [
+                'booking_id'    => $bookingId
+            ],
+            'message'    => '',
+            'statusCode' => 200
+        ];
+    }
+
+
+    public function acceptByVendor($bookingId)
+    {
+        $vendorId = getVendorId();
+
+        $booking = $this->bookingRepository->findByVendor(new ObjectId($vendorId), new ObjectId($bookingId));
+
+        abort_if(is_null($booking), 404);
+
+        if ($booking->status != BookingStatus::PENDING) {
+            return [
+                'data'      => [],
+                'message'   => __('accept booking not allowed'),
+                'statusCode'=> 400
+            ];
+        }
+
+        $booking->status = BookingStatus::ACCEPT;
+        $booking->save();
+
+        return [
+            'data'       => [
+                'booking_id'    => $bookingId
+            ],
+            'message'    => '',
+            'statusCode' => 200
+        ];
+    }
+
+
+    public function cancelByVendor($bookingId)
+    {
+        $vendorId = getVendorId();
+
+        $booking = $this->bookingRepository->findByVendor(new ObjectId($vendorId), new ObjectId($bookingId));
+
+        abort_if(is_null($booking), 404);
+
+        if (!in_array($booking->status, [BookingStatus::PENDING, BookingStatus::ACCEPT])) {
+            return [
+                'data'      => [],
+                'message'   => __('cancel booking not allowed'),
+                'statusCode'=> 400
+            ];
+        }
+
+        $booking->status = ($booking->status == BookingStatus::ACCEPT) ? BookingStatus::CANCELLED_AFTER_ACCEPT : BookingStatus::REJECTED;
         $booking->save();
 
         return [
@@ -238,5 +295,25 @@ class BookingService
             'message'          => __('payment successful'),
             'data'             => []
         ];
+    }
+
+
+    public function getBookingsByVendor(Request $request)
+    {
+        $vendorId = new ObjectId(getVendorId());
+
+        $bookings = $this->bookingRepository->bookingsByVendor($vendorId, $request);
+
+        return new PaginateResource(\Modules\BookingModule\Transformers\Admin\BookingResource::collection($bookings));
+    }
+
+
+    public function findBookingByVendor($bookingId)
+    {
+        $vendorId = new ObjectId(getVendorId());
+
+        $booking = $this->bookingRepository->findByVendor($vendorId, new ObjectId($bookingId));
+
+        return new \Modules\BookingModule\Transformers\Admin\BookingDetailsResource($booking);
     }
 }

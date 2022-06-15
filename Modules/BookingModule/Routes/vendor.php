@@ -17,8 +17,10 @@ use Illuminate\Http\Request;
 //vendor booking routes
 Route::group([
     'prefix'    => 'bookings',
-    'namespace' => 'Vendor'
+    'middleware'=> ['auth:vendor_api']
 ], function () {
-    Route::get(''                       , 'BookingController@idnex')->middleware('auth:api');
-    Route::get('{booking}'              , 'BookingController@show')->middleware('auth:api');
+    Route::get(''                       , 'BookingController@index');
+    Route::get('{booking}'              , 'BookingController@show');
+    Route::post('{booking}/cancel'      , 'BookingController@cancel');
+    Route::post('{booking}/accept'      , 'BookingController@accept');
 });

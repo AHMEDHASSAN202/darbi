@@ -34,7 +34,9 @@ class VendorProfileRepository
         $me = auth($this->guardName)->user();
         $me->name = $updateVendorProfile->name;
         $me->email = $updateVendorProfile->email;
-        $me->password = Hash::make($updateVendorProfile->password);
+        if ($updateVendorProfile->password) {
+            $me->password = Hash::make($updateVendorProfile->password);
+        }
         if ($updateVendorProfile->hasFile('image')) {
             $me->image = $this->uploadAvatar($updateVendorProfile->image);
         }

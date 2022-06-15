@@ -6,6 +6,7 @@
 
 namespace Modules\BookingModule\Repositories;
 
+use Illuminate\Http\Request;
 use Modules\BookingModule\Entities\Booking;
 use MongoDB\BSON\ObjectId;
 
@@ -33,5 +34,15 @@ class BookingRepository
     public function create($data)
     {
         return $this->booking->create($data);
+    }
+
+    public function bookingsByVendor(ObjectId $vendorId, Request $request)
+    {
+        return $this->booking->adminSearch($request)->adminFilter($request)->where('vendor_id', $vendorId)->paginate($request->get('limit', 20));
+    }
+
+    public function findByVendor(ObjectId $vendorId, ObjectId $bookingId)
+    {
+        return $this->booking->where('vendor_id', $vendorId)->where('_id', $bookingId)->firstOrFail();
     }
 }

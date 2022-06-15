@@ -2,11 +2,10 @@
 
 namespace Modules\CatalogModule\Database\factories;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\CatalogModule\Entities\Brand;
+use Modules\CatalogModule\Entities\Extra;
 use Modules\CatalogModule\Entities\Model;
-use Modules\CatalogModule\Entities\Plugin;
 use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Entities\City;
 use Modules\CommonModule\Entities\Country;
@@ -44,7 +43,7 @@ class CarFactory extends Factory
             'vendor_id'         => new ObjectId($vendor->_id),
             'branch_ids'        => $branches,
             'state'             => 'free',//['free', 'reserved', 'pending'][mt_rand(0,2)],
-            'plugin_ids'        => [],
+            'extra_ids'         => generateObjectIdOfArrayValues(Extra::all()->random(2)->pluck('_id')->toArray()),
             'country_id'        => new ObjectId($country->_id),
             'city_id'           => new ObjectId($city->_id),
             'require_activation'=> $this->faker->boolean,

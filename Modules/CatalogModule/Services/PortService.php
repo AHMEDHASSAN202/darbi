@@ -57,7 +57,7 @@ class PortService
     public function create(CreatePortRequest $createPortRequest)
     {
         $port = $this->portRepository->create([
-            'name'      => ['ar' => $createPortRequest->name['ar'], 'en' => $createPortRequest->name['en']],
+            'name'       => $createPortRequest->name,
             'country_id' => new ObjectId($createPortRequest->country_id),
             'lat'        => $createPortRequest->lat,
             'lng'        => $createPortRequest->lng,
@@ -72,7 +72,7 @@ class PortService
     public function update($id, UpdatePortRequest $updatePortRequest)
     {
         $port = $this->portRepository->update($id, [
-            'name'      => ['ar' => $updatePortRequest->name['ar'], 'en' => $updatePortRequest->name['en']],
+            'name'       => $updatePortRequest->name,
             'country_id' => new ObjectId($updatePortRequest->country_id),
             'lat'        => $updatePortRequest->lat,
             'lng'        => $updatePortRequest->lng,

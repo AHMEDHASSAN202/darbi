@@ -30,7 +30,7 @@ class VendorFactory extends Factory
         return [
             'name'                  => ['ar' => $arFaker->company, 'en' => $this->faker->company],
             'image'                 => $this->faker->imageUrl(400, 400, null, false, 'Vendor'),
-            'is_active'             => $this->faker->boolean,
+            'is_active'             => true, //$this->faker->boolean,
             'email'                 => $this->faker->email,
             'phone'                 => $this->faker->phoneNumber,
             'subscription_id'       => $subscription->isNotEmpty() ? new ObjectId($subscription->random(1)->first()->_id) : null,

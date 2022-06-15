@@ -6,15 +6,10 @@
 
 namespace Modules\CommonModule\Services;
 
-use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CommonModule\Classes\GoogleFindLocation;
-use Modules\CommonModule\Http\Requests\GetRegionsByNorthEastAndSouthWestRequest;
 use Modules\CommonModule\Repositories\LocationRepository;
-use Modules\CommonModule\Repositories\RegionRepository;
 use Modules\CommonModule\Transformers\LocationResource;
-use Modules\CommonModule\Transformers\PaginateResource;
-use Modules\CommonModule\Transformers\RegionResource;
+use MongoDB\BSON\ObjectId;
 
 class LocationService
 {
@@ -27,13 +22,37 @@ class LocationService
 
     public function handleLocation($lat, $lng)
     {
+        //get region
+        $regionService = new RegionService();
+        $region = $regionService->findRegionByLatAndLng($lat, $lng);
+        if (!$region) {
+            //region not supported
+            return [
+                'data'       => [],
+                'message'    => 'region not supported',
+                'statusCode' => 400
+            ];
+        }
+
         //check if location exists in darbi database
         $location = $this->locationRepository->findLocation($lat, $lng);
 
         if (!$location) {
-            $location = $this->locationRepository->create((new GoogleFindLocation($lat, $lng)));
+            $geoLocation = new GoogleFindLocation($lat, $lng);
+            $locationInfo['country']    = $geoLocation->getCountry();
+            $locationInfo['city']       = $geoLocation->getCity();
+            $locationInfo['fully_addressed'] =  $geoLocation->fullAddress();
+            $locationInfo['country_id'] = new ObjectId($region['country_id']);
+            $locationInfo['city_id']    = new ObjectId($region['city_id']);
+            $location = $this->locationRepository->create($locationInfo);
         }
 
-        return new LocationResource($location);
+        return [
+            'data'       => [
+                'location'  => new LocationResource($location)
+            ],
+            'message'    => '',
+            'statusCode' => 200
+        ];
     }
 }

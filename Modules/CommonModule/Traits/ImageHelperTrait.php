@@ -33,22 +33,27 @@ trait ImageHelperTrait
         }
     }
 
-    public function uploadImage($folder, UploadedFile $image, $resizes = [], $disc = 'public')
+    public function uploadImage($folder, UploadedFile $image, $resizes = [], $disc = 's3')
     {
         $imagePath = $image->store($folder, $disc);
 
+        Storage::disk($disc)->setVisibility($imagePath, 'public');
+
         if (!empty($resizes)) {
-            $folderPath = Storage::disk($disc)->path($folder);
-            $this->resizeImage($folderPath, $imagePath, $resizes);
+//            $folderPath = Storage::disk($disc)->path($folder);
+//            $this->resizeImage($folderPath, $imagePath, $resizes);
         }
 
         return $imagePath;
     }
 
-    public function uploadImages($folder, $images, $resizes = [], $disc = 'public')
+    public function uploadImages($folder, $images, $resizes = [], $disc = 's3')
     {
-        $imagePaths = [];
+        if (!is_array($images) || empty($images)) {
+            return [];
+        }
 
+        $imagePaths = [];
         foreach ($images as $image) {
             try {
                 $imagePaths[] = $this->uploadImage($folder, $image, $resizes, $disc);

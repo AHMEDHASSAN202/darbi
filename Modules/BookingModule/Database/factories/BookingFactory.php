@@ -4,6 +4,7 @@ namespace Modules\BookingModule\Database\factories;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\AuthModule\Entities\User;
 use Modules\CatalogModule\Entities\Car;
 use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Entities\Country;
@@ -27,15 +28,18 @@ class BookingFactory extends Factory
     public function definition()
     {
         $vendor = Vendor::all()->random(1)->first();
-        $ent = Car::withoutGlobalScope('car')->with(['model', 'brand', 'country', 'city', 'plugins'])->get()->random(1)->first();
+        $user = User::all()->random(1)->first();
+        $ent = Car::withoutGlobalScope('car')->with(['model', 'brand', 'country', 'city'])->get()->random(1)->first();
         $branch = $vendor->branches()->first();
         $country = Country::all()->random(1)->first();
         $region = Region::active()->get()->random(1)->first();
-        $pluginPrice = $this->faker->randomFloat(2,3);
 
         return [
+            'user_id'               => $user->_id,
+            'user'                  => $user->only(['_id', 'phone', 'phone_code', 'name', 'email']),
             'vendor_id'             => new ObjectId($vendor->_id),
             'branch_id'             => $branch ? new ObjectId($branch->_id): null,
+            'branch'                => $branch,
             'country_id'            => new ObjectId($country->_id),
             'entity_id'             => new ObjectId($ent->_id),
             'entity_type'           => $ent->type,
@@ -70,10 +74,11 @@ class BookingFactory extends Factory
                 'brand_name'=> @$ent->brand->name,
                 'country'   => $ent->country->name,
                 'city'      => $ent->city->name,
-                'plugins'   => @$ent->plugins ?? [],
+                'extras'    => [],
             ],
             'invoice_number'         => \Str::random(),
             'price_summary'          => [
+                'total_price'       => 100,
                 'total_discount'    => 22.2,
                 'discount_value'    => 22,
                 'total_price_before_discount_before_vat' => 23.3,

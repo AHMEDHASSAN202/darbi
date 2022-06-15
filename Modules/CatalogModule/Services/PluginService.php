@@ -34,14 +34,8 @@ class PluginService
     public function create(CreatePluginRequest $createPluginRequest)
     {
         $plugin = $this->pluginRepository->create([
-            'name'          => [
-                'ar'            => $createPluginRequest->name['ar'],
-                'en'            => $createPluginRequest->name['en']
-            ],
-            'desc'          => [
-                'ar'            => $createPluginRequest->desc['ar'],
-                'en'            => $createPluginRequest->desc['en'],
-            ],
+            'name'          => $createPluginRequest->name,
+            'desc'          => $createPluginRequest->desc,
             'is_active'     => ($createPluginRequest->is_active === null) || (boolean)$createPluginRequest->is_active
         ]);
 
@@ -53,14 +47,8 @@ class PluginService
     public function update($id, UpdatePluginRequest $updatePluginRequest)
     {
         $plugin = $this->pluginRepository->update($id, [
-            'name'          => [
-                'ar'            => $updatePluginRequest->name['ar'],
-                'en'            => $updatePluginRequest->name['en']
-            ],
-            'desc'          => [
-                'ar'            => $updatePluginRequest->desc['ar'],
-                'en'            => $updatePluginRequest->desc['en'],
-            ],
+            'name'          => $updatePluginRequest->name,
+            'desc'          => $updatePluginRequest->desc,
             'is_active'     => ($updatePluginRequest->is_active === null) || (boolean)$updatePluginRequest->is_active
         ]);
 

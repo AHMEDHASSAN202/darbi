@@ -33,7 +33,7 @@ class EntityDetailsResource extends JsonResource
             'unavailable_date'  => $this->unavailable_date,
             'country_id'    => (string)$this->country_id,
             'city_id'       => (string)$this->city_id,
-            'plugin_ids'    => $this->plugin_ids,
+            'extras_ids'    => $this->extras_ids,
             'branch_ids'    => $this->branch_ids
         ];
 

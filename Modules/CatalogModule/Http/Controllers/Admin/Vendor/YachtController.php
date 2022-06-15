@@ -37,7 +37,7 @@ class YachtController extends Controller
         return $this->apiResponse(compact('yacht'));
     }
 
-    public function store(CreateEntityRequest $createYachtRequest)
+    public function store(CreateYachtRequest $createYachtRequest)
     {
         $yacht = $this->yachtService->create($createYachtRequest);
 
@@ -45,7 +45,7 @@ class YachtController extends Controller
     }
 
 
-    public function update($id, UpdateEntityRequest $updateYachtRequest)
+    public function update($id, UpdateYachtRequest $updateYachtRequest)
     {
         $yacht = $this->yachtService->update($id, $updateYachtRequest);
 

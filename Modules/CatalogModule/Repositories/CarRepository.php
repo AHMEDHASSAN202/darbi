@@ -27,7 +27,7 @@ class CarRepository
                            ->whereHas('model', function ($query) { $query->active(); })
                            ->whereHas('brand', function ($query) { $query->active(); })
                            ->when($request->region, function ($query) use ($request) {
-                               $branchIds = app(BranchesRepository::class)->findAllBranchesByRegion($request->region, true)->pluck('_id')->toArray();
+                               $branchIds = app(BranchRepository::class)->findAllBranchesByRegion($request->region, true)->pluck('_id')->toArray();
                                $query->where('branch_ids', 'all', $branchIds);
                            })
                            ->filter($request)

@@ -13,10 +13,6 @@ trait ApiResponseTrait
         $data['data'] = (object)$responseData;
         $data['errors'] = (object)$errors;
 
-        if ($message && $statusCode == 400) {
-            $data['errors']->error_id = $message;
-        }
-
         switch ($statusCode) {
             case 200:
                 $data['message'] = $message ?? '';

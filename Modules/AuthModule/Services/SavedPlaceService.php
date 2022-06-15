@@ -60,7 +60,7 @@ class SavedPlaceService
                 'lng'           => $createPlaceRequest->lng,
                 'country'       => $location->country,
                 'city'          => $location->city,
-                'full_address'  => $location->full_address,
+                'full_address'  => $location->fully_addressed,
                 'region_id'     => new ObjectId($region->id)
             ]);
 

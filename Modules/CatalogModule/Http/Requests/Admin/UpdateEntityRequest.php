@@ -15,15 +15,13 @@ class UpdateEntityRequest extends FormRequest
      */
     public function rules()
     {
-        $res = [
+        return [
             'name'              => 'required',
             'name.en'           => 'required|min:2|max:100',
             'name.ar'           => 'sometimes|min:2|max:100',
             'model_id'          => ['required', new MongoIdRule()],
             'images'            => 'nullable|sometimes|array',
             'images.*'          => 'nullable|sometimes|image|max:5120', //5m
-            'branch_ids'        => 'required|array',
-            'branch_ids.*'      => ['required', new MongoIdRule()],
             'plugin_ids'        => 'required|array',
             'plugin_ids.*'      => ['required', new MongoIdRule()],
             'country_id'        => ['required', new MongoIdRule()],
@@ -34,12 +32,6 @@ class UpdateEntityRequest extends FormRequest
             'unavailable_date.*' => 'required|date',
             'is_active'         => 'nullable|sometimes|boolean'
         ];
-
-        if (auth('vendor_api')->user()->vendor->isYacht()){
-            $res['port_id']  = ['required', new MongoIdRule()];
-        }
-
-        return $res;
     }
 
     /**

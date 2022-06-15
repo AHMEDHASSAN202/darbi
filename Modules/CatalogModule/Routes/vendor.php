@@ -97,3 +97,19 @@ Route::group([
 ], function () {
     Route::get(''                 , 'PortController@index');
 });
+
+
+
+//branches routes
+Route::group([
+    'prefix'    => 'branches',
+    'namespace' => 'Vendor',
+    'middleware'=> ['auth:vendor_api']
+], function () {
+    Route::get(''                  , 'BranchController@index');
+    Route::post(''                 , 'BranchController@store');
+    Route::get('{branch}'          , 'BranchController@show');
+    Route::put('{branch}'          , 'BranchController@update');
+    Route::delete('{branch}'       , 'BranchController@destroy');
+    Route::delete('{branch}/images/{index}'  , 'BranchController@deleteImage');
+});

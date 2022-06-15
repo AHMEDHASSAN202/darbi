@@ -20,7 +20,7 @@ trait EntityHelperService
     {
         if (empty($images)) return [];
 
-        return $this->uploadImages($dir, $images, ['300x300']);
+        return $this->uploadImages($dir, $images);
     }
 
     private function prepareUnavailableDate(?array $unavailableDate)
@@ -42,6 +42,10 @@ trait EntityHelperService
 
         $images = $car->images;
 
+        if (empty($images)) {
+            return null;
+        }
+
         unset($images[$imageIndex]);
 
         $car->update(['images' => $images]);
@@ -59,7 +63,7 @@ trait EntityHelperService
         $unavailableDate = $this->prepareUnavailableDate($request->unavailable_date);
 
         $data = [
-                'name'          => ['ar' => $request->name['ar'], 'en' => $request->name['en']],
+                'name'          => $request->name,
                 'vendor_id'     => new ObjectId(getVendorId()),
                 'model_id'      => new ObjectId($model->_id),
                 'brand_id'      => new ObjectId($model->brand_id),
@@ -92,7 +96,7 @@ trait EntityHelperService
         $unavailableDate = $this->prepareUnavailableDate($request->unavailable_date);
 
         $data = $data + [
-                'name'          => ['ar' => $request->name['ar'], 'en' => $request->name['en']],
+                'name'          => $request->name,
                 'model_id'      => new ObjectId($model->_id),
                 'brand_id'      => new ObjectId($model->brand_id),
                 'images'        => $images,

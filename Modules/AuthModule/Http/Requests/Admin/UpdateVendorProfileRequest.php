@@ -20,7 +20,7 @@ class UpdateVendorProfileRequest extends FormRequest
         return [
             'name'      => 'required|max:100',
             'email'     => ['required', 'email', Rule::unique('admins')->ignore($me->id, '_id')],
-            'password'  => ['required', 'max:100', 'confirmed', Password::min(8)->letters()],
+            'password'  => ['sometimes', 'nullable', 'max:100', 'confirmed', Password::min(8)->letters()],
             'image'     => 'sometimes|image|max:5120' //5m
         ];
     }

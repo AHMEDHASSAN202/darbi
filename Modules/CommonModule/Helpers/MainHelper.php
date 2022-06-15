@@ -33,11 +33,15 @@ function assetsHelper() {
 
 function imageUrl(?string $image, $dir = '', $size = null) {
     if (!$image) return '';
-    $image = filter_var($image, FILTER_VALIDATE_URL) ? $image : asset('storage/'. $dir . $image);
+    $image = filter_var($image, FILTER_VALIDATE_URL) ? $image : \Illuminate\Support\Facades\Storage::url($image);
     if ($size) {
         $image = addSizeToImageLink($image, $size);
     }
     return $image;
+}
+
+function imagesUrl(array $images, $dir = '', $size = null) {
+    return array_map(function ($image) use ($dir, $size) { return imageUrl($image, $dir, $size); }, $images);
 }
 
 function addSizeToImageLink($imageLink, $size)
@@ -130,6 +134,20 @@ function getYatchTestImages()
         'https://i.ibb.co/2qXy1QY/Rectangle-7513.png',
         'https://i.ibb.co/mSkD0zt/Rectangle-8230.png',
         'https://i.ibb.co/KVgGG9C/Rectangle-8229.png'
+    ];
+}
+
+function getBrandTestImages()
+{
+    return [
+        'https://i.ibb.co/jf53hBr/carType0.png',
+        'https://i.ibb.co/1zymqCW/Bentley.png',
+        'https://i.ibb.co/qyKvWNY/BMW.png',
+        'https://i.ibb.co/C1WgKtG/jaguar.png',
+        'https://i.ibb.co/F8dhpZW/Lamborghini.png',
+        'https://i.ibb.co/QK5D5NV/mercedes.png',
+        'https://i.ibb.co/P4zB4bR/Porsche.png',
+        'https://i.ibb.co/ZG2xJK5/Rolls.png'
     ];
 }
 

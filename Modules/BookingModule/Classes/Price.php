@@ -75,10 +75,16 @@ class Price
     private function getUnitsCount()
     {
         if ($this->bookingEntity['price_unit'] == 'day') {
-            return $this->startedAt->diffInDays($this->endedAt);
+            $diffInUnits = $this->startedAt->diffInDays($this->endedAt);
         } else {
-            return $this->startedAt->diffInHours($this->endedAt);
+            $diffInUnits = $this->startedAt->diffInHours($this->endedAt);
         }
+
+        if ($diffInUnits === 0) {
+            return 1;
+        }
+
+        return $diffInUnits;
     }
 
 

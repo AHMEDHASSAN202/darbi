@@ -25,16 +25,16 @@ class CatalogModuleDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        Brand::factory(100)->create();
+        Brand::factory(30)->create();
         \Modules\CatalogModule\Entities\Model::factory(50)->create();
         Plugin::factory(100)->create();
-        Extra::factory(100)->create();
+        Extra::factory(300)->create();
         Subscription::factory(5)->create();
-        Vendor::factory(100)->create();
+        Vendor::factory(10)->create();
         Branch::factory(100)->create();
-        Car::factory(200)->create();
+        Car::factory(100)->create();
         Port::factory(20)->create();
-        Yacht::factory(200)->create();
-        $this->call(EntityPluginSeederTableSeeder::class);
+        Yacht::factory(100)->create();
+//        $this->call(EntityPluginSeederTableSeeder::class);
     }
 }

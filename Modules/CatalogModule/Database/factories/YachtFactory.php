@@ -4,8 +4,8 @@ namespace Modules\CatalogModule\Database\factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\CatalogModule\Entities\Brand;
+use Modules\CatalogModule\Entities\Extra;
 use Modules\CatalogModule\Entities\Model;
-use Modules\CatalogModule\Entities\Plugin;
 use Modules\CatalogModule\Entities\Port;
 use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Entities\City;
@@ -30,7 +30,7 @@ class YachtFactory extends Factory
     {
         $country = Country::all()->random(1)->first();
         $city = City::where('country_id', new ObjectId($country->_id))->get()->random(1)->first();
-        $plugins = Plugin::all()->random(2)->pluck('_id')->toArray();
+        $extras = Extra::all()->random(2)->pluck('_id')->toArray();
         $model = Model::all()->random(1)->first();
         $brand = Brand::all()->random(1)->first();
         $vendor = Vendor::all()->random(1)->first();
@@ -49,7 +49,7 @@ class YachtFactory extends Factory
             'port_id'           => new ObjectId($port->_id),
             'branch_ids'        => $branches,
             'state'             => ['free', 'reserved', 'pending'][mt_rand(0,2)],
-            'plugin_ids'        => $plugins,
+            'extra_ids'         => generateObjectIdOfArrayValues($extras),
             'country_id'        => new ObjectId($country->_id),
             'city_id'           => new ObjectId($city->_id),
             'require_activation'=> $this->faker->boolean,

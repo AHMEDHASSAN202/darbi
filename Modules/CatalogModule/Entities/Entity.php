@@ -158,16 +158,6 @@ class Entity extends Base
         return $this->belongsTo(Model::class);
     }
 
-    public function plugins()
-    {
-        return $this->belongsToMany(Plugin::class, null, 'entity_ids','plugin_ids');
-    }
-
-    public function extras()
-    {
-        return $this->belongsToMany(Extra::class, null, 'entity_ids','extra_ids');
-    }
-
     public function country()
     {
         return $this->belongsTo(Country::class);

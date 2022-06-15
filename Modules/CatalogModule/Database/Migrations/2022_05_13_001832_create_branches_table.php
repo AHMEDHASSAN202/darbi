@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
             $table->index('vendor_id');
+            $table->index('city_id');
             $table->softDeletes();
             $table->timestamps();
         });
