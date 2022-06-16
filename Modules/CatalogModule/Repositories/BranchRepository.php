@@ -38,6 +38,6 @@ class BranchRepository
 
     public function findByVendor(ObjectId $vendorId, ObjectId $branchId)
     {
-        return $this->model->where('vendor_id', $vendorId)->where('_id', $branchId)->firstOrFail();
+        return $this->model->where('vendor_id', $vendorId)->where('_id', $branchId)->with('city')->firstOrFail();
     }
 }

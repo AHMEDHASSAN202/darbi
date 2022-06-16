@@ -5,6 +5,7 @@ namespace Modules\CatalogModule\Entities;
 use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
+use Modules\CommonModule\Entities\City;
 use Modules\CommonModule\Entities\Region;
 use MongoDB\BSON\ObjectId;
 
@@ -66,6 +67,11 @@ class Branch extends Base
     public function regions()
     {
         return $this->belongsToMany(Region::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
     }
 
     //============= #END# Relations ===================\\

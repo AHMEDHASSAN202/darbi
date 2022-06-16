@@ -63,8 +63,7 @@ class BranchService
         $data['lng']   = $createBranchRequest->lng;
         $data['cover_images'] = $this->uploadImages('branches', $createBranchRequest->cover_images);
         $data['is_active']  = ($createBranchRequest->is_active === null) || (boolean)$createBranchRequest->is_active;
-        $data['phone']      = $createBranchRequest->phone;
-        $data['phone_code'] = $createBranchRequest->phone_code;
+        $data['phone']      = ['phone' => $createBranchRequest->phone, 'phone_code' => $createBranchRequest->phone_code];
         $data['region_id']  = @$this->getRegion($createBranchRequest->lat, $createBranchRequest->lng)['id'];
         $data['city_id']    = $createBranchRequest->city_id;
 
@@ -87,8 +86,7 @@ class BranchService
         $branch->lng        = $updateBranchRequest->lng;
         $branch->cover_images = $branchCoverImages + $this->uploadImages('branches', $updateBranchRequest->cover_images);
         $branch->is_active  = ($updateBranchRequest->is_active === null) || (boolean)$updateBranchRequest->is_active;
-        $branch->phone      = $updateBranchRequest->phone;
-        $branch->phone_code = $updateBranchRequest->phone_code;
+        $branch->phone      = ['phone' => $updateBranchRequest->phone, 'phone_code' => $updateBranchRequest->phone_code];
         $branch->region_id  = @$this->getRegion($updateBranchRequest->lat, $updateBranchRequest->lng)['id'];
         $branch->city_id    = new ObjectId($updateBranchRequest->city_id);
         $branch->save();
