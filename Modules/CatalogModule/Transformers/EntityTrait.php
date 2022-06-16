@@ -30,10 +30,14 @@ trait EntityTrait
     //get entity images
     private function getImagesFullPath($onlyEntityImages = false) : array
     {
-        $entityMainImages = $this->images;
+        $entityMainImages = @(array)$this->images;
 
         if (empty($entityMainImages) && $onlyEntityImages !== true) {
-            $entityMainImages = optional($this->model)->images ?? [$this->defaultImage];
+            $entityMainImages = @(array)optional($this->model)->images ?? [$this->defaultImage];
+        }
+
+        if (!is_array($entityMainImages)) {
+            return [];
         }
 
         return array_map(function ($image) { return imageUrl($image); }, $entityMainImages);

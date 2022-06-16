@@ -14,7 +14,7 @@ use MongoDB\BSON\ObjectId;
 
 class YachtRepository
 {
-    use CrudRepositoryTrait;
+    use EntityHelperRepository;
 
     public function __construct(Yacht $model)
     {
@@ -49,11 +49,5 @@ class YachtRepository
                             ->latest()
                             ->where('vendor_id', new ObjectId($vendorId))
                             ->paginate($request->get('limit', 20));
-    }
-
-
-    public function findByVendor($vendorId, $carId)
-    {
-        return $this->model->with(['model', 'port'])->where('vendor_id', new ObjectId($vendorId))->findOrFail($carId);
     }
 }

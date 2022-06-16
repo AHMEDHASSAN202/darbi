@@ -8,12 +8,11 @@ namespace Modules\CatalogModule\Repositories;
 
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Entities\Car;
-use Modules\CommonModule\Traits\CrudRepositoryTrait;
 use MongoDB\BSON\ObjectId;
 
 class CarRepository
 {
-    use CrudRepositoryTrait;
+    use EntityHelperRepository;
 
     public function __construct(Car $model)
     {
@@ -54,11 +53,5 @@ class CarRepository
                             ->latest()
                             ->where('vendor_id', new ObjectId($vendorId))
                             ->paginate($request->get('limit', 20));
-    }
-
-
-    public function findByVendor($vendorId, $carId)
-    {
-        return $this->model->with(['model', 'brand'])->where('vendor_id', new ObjectId($vendorId))->findOrFail($carId);
     }
 }

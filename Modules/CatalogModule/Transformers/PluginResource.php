@@ -15,7 +15,7 @@ class PluginResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'            => $this->id,
+            'id'            => (string)$this->_id,
             'name'          => translateAttribute($this->name),
             'desc'          => translateAttribute($this->desc),
         ];

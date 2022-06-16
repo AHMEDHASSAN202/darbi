@@ -130,7 +130,9 @@ trait EntityHelperService
 
     public function findByVendor($id)
     {
-        $yacht = $this->repository->findByVendor(getVendorId(), $id);
+        $id = new ObjectId($id);
+        $vendorId = new ObjectId(getVendorId());
+        $yacht = $this->repository->findByVendor($vendorId, $id);
 
         return new EntityDetailsResource($yacht);
     }

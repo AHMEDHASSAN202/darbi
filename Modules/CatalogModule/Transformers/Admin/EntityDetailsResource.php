@@ -6,6 +6,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\CatalogModule\Entities\Car;
 use Modules\CatalogModule\Entities\Yacht;
 use Modules\CatalogModule\Transformers\EntityTrait;
+use Modules\CatalogModule\Transformers\ExtraResource;
+use Modules\CatalogModule\Transformers\PluginResource;
+use Modules\CommonModule\Transformers\CityResource;
+use Modules\CommonModule\Transformers\CountryResource;
 
 class EntityDetailsResource extends JsonResource
 {
@@ -21,11 +25,11 @@ class EntityDetailsResource extends JsonResource
     {
         $res = [
             'id'            => $this->_id,
-            'name'          => $request->has('for-edit') ? $this->name : translateAttribute($this->name),
+            'name'          => $this->name,
             'images'        => $this->getImagesFullPath(true),
-            'brand'         => translateAttribute(optional($this->brand)->name),
+            'brand'         => new BrandResource($this->brand),
             'brand_id'      => (string)$this->brand_id,
-            'model'         => translateAttribute(optional($this->model)->name),
+            'model'         => new ModelResource($this->model),
             'model_id'      => (string)$this->model_id,
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
@@ -33,15 +37,17 @@ class EntityDetailsResource extends JsonResource
             'is_active'     => (boolean)$this->is_active,
             'unavailable_date'  => $this->unavailable_date,
             'country_id'    => (string)$this->country_id,
+            'country'       => new CountryResource($this->country),
             'city_id'       => (string)$this->city_id,
-            'extra_ids'     => $this->extra_ids ?? [],
+            'city'          => new CityResource($this->city),
+            'extras'        => PluginResource::collection(convertBsonArrayToCollection($this->plugins))
         ];
 
         if ($this->resource instanceof Yacht) {
             $res['port_id'] = (string)$this->port_id;
-            $res['port']    = translateAttribute(optional($this->port)->name);
+            $res['port']    = new PortResource($this->port);
         }elseif ($this->resource instanceof Car) {
-            $res['branch_ids'] = $this->branch_ids;
+            $res['branches'] = BranchResource::collection(convertBsonArrayToCollection($this->branches));
         }
 
         return $res;

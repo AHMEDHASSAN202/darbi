@@ -15,9 +15,9 @@ class BranchResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'         => $this->_id,
+            'id'         => (string)$this->_id,
             'name'       => $request->has('for-edit') ? $this->name : translateAttribute($this->name),
-            'cover_images' => imagesUrl($this->cover_images),
+            'cover_images' => imagesUrl(convertBsonArrayToNormalArray($this->cover_images)),
             'is_active'  => (boolean)$this->is_active,
             'phone'      => $this->phone,
             'address'    => $this->address,

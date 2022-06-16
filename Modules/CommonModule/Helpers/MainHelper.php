@@ -53,7 +53,7 @@ function addSizeToImageLink($imageLink, $size)
     return $imageInfo['dirname'] . '/' . $imageInfo['filename'] . '-resize-' . $size . '.' . $imageInfo['extension'];
 }
 
-function translateAttribute(?array $attribute, $locale = null) {
+function translateAttribute(array | object | null $attribute, $locale = null) {
     if (!$attribute) {
         return '';
     }
@@ -66,7 +66,11 @@ function translateAttribute(?array $attribute, $locale = null) {
         $locale = app()->getLocale();
     }
 
-    return $attribute[$locale] ?? $attribute['en'];
+    if (is_array($attribute)) {
+        return $attribute[$locale] ?? $attribute['en'];
+    }
+
+    return $attribute->{$locale} ?? $attribute->en;
 }
 
 function generatePriceLabelFromPrice(?float $price, $priceUnit) : string
@@ -187,4 +191,20 @@ function locationInfoKeys() : array
     return [
         'id', 'lat', 'lng', 'fully_addressed', 'city', 'country', 'state', 'region_id'
     ];
+}
+
+function convertBsonArrayToCollection($bsonArray)
+{
+    $objects = array_map(function ($object) { return (object)$object; }, (array)$bsonArray);
+
+    return collect($objects);
+}
+
+function convertBsonArrayToNormalArray($bsonArray)
+{
+    if (is_array($bsonArray)) {
+        return $bsonArray;
+    }
+
+    return $bsonArray->jsonSerialize();
 }

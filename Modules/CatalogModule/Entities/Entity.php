@@ -128,6 +128,8 @@ class Entity extends Base
 
     public function getBranchIdsAttribute($value)
     {
+        $value = @(array)$value;
+
         if (empty($value)) return [];
 
         return array_map(function ($id) { return (string)$id; }, $value);
@@ -150,22 +152,23 @@ class Entity extends Base
 
     public function brand()
     {
-        return $this->belongsTo(Brand::class);
+        return $this->belongsTo(Brand::class)->withTrashed();
     }
 
     public function model()
     {
-        return $this->belongsTo(Model::class);
+        return $this->belongsTo(Model::class)->withTrashed();
     }
 
     public function country()
     {
-        return $this->belongsTo(Country::class);
+        return $this->belongsTo(Country::class)->withTrashed();
     }
 
     public function city()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(City::class)->withTrashed();
     }
+
     //=============== #END# relation =====================\\
 }
