@@ -206,5 +206,5 @@ function convertBsonArrayToNormalArray($bsonArray)
         return $bsonArray;
     }
 
-    return $bsonArray->jsonSerialize();
+    return (array)$bsonArray->jsonSerialize();
 }

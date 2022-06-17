@@ -3,7 +3,6 @@
 namespace Modules\CatalogModule\Transformers\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\CommonModule\Transformers\CityResource;
 
 class BranchResource extends JsonResource
 {
@@ -18,7 +17,7 @@ class BranchResource extends JsonResource
         return [
             'id'         => (string)$this->_id,
             'name'       => translateAttribute($this->name),
-            'cover_images' => imagesUrl(convertBsonArrayToNormalArray($this->cover_images)),
+            'cover_images' => @imagesUrl(convertBsonArrayToNormalArray($this->cover_images)) ?? [],
             'is_active'  => (boolean)$this->is_active,
             'phone'      => $this->phone,
             'address'    => $this->address,
