@@ -24,8 +24,8 @@ class UpdateBranchRequest extends FormRequest
             'cover_images.*'=> 'nullable|sometimes|image|max:5120',
             'is_active'     => 'nullable|sometimes|boolean',
             'phone'         => 'nullable|sometimes|array',
-            'phone.phone'   => 'nullable|sometimes|numeric|digits_between:8,11',
-            'phone.phone_code' => 'required_with:phone'
+            'phone'         => 'nullable|sometimes|numeric|digits_between:8,11',
+            'phone_code'    => 'required_with:phone'
         ];
     }
 

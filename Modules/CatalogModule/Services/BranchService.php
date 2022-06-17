@@ -67,7 +67,7 @@ class BranchService
             'lng'                       => $createBranchRequest->lng,
             'cover_images'              => $this->uploadImages('branches', $createBranchRequest->cover_images),
             'is_active'                 => ($createBranchRequest->is_active === null) || (boolean)$createBranchRequest->is_active,
-            'phone'                     => ['phone' => $createBranchRequest->phone['phone'], 'phone_code' => $createBranchRequest->phone['phone_code']],
+            'phone'                     => ['phone' => $createBranchRequest->phone, 'phone_code' => $createBranchRequest->phone_code],
             'region_id'                 => $regionId ? new ObjectId($regionId) : null,
             'city_id'                   => new ObjectId($createBranchRequest->city_id)
         ]);
@@ -95,7 +95,7 @@ class BranchService
             'lng'                           => $updateBranchRequest->lng,
             'cover_images'                  => $branchCoverImages,
             'is_active'                     => ($updateBranchRequest->is_active === null) || (boolean)$updateBranchRequest->is_active,
-            'phone'                         => ['phone' => $updateBranchRequest->phone['phone'], 'phone_code' => $updateBranchRequest->phone['phone_code']],
+            'phone'                         => ['phone' => $updateBranchRequest->phone, 'phone_code' => $updateBranchRequest->phone_code],
             'region_id'                     => $regionId ? new ObjectId($regionId) : null,
             'city_id'                       => new ObjectId($updateBranchRequest->city_id)
         ], ['vendor_id' => $vendorId]);
