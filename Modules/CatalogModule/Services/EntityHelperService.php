@@ -9,7 +9,7 @@ namespace Modules\CatalogModule\Services;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Repositories\ModelRepository;
-use Modules\CatalogModule\Transformers\Admin\EntityDetailsResource;
+use Modules\CatalogModule\Transformers\Admin\FindEntityResource;
 use Modules\CatalogModule\Transformers\Admin\EntityResource;
 use Modules\CommonModule\Transformers\PaginateResource;
 use MongoDB\BSON\ObjectId;
@@ -134,6 +134,6 @@ trait EntityHelperService
         $vendorId = new ObjectId(getVendorId());
         $yacht = $this->repository->findByVendor($vendorId, $id);
 
-        return new EntityDetailsResource($yacht);
+        return new FindEntityResource($yacht);
     }
 }

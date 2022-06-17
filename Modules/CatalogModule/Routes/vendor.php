@@ -31,6 +31,7 @@ Route::group([
 ], function () {
     Route::get(''               , 'ExtraController@index');
     Route::post(''              , 'ExtraController@store');
+    Route::get('{extra}'        , 'ExtraController@show');
     Route::put('{extra}'        , 'ExtraController@update');
     Route::delete('{extra}'     , 'ExtraController@destroy');
 });

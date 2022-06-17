@@ -3,9 +3,9 @@
 namespace Modules\CatalogModule\Transformers\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\CommonModule\Transformers\CityResource;
+use Modules\CommonModule\Transformers\FindCityResource;
 
-class BranchResource extends JsonResource
+class FindBranchResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +17,7 @@ class BranchResource extends JsonResource
     {
         return [
             'id'         => (string)$this->_id,
-            'name'       => translateAttribute($this->name),
+            'name'       => $this->name,
             'cover_images' => imagesUrl(convertBsonArrayToNormalArray($this->cover_images)),
             'is_active'  => (boolean)$this->is_active,
             'phone'      => $this->phone,
@@ -25,6 +25,7 @@ class BranchResource extends JsonResource
             'lat'        => $this->lat,
             'lng'        => $this->lng,
             'city_id'    => (string)$this->city_id,
+            'city'       => new FindCityResource($this->city),
         ];
     }
 }

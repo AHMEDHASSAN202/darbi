@@ -12,7 +12,7 @@ use Modules\CatalogModule\Http\Requests\Admin\CreateYachtRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateEntityRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateYachtRequest;
 use Modules\CatalogModule\Repositories\YachtRepository;
-use Modules\CatalogModule\Transformers\Admin\EntityDetailsResource;
+use Modules\CatalogModule\Transformers\Admin\FindEntityResource;
 use Modules\CatalogModule\Transformers\Admin\EntityResource;
 use Modules\CatalogModule\Transformers\YachtDetailsResource;
 use Modules\CatalogModule\Transformers\YachtResource;

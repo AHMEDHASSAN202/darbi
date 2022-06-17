@@ -46,6 +46,14 @@ class ExtraController extends Controller
         return $this->apiResponse(compact('extra'), 200, __('Data has been updated successfully'));
     }
 
+
+    public function show($id)
+    {
+        $extra = $this->extraService->find($id);
+
+        return $this->apiResponse(compact('extra'));
+    }
+
     public function destroy($id)
     {
         $this->extraService->delete($id);

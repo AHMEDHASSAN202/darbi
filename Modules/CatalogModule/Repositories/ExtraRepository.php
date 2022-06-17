@@ -103,4 +103,33 @@ class ExtraRepository
             ]
         ]); });
     }
+
+
+    public function findByVendor(ObjectId $id, ObjectId $vendorId)
+    {
+        $extra = $this->model->raw(function ($collection) use ($id, $vendorId) { return $collection->aggregate([
+                [
+                    '$lookup'   => [
+                        'from'          => 'plugins',
+                        'localField'    => 'plugin_id',
+                        'foreignField'  => '_id',
+                        'as'            => 'plugin'
+                    ],
+                ],
+                [
+                    '$unwind'    => '$plugin',
+                ],
+                [
+                    '$match'        => [
+                        'vendor_id'    => [ '$eq' => $vendorId ],
+                        '_id'          => [ '$eq' => $id ]
+                    ]
+                ]
+            ]);
+        });
+
+        abort_if(!$extra->count(), 404);
+
+        return $extra->first();
+    }
 }

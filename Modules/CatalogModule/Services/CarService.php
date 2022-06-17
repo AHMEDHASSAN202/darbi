@@ -55,7 +55,7 @@ class CarService
         $id = new ObjectId($id);
         $car = $this->repository->findByVendor($vendorId, $id);
 
-        return new \Modules\CatalogModule\Transformers\Admin\EntityDetailsResource($car);
+        return new \Modules\CatalogModule\Transformers\Admin\FindEntityResource($car);
     }
 
 

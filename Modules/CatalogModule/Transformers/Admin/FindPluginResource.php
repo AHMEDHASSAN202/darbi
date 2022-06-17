@@ -4,7 +4,7 @@ namespace Modules\CatalogModule\Transformers\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PluginEditResource extends JsonResource
+class FindPluginResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

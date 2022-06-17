@@ -12,6 +12,7 @@ use Modules\CatalogModule\Http\Requests\Admin\CreateExtraRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateExtraRequest;
 use Modules\CatalogModule\Repositories\ExtraRepository;
 use Modules\CatalogModule\Transformers\ExtraResource;
+use Modules\CatalogModule\Transformers\Admin\FindExtraResource;
 use Modules\CommonModule\Transformers\PaginateResource;
 use MongoDB\BSON\ObjectId;
 
@@ -67,5 +68,17 @@ class ExtraService
     public function delete($id)
     {
         return $this->extraRepository->destroy($id);
+    }
+
+    public function find($id)
+    {
+        $vendorId = new ObjectId(getVendorId());
+        $id = new ObjectId($id);
+
+        $extra = $this->extraRepository->findByVendor($id, $vendorId);
+
+        abort_if(is_null($extra), 404);
+
+        return new FindExtraResource($extra);
     }
 }

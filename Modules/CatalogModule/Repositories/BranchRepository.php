@@ -27,7 +27,7 @@ class BranchRepository
 
     public function findAllByVendor(ObjectId $vendorId, Request $request)
     {
-        $query = $this->model->where('vendor_id', $vendorId)->adminSearch($request)->adminFilters($request);
+        $query = $this->model->where('vendor_id', $vendorId)->adminSearch($request)->adminFilters($request)->latest();
 
         if ($request->has('paginated')) {
             return $query->paginate($request->get('limit', 20));

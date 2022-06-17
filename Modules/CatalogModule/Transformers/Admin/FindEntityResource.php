@@ -11,7 +11,7 @@ use Modules\CatalogModule\Transformers\PluginResource;
 use Modules\CommonModule\Transformers\CityResource;
 use Modules\CommonModule\Transformers\CountryResource;
 
-class EntityDetailsResource extends JsonResource
+class FindEntityResource extends JsonResource
 {
     use EntityTrait;
 
