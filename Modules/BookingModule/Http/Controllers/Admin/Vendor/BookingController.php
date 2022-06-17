@@ -38,16 +38,16 @@ class BookingController extends Controller
 
     public function accept($bookingId)
     {
-        $booking = $this->bookingService->acceptByVendor($bookingId);
+        $result = $this->bookingService->acceptByVendor($bookingId);
 
-        return $this->apiResponse(compact('booking'));
+        return $this->apiResponse($result['data'], $result['message'], $result['statusCode']);
     }
 
 
     public function cancel($bookingId)
     {
-        $booking = $this->bookingService->cancelByVendor($bookingId);
+        $result = $this->bookingService->cancelByVendor($bookingId);
 
-        return $this->apiResponse(compact('booking'));
+        return $this->apiResponse($result['data'], $result['message'], $result['statusCode']);
     }
 }
