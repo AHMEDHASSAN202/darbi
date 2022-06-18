@@ -26,7 +26,7 @@ class BrandFactory extends Factory
         return [
             'name'      => ['ar' => $arFaker->company(), 'en' => $this->faker->company()],
             'logo'      => $brandImages[mt_rand(0, (count($brandImages) - 1))],
-            'entity_type' => 'car',
+            'entity_type' => ['car', 'yacht'][mt_rand(0,1)],
             'is_active' => true
         ];
     }

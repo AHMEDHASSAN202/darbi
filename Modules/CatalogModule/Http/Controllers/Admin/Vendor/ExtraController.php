@@ -2,15 +2,12 @@
 
 namespace Modules\CatalogModule\Http\Controllers\Admin\Vendor;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\CatalogModule\Http\Requests\Admin\CreateExtraRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateExtraRequest;
-use Modules\CatalogModule\Services\ExtraService;
-use Modules\CatalogModule\Services\PluginService;
+use Modules\CatalogModule\Services\Admin\ExtraService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
-use function view;
 
 class ExtraController extends Controller
 {

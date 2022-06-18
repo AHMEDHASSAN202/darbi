@@ -4,7 +4,7 @@
  * User: ahmed hasssan
  */
 
-namespace Modules\CatalogModule\Services;
+namespace Modules\CatalogModule\Services\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -22,13 +22,6 @@ class PluginService
     public function __construct(PluginRepository $pluginRepository)
     {
         $this->pluginRepository = $pluginRepository;
-    }
-
-    public function findAllPlugin($entityId)
-    {
-        $plugins = $this->pluginRepository->findAllPlugin($entityId);
-
-        return PluginResource::collection($plugins);
     }
 
     public function create(CreatePluginRequest $createPluginRequest)

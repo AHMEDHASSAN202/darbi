@@ -2,14 +2,12 @@
 
 namespace Modules\CatalogModule\Http\Controllers\Admin\Vendor;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\CatalogModule\Http\Requests\Admin\CreateBranchRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateBranchRequest;
-use Modules\CatalogModule\Services\BranchService;
+use Modules\CatalogModule\Services\Admin\BranchService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
-use function view;
 
 class BranchController extends Controller
 {

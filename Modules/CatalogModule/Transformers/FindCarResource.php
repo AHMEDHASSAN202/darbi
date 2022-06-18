@@ -4,7 +4,7 @@ namespace Modules\CatalogModule\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CarDetailsResource extends JsonResource
+class FindCarResource extends JsonResource
 {
     use EntityTrait;
 

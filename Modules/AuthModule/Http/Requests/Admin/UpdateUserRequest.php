@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\AuthModule\Http\Requests\User;
+namespace Modules\AuthModule\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
-class CreateUserRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -15,11 +15,13 @@ class CreateUserRequest extends FormRequest
      */
     public function rules()
     {
+        $id = $this->route('id');
+
         return [
             'name'      => 'required|max:100',
-            'email'     => ['required', 'email', Rule::unique('vendors')],
+            'email'     => ['required', 'email', Rule::unique('vendors')->ignore($id, '_id')],
             'password'  => ['required', 'max:100', Password::min(8)->letters()],
-            'phone'     => ['required', 'numeric', 'digits_between:8,15', Rule::unique('vendors')],
+            'phone'     => ['required', 'numeric', 'digits_between:8,15', Rule::unique('vendors')->ignore($id, '_id')],
             'image'     => 'nullable|image|max:5120', //5m
             'country'   => 'required|string|size:2',
             'city'      => 'required|string|size:2'

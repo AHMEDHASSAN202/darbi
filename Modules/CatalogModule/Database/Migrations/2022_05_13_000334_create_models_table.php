@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('models', function (Blueprint $table) {
             $table->id();
             $table->index('brand_id');
+            $table->index('entity_type');
             $table->softDeletes();
             $table->timestamps();
         });

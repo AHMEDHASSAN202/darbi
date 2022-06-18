@@ -9,11 +9,9 @@ namespace Modules\AuthModule\Repositories\Admin;
 
 use Illuminate\Support\Facades\Hash;
 use Modules\AuthModule\Http\Requests\Admin\UpdateInfoVendorProfile;
-use Modules\AuthModule\Http\Requests\Admin\UpdateVendorInfoRequest;
 use Modules\AuthModule\Http\Requests\Admin\UpdateVendorProfileRequest;
 use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Traits\ImageHelperTrait;
-use MongoDB\BSON\ObjectId;
 use function auth;
 
 class VendorProfileRepository
@@ -42,19 +40,5 @@ class VendorProfileRepository
         }
         $me->save();
         return $me;
-    }
-
-    public function updateVendorInfo(UpdateVendorInfoRequest $updateVendorInfoRequest)
-    {
-        $vendor = auth($this->guardName)->user()->vendor;
-        $vendor->name = $updateVendorInfoRequest->name;
-        $vendor->email = $updateVendorInfoRequest->email;
-        $vendor->phone = $updateVendorInfoRequest->phone;
-        $vendor->country = new ObjectId($updateVendorInfoRequest->country);
-        if ($updateVendorInfoRequest->hasFile('image')) {
-            $vendor->image = $this->uploadAvatar($updateVendorInfoRequest->image);
-        }
-        $vendor->save();
-        return $vendor;
     }
 }

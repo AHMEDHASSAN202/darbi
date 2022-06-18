@@ -4,12 +4,12 @@
  * User: ahmed hasssan
  */
 
-namespace Modules\CatalogModule\Services;
+namespace Modules\CatalogModule\Services\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Repositories\BrandRepository;
-use Modules\CatalogModule\Transformers\BrandResource;
+use Modules\CatalogModule\Transformers\Admin\BrandResource;
 use Modules\CommonModule\Transformers\PaginateResource;
 
 class BrandService
@@ -21,9 +21,13 @@ class BrandService
         $this->brandRepository = $brandRepository;
     }
 
-    public function findAll(Request $request)
+    public function findAllForDashboard(Request $request, $onlyActive = true)
     {
-        $brands = $this->brandRepository->listOfBrands($request);
+        $wheres = [];
+        if ($onlyActive) {
+            $wheres['is_active'] = true;
+        }
+        $brands = $this->brandRepository->listOfBrandsForDashboard($request, $wheres);
 
         if ($brands instanceof LengthAwarePaginator) {
             return new PaginateResource(BrandResource::collection($brands));

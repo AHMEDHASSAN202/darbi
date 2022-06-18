@@ -5,7 +5,7 @@ namespace Modules\AuthModule\Http\Requests\Admin;
 use App\Rules\MongoIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateVendorInfoRequest extends FormRequest
+class UpdateVendorSettingsRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -21,7 +21,8 @@ class UpdateVendorInfoRequest extends FormRequest
             'email'     => ['required', 'email'],
             'phone'     => 'required|numeric|digits_between:8,11',
             'image'     => 'sometimes|image|max:5120', //5m
-            'country'   => ['required', new MongoIdRule]
+            'country'   => ['required', new MongoIdRule],
+            'settings'  => 'nullable|sometimes|array'
         ];
     }
 

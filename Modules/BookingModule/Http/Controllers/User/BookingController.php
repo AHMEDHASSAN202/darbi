@@ -10,7 +10,7 @@ use Modules\BookingModule\Http\Requests\CheckoutRequest;
 use Modules\BookingModule\Http\Requests\ProceedRequest;
 use Modules\BookingModule\Http\Requests\RentRequest;
 use Modules\BookingModule\Services\BookingService;
-use Modules\BookingModule\Transformers\BookingDetailsResource;
+use Modules\BookingModule\Transformers\FindBookingResource;
 use Modules\BookingModule\Transformers\BookingResource;
 use Modules\CatalogModule\Entities\Entity;
 use Modules\CommonModule\Traits\ApiResponseTrait;

@@ -5,7 +5,7 @@ namespace Modules\BookingModule\Transformers\Admin;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\BookingModule\Transformers\BookingTraitResource;
 
-class BookingDetailsResource extends JsonResource
+class FindBookingResource extends JsonResource
 {
     use BookingTraitResource;
 

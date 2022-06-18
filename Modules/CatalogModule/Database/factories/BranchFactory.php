@@ -40,7 +40,7 @@ class BranchFactory extends Factory
             'is_active'     => $this->faker->boolean,
             'is_open'       => $this->faker->boolean,
             'phone'         => [
-                'phone'        => $this->faker->phoneNumber,
+                'phone'        => $this->faker->numberBetween(1111111111, 9999999999),
                 'phone_code'   => $this->faker->countryCode
             ],
             'address'       => $this->faker->address,

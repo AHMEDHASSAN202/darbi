@@ -14,4 +14,11 @@ abstract class Base extends Model
     {
         return new Builder($query);
     }
+
+    public function _paginate($collection, $total, $limit, $page)
+    {
+        return new \Illuminate\Pagination\LengthAwarePaginator($collection, $total, $limit, $page, [
+            'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
+        ]);
+    }
 }

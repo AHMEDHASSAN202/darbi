@@ -8,13 +8,10 @@ namespace Modules\CatalogModule\Services;
 
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Http\Requests\Admin\CreateEntityRequest;
-use Modules\CatalogModule\Http\Requests\Admin\CreateYachtRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateEntityRequest;
-use Modules\CatalogModule\Http\Requests\Admin\UpdateYachtRequest;
 use Modules\CatalogModule\Repositories\YachtRepository;
-use Modules\CatalogModule\Transformers\Admin\FindEntityResource;
-use Modules\CatalogModule\Transformers\Admin\EntityResource;
-use Modules\CatalogModule\Transformers\YachtDetailsResource;
+use Modules\CatalogModule\Services\Admin\EntityHelperService;
+use Modules\CatalogModule\Transformers\FindYachtResource;
 use Modules\CatalogModule\Transformers\YachtResource;
 use Modules\CommonModule\Traits\ImageHelperTrait;
 use Modules\CommonModule\Transformers\PaginateResource;
@@ -46,33 +43,6 @@ class YachtService
 
         abort_if(is_null($yacht), 404);
 
-        return new YachtDetailsResource($yacht);
-    }
-
-    public function create(CreateEntityRequest $createEntityRequest)
-    {
-        $data = [
-            'port_id'       => new ObjectId($createEntityRequest->port_id),
-        ];
-
-        $yacht = $this->createEntity($createEntityRequest, $data);
-
-        return [
-            'id'        => $yacht->_id
-        ];
-    }
-
-
-    public function update($id, UpdateEntityRequest $updateEntityRequest)
-    {
-        $data = [
-            'port_id'       => new ObjectId($updateEntityRequest->port_id)
-        ];
-
-        $yacht = $this->updateEntity($id, $updateEntityRequest, $data);
-
-        return [
-            'id'        => $yacht->_id
-        ];
+        return new FindYachtResource($yacht);
     }
 }

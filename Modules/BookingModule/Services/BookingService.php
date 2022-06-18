@@ -9,16 +9,18 @@ namespace Modules\BookingModule\Services;
 use App\Proxy\Proxy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Modules\BookingModule\Classes\Payments\Payment;
 use Modules\BookingModule\Classes\Price;
 use Modules\BookingModule\Enums\BookingStatus;
+use Modules\BookingModule\Events\BookingStatusChangedEvent;
 use Modules\BookingModule\Http\Requests\AddBookDetailsRequest;
 use Modules\BookingModule\Http\Requests\ProceedRequest;
 use Modules\BookingModule\Http\Requests\RentRequest;
 use Modules\BookingModule\Proxy\BookingProxy;
 use Modules\BookingModule\Repositories\BookingRepository;
-use Modules\BookingModule\Transformers\BookingDetailsResource;
+use Modules\BookingModule\Transformers\FindBookingResource;
 use Modules\BookingModule\Transformers\BookingResource;
 use Modules\CommonModule\Transformers\PaginateResource;
 use MongoDB\BSON\ObjectId;
@@ -50,7 +52,7 @@ class BookingService
 
         $booking = $this->bookingRepository->findByUser($userId, $bookingId);
 
-        return new BookingDetailsResource($booking);
+        return new FindBookingResource($booking);
     }
 
 
@@ -102,16 +104,16 @@ class BookingService
     }
 
 
-    private function getExtras($entity, $plugins) : array
+    private function getExtras($entity, $extras) : array
     {
         $entityExtras = @$entity['extras'];
 
-        if (!is_array($plugins) || empty($plugins) || empty($entity) || !is_array($entityExtras)) return [];
+        if (!is_array($extras) || empty($extras) || empty($entity) || !is_array($entityExtras)) return [];
 
         $bookingExtras = [];
 
         foreach ($entityExtras as $entityExtra) {
-            if (in_array($entityExtra['id'], $plugins)) {
+            if (in_array($entityExtra['id']['$oid'], $extras)) {
                 $bookingExtras[] = $entityExtra;
             }
         }
@@ -174,74 +176,34 @@ class BookingService
             ];
         }
 
-        $booking->status = BookingStatus::CANCELLED_BEFORE_ACCEPT;
-        $booking->save();
+        $session = DB::connection('mongodb')->getMongoClient()->startSession();
+        $session->startTransaction();
 
-        return [
-            'data'       => [
-                'booking_id'    => $bookingId
-            ],
-            'message'    => '',
-            'statusCode' => 200
-        ];
-    }
+        try {
 
+            DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update(['status' => BookingStatus::CANCELLED_BEFORE_ACCEPT], ['session' => $session]);
 
-    public function acceptByVendor($bookingId)
-    {
-        $vendorId = getVendorId();
+            event(new BookingStatusChangedEvent($booking));
 
-        $booking = $this->bookingRepository->findByVendor(new ObjectId($vendorId), new ObjectId($bookingId));
+            $session->commitTransaction();
 
-        abort_if(is_null($booking), 404);
-
-        if ($booking->status != BookingStatus::PENDING) {
             return [
-                'data'      => [],
-                'message'   => __('accept booking not allowed'),
-                'statusCode'=> 400
+                'data'       => [
+                    'booking_id'    => $bookingId
+                ],
+                'message'    => '',
+                'statusCode' => 200
+            ];
+
+        }catch (\Exception $exception) {
+            Log::error($exception->getMessage());
+            $session->abortTransaction();
+            return [
+                'data'       => [],
+                'message'    => null,
+                'statusCode' => 500
             ];
         }
-
-        $booking->status = BookingStatus::ACCEPT;
-        $booking->save();
-
-        return [
-            'data'       => [
-                'booking_id'    => $bookingId
-            ],
-            'message'    => '',
-            'statusCode' => 200
-        ];
-    }
-
-
-    public function cancelByVendor($bookingId)
-    {
-        $vendorId = getVendorId();
-
-        $booking = $this->bookingRepository->findByVendor(new ObjectId($vendorId), new ObjectId($bookingId));
-
-        abort_if(is_null($booking), 404);
-
-        if (!in_array($booking->status, [BookingStatus::PENDING, BookingStatus::ACCEPT])) {
-            return [
-                'data'      => [],
-                'message'   => __('cancel booking not allowed'),
-                'statusCode'=> 400
-            ];
-        }
-
-        $booking->status = ($booking->status == BookingStatus::ACCEPT) ? BookingStatus::CANCELLED_AFTER_ACCEPT : BookingStatus::REJECTED;
-        $booking->save();
-
-        return [
-            'data'       => [
-                'booking_id'    => $bookingId
-            ],
-            'message'    => '',
-            'statusCode' => 200
-        ];
     }
 
 
@@ -252,15 +214,6 @@ class BookingService
         $booking = $this->bookingRepository->findByUser($userId, $bookingId);
 
         abort_if((is_null($booking) || $booking->status != BookingStatus::ACCEPT), 404);
-
-        $booking->status = BookingStatus::PAID;
-        $booking->save();
-
-        return [
-            'statusCode'       => 200,
-            'message'          => __('payment successful'),
-            'data'             => []
-        ];
 
         if ($booking->status != BookingStatus::ACCEPT) {
             return [
@@ -290,30 +243,12 @@ class BookingService
         $booking->status = BookingStatus::PAID;
         $booking->save();
 
+        event(new BookingStatusChangedEvent($booking));
+
         return [
             'statusCode'       => 200,
             'message'          => __('payment successful'),
             'data'             => []
         ];
-    }
-
-
-    public function getBookingsByVendor(Request $request)
-    {
-        $vendorId = new ObjectId(getVendorId());
-
-        $bookings = $this->bookingRepository->bookingsByVendor($vendorId, $request);
-
-        return new PaginateResource(\Modules\BookingModule\Transformers\Admin\BookingResource::collection($bookings));
-    }
-
-
-    public function findBookingByVendor($bookingId)
-    {
-        $vendorId = new ObjectId(getVendorId());
-
-        $booking = $this->bookingRepository->findByVendor($vendorId, new ObjectId($bookingId));
-
-        return new \Modules\BookingModule\Transformers\Admin\BookingDetailsResource($booking);
     }
 }

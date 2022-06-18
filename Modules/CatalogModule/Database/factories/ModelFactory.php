@@ -59,7 +59,8 @@ class ModelFactory extends Factory
                     'group_details' => ['ar' => 'Details', 'en' => 'Details', 'key' => 'general']
                 ],
             ],
-            'is_active'      => true
+            'is_active'      => true,
+            'entity_type' => ['car', 'yacht'][mt_rand(0,1)],
         ];
     }
 }

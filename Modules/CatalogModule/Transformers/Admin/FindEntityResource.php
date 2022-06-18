@@ -6,8 +6,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\CatalogModule\Entities\Car;
 use Modules\CatalogModule\Entities\Yacht;
 use Modules\CatalogModule\Transformers\EntityTrait;
-use Modules\CatalogModule\Transformers\ExtraResource;
-use Modules\CatalogModule\Transformers\PluginResource;
 use Modules\CommonModule\Transformers\CityResource;
 use Modules\CommonModule\Transformers\CountryResource;
 
@@ -40,7 +38,7 @@ class FindEntityResource extends JsonResource
             'country'       => new CountryResource($this->country),
             'city_id'       => (string)$this->city_id,
             'city'          => new CityResource($this->city),
-            'extras'        => PluginResource::collection(convertBsonArrayToCollection($this->plugins))
+            'extras'        => FindExtraResource::collection(convertBsonArrayToCollection($this->attachPluginToExtra($this->extras, $this->plugins)))
         ];
 
         if ($this->resource instanceof Yacht) {

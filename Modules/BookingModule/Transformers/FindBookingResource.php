@@ -5,9 +5,10 @@ namespace Modules\BookingModule\Transformers;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Log;
 use Modules\CatalogModule\Transformers\CarResource;
+use Modules\CatalogModule\Transformers\ExtraResource;
 use Modules\CatalogModule\Transformers\YachtResource;
 
-class BookingDetailsResource extends JsonResource
+class FindBookingResource extends JsonResource
 {
     use BookingTraitResource;
 
@@ -26,8 +27,8 @@ class BookingDetailsResource extends JsonResource
             'status_label'  => __($this->status),
             'status'        => $this->status,
             'entity'        => $this->entity(),
-            'start'         => ['month' => $this->start_booking_at->format('m F'), 'time' => $this->start_booking_at->format('H:s A')],
-            'end'           => ['month' => $this->end_booking_at->format('m F'), 'time' => $this->end_booking_at->format('H:s A')],
+            'start'         => ['month' => optional($this->start_booking_at)->format('m F'), 'time' => optional($this->start_booking_at)->format('H:s A')],
+            'end'           => ['month' => optional($this->end_booking_at)->format('m F'), 'time' => optional($this->end_booking_at)->format('H:s A')],
             'extras'        => $this->extras ?? [],
             'pickup_location_address' => $this->pickup_location_address,
             'drop_location_address'   => $this->drop_location_address,
@@ -53,14 +54,6 @@ class BookingDetailsResource extends JsonResource
             'model_name'    => translateAttribute($this->entity_details['model_name']),
             'brand_id'      => (string)$this->entity_details['brand_id'],
             'brand_name'    => translateAttribute($this->entity_details['brand_name']),
-            'country'       => [
-                'id'            => @$this->entity_details['country']['_id'],
-                'name'          => translateAttribute(@$this->entity_details['country']['name'])
-            ],
-            'city'       => [
-                'id'            => @$this->entity_details['city']['_id'],
-                'name'          => translateAttribute(@$this->entity_details['city']['name'])
-            ],
         ];
     }
 }

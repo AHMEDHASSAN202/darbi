@@ -43,6 +43,11 @@ class ExtraRepository
                     'vendor_id'    => [ '$eq' => new ObjectId(getVendorId()) ]
                 ]
             ],
+            [
+                '$sort'         => [
+                    'created_at'    => -1
+                ]
+            ]
         ];
 
 
@@ -71,7 +76,7 @@ class ExtraRepository
         $collection = $this->model->raw(function ($collection) use ($aggregate) { return $collection->aggregate($aggregate); });
 
         if ($limit) {
-            return $this->_paginate($collection, $total, $limit, $page);
+            return $this->model->_paginate($collection, $total, $limit, $page);
         }
 
         return $collection;

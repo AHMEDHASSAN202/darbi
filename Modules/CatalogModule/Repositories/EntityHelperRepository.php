@@ -17,9 +17,14 @@ trait EntityHelperRepository
 
     public function findByVendor($vendorId, $entityId)
     {
-//        return $this->model->with(['model', 'brand', 'country', 'city', 'extras', 'branches'])->where('vendor_id', new ObjectId($vendorId))->findOrFail($carId);
         $entity = $this->model->raw(function ($collection) use ($vendorId, $entityId) {
             return $collection->aggregate([
+                [
+                    '$match'        => [
+                        'vendor_id'    => [ '$eq' => $vendorId ],
+                        '_id'          => [ '$eq' => $entityId ],
+                    ]
+                ],
                 [
                     '$lookup'   => [
                         'from'          => 'models',
@@ -113,12 +118,6 @@ trait EntityHelperRepository
                         "path"      => '$port',
                         "preserveNullAndEmptyArrays" => true
                     ],
-                ],
-                [
-                    '$match'        => [
-                        'vendor_id'    => [ '$eq' => $vendorId ],
-                        '_id'          => [ '$eq' => $entityId ],
-                    ]
                 ]
             ]);
         });

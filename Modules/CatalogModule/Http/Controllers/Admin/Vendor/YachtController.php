@@ -4,11 +4,9 @@ namespace Modules\CatalogModule\Http\Controllers\Admin\Vendor;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\CatalogModule\Http\Requests\Admin\CreateEntityRequest;
 use Modules\CatalogModule\Http\Requests\Admin\CreateYachtRequest;
-use Modules\CatalogModule\Http\Requests\Admin\UpdateEntityRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateYachtRequest;
-use Modules\CatalogModule\Services\YachtService;
+use Modules\CatalogModule\Services\Admin\YachtService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
 

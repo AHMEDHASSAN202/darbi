@@ -28,9 +28,9 @@ trait CrudRepositoryTrait
         return $this->model->where($wheres)->findOrFail($id)->delete();
     }
 
-    public function find($id, $wheres = [])
+    public function find($id, $wheres = [], $with = [])
     {
-        return $this->model->where($wheres)->findOrFail($id);
+        return $this->model->where($wheres)->with($with)->findOrFail($id);
     }
 
     public function list($limit = 20, $searchMethod = null, $moreScopeMethod = null, $with = [])
@@ -60,12 +60,5 @@ trait CrudRepositoryTrait
 
         //get all
         return $query->get();
-    }
-
-    public function _paginate($collection, $total, $limit, $page)
-    {
-        return new \Illuminate\Pagination\LengthAwarePaginator($collection, $total, $limit, $page, [
-            'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
-        ]);
     }
 }

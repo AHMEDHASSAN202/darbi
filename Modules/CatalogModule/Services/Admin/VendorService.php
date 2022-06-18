@@ -4,12 +4,13 @@
  * User: ahmed hasssan
  */
 
-namespace Modules\CatalogModule\Services;
+namespace Modules\CatalogModule\Services\Admin;
 
 use Illuminate\Http\Request;
-use Modules\AuthModule\Http\Requests\User\CreateUserRequest;
-use Modules\AuthModule\Http\Requests\User\UpdateUserRequest;
+use Modules\AuthModule\Http\Requests\Admin\CreateUserRequest;
+use Modules\AuthModule\Http\Requests\Admin\UpdateUserRequest;
 use Modules\CatalogModule\Repositories\VendorRepository;
+use Modules\CatalogModule\Services\UserResource;
 use Modules\CommonModule\Traits\ImageHelperTrait;
 use Modules\CommonModule\Transformers\PaginateResource;
 

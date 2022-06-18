@@ -51,6 +51,10 @@ class Model extends Base
         if ($brand = $request->get('brand')) {
             $query->where('brand_id', new ObjectId($brand));
         }
+
+        if ($entityType = $request->get('entity_type')) {
+            $query->where('entity_type', $entityType);
+        }
     }
 
     //================ #END# scopes =========================\\

@@ -59,4 +59,14 @@ trait EntityTrait
             })
         );
     }
+
+
+    private function attachPluginToExtra($extras, $plugins)
+    {
+        foreach ($extras as $key => $extra) {
+           $extra->plugin = collect($plugins)->where('_id', $extra->plugin_id)->first();
+           $extras[$key] = $extra;
+        }
+        return $extras;
+    }
 }

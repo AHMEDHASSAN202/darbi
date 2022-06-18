@@ -27,7 +27,7 @@ class EntityResource extends JsonResource
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
             'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit),
-            'extras'        => $this->getExtras(),
+            'extras'        => ExtraResource::collection(convertBsonArrayToCollection($this->attachPluginToExtra($this->extras, $this->plugins))),
             'state'         => $this->state,
             'specs'         => SpecsResource::collection($this->model->addons),
             'country'       => $this->country,

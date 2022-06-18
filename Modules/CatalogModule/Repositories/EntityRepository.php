@@ -19,7 +19,91 @@ class EntityRepository
 
     public function findById($entityId)
     {
-        return $this->model->with(['model', 'brand', 'country', 'city'])->findOrFail($entityId);
+        $entity = $this->model->raw(function ($collection) use ($entityId) {
+            return $collection->aggregate([
+                [
+                    '$match'        => [
+                        '_id'          => [ '$eq' => new ObjectId($entityId) ],
+                    ]
+                ],
+                [
+                    '$lookup'   => [
+                        'from'          => 'models',
+                        'localField'    => 'model_id',
+                        'foreignField'  => '_id',
+                        'as'            => 'model'
+                    ],
+                ],
+                [
+                    '$unwind'    => [
+                        "path"      => '$model',
+                        "preserveNullAndEmptyArrays" => true
+                    ],
+                ],
+                [
+                    '$lookup'   => [
+                        'from'          => 'brands',
+                        'localField'    => 'brand_id',
+                        'foreignField'  => '_id',
+                        'as'            => 'brand'
+                    ],
+                ],
+                [
+                    '$unwind'    => [
+                        "path"      => '$brand',
+                        "preserveNullAndEmptyArrays" => true
+                    ],
+                ],
+                [
+                    '$lookup'   => [
+                        'from'          => 'countries',
+                        'localField'    => 'country_id',
+                        'foreignField'  => '_id',
+                        'as'            => 'country'
+                    ],
+                ],
+                [
+                    '$unwind'    => [
+                        "path"      => '$country',
+                        "preserveNullAndEmptyArrays" => true
+                    ],
+                ],
+                [
+                    '$lookup'   => [
+                        'from'          => 'cities',
+                        'localField'    => 'city_id',
+                        'foreignField'  => '_id',
+                        'as'            => 'city'
+                    ],
+                ],
+                [
+                    '$unwind'    => [
+                        "path"      => '$city',
+                        "preserveNullAndEmptyArrays" => true
+                    ],
+                ],
+                [
+                    '$lookup'   => [
+                        'from'          => 'extras',
+                        'localField'    => 'extra_ids',
+                        'foreignField'  => '_id',
+                        'as'            => 'extras'
+                    ],
+                ],
+                [
+                    '$lookup'   => [
+                        'from'          => 'plugins',
+                        'localField'    => 'extras.plugin_id',
+                        'foreignField'  => '_id',
+                        'as'            => 'plugins'
+                    ],
+                ],
+            ]);
+        });
+
+        abort_if(!$entity->count(), 404);
+
+        return $entity->first();
     }
 
     public function changeState($entityId, $state)

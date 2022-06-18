@@ -36,10 +36,10 @@ Route::group([
 
 //vendor profile
 Route::group([
-    'prefix'     => 'vendor-profile',
+    'prefix'     => 'settings',
     'middleware' => 'auth:vendor_api',
-    'namespace'  => 'Profile'
+    'namespace'  => 'Settings'
 ], function () {
-    Route::get(''                       , 'VendorProfileController@getVendor');
-    Route::put(''                       , 'VendorProfileController@updateVendor');
+    Route::get(''                       , 'VendorSettingsController@getSettings');
+    Route::put(''                       , 'VendorSettingsController@updateSettings');
 });

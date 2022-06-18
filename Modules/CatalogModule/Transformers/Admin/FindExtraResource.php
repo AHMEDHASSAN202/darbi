@@ -15,12 +15,13 @@ class FindExtraResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'            => $this->_id,
+            'id'            => (string)$this->_id,
             'plugin_id'     => (string) $this->plugin_id,
             'name'          => translateAttribute(@(array)$this->plugin->name),
             'desc'          => translateAttribute(@(array)$this->plugin->desc),
             'price'         => $this->price,
-            'price_unit'    => $this->price_unit,
+            'entity_type'   => @$this->plugin ? optional($this->plugin)->entity_type : '',
+            'plugin'        => @$this->plugin ? new PluginResource($this->plugin) : null
         ];
     }
 

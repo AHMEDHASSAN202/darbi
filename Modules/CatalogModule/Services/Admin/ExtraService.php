@@ -4,14 +4,14 @@
  * User: ahmed hasssan
  */
 
-namespace Modules\CatalogModule\Services;
+namespace Modules\CatalogModule\Services\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Http\Requests\Admin\CreateExtraRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateExtraRequest;
 use Modules\CatalogModule\Repositories\ExtraRepository;
-use Modules\CatalogModule\Transformers\ExtraResource;
+use Modules\CatalogModule\Transformers\Admin\ExtraResource;
 use Modules\CatalogModule\Transformers\Admin\FindExtraResource;
 use Modules\CommonModule\Transformers\PaginateResource;
 use MongoDB\BSON\ObjectId;
@@ -24,6 +24,7 @@ class ExtraService
     {
         $this->extraRepository = $extraRepository;
     }
+
 
     public function list(Request $request)
     {
@@ -39,6 +40,7 @@ class ExtraService
         return ExtraResource::collection($extras);
     }
 
+
     public function create(CreateExtraRequest $createExtraRequest)
     {
         $plugin = $this->extraRepository->create([
@@ -51,6 +53,7 @@ class ExtraService
             'id'        => $plugin->id
         ];
     }
+
 
     public function update($id, UpdateExtraRequest $updateExtraRequest)
     {
@@ -65,10 +68,12 @@ class ExtraService
         ];
     }
 
+
     public function delete($id)
     {
         return $this->extraRepository->destroy($id);
     }
+
 
     public function find($id)
     {

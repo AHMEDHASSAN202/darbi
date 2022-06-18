@@ -15,6 +15,9 @@ class Payment
         'apple_pay'     => ApplePay::class,
     ];
 
+    private $paymentObject;
+
+
     public function __construct($paymentMethod, $data = [])
     {
         if (!in_array($paymentMethod, array_keys($this->paymentMethods))) {
@@ -22,6 +25,18 @@ class Payment
             abort(404);
         }
 
-        return new $this->paymentMethods[$paymentMethod]($data);
+        $this->paymentObject = new $this->paymentMethods[$paymentMethod]($data);
+    }
+
+
+    public function getInstance()
+    {
+        return $this->paymentObject;
+    }
+
+
+    public function __call(string $name, array $arguments)
+    {
+        return $this->paymentObject->{$name}(...$arguments);
     }
 }

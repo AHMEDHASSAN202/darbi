@@ -22,7 +22,7 @@ class BookingRepository
     public function findAllByUser($userId, $limit = 20)
     {
         //->where('user_id', $userId)
-        return $this->booking->paginate($limit);
+        return $this->booking->latest()->paginate($limit);
     }
 
     public function findByUser($userId, $bookingId)
@@ -38,7 +38,7 @@ class BookingRepository
 
     public function bookingsByVendor(ObjectId $vendorId, Request $request)
     {
-        return $this->booking->adminSearch($request)->adminFilter($request)->where('vendor_id', $vendorId)->paginate($request->get('limit', 20));
+        return $this->booking->latest()->adminSearch($request)->adminFilter($request)->where('vendor_id', $vendorId)->paginate($request->get('limit', 20));
     }
 
     public function findByVendor(ObjectId $vendorId, ObjectId $bookingId)

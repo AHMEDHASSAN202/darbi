@@ -9,7 +9,7 @@ namespace Modules\CatalogModule\Services;
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Repositories\CarRepository;
 use Modules\CatalogModule\Repositories\EntityRepository;
-use Modules\CatalogModule\Transformers\CarDetailsResource;
+use Modules\CatalogModule\Transformers\FindCarResource;
 use Modules\CatalogModule\Transformers\CarResource;
 use Modules\CatalogModule\Transformers\EntityResource;
 use Modules\CommonModule\Transformers\PaginateResource;

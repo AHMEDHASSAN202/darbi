@@ -2,16 +2,12 @@
 
 namespace Modules\CatalogModule\Http\Controllers\Admin;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\CatalogModule\Http\Requests\Admin\CreatePortRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdatePortRequest;
-use Modules\CatalogModule\Services\BrandService;
-use Modules\CatalogModule\Services\PluginService;
 use Modules\CatalogModule\Services\PortService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
-use function view;
 
 class PortController extends Controller
 {

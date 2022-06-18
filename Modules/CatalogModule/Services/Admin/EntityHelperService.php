@@ -4,15 +4,18 @@
  * User: ahmed hasssan
  */
 
-namespace Modules\CatalogModule\Services;
+namespace Modules\CatalogModule\Services\Admin;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Repositories\ModelRepository;
-use Modules\CatalogModule\Transformers\Admin\FindEntityResource;
 use Modules\CatalogModule\Transformers\Admin\EntityResource;
+use Modules\CatalogModule\Transformers\Admin\FindEntityResource;
 use Modules\CommonModule\Transformers\PaginateResource;
 use MongoDB\BSON\ObjectId;
+use function app;
+use function generateObjectIdOfArrayValues;
+use function getVendorId;
 
 trait EntityHelperService
 {

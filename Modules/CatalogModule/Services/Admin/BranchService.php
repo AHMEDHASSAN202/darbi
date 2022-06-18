@@ -4,7 +4,7 @@
  * User: ahmed hasssan
  */
 
-namespace Modules\CatalogModule\Services;
+namespace Modules\CatalogModule\Services\Admin;
 
 use App\Proxy\Proxy;
 use Illuminate\Http\Request;
@@ -18,6 +18,7 @@ use Modules\CatalogModule\Transformers\Admin\FindBranchResource;
 use Modules\CommonModule\Traits\ImageHelperTrait;
 use Modules\CommonModule\Transformers\PaginateResource;
 use MongoDB\BSON\ObjectId;
+use function getVendorId;
 
 class BranchService
 {

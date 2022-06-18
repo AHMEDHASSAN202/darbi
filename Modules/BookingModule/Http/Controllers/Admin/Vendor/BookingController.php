@@ -4,7 +4,7 @@ namespace Modules\BookingModule\Http\Controllers\Admin\Vendor;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\BookingModule\Services\BookingService;
+use Modules\BookingModule\Services\Admin\BookingService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
 class BookingController extends Controller
@@ -40,7 +40,7 @@ class BookingController extends Controller
     {
         $result = $this->bookingService->acceptByVendor($bookingId);
 
-        return $this->apiResponse($result['data'], $result['message'], $result['statusCode']);
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
     }
 
 
@@ -48,6 +48,6 @@ class BookingController extends Controller
     {
         $result = $this->bookingService->cancelByVendor($bookingId);
 
-        return $this->apiResponse($result['data'], $result['message'], $result['statusCode']);
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
     }
 }

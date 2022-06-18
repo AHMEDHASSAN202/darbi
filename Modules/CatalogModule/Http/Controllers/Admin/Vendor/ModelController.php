@@ -2,14 +2,10 @@
 
 namespace Modules\CatalogModule\Http\Controllers\Admin\Vendor;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\CatalogModule\Services\BrandService;
-use Modules\CatalogModule\Services\ModelService;
-use Modules\CatalogModule\Services\PluginService;
+use Modules\CatalogModule\Services\Admin\ModelService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
-use function view;
 
 class ModelController extends Controller
 {

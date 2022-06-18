@@ -27,6 +27,7 @@ class CarFactory extends Factory
      */
     public function definition()
     {
+        $arFaker = \Faker\Factory::create('ar_EG');
         $country = Country::all()->random(1)->first();
         $city = City::where('country_id', new ObjectId($country->_id))->get()->random(1)->first();
         $model = Model::all()->random(1)->first();
@@ -35,6 +36,7 @@ class CarFactory extends Factory
         $branches = $vendor->branches()->limit(3)->pluck('_id')->toArray();
 
         return [
+            'name'              => ['en' => $this->faker->company, 'ar' => $arFaker->company],
             'model_id'          => new ObjectId($model->_id),
             'brand_id'          => new ObjectId($brand->_id),
             'images'            => getRandomImages(getCarTestImages(), mt_rand(1, 5)),

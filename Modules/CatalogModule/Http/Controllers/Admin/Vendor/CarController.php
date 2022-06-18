@@ -2,20 +2,12 @@
 
 namespace Modules\CatalogModule\Http\Controllers\Admin\Vendor;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\CatalogModule\Http\Requests\Admin\CreateCarRequest;
-use Modules\CatalogModule\Http\Requests\Admin\CreateEntityRequest;
-use Modules\CatalogModule\Http\Requests\Admin\CreateExtraRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateCarRequest;
-use Modules\CatalogModule\Http\Requests\Admin\UpdateEntityRequest;
-use Modules\CatalogModule\Http\Requests\Admin\UpdateExtraRequest;
-use Modules\CatalogModule\Services\CarService;
-use Modules\CatalogModule\Services\ExtraService;
-use Modules\CatalogModule\Services\PluginService;
+use Modules\CatalogModule\Services\Admin\CarService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
-use function view;
 
 class CarController extends Controller
 {
