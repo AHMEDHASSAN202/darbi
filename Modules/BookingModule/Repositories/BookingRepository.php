@@ -8,6 +8,7 @@ namespace Modules\BookingModule\Repositories;
 
 use Illuminate\Http\Request;
 use Modules\BookingModule\Entities\Booking;
+use Modules\BookingModule\Enums\BookingStatus;
 use MongoDB\BSON\ObjectId;
 
 class BookingRepository
@@ -21,14 +22,12 @@ class BookingRepository
 
     public function findAllByUser($userId, $limit = 20)
     {
-        //->where('user_id', $userId)
-        return $this->booking->latest()->paginate($limit);
+        return $this->booking->latest()->where('user_id', new ObjectId($userId))->paginate($limit);
     }
 
     public function findByUser($userId, $bookingId)
     {
-        //->where('user_id', $userId)
-        return $this->booking->where('_id', new ObjectId($bookingId))->firstOrFail();
+        return $this->booking->where('_id', new ObjectId($bookingId))->where('user_id', new ObjectId($userId))->firstOrFail();
     }
 
     public function create($data)
@@ -44,5 +43,15 @@ class BookingRepository
     public function findByVendor(ObjectId $vendorId, ObjectId $bookingId)
     {
         return $this->booking->where('vendor_id', $vendorId)->where('_id', $bookingId)->firstOrFail();
+    }
+
+    public function vendorSales(ObjectId $vendorId)
+    {
+        return $this->booking->where('vendor_id', $vendorId)->where('status', BookingStatus::COMPLETED)->sum('price_summary.total_price');
+    }
+
+    public function vendorOrders(ObjectId $vendorId)
+    {
+        return $this->booking->where('vendor_id', $vendorId)->where('status', BookingStatus::COMPLETED)->count();
     }
 }

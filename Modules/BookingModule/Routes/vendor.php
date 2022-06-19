@@ -24,3 +24,13 @@ Route::group([
     Route::post('{booking}/cancel'      , 'BookingController@cancel');
     Route::post('{booking}/accept'      , 'BookingController@accept');
 });
+
+
+//vendor statistics
+Route::group([
+    'prefix'    => 'bookings/statistics',
+    'middleware'=> ['auth:vendor_api']
+], function () {
+    Route::get('sales'                   , 'BookingStatisticController@sales');
+    Route::get('orders'                  , 'BookingStatisticController@orders');
+});

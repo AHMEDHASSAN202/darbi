@@ -144,4 +144,20 @@ class BookingService
 
         return new FindBookingResource($booking);
     }
+
+
+    public function vendorSales()
+    {
+        $vendorId = new ObjectId(getVendorId());
+
+        return $this->bookingRepository->vendorSales($vendorId);
+    }
+
+
+    public function vendorOrders()
+    {
+        $vendorId = new ObjectId(getVendorId());
+
+        return $this->bookingRepository->vendorOrders($vendorId);
+    }
 }
