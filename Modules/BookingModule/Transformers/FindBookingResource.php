@@ -27,9 +27,9 @@ class FindBookingResource extends JsonResource
             'status_label'  => __($this->status),
             'status'        => $this->status,
             'entity'        => $this->entity(),
-            'start'         => ['month' => optional($this->start_booking_at)->format('m F'), 'time' => optional($this->start_booking_at)->format('H:s A')],
-            'end'           => ['month' => optional($this->end_booking_at)->format('m F'), 'time' => optional($this->end_booking_at)->format('H:s A')],
-            'extras'        => $this->extras ?? [],
+            'start'         => $this->start_booking_at,
+            'end'           => $this->end_booking_at,
+            'extras'        => $this->extrasResource(),
             'pickup_location_address' => $this->pickup_location_address,
             'drop_location_address'   => $this->drop_location_address,
             'payment_method'=> @$this->payment_method['type'] ?? "",
@@ -55,5 +55,26 @@ class FindBookingResource extends JsonResource
             'brand_id'      => (string)$this->entity_details['brand_id'],
             'brand_name'    => translateAttribute($this->entity_details['brand_name']),
         ];
+    }
+
+
+    private function extrasResource()
+    {
+        $extras = $this->extras;
+
+        if (empty($extras) || !is_array($extras)) {
+            return [];
+        }
+
+        return array_map(function ($extra) {
+            return [
+                'id'        => (string)$extra['id']['$oid'],
+                'plugin_id' => (string)$extra['plugin_id'],
+                'name'      => $extra['name'],
+                'desc'      => $extra['desc'],
+                'price'     => $extra['price'],
+                'price_unit' => $this->entity_details['price_unit']
+            ];
+        }, $extras);
     }
 }

@@ -31,8 +31,8 @@ class YachtFactory extends Factory
         $country = Country::all()->random(1)->first();
         $city = City::where('country_id', new ObjectId($country->_id))->get()->random(1)->first();
         $extras = Extra::all()->random(2)->pluck('_id')->toArray();
-        $model = Model::all()->random(1)->first();
-        $brand = Brand::all()->random(1)->first();
+        $model = Model::where('entity_type', 'yacht')->get()->random(1)->first();
+        $brand = Brand::where('entity_type', 'yacht')->get()->random(1)->first();
         $vendor = Vendor::all()->random(1)->first();
         $branches = $vendor->branches()->limit(3)->pluck('_id')->toArray();
         $port = Port::all()->random(1)->first();
