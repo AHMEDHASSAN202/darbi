@@ -16,7 +16,6 @@
 //plugins routes
 Route::group([
     'prefix'    => 'plugins',
-    'namespace' => 'Vendor',
     'middleware'=> ['auth:vendor_api']
 ], function () {
     Route::get(''               , 'PluginController@index');
@@ -26,7 +25,6 @@ Route::group([
 //plugins routes
 Route::group([
     'prefix'    => 'extras',
-    'namespace' => 'Vendor',
     'middleware'=> ['auth:vendor_api']
 ], function () {
     Route::get(''               , 'ExtraController@index');
@@ -40,7 +38,6 @@ Route::group([
 //cars routes
 Route::group([
     'prefix'    => 'cars',
-    'namespace' => 'Vendor',
     'middleware'=> ['auth:vendor_api']
 ], function () {
     Route::get(''               , 'CarController@index');
@@ -55,7 +52,6 @@ Route::group([
 //yachts routes
 Route::group([
     'prefix'    => 'yachts',
-    'namespace' => 'Vendor',
     'middleware'=> ['auth:vendor_api']
 ], function () {
     Route::get(''                 , 'YachtController@index');
@@ -71,7 +67,6 @@ Route::group([
 //brands routes
 Route::group([
     'prefix'    => 'brands',
-    'namespace' => 'Vendor',
     'middleware'=> ['auth:vendor_api']
 ], function () {
     Route::get(''                 , 'BrandController@index');
@@ -82,7 +77,6 @@ Route::group([
 //models routes
 Route::group([
     'prefix'    => 'models',
-    'namespace' => 'Vendor',
     'middleware'=> ['auth:vendor_api']
 ], function () {
     Route::get(''                 , 'ModelController@index');
@@ -93,7 +87,6 @@ Route::group([
 //ports routes
 Route::group([
     'prefix'    => 'ports',
-    'namespace' => 'Vendor',
     'middleware'=> ['auth:vendor_api']
 ], function () {
     Route::get(''                 , 'PortController@index');
@@ -104,7 +97,6 @@ Route::group([
 //branches routes
 Route::group([
     'prefix'    => 'branches',
-    'namespace' => 'Vendor',
     'middleware'=> ['auth:vendor_api']
 ], function () {
     Route::get(''                  , 'BranchController@index');

@@ -16,6 +16,8 @@ class RouteServiceProvider extends ServiceProvider
 
     protected $moduleNamespaceAdmin = 'Modules\CatalogModule\Http\Controllers\Admin';
 
+    protected $moduleNamespaceVendor = 'Modules\CatalogModule\Http\Controllers\Admin\Vendor';
+
     /**
      * Called before routes are registered.
      *
@@ -99,7 +101,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('api/vendor/v1')
             ->middleware('api')
-            ->namespace($this->moduleNamespaceAdmin)
+            ->namespace($this->moduleNamespaceVendor)
             ->group(module_path('CatalogModule', '/Routes/vendor.php'));
     }
 }
