@@ -28,9 +28,18 @@ Route::group([
 
 //vendor statistics
 Route::group([
-    'prefix'    => 'bookings/statistics',
+    'prefix'    => 'bookings/statistics/find',
     'middleware'=> ['auth:vendor_api']
 ], function () {
-    Route::get('sales'                   , 'BookingStatisticController@sales');
-    Route::get('orders'                  , 'BookingStatisticController@orders');
+    Route::get(''                       , 'BookingStatisticController');
+});
+
+
+
+//vendor transactions
+Route::group([
+    'prefix'    => 'transactions',
+    'middleware'=> ['auth:vendor_api']
+], function () {
+    Route::get(''                       , 'BookingPaymentTransactionController@index');
 });

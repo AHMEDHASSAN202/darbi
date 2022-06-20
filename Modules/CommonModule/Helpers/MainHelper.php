@@ -213,3 +213,25 @@ function convertBsonArrayToNormalArray($bsonArray)
 
     return (array)$bsonArray->jsonSerialize();
 }
+
+function exportData($filename, array $columns, array $data)
+{
+    return function () use ($filename, $columns, $data) {
+        $file = fopen('php://output', 'w');
+        fputcsv($file, array_values($columns));
+
+        foreach ($data as $lines){
+            $row = [];
+            foreach (array_keys($columns) as $columnKey) {
+                $row[] = \Illuminate\Support\Arr::get($lines, $columnKey);
+            }
+            fputcsv($file, [...$row]);
+        }
+
+        fclose($file);
+
+        header("Content-Description: File Transfer");
+        header("Content-Disposition: attachment; filename=".$filename);
+        header("Content-Type: application/csv; ");
+    };
+}

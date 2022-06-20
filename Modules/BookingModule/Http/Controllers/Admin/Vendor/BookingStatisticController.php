@@ -20,18 +20,11 @@ class BookingStatisticController extends Controller
     }
 
 
-    public function sales()
+    public function __invoke()
     {
-        $sales = $this->bookingService->vendorSales();
-
-        return $this->apiResponse(compact('sales'));
-    }
-
-
-    public function orders()
-    {
-        $orders = $this->bookingService->vendorOrders();
-
-        return $this->apiResponse(compact('orders'));
+        return $this->apiResponse([
+            'sales'     => $this->bookingService->vendorSales(),
+            'orders'    => $this->bookingService->vendorOrders()
+        ]);
     }
 }

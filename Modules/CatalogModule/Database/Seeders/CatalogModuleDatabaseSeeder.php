@@ -30,7 +30,7 @@ class CatalogModuleDatabaseSeeder extends Seeder
         Plugin::factory(100)->create();
         Extra::factory(300)->create();
         Subscription::factory(5)->create();
-        Vendor::factory(10)->create();
+        Vendor::factory(5)->create();
         Branch::factory(100)->create();
         Car::factory(100)->create();
         Port::factory(20)->create();

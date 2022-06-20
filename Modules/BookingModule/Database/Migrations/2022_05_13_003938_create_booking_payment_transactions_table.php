@@ -15,7 +15,10 @@ return new class extends Migration
     {
         Schema::create('booking_payment_transactions', function (Blueprint $table) {
             $table->id();
-
+            $table->index('vendor_id');
+            $table->index('booking_id');
+            $table->index('entity_id');
+            $table->index('status');
             $table->timestamps();
         });
     }
