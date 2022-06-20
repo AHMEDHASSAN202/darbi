@@ -169,7 +169,7 @@ class BookingService
 
         abort_if(is_null($booking), 404);
 
-        if (!in_array($booking->status, [BookingStatus::INIT, BookingStatus::PENDING])) {
+        if (!in_array($booking->status, [BookingStatus::INIT, BookingStatus::PENDING, BookingStatus::ACCEPT])) {
             return [
                 'data'      => [],
                 'message'   => __('cancel booking not allowed'),
