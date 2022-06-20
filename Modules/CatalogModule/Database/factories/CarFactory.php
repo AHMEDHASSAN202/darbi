@@ -45,7 +45,7 @@ class CarFactory extends Factory
             'vendor_id'         => new ObjectId($vendor->_id),
             'branch_ids'        => $branches,
             'state'             => 'free',//['free', 'reserved', 'pending'][mt_rand(0,2)],
-            'extra_ids'         => generateObjectIdOfArrayValues(Extra::all()->random(2)->pluck('_id')->toArray()),
+            'extra_ids'         => generateObjectIdOfArrayValues(Extra::where('entity_type', 'car')->get()->random(2)->pluck('_id')->toArray()),
             'country_id'        => new ObjectId($country->_id),
             'city_id'           => new ObjectId($city->_id),
             'require_activation'=> $this->faker->boolean,

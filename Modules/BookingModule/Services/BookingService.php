@@ -125,6 +125,7 @@ class BookingService
     public function addBookDetails($bookingId, AddBookDetailsRequest $addBookDetailsRequest)
     {
         $meId = auth('api')->id();
+        $me = auth('api')->user();
 
         $booking = $this->bookingRepository->findByUser($meId, $bookingId);
 
@@ -147,8 +148,8 @@ class BookingService
         $booking->pickup_location_address = Arr::only($addBookDetailsRequest->pickup_location, [...locationInfoKeys()]);
         $booking->drop_location_address = Arr::only($addBookDetailsRequest->drop_location, [...locationInfoKeys()]);
         $booking->status = BookingStatus::PENDING;
-        $booking->start_booking_at = $addBookDetailsRequest->start_at;
-        $booking->end_booking_at = $addBookDetailsRequest->end_at;
+        $booking->start_booking_at = convertDateTimeToUTC($me, $addBookDetailsRequest->start_at);
+        $booking->end_booking_at = convertDateTimeToUTC($me, $addBookDetailsRequest->end_at);
         $booking->note = $addBookDetailsRequest->note;
         $booking->save();
 
@@ -162,9 +163,9 @@ class BookingService
 
     public function cancel($bookingId)
     {
-        $userId = auth('api')->id();
+        $meId = auth('api')->id();
 
-        $booking = $this->bookingRepository->findByUser($userId, $bookingId);
+        $booking = $this->bookingRepository->findByUser($meId, $bookingId);
 
         abort_if(is_null($booking), 404);
 

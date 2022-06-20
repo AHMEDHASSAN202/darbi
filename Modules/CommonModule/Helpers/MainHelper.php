@@ -235,3 +235,8 @@ function exportData($filename, array $columns, array $data)
         header("Content-Type: application/csv; ");
     };
 }
+
+function convertDateTimeToUTC($me, string $datetime)
+{
+    return $datetime;
+}

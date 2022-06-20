@@ -4,6 +4,8 @@ namespace Modules\BookingModule\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Log;
+use Modules\AuthModule\Transformers\VendorResource;
+use Modules\CatalogModule\Entities\Vendor;
 use Modules\CatalogModule\Transformers\CarResource;
 use Modules\CatalogModule\Transformers\ExtraResource;
 use Modules\CatalogModule\Transformers\YachtResource;
@@ -29,6 +31,8 @@ class FindBookingResource extends JsonResource
             'entity'        => $this->entity(),
             'start'         => $this->start_booking_at,
             'end'           => $this->end_booking_at,
+            'start_trip_at' => $this->start_trip_at,
+            'end_trip_at'   => $this->end_trip_at,
             'extras'        => $this->extrasResource(),
             'pickup_location_address' => $this->pickup_location_address,
             'drop_location_address'   => $this->drop_location_address,
@@ -36,7 +40,8 @@ class FindBookingResource extends JsonResource
             'note'          => $this->note ?? "",
             'price'         => ['total_price' => @$this->price_summary['total_price']],
             'created_at'    => $this->created_at,
-            'expired_at'    => $this->expired_at
+            'expired_at'    => $this->expired_at,
+            'vendor'        => $this->getVendor()
         ];
     }
 
@@ -44,11 +49,11 @@ class FindBookingResource extends JsonResource
     private function entity()
     {
         return [
-            'id'        => (string)$this->entity_id,
-            'entity_type' => $this->entity_type,
-            'name'      => $this->getName(),
-            'price'     => $this->entity_details['price'],
-            'price_unit' => $this->entity_details['price_unit'],
+            'id'            => (string)$this->entity_id,
+            'entity_type'   => $this->entity_type,
+            'name'          => $this->getName(),
+            'price'         => $this->entity_details['price'],
+            'price_unit'    => $this->entity_details['price_unit'],
             'images'        => @$this->entity_details['images'][0],
             'model_id'      => (string)$this->entity_details['model_id'],
             'model_name'    => translateAttribute($this->entity_details['model_name']),
@@ -68,13 +73,20 @@ class FindBookingResource extends JsonResource
 
         return array_map(function ($extra) {
             return [
-                'id'        => (string)$extra['id']['$oid'],
-                'plugin_id' => (string)$extra['plugin_id'],
-                'name'      => $extra['name'],
-                'desc'      => $extra['desc'],
-                'price'     => $extra['price'],
+                'id'         => (string)$extra['id']['$oid'],
+                'plugin_id'  => (string)$extra['plugin_id'],
+                'name'       => $extra['name'],
+                'desc'       => $extra['desc'],
+                'price'      => $extra['price'],
                 'price_unit' => $this->entity_details['price_unit']
             ];
         }, $extras);
+    }
+
+
+    private function getVendor()
+    {
+        $vendorId = $this->vendor_id;
+        return new VendorResource(Vendor::where('_id', $vendorId)->first());
     }
 }

@@ -44,6 +44,7 @@ class TripService
         }
 
         $booking->start_trip_at = now();
+        $booking->status = BookingStatus::PICKED_UP;
         $booking->save();
 
         return [
@@ -60,6 +61,7 @@ class TripService
         abort_if(is_null($booking), 404);
 
         $booking->end_trip_at = now();
+        $booking->status = BookingStatus::DROPPED;
         $booking->save();
 
         return [
