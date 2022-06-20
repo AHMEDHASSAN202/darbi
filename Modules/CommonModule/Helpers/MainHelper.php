@@ -36,7 +36,7 @@ function imageUrl(?string $image, $dir = '', $size = null) {
         return '';
     }
 
-    $image = filter_var($image, FILTER_VALIDATE_URL) ? $image : \Illuminate\Support\Facades\Storage::url($image);
+    $image = filter_var($image, FILTER_VALIDATE_URL) ? $image : \Illuminate\Support\Facades\Storage::disk('s3')->url($image);
 
     if ($size) {
         $image = addSizeToImageLink($image, $size);
