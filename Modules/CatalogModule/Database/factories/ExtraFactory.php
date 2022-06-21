@@ -27,6 +27,7 @@ class ExtraFactory extends Factory
             'plugin_id'      => new ObjectId(Plugin::all()->random(1)->first()->_id),
             'vendor_id'      => new ObjectId(Vendor::all()->random(1)->first()->_id),
             'price'          => $this->faker->randomFloat(2, 200, 1000),
+            'entity_type'    => ['yacht', 'car'][mt_rand(0,1)]
         ];
     }
 }

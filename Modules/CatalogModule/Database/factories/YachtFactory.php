@@ -30,13 +30,13 @@ class YachtFactory extends Factory
     {
         $country = Country::all()->random(1)->first();
         $city = City::where('country_id', new ObjectId($country->_id))->get()->random(1)->first();
-        $extras = Extra::all()->random(2)->pluck('_id')->toArray();
         $model = Model::where('entity_type', 'yacht')->get()->random(1)->first();
         $brand = Brand::where('entity_type', 'yacht')->get()->random(1)->first();
         $vendor = Vendor::all()->random(1)->first();
         $branches = $vendor->branches()->limit(3)->pluck('_id')->toArray();
         $port = Port::all()->random(1)->first();
         $arFaker = \Faker\Factory::create('ar_EG');
+        $extras = generateObjectIdOfArrayValues(Extra::where('entity_type', 'yacht')->where('vendor_id', new ObjectId($vendor->_id))->get()->random(2)->pluck('_id')->toArray());
 
         return [
             'model_id'          => new ObjectId($model->_id),

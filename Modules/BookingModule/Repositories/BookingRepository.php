@@ -7,6 +7,7 @@
 namespace Modules\BookingModule\Repositories;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Modules\BookingModule\Entities\Booking;
 use Modules\BookingModule\Enums\BookingStatus;
 use MongoDB\BSON\ObjectId;
@@ -53,5 +54,10 @@ class BookingRepository
     public function vendorOrders(ObjectId $vendorId)
     {
         return $this->booking->where('vendor_id', $vendorId)->where('status', BookingStatus::COMPLETED)->count();
+    }
+
+    public function updateBookingCollection($bookingId, $data, $session)
+    {
+        return DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update($data, ['session' => $session]);
     }
 }

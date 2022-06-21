@@ -10,6 +10,7 @@ namespace Modules\BookingModule\Services\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Modules\BookingModule\Classes\BookingChangeLog;
 use Modules\BookingModule\Enums\BookingStatus;
 use Modules\BookingModule\Events\BookingStatusChangedEvent;
 use Modules\BookingModule\Repositories\BookingRepository;
@@ -49,7 +50,9 @@ class BookingService
                 ];
             }
 
-            DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update(['status' => BookingStatus::ACCEPT], ['session' => $session]);
+            $data['status'] = BookingStatus::ACCEPT;
+            $data['status_change_log'] = (new BookingChangeLog($booking, BookingStatus::ACCEPT, auth('vendor_api')->user()))->logs();
+            $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
 
             $booking->refresh();
 
@@ -98,7 +101,9 @@ class BookingService
             }
 
             $status = ($booking->status == BookingStatus::ACCEPT) ? BookingStatus::CANCELLED_AFTER_ACCEPT : BookingStatus::REJECTED;
-            DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update(['status' => $status], ['session' => $session]);
+            $data['status'] = $status;
+            $data['status_change_log'] = (new BookingChangeLog($booking, $status, auth('vendor_api')->user()))->logs();
+            $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
 
             $booking->refresh();
 

@@ -28,13 +28,13 @@ class CatalogModuleDatabaseSeeder extends Seeder
         Brand::factory(30)->create();
         \Modules\CatalogModule\Entities\Model::factory(50)->create();
         Plugin::factory(100)->create();
-        Extra::factory(300)->create();
-        Subscription::factory(5)->create();
         Vendor::factory(5)->create();
+        Extra::factory(400)->create();
+        Subscription::factory(5)->create();
         Branch::factory(100)->create();
-        Car::factory(100)->create();
+        Car::factory(80)->create();
         Port::factory(20)->create();
-        Yacht::factory(100)->create();
+        Yacht::factory(80)->create();
 //        $this->call(EntityPluginSeederTableSeeder::class);
     }
 }

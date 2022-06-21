@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Modules\BookingModule\Classes\BookingChangeLog;
 use Modules\BookingModule\Classes\Payments\Payment;
 use Modules\BookingModule\Classes\Price;
 use Modules\BookingModule\Enums\BookingStatus;
@@ -147,6 +148,7 @@ class BookingService
         $booking->price_summary = $priceSummary;
         $booking->pickup_location_address = Arr::only($addBookDetailsRequest->pickup_location, [...locationInfoKeys()]);
         $booking->drop_location_address = Arr::only($addBookDetailsRequest->drop_location, [...locationInfoKeys()]);
+        $booking->status_change_log = (new BookingChangeLog($booking, BookingStatus::PENDING, $me))->logs();
         $booking->status = BookingStatus::PENDING;
         $booking->start_booking_at = convertDateTimeToUTC($me, $addBookDetailsRequest->start_at);
         $booking->end_booking_at = convertDateTimeToUTC($me, $addBookDetailsRequest->end_at);
@@ -164,6 +166,7 @@ class BookingService
     public function cancel($bookingId)
     {
         $meId = auth('api')->id();
+        $me = auth('api')->user();
 
         $booking = $this->bookingRepository->findByUser($meId, $bookingId);
 
@@ -182,7 +185,9 @@ class BookingService
 
         try {
 
-            DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update(['status' => BookingStatus::CANCELLED_BEFORE_ACCEPT], ['session' => $session]);
+            $data['status_change_log'] = (new BookingChangeLog($booking, BookingStatus::CANCELLED_BEFORE_ACCEPT, $me))->logs();
+            $data['status'] = BookingStatus::CANCELLED_BEFORE_ACCEPT;
+            $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
 
             event(new BookingStatusChangedEvent($booking));
 
@@ -210,9 +215,10 @@ class BookingService
 
     public function proceed($bookingId, ProceedRequest $proceedRequest)
     {
-        $userId = auth('api')->id();
+        $meId = auth('api')->id();
+        $me = auth('api')->user();
 
-        $booking = $this->bookingRepository->findByUser($userId, $bookingId);
+        $booking = $this->bookingRepository->findByUser($meId, $bookingId);
 
         abort_if((is_null($booking) || $booking->status != BookingStatus::ACCEPT), 404);
 
@@ -224,32 +230,52 @@ class BookingService
             ];
         }
 
-        $payment = new Payment($proceedRequest->payment_method, $proceedRequest->all());
+        $session = DB::connection('mongodb')->getMongoClient()->startSession();
+        $session->startTransaction();
 
-        $booking->payment_method = [
-            'type'  => $proceedRequest->payment_method,
-            'extra_info' => $payment->storeData()
-        ];
+        try {
+            $payment = new Payment($proceedRequest->payment_method, $proceedRequest->all());
 
-        if (!$payment->successTransaction()) {
-            $booking->save();
-            Log::error('payment failed', $booking->toArray());
+            $data['payment_method'] = [
+                'type'       => $proceedRequest->payment_method,
+                'extra_info' => $payment->storeData()
+            ];
+
+            if (!$payment->successTransaction()) {
+                $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
+
+                $session->commitTransaction();
+
+                Log::error('payment failed', $booking->toArray());
+                return [
+                    'statusCode'       => 400,
+                    'message'          => __('something error'),
+                    'data'             => []
+                ];
+            }
+
+            $data['status'] = BookingStatus::PAID;
+            $data['status_change_log'] = (new BookingChangeLog($booking, BookingStatus::PAID, $me))->logs();
+            DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update($data, ['session' => $session]);
+
+            event(new BookingStatusChangedEvent($booking));
+
+            $session->commitTransaction();
+
             return [
-                'statusCode'       => 400,
-                'message'          => __('something error'),
+                'statusCode'       => 200,
+                'message'          => __('payment successful'),
                 'data'             => []
             ];
+
+        }catch (\Exception $exception) {
+            Log::error($exception->getMessage());
+            $session->abortTransaction();
+            return [
+                'data'       => [],
+                'message'    => null,
+                'statusCode' => 500
+            ];
         }
-
-        $booking->status = BookingStatus::PAID;
-        $booking->save();
-
-        event(new BookingStatusChangedEvent($booking));
-
-        return [
-            'statusCode'       => 200,
-            'message'          => __('payment successful'),
-            'data'             => []
-        ];
     }
 }
