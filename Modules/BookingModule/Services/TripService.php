@@ -56,7 +56,7 @@ class TripService
         try {
 
             $data['status'] = BookingStatus::PICKED_UP;
-            $data['start_trip_at'] = now();
+            $data['start_trip_at'] = new \MongoDB\BSON\UTCDateTime(now()->timestamp);
             $data['status_change_log'] = (new BookingChangeLog($booking, BookingStatus::PICKED_UP, $me))->logs();
             DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update($data, ['session' => $session]);
 
@@ -96,7 +96,7 @@ class TripService
         try {
 
             $data['status'] = BookingStatus::DROPPED;
-            $data['end_trip_at'] = now();
+            $data['end_trip_at'] = new \MongoDB\BSON\UTCDateTime(now()->timestamp);
             $data['status_change_log'] = (new BookingChangeLog($booking, BookingStatus::PICKED_UP, $me))->logs();
             DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update($data, ['session' => $session]);
 
