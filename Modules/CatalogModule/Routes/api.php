@@ -61,3 +61,12 @@ Route::group([
 ], function () {
     Route::get(''               , 'PortController@index');
 });
+
+
+//vendor routes
+Route::group([
+    'prefix'    => 'vendors',
+    'namespace' => 'User'
+], function () {
+    Route::get('{vendor}'               , 'VendorController@show');
+});

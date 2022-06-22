@@ -7,6 +7,7 @@ use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Modules\CatalogModule\Database\factories\VendorFactory;
+use Modules\CommonModule\Entities\Country;
 
 
 class Vendor extends Base
@@ -27,6 +28,11 @@ class Vendor extends Base
     public function branches()
     {
         return $this->hasMany(Branch::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 
     //============= #END# Relations ===================\\

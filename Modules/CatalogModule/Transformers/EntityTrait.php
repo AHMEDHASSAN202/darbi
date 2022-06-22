@@ -6,11 +6,14 @@
 
 namespace Modules\CatalogModule\Transformers;
 
+use App\Proxy\Proxy;
+use Modules\BookingModule\Proxy\BookingProxy;
 use Modules\CatalogModule\Repositories\ExtraRepository;
 
 trait EntityTrait
 {
     private $defaultImage = '';
+
 
     //this object maybe car or yacht
     private function getMainImage() : string
@@ -27,6 +30,7 @@ trait EntityTrait
         return imageUrl($entityMainImage ?? $this->defaultImage);
     }
 
+
     //get entity images
     private function getImagesFullPath($onlyEntityImages = false) : array
     {
@@ -42,6 +46,7 @@ trait EntityTrait
 
         return array_map(function ($image) { return imageUrl($image); }, $entityMainImages);
     }
+
 
     //get entity extras
     private function getExtras()
@@ -68,5 +73,15 @@ trait EntityTrait
            $extras[$key] = $extra;
         }
         return $extras;
+    }
+
+
+    private function getVendor()
+    {
+        $vendorId = $this->vendor_id;
+        $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => $vendorId])))->result();
+        if (isset($vendor['darbi_percentage'])) unset($vendor['darbi_percentage']);
+        if (isset($vendor['settings'])) unset($vendor['settings']);
+        return $vendor;
     }
 }

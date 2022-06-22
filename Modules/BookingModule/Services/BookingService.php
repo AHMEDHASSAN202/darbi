@@ -59,9 +59,11 @@ class BookingService
 
     public function rent(RentRequest $rentRequest)
     {
-        $entity = (new Proxy(new BookingProxy('GET_ENTITY', ['entity_id' => $rentRequest->entity_id])))->result();
 
-        abort_if(is_null($entity), 404);
+        $entity = (new Proxy(new BookingProxy('GET_ENTITY', ['entity_id' => $rentRequest->entity_id])))->result();
+        $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => $entity['vendor_id']])))->result();
+
+        abort_if((is_null($entity) || is_null($vendor)), 404);
 
         if (!entityIsFree($entity['state'])) {
             return [

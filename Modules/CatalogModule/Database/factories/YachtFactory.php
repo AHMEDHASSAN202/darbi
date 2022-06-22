@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\CatalogModule\Entities\Brand;
 use Modules\CatalogModule\Entities\Extra;
 use Modules\CatalogModule\Entities\Model;
+use Modules\CatalogModule\Entities\Plugin;
 use Modules\CatalogModule\Entities\Port;
 use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Entities\City;
@@ -21,6 +22,8 @@ class YachtFactory extends Factory
      */
     protected $model = \Modules\CatalogModule\Entities\Yacht::class;
 
+    private $type = 'yacht';
+
     /**
      * Define the model's default state.
      *
@@ -30,13 +33,14 @@ class YachtFactory extends Factory
     {
         $country = Country::all()->random(1)->first();
         $city = City::where('country_id', new ObjectId($country->_id))->get()->random(1)->first();
-        $model = Model::where('entity_type', 'yacht')->get()->random(1)->first();
-        $brand = Brand::where('entity_type', 'yacht')->get()->random(1)->first();
-        $vendor = Vendor::all()->random(1)->first();
+        $brand = Brand::where('entity_type', $this->type)->get()->random(1)->first();
+        $model = Model::where('brand_id', new ObjectId($brand->_id))->get()->random(1)->first();
+        $vendor = Vendor::where('type', $this->type)->get()->random(1)->first();
         $branches = $vendor->branches()->limit(3)->pluck('_id')->toArray();
         $port = Port::all()->random(1)->first();
         $arFaker = \Faker\Factory::create('ar_EG');
-        $extras = generateObjectIdOfArrayValues(Extra::where('entity_type', 'yacht')->where('vendor_id', new ObjectId($vendor->_id))->get()->random(2)->pluck('_id')->toArray());
+        $plugins = Plugin::where('entity_type', $this->type)->get()->pluck('id')->toArray();
+        $extras = generateObjectIdOfArrayValues(Extra::whereIn('plugin_id', generateObjectIdOfArrayValues($plugins))->where('vendor_id', new ObjectId($vendor->_id))->get()->random(2)->pluck('_id')->toArray());
 
         return [
             'model_id'          => new ObjectId($model->_id),

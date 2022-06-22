@@ -2,13 +2,9 @@
 
 namespace Modules\BookingModule\Transformers;
 
+use App\Proxy\Proxy;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Log;
-use Modules\AuthModule\Transformers\VendorResource;
-use Modules\CatalogModule\Entities\Vendor;
-use Modules\CatalogModule\Transformers\CarResource;
-use Modules\CatalogModule\Transformers\ExtraResource;
-use Modules\CatalogModule\Transformers\YachtResource;
+use Modules\BookingModule\Proxy\BookingProxy;
 
 class FindBookingResource extends JsonResource
 {
@@ -87,6 +83,9 @@ class FindBookingResource extends JsonResource
     private function getVendor()
     {
         $vendorId = $this->vendor_id;
-        return new VendorResource(Vendor::where('_id', $vendorId)->first());
+        $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => $vendorId])))->result();
+        if (isset($vendor['darbi_percentage'])) unset($vendor['darbi_percentage']);
+        if (isset($vendor['settings'])) unset($vendor['settings']);
+        return $vendor;
     }
 }

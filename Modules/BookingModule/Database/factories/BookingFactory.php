@@ -9,6 +9,7 @@ use Modules\CatalogModule\Entities\Car;
 use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Entities\Country;
 use Modules\CommonModule\Entities\Region;
+use Modules\CommonModule\Transformers\CountryResource;
 use MongoDB\BSON\ObjectId;
 
 class BookingFactory extends Factory
@@ -107,7 +108,8 @@ class BookingFactory extends Factory
             'payment_method'        => [
                 'type'  => ['cash','credit','applepay'][mt_rand(0,2)],
                 'extra_info' => []
-            ]
+            ],
+            'country'   => new CountryResource($vendor->country)
         ];
     }
 }
