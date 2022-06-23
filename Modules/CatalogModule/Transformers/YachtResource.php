@@ -22,7 +22,8 @@ class YachtResource extends JsonResource
             'image'         => $this->getMainImage(),
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
-            'passengers'    => $this->passengers()
+            'passengers'    => $this->passengers(),
+            'currency_code' => optional($this->country)->currency_code
         ];
     }
 

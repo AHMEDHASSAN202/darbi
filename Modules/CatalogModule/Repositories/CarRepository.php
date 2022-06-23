@@ -22,7 +22,7 @@ class CarRepository
     public function listOfCars(Request $request)
     {
         return $this->model->search($request)
-                           ->with(['model', 'brand'])
+                           ->with(['model', 'brand', 'country'])
                            ->whereHas('model', function ($query) { $query->active(); })
                            ->whereHas('brand', function ($query) { $query->active(); })
                            ->when($request->region, function ($query) use ($request) {

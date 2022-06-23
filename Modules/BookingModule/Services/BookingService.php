@@ -91,6 +91,7 @@ class BookingService
                 'brand_id'  => isset($entity['brand_id']) ? new ObjectId($entity['brand_id']) : null,
                 'brand_name'=> @$entity['brand_name'],
             ],
+            'currency_code' => @$entity['country']['currency_code'],
             'status'        => BookingStatus::INIT,
             'extras'        => $extras,
             'start_booking_at' => $rentRequest->start_at,

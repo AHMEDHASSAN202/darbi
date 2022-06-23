@@ -29,7 +29,7 @@ class YachtRepository
                            ->active()
                            ->available()
                            ->free()
-                           ->with('model')
+                           ->with(['model', 'country'])
                            ->whereHas('port', function ($query) { $query->active(); })
                            ->latest()
                            ->paginate($request->get('limit', 20));
