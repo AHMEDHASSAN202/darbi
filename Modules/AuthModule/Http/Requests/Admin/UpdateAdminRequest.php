@@ -2,6 +2,7 @@
 
 namespace Modules\AuthModule\Http\Requests\Admin;
 
+use App\Rules\AlphaNumSpacesRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -15,7 +16,7 @@ class UpdateAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'          => 'required|max:100',
+            'name'          => ['required', 'max:100', new AlphaNumSpacesRule()],
             'email'         => ['required', 'email', Rule::unique('admins')->ignore($this->route('admin'), '_id')],
             'role_id'       => 'required|exists:roles,_id'
         ];

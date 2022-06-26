@@ -23,13 +23,11 @@ class LocationRepository
 
     public function findLocation($lat, $lng)
     {
-        //find location
-        return [];
+        return $this->model->where('lat', $lat)->where('lng', $lng)->first();
     }
 
-    public function create(GoogleFindLocation $googleFindLocation)
+    public function create(array $location)
     {
-        //create new location
-        return [];
+        return $this->model->create($location);
     }
 }

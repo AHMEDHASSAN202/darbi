@@ -217,6 +217,10 @@ function convertBsonArrayToNormalArray($bsonArray)
 function exportData($filename, array $columns, array $data)
 {
     return function () use ($filename, $columns, $data) {
+        header("Content-Description: File Transfer");
+        header("Content-Disposition: attachment; filename=".$filename);
+        header("Content-Type: application/csv; ");
+
         $file = fopen('php://output', 'w');
         fputcsv($file, array_values($columns));
 
@@ -229,10 +233,6 @@ function exportData($filename, array $columns, array $data)
         }
 
         fclose($file);
-
-        header("Content-Description: File Transfer");
-        header("Content-Disposition: attachment; filename=".$filename);
-        header("Content-Type: application/csv; ");
     };
 }
 

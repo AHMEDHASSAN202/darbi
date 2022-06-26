@@ -2,6 +2,7 @@
 
 namespace Modules\AuthModule\Http\Requests\Admin;
 
+use App\Rules\AlphaNumSpacesRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
@@ -18,7 +19,7 @@ class UpdateVendorProfileRequest extends FormRequest
         $me = auth('vendor_api')->user();
 
         return [
-            'name'      => 'required|max:100',
+            'name'      => ['required', 'max:100', new AlphaNumSpacesRule()],
             'email'     => ['required', 'email', Rule::unique('admins')->ignore($me->id, '_id')],
             'password'  => ['sometimes', 'nullable', 'max:100', 'confirmed', Password::min(8)->letters()],
             'image'     => 'sometimes|image|max:5120' //5m

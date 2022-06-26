@@ -40,7 +40,7 @@ class InitService
             'need_update'           => $this->checkIfAppNeedUpdated($request->version, $request->platform),
             'default_country'       => $this->settings->default_country,
             'default_city'          => $this->settings->default_city,
-            'push_version'          => 12
+            'push_version'          => 13
         ];
     }
 
@@ -50,7 +50,7 @@ class InitService
         $currentVersion = ['android' => $this->settings->android_app_version, 'ios' => $this->settings->ios_app_version][$platform];
 
         if (!$currentVersion) {
-            Log::alert('sometimes error when get current app version');
+            Log::alert('something error when get current app version');
         }
 
         return ($currentVersion != $userVersion);

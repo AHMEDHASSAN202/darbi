@@ -18,10 +18,10 @@ class LocationResource extends JsonResource
             'id'                => $this->_id,
             'lat'               => $this->lat,
             'lng'               => $this->lng,
-            'city'              => $this->data['city'],
-            'country'           => $this->data['country'],
-            'fully_addressed'   => $this->data['fully_addressed'],
-            'state'             => $this->data['state'],
+            'city'              => $this->city,
+            'country'           => $this->country,
+            'fully_addressed'   => $this->fully_addressed,
+            'name'              => $this->fully_addressed
         ];
     }
 }

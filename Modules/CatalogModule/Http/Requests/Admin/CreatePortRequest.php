@@ -2,6 +2,7 @@
 
 namespace Modules\CatalogModule\Http\Requests\Admin;
 
+use App\Rules\AlphaNumSpacesRule;
 use App\Rules\MongoIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -17,8 +18,8 @@ class CreatePortRequest extends FormRequest
     {
         return [
             'name'          => 'required|array',
-            'name.ar'       => 'nullable|min:2|max:100',
-            'name.en'       => 'required|min:2|max:100',
+            'name.ar'       => ['nullable', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
+            'name.en'       => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
             'country_id'    => ['required', new MongoIdRule(), Rule::exists('countries', '_id')],
             'lat'           => 'required|numeric',
             'lng'           => 'required|numeric',

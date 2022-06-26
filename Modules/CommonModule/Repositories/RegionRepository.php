@@ -14,9 +14,9 @@ class RegionRepository
 {
     private $model;
 
-    public function __construct(Region $model)
+    public function __construct()
     {
-        $this->model = $model;
+        $this->model = new Region();
     }
 
 

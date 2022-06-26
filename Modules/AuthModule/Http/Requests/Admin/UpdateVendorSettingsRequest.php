@@ -2,6 +2,7 @@
 
 namespace Modules\AuthModule\Http\Requests\Admin;
 
+use App\Rules\AlphaNumSpacesRule;
 use App\Rules\MongoIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -16,8 +17,8 @@ class UpdateVendorSettingsRequest extends FormRequest
     {
         return [
             'name'      => 'required|array',
-            'name.ar'   => 'required|max:100',
-            'name.en'   => 'required|max:100',
+            'name.ar'   => ['required', 'max:100', new AlphaNumSpacesRule('ar')],
+            'name.en'   => ['required', 'max:100', new AlphaNumSpacesRule('en')],
             'email'     => ['required', 'email'],
             'phone'     => 'required|numeric|digits_between:8,11',
             'image'     => 'sometimes|image|max:5120', //5m

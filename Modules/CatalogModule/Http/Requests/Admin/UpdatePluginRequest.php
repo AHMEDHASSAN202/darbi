@@ -2,6 +2,7 @@
 
 namespace Modules\CatalogModule\Http\Requests\Admin;
 
+use App\Rules\AlphaNumSpacesRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePluginRequest extends FormRequest
@@ -15,8 +16,8 @@ class UpdatePluginRequest extends FormRequest
     {
         return [
             'name'      => 'required|array',
-            'name.ar'   => 'nullable|min:2|max:100',
-            'name.en'   => 'required|min:2|max:100',
+            'name.ar'   => ['nullable', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
+            'name.en'   => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
             'desc.ar'   => 'nullable|min:2|max:500',
             'desc.en'   => 'required|min:2|max:500',
             'is_active' => 'nullable|boolean'

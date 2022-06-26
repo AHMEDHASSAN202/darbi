@@ -41,9 +41,10 @@ class LocationService
             $geoLocation = new GoogleFindLocation($lat, $lng);
             $locationInfo['country']    = $geoLocation->getCountry();
             $locationInfo['city']       = $geoLocation->getCity();
-            $locationInfo['fully_addressed'] =  $geoLocation->fullAddress();
-            $locationInfo['country_id'] = new ObjectId($region['country_id']);
-            $locationInfo['city_id']    = new ObjectId($region['city_id']);
+            $locationInfo['fully_addressed'] =  $geoLocation->getAddress();
+            $locationInfo['lat']        = $lat;
+            $locationInfo['lng']        = $lng;
+            $locationInfo['region_id']  = new ObjectId($region->id);
             $location = $this->locationRepository->create($locationInfo);
         }
 

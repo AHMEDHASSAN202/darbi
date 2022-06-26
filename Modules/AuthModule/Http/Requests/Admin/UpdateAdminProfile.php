@@ -2,6 +2,7 @@
 
 namespace Modules\AuthModule\Http\Requests\Admin;
 
+use App\Rules\AlphaNumSpacesRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
@@ -16,7 +17,7 @@ class UpdateAdminProfile extends FormRequest
     public function rules()
     {
         return [
-            'name'      => 'required|max:100',
+            'name'      => ['required', 'max:100', new AlphaNumSpacesRule()],
             'email'     => ['required', 'email', Rule::unique('admins')->ignore(auth('admin_api')->id(), '_id')],
             'password'  => ['required', 'max:100', 'confirmed', Password::min(8)->letters()]
         ];

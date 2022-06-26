@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->index('lat');
             $table->index('lng');
+            $table->index('region_id');
             $table->timestamps();
         });
     }

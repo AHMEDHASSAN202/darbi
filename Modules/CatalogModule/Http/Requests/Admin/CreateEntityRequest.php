@@ -2,6 +2,7 @@
 
 namespace Modules\CatalogModule\Http\Requests\Admin;
 
+use App\Rules\AlphaNumSpacesRule;
 use App\Rules\MongoIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -16,8 +17,8 @@ class CreateEntityRequest extends FormRequest
     {
         return [
             'name'              => 'required',
-            'name.en'           => 'required|min:2|max:100',
-            'name.ar'           => 'sometimes|min:2|max:100',
+            'name.ar'           => ['sometimes', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
+            'name.en'           => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
             'model_id'          => ['required', new MongoIdRule()],
             'images'            => 'nullable|sometimes|array',
             'images.*'          => 'nullable|sometimes|image|max:5120', //5m

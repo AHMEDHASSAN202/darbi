@@ -11,5 +11,7 @@ return [
     'vendor_permissions'   => [
         'manage-booking-cars', 'manage-addons', 'manage-locations', 'manage-cars-searches',
         'manage-booking-yachts', 'manage-vendors-yachts', 'manage-ports'
-    ]
+    ],
+    'used_otp_provider' => true,
+    'otp_message_text'  => 'Verification Code: %s'
 ];

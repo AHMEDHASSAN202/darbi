@@ -2,6 +2,7 @@
 
 namespace Modules\AuthModule\Http\Requests\Admin;
 
+use App\Rules\AlphaNumSpacesRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
@@ -18,7 +19,7 @@ class UpdateUserRequest extends FormRequest
         $id = $this->route('id');
 
         return [
-            'name'      => 'required|max:100',
+            'name'      => ['required', 'max:100', new AlphaNumSpacesRule()],
             'email'     => ['required', 'email', Rule::unique('vendors')->ignore($id, '_id')],
             'password'  => ['required', 'max:100', Password::min(8)->letters()],
             'phone'     => ['required', 'numeric', 'digits_between:8,15', Rule::unique('vendors')->ignore($id, '_id')],

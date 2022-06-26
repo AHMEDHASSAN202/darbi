@@ -17,9 +17,9 @@ class RegionService
 {
     private $regionRepository;
 
-    public function __construct(RegionRepository $regionRepository)
+    public function __construct()
     {
-        $this->regionRepository = $regionRepository;
+        $this->regionRepository = new RegionRepository();
     }
 
     public function regions(Request $request)
