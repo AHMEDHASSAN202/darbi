@@ -39,17 +39,18 @@ class GoogleFindLocation
 
     public function getCountry($short_name = false)
     {
-        return $this->findLongNameGivenType('country', $this->data["results"][0]["address_components"], $short_name);
+        return $this->findLongNameGivenType('country', $this->data["results"][1]["address_components"], $short_name);
     }
 
     public function getProvince($short_name = false)
     {
-        return $this->findLongNameGivenType('administrative_area_level_1', $this->data["results"][0]["address_components"], $short_name);
+        return $this->findLongNameGivenType('administrative_area_level_1', $this->data["results"][1]["address_components"], $short_name);
     }
 
     public function getCity($short_name = false)
     {
-        return $this->findLongNameGivenType('administrative_area_level_2', $this->data["results"][1]["address_components"], $short_name);
+        return $this->findLongNameGivenType('administrative_area_level_2', $this->data["results"][1]["address_components"], $short_name) ??
+               $this->findLongNameGivenType('administrative_area_level_2', $this->data["results"][2]["address_components"], $short_name);
     }
 
     public function getCountryCode()
@@ -60,6 +61,11 @@ class GoogleFindLocation
     public function getAddress()
     {
         return $this->data["results"][1]["formatted_address"];
+    }
+
+    public function getName()
+    {
+        return $this->data["results"][2]["formatted_address"];
     }
 
     public function getAllData()

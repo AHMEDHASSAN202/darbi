@@ -29,7 +29,7 @@ class LocationService
             //region not supported
             return [
                 'data'       => [],
-                'message'    => 'region not supported',
+                'message'    => 'your region not supported',
                 'statusCode' => 400
             ];
         }
@@ -42,6 +42,7 @@ class LocationService
             $locationInfo['country']    = $geoLocation->getCountry();
             $locationInfo['city']       = $geoLocation->getCity();
             $locationInfo['fully_addressed'] =  $geoLocation->getAddress();
+            $locationInfo['name'] =  $geoLocation->getName();
             $locationInfo['lat']        = $lat;
             $locationInfo['lng']        = $lng;
             $locationInfo['region_id']  = new ObjectId($region->id);

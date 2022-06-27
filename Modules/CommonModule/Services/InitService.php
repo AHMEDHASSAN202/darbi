@@ -37,15 +37,17 @@ class InitService
             'time_interval_vendor_accept_min' => $this->settings->time_interval_vendor_accept_min,
             'booking_running'       => [],
             'categories'            => CategoryResource::collection($this->settings->categories),
-            'need_update'           => $this->checkIfAppNeedUpdated($request->version, $request->platform),
+            'need_update'           => $this->appNeedUpdated($request->version, $request->platform),
+            'force_updated'         => $this->getForceUpdated($request->platform),
+            'force_updated_link'    => $this->getForceUpdatedLink($request->platform),
             'default_country'       => $this->settings->default_country,
             'default_city'          => $this->settings->default_city,
-            'push_version'          => 13
+            'push_version'          => 14
         ];
     }
 
 
-    private function checkIfAppNeedUpdated($userVersion, $platform)
+    private function appNeedUpdated($userVersion, $platform)
     {
         $currentVersion = ['android' => $this->settings->android_app_version, 'ios' => $this->settings->ios_app_version][$platform];
 
@@ -54,5 +56,19 @@ class InitService
         }
 
         return ($currentVersion != $userVersion);
+    }
+
+
+    private function getForceUpdated($platform)
+    {
+        $platform = $platform . '_force_updated';
+        return (bool)$this->settings->{$platform};
+    }
+
+
+    private function getForceUpdatedLink($platform)
+    {
+        $platform = $platform . '_force_updated_link';
+        return $this->settings->{$platform};
     }
 }

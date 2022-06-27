@@ -63,7 +63,7 @@ class RegionRepository
 
     private function _findRegionByLatLng($lat, $lng, $with = [])
     {
-        return $this->model->active()->where('location', 'near', [
+        return $this->model->active()->where('location', 'geoIntersects', [
                         '$geometry' => [
                             'type' => 'Point',
                             'coordinates' => [(float)$lng, (float)$lat],

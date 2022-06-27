@@ -92,6 +92,7 @@ class BookingFactory extends Factory
                 'charge_shop'   => ''
             ],
             'status' => ['pending','accepted','paid','cancelled_before_accept','cancelled_after_accept','rejected','picked_up','dropped','completed','force_cancelled'][mt_rand(0,9)],
+            'rejected_reason' => '',
             'status_change_log' => [
                 [
                     'old_status'    => '',

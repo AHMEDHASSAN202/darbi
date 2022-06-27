@@ -60,7 +60,7 @@
     "Plugins":{"name":{"ar":"","en":""},"price_per_day":"","is_active":"true"},
     "Vendors":{"name":{"ar":"","en":""},"image":"","is_active":"true","subscription_id":"","darbi_percentage":4.5,"country_id":"","require_activation":true},
     "Subscriptions":{"start_at":"","end_at":"","created_by":{"id":"","on_model":""}},
-    "Branches":{"vendor_id": "", "name":{"ar":"","en":""},"cover_images":[""],"is_active":"true","is_open":"","phones":[{"phone":"000000","country_code":"966"}],"address":"","lat":33.33,"lng":22.22,"require_activation":true, "darbi_percentage": null,"region_ids":[], branch_times:[{day_number: 1, day_name:"Monday",from:"09:00",to:"05:00",is_active:false}]},
+    "Branches":{"vendor_id": "", "name":{"ar":"","en":""},"cover_images":[""],"is_active":"true","is_open":"","phones":[{"phone":"000000","country_code":"966"}],"address":"","lat":33.33,"lng":22.22,"require_activation":true, "darbi_percentage": null,"region_ids":[], "branch_times":[{"day_number": 1, "day_name":"Monday","from":"09:00","to":"05:00","is_active":false}]},
     "Bookings":{
         "vendor_id":"",
         "branch_id":"",

@@ -13,5 +13,9 @@ return [
         'manage-booking-yachts', 'manage-vendors-yachts', 'manage-ports'
     ],
     'used_otp_provider' => true,
-    'otp_message_text'  => 'Verification Code: %s'
+    'otp_messages'  => [
+        'Your darbi verification code is: %s',
+        'Darbi OTP: %s . هذا الكود سري يرجى عدم مشاركته مع أحد',
+        'الكود المتغير الخاص بك في داربي هو: %s',
+    ]
 ];

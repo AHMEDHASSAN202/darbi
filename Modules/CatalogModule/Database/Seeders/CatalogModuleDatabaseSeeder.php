@@ -35,6 +35,7 @@ class CatalogModuleDatabaseSeeder extends Seeder
         Car::factory(80)->create();
         Port::factory(20)->create();
         Yacht::factory(80)->create();
+        $this->call(RegionsTableSeeder::class);
 //        $this->call(EntityPluginSeederTableSeeder::class);
     }
 }

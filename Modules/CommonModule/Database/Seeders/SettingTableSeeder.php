@@ -29,7 +29,11 @@ class SettingTableSeeder extends Seeder
             'home_main_theme'                       => 'https://via.placeholder.com/400x300',
             'specs_keys'                            => ['engine_type'],
             'android_app_version'                   => '1.0',
+            'android_force_updated'                 => false,
+            'android_force_updated_link'            => '',
             'ios_app_version'                       => '1.0',
+            'ios_force_updated'                     => false,
+            'ios_force_updated_link'                => '',
             'default_country'                       => 'AE',
             'default_city'                          => 'DU',
         ];

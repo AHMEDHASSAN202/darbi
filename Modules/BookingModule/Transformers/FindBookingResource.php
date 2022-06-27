@@ -24,6 +24,7 @@ class FindBookingResource extends JsonResource
             'id'            => $this->_id,
             'status_label'  => __($this->status),
             'status'        => $this->status,
+            'rejected_reason' => $this->rejected_reason,
             'entity'        => $this->entity(),
             'start'         => $this->start_booking_at,
             'end'           => $this->end_booking_at,

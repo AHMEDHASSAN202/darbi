@@ -21,7 +21,7 @@ class LocationResource extends JsonResource
             'city'              => $this->city,
             'country'           => $this->country,
             'fully_addressed'   => $this->fully_addressed,
-            'name'              => $this->fully_addressed
+            'name'              => $this->name
         ];
     }
 }
