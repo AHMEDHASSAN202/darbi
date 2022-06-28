@@ -16,10 +16,10 @@ class CreatePluginRequest extends FormRequest
     {
         return [
             'name'      => 'required|array',
-            'name.ar'   => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
-            'name.en'   => ['nullable', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
-            'desc.ar'   => 'required|min:2|max:500',
-            'desc.en'   => 'nullable|min:2|max:500',
+            'name.ar'   => ['nullable', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
+            'name.en'   => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
+            'desc.ar'   => ['nullable', 'min:2', 'max:500', new AlphaNumSpacesRule('ar')],
+            'desc.en'   => ['nullable', 'min:2', 'max:500', new AlphaNumSpacesRule('en')],
             'is_active' => 'nullable|boolean'
         ];
     }

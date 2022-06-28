@@ -22,7 +22,6 @@ Route::group([
 });
 
 
-
 //user vendor profile
 Route::group([
     'prefix'     => 'profile',

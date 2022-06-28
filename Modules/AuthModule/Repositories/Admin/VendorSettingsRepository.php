@@ -11,7 +11,6 @@ use Modules\AuthModule\Http\Requests\Admin\UpdateInfoVendorProfile;
 use Modules\AuthModule\Http\Requests\Admin\UpdateVendorSettingsRequest;
 use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Traits\ImageHelperTrait;
-use MongoDB\BSON\ObjectId;
 
 class VendorSettingsRepository
 {
@@ -30,9 +29,8 @@ class VendorSettingsRepository
         $vendor->name = $updateVendorInfoRequest->name;
         $vendor->email = $updateVendorInfoRequest->email;
         $vendor->phone = $updateVendorInfoRequest->phone;
-        $vendor->country = new ObjectId($updateVendorInfoRequest->country);
         if ($updateVendorInfoRequest->hasFile('image')) {
-            $vendor->image = $this->uploadAvatar($updateVendorInfoRequest->image);
+            $vendor->image = $this->uploadImage('vendors', $updateVendorInfoRequest->image);
         }
         $vendor->settings = $updateVendorInfoRequest->settings ?? [];
         $vendor->save();

@@ -96,12 +96,19 @@ class Entity extends Base
             $query->where('state', $state);
         }
 
-        return $this->scopeSearch($query, $request);
+        return $this->scopeFilter($query, $request);
     }
 
     public function scopeAdminSearch($query, Request $request)
     {
-        return $this->scopeFilter($query, $request);
+        $q = $request->get('q');
+
+        if (!$q) return $query;
+
+        return $query->where(function ($query) use ($q) {
+            $q = '%' . $q . '%';
+            $query->where('name.en', 'LIKE', $q)->orWhere('name.ar', 'LIKE', $q);
+        });
     }
 
     //================ #END# scopes =========================\\

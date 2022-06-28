@@ -32,7 +32,6 @@ class BookingFactory extends Factory
         $user = User::all()->random(1)->first();
         $ent = Car::withoutGlobalScope('car')->with(['model', 'brand', 'country', 'city'])->get()->random(1)->first();
         $branch = $vendor->branches()->first();
-        $country = Country::all()->random(1)->first();
         $region = Region::active()->get()->random(1)->first();
 
         return [
@@ -41,7 +40,6 @@ class BookingFactory extends Factory
             'vendor_id'             => new ObjectId($vendor->_id),
             'branch_id'             => $branch ? new ObjectId($branch->_id): null,
             'branch'                => $branch,
-            'country_id'            => new ObjectId($country->_id),
             'entity_id'             => new ObjectId($ent->_id),
             'entity_type'           => $ent->type,
             'start_booking_at'      => now()->subDay()->timestamp,
@@ -109,8 +107,7 @@ class BookingFactory extends Factory
             'payment_method'        => [
                 'type'  => ['cash','credit','applepay'][mt_rand(0,2)],
                 'extra_info' => []
-            ],
-            'country'   => new CountryResource($vendor->country)
+            ]
         ];
     }
 }

@@ -17,8 +17,8 @@ class PortResource extends JsonResource
         return [
             'id'              => $this->_id,
             'name'            => translateAttribute($this->name),
-            'country'         => translateAttribute($this->country),
-            'city'            => translateAttribute($this->city),
+            'country'         => translateAttribute($this->country->name),
+            'city'            => translateAttribute($this->city->name),
             'fully_addressed' => $this->fully_addressed,
             'lat'             => $this->lat,
             'lng'             => $this->lng,

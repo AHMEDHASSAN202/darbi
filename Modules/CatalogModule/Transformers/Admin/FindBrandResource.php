@@ -4,7 +4,7 @@ namespace Modules\CatalogModule\Transformers\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BrandResource extends JsonResource
+class FindBrandResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,7 @@ class BrandResource extends JsonResource
     {
         return [
             'id'        => $this->_id,
-            'name'      => translateAttribute($this->name),
+            'name'      => $this->name,
             'logo'      => imageUrl($this->logo),
             'is_active' => (boolean)$this->is_active
         ];

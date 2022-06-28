@@ -13,7 +13,7 @@
 */
 
 
-//plugins routes
+//plugin routes
 Route::group([
     'prefix'    => 'plugins',
     'middleware' => ['auth:admin_api']
@@ -26,7 +26,7 @@ Route::group([
 });
 
 
-//ports routes
+//port routes
 Route::group([
     'prefix'    => 'ports',
     'middleware'=> ['auth:admin_api']
@@ -36,4 +36,17 @@ Route::group([
     Route::post(''            , 'PortController@store');
     Route::put('{port}'       , 'PortController@update');
     Route::delete('{port}'    , 'PortController@destroy');
+});
+
+
+//brand routes
+Route::group([
+    'prefix'    => 'brands',
+    'middleware'=> ['auth:admin_api']
+], function () {
+    Route::get(''             , 'BrandController@index');
+    Route::get('{brand}'       , 'BrandController@show');
+    Route::post(''            , 'BrandController@store');
+    Route::put('{brand}'       , 'BrandController@update');
+    Route::delete('{brand}'    , 'BrandController@destroy');
 });

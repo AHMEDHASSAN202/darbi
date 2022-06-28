@@ -129,7 +129,7 @@ class BranchService
 
         unset($images[$imageIndex]);
 
-        $branch->update(['cover_images' => $images]);
+        $branch->update(['cover_images' => array_values($images)]);
 
         return $branch;
     }

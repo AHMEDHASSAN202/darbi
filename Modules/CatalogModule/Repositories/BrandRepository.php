@@ -8,9 +8,12 @@ namespace Modules\CatalogModule\Repositories;
 
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Entities\Brand;
+use Modules\CommonModule\Traits\CrudRepositoryTrait;
 
 class BrandRepository
 {
+    use CrudRepositoryTrait;
+
     public function __construct(Brand $model)
     {
         $this->model = $model;

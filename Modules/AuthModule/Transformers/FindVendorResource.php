@@ -3,9 +3,10 @@
 namespace Modules\AuthModule\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\CommonModule\Transformers\CountryResource;
 use function asset;
 
-class VendorDetailsResource extends JsonResource
+class FindVendorResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,12 +18,13 @@ class VendorDetailsResource extends JsonResource
     {
         return [
             'id'        => $this->_id,
-            'name'      => $request->has('for-edit') ? $this->name : translateAttribute($this->name),
+            'name'      => $this->name,
             'email'     => $this->email,
             'phone'     => $this->phone,
+            'phone_code'=> optional($this->country)->calling_code,
             'image'     => imageUrl($this->image),
             'type'      => $this->type,
-            'country'   => (string)$this->country_id,
+            'country'   => new CountryResource($this->country),
             'settings'  => $this->settings
         ];
     }

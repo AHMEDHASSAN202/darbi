@@ -51,7 +51,7 @@ trait EntityHelperService
 
         unset($images[$imageIndex]);
 
-        $car->update(['images' => $images]);
+        $car->update(['images' => array_values($images)]);
 
         return $car;
     }
@@ -93,7 +93,7 @@ trait EntityHelperService
 
         $images = $entity->images ?? [];
 
-        $images = $images + $this->handleImages($request->images, $this->uploadDirectory);
+        $images = array_merge($images, $this->handleImages($request->images, $this->uploadDirectory));
 
         $unavailableDate = $this->prepareUnavailableDate($request->unavailable_date);
 

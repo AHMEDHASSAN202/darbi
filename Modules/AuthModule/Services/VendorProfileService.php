@@ -10,7 +10,7 @@ use Modules\AuthModule\Http\Requests\Admin\UpdateInfoVendorProfile;
 use Modules\AuthModule\Http\Requests\Admin\UpdateVendorSettingsRequest;
 use Modules\AuthModule\Repositories\Admin\VendorProfileRepository;
 use Modules\AuthModule\Transformers\AdminProfileResource;
-use Modules\AuthModule\Transformers\VendorDetailsResource;
+use Modules\AuthModule\Transformers\FindVendorResource;
 
 
 class VendorProfileService
@@ -42,13 +42,13 @@ class VendorProfileService
     {
         $vendor = $this->vendorProfileRepository->updateVendorInfo($updateVendorInfoRequest);
 
-        return new VendorDetailsResource($vendor);
+        return new FindVendorResource($vendor);
     }
 
     public function getVendor()
     {
         $vendor = auth($this->guardName)->user()->vendor;
 
-        return new VendorDetailsResource($vendor);
+        return new FindVendorResource($vendor);
     }
 }

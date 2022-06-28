@@ -6,7 +6,9 @@ use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Modules\CommonModule\Entities\City;
 use Modules\CommonModule\Entities\Country;
+use MongoDB\BSON\ObjectId;
 
 class Port extends Base
 {
@@ -31,6 +33,11 @@ class Port extends Base
         return $this->belongsTo(Country::class);
     }
 
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
     //=============== #END# relation =====================\\
 
     //================ Scopes =========================\\
@@ -40,10 +47,20 @@ class Port extends Base
         return $query->where('is_active', true);
     }
 
-    public function scopeSearch($query, $request)
+    public function scopeFilters($query, $request)
     {
         if ($countryId = $request->get('country_id')) {
-            $query->where('country_id', $countryId);
+            $query->where('country_id', new ObjectId($countryId));
+        }
+    }
+
+    public function scopeSearch($query, $request)
+    {
+        if ($q = $request->get('q')) {
+            $query->where(function ($query) use ($q) {
+                $q = '%' . $q . '%';
+                $query->where('name.ar', 'LIKE', $q)->orWhere('name.en', 'LIKE', $q);
+            });
         }
     }
 
@@ -54,7 +71,7 @@ class Port extends Base
 
     public function scopeAdminFilters($query, Request $request)
     {
-
+        $this->scopeFilters($query, $request);
     }
 
     //================ #END# scopes =========================\\

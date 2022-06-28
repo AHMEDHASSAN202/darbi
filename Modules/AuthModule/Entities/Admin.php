@@ -55,4 +55,18 @@ class Admin extends BaseAuthenticatable implements JWTSubject
         }
     }
     //============= #END# scopes ==============\\
+
+    //================ Helpers ====================\\
+
+    public function isVendor()
+    {
+        return $this->type === 'vendor';
+    }
+
+    public function isAdmin()
+    {
+        return $this->type === 'admin';
+    }
+
+    //==================== #END# Helpers ================\\
 }

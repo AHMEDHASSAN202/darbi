@@ -8,13 +8,11 @@ namespace Modules\CatalogModule\Services\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Modules\CatalogModule\Entities\Port;
 use Modules\CatalogModule\Http\Requests\Admin\CreatePortRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdatePortRequest;
-use Modules\CatalogModule\Repositories\BrandRepository;
 use Modules\CatalogModule\Repositories\PortRepository;
-use Modules\CatalogModule\Transformers\BrandResource;
-use Modules\CatalogModule\Transformers\PortResource;
+use Modules\CatalogModule\Transformers\Admin\FindPortResource;
+use Modules\CatalogModule\Transformers\Admin\PortResource;
 use Modules\CommonModule\Transformers\PaginateResource;
 use MongoDB\BSON\ObjectId;
 
@@ -34,13 +32,16 @@ class PortService
             $wheres['is_active'] = true;
         }
 
-        $brands = $this->portRepository->listOfPortsForDashboard($request, $wheres);
+        $ports = $this->portRepository->listOfPortsForDashboard($request, $wheres);
 
-        if ($brands instanceof LengthAwarePaginator) {
-            return new PaginateResource(\Modules\CatalogModule\Transformers\Admin\PortResource::collection($brands));
-        }
+        return new PaginateResource(PortResource::collection($ports));
+    }
 
-        return \Modules\CatalogModule\Transformers\Admin\PortResource::collection($brands);
+    public function find($portId)
+    {
+        $port = $this->portRepository->find($portId, [], ['country', 'city']);
+
+        return new FindPortResource($port);
     }
 
     public function create(CreatePortRequest $createPortRequest)
@@ -48,6 +49,7 @@ class PortService
         $port = $this->portRepository->create([
             'name'       => $createPortRequest->name,
             'country_id' => new ObjectId($createPortRequest->country_id),
+            'city_id'    => new ObjectId($createPortRequest->city_id),
             'lat'        => $createPortRequest->lat,
             'lng'        => $createPortRequest->lng,
             'is_active'  => ($createPortRequest->is_active === null) || (boolean)$createPortRequest->is_active
@@ -63,6 +65,7 @@ class PortService
         $port = $this->portRepository->update($id, [
             'name'       => $updatePortRequest->name,
             'country_id' => new ObjectId($updatePortRequest->country_id),
+            'city_id'    => new ObjectId($updatePortRequest->city_id),
             'lat'        => $updatePortRequest->lat,
             'lng'        => $updatePortRequest->lng,
             'is_active'  => ($updatePortRequest->is_active === null) || (boolean)$updatePortRequest->is_active

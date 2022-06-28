@@ -24,16 +24,7 @@ class AuthAdminController extends Controller
         $this->authAdminService = $authAdminService;
     }
 
-    /**
-     * Login Admin
-     *
-     * Login admin request. If everything is okay, you'll get a 200 OK response and user access token.
-     * Otherwise, the request will fail with a 400 || 422 || 401 || 500 error
-     * @bodyParam email string required the admin mail.
-     * @bodyParam password string required the admin password.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function login(LoginToAdminRequest $loginToDashboardRequest)
     {
         $result = $this->authAdminService->login($loginToDashboardRequest, 'admin');

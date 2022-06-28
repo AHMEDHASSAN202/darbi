@@ -8,11 +8,7 @@ use Modules\AuthModule\Services\AdminProfileService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 use function __;
 
-/**
- * @gorup Admin Profile
- *
- * Management Admin Profile
- */
+
 class AdminProfileController extends Controller
 {
     use ApiResponseTrait;
@@ -24,11 +20,7 @@ class AdminProfileController extends Controller
         $this->adminProfileService = $adminProfileService;
     }
 
-    /**
-     * Admin Profile
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function getProfile()
     {
         $profile = $this->adminProfileService->getProfile();
@@ -36,15 +28,7 @@ class AdminProfileController extends Controller
         return $this->apiResponse(compact('profile'));
     }
 
-    /**
-     * Update Admin Profile
-     *
-     * @bodyParam name string required
-     * @bodyParam email string required
-     * @bodyParam password string required
-     * @param UpdateAdminProfile $updateAdminProfile
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function updateProfile(UpdateAdminProfile $updateAdminProfile)
     {
         $profile = $this->adminProfileService->updateProfile($updateAdminProfile);

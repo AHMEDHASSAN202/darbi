@@ -19,7 +19,8 @@ class UpdateAdminProfile extends FormRequest
         return [
             'name'      => ['required', 'max:100', new AlphaNumSpacesRule()],
             'email'     => ['required', 'email', Rule::unique('admins')->ignore(auth('admin_api')->id(), '_id')],
-            'password'  => ['required', 'max:100', 'confirmed', Password::min(8)->letters()]
+            'password'  => ['sometimes', 'nullable', 'max:100', 'confirmed', Password::min(8)->letters()],
+            'image'     => 'sometimes|image|max:5120' //5m
         ];
     }
 

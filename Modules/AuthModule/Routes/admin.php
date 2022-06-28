@@ -21,6 +21,7 @@ Route::group([
     'namespace'  => 'Role'
 ], function () {
     Route::get(''                       , 'RoleController@index');
+    Route::get('{role}'                 , 'RoleController@show');
     Route::post(''                      , 'RoleController@store');
     Route::put('{role}'                 , 'RoleController@update');
     Route::delete('{role}'              , 'RoleController@destroy');

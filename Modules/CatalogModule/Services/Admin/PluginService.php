@@ -12,7 +12,7 @@ use Modules\CatalogModule\Http\Requests\Admin\CreatePluginRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdatePluginRequest;
 use Modules\CatalogModule\Repositories\PluginRepository;
 use Modules\CatalogModule\Transformers\Admin\FindPluginResource;
-use Modules\CatalogModule\Transformers\PluginResource;
+use Modules\CatalogModule\Transformers\Admin\PluginResource;
 use Modules\CommonModule\Transformers\PaginateResource;
 
 class PluginService

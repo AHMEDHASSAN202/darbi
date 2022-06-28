@@ -4,6 +4,7 @@ namespace Modules\AuthModule\Http\Requests\Admin;
 
 use App\Rules\AlphaNumSpacesRule;
 use App\Rules\MongoIdRule;
+use App\Rules\PhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateVendorSettingsRequest extends FormRequest
@@ -20,9 +21,9 @@ class UpdateVendorSettingsRequest extends FormRequest
             'name.ar'   => ['required', 'max:100', new AlphaNumSpacesRule('ar')],
             'name.en'   => ['required', 'max:100', new AlphaNumSpacesRule('en')],
             'email'     => ['required', 'email'],
-            'phone'     => 'required|numeric|digits_between:8,11',
+            'phone'     => ['required', 'numeric', new PhoneRule($this->request->get('phone_code'))],
+            'phone_code' => 'required|exists:countries,calling_code',
             'image'     => 'sometimes|image|max:5120', //5m
-            'country'   => ['required', new MongoIdRule],
             'settings'  => 'nullable|sometimes|array'
         ];
     }

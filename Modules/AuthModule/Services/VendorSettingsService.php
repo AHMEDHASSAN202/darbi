@@ -11,7 +11,7 @@ use Modules\AuthModule\Http\Requests\Admin\UpdateVendorSettingsRequest;
 use Modules\AuthModule\Repositories\Admin\VendorProfileRepository;
 use Modules\AuthModule\Repositories\Admin\VendorSettingsRepository;
 use Modules\AuthModule\Transformers\AdminProfileResource;
-use Modules\AuthModule\Transformers\VendorDetailsResource;
+use Modules\AuthModule\Transformers\FindVendorResource;
 
 
 class VendorSettingsService
@@ -27,13 +27,13 @@ class VendorSettingsService
     {
         $vendor = $this->vendorSettingsRepository->updateVendorInfo($updateVendorInfoRequest);
 
-        return new VendorDetailsResource($vendor);
+        return new FindVendorResource($vendor);
     }
 
     public function getSettings()
     {
-        $vendor = auth($this->guardName)->user()->vendor;
+        $vendor = auth('vendor_api')->user()->vendor->load('country');
 
-        return new VendorDetailsResource($vendor);
+        return new FindVendorResource($vendor);
     }
 }

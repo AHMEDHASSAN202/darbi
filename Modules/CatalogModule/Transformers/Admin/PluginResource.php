@@ -18,6 +18,8 @@ class PluginResource extends JsonResource
             'id'            => (string)$this->_id,
             'name'          => translateAttribute($this->name),
             'desc'          => translateAttribute($this->desc),
+            'entity_type'   => $this->entity_type,
+            'is_active'     => (bool)$this->is_active
         ];
     }
 

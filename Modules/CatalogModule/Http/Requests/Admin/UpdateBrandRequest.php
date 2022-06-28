@@ -2,6 +2,7 @@
 
 namespace Modules\CatalogModule\Http\Requests\Admin;
 
+use App\Rules\AlphaNumSpacesRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateBrandRequest extends FormRequest
@@ -14,7 +15,11 @@ class UpdateBrandRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name'          => 'required|array',
+            'name.ar'       => ['nullable', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
+            'name.en'       => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
+            'logo'          => 'nullable|image|max:5120',
+            'is_active'     => 'nullable|boolean'
         ];
     }
 

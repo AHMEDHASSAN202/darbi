@@ -18,8 +18,8 @@ class UpdatePluginRequest extends FormRequest
             'name'      => 'required|array',
             'name.ar'   => ['nullable', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
             'name.en'   => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
-            'desc.ar'   => 'nullable|min:2|max:500',
-            'desc.en'   => 'required|min:2|max:500',
+            'desc.ar'   => ['nullable', 'min:2', 'max:500', new AlphaNumSpacesRule('ar')],
+            'desc.en'   => ['nullable', 'min:2', 'max:500', new AlphaNumSpacesRule('en')],
             'is_active' => 'nullable|boolean'
         ];
     }

@@ -22,6 +22,8 @@ class PortRepository
     public function listOfPorts(Request $request)
     {
         $query = $this->model->search($request)
+                             ->filters($request)
+                             ->with(['country', 'city'])
                              ->active()
                              ->latest();
 
@@ -34,12 +36,6 @@ class PortRepository
 
     public function listOfPortsForDashboard(Request $request, $wheres = [])
     {
-        $query = $this->model->adminSearch($request)->adminFilters($request)->with('country')->latest()->where($wheres);
-
-        if ($request->has('paginated')) {
-            return $query->paginate($request->get('limit', 20));
-        }
-
-        return $query->get();
+        return $this->model->adminSearch($request)->adminFilters($request)->with('country')->latest()->where($wheres)->paginate($request->get('limit', 20));
     }
 }

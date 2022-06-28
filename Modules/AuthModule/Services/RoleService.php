@@ -29,6 +29,13 @@ class RoleService
         return new PaginateResource(RoleResource::collection($roles));
     }
 
+    public function find($roleId)
+    {
+        $role = $this->roleRepository->find($roleId);
+
+        return new RoleResource($role);
+    }
+
     public function createRole($request)
     {
         $role = $this->roleRepository->create(['name' => $request->name, 'permissions' => json_encode($request->permissions), 'guard' => $request->guard]);

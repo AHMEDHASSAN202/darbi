@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\AuthModule\Http\Controllers\Admin\Profile;
+namespace Modules\AuthModule\Http\Controllers\Admin\Settings;
 
 use Illuminate\Routing\Controller;
 use Modules\AuthModule\Http\Requests\Admin\UpdateInfoVendorProfile;

@@ -42,7 +42,7 @@ class InitService
             'force_updated_link'    => $this->getForceUpdatedLink($request->platform),
             'default_country'       => $this->settings->default_country,
             'default_city'          => $this->settings->default_city,
-            'push_version'          => 14
+            'push_version'          => 15
         ];
     }
 

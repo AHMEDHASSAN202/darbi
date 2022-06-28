@@ -13,9 +13,6 @@ class PermissionService
 {
     public function findAll($request)
     {
-        return [
-            'admin'  => config('authmodule.permissions'),
-            'vendor' => config('authmodule.vendor_permissions')
-        ];
+        return config('authmodule.permissions');
     }
 }
