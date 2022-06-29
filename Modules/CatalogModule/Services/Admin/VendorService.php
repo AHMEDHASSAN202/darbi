@@ -9,8 +9,11 @@ namespace Modules\CatalogModule\Services\Admin;
 use Illuminate\Http\Request;
 use Modules\AuthModule\Http\Requests\Admin\CreateUserRequest;
 use Modules\AuthModule\Http\Requests\Admin\UpdateUserRequest;
+use Modules\CatalogModule\Http\Requests\Admin\CreateVendorRequest;
+use Modules\CatalogModule\Http\Requests\Admin\UpdateVendorRequest;
 use Modules\CatalogModule\Repositories\VendorRepository;
 use Modules\CatalogModule\Services\UserResource;
+use Modules\CatalogModule\Transformers\FindVendorResource;
 use Modules\CommonModule\Traits\ImageHelperTrait;
 use Modules\CommonModule\Transformers\PaginateResource;
 
@@ -25,33 +28,40 @@ class VendorService
         $this->vendorRepository = $vendorRepository;
     }
 
-    public function list(Request $request)
+    public function findAll(Request $request)
     {
         $vendors = $this->vendorRepository->listOfVendors($request->get('limit', 20), $request);
 
         return new PaginateResource(UserResource::collection($vendors));
     }
 
-    public function create(CreateUserRequest $createVendorRequest)
+    public function find($vendorId)
     {
-        $data = $createVendorRequest->validated();
+        $vendor = $this->vendorRepository->findOne($vendorId);
 
-        if ($createVendorRequest->hasFile('image')) {
-            $data['image'] = $this->uploadAvatar($createVendorRequest->file('image'));
-        }
-
-        return $this->vendorRepository->create($data);
+        return new FindVendorResource($vendor);
     }
 
-    public function update($id, UpdateUserRequest $updateVendorRequest)
+    public function create(CreateVendorRequest $createVendorRequest)
     {
-        $data = $updateVendorRequest->validated();
+        $data = [];
 
-        if ($updateVendorRequest->hasFile('image')) {
-            $data['image'] = $this->uploadAvatar($updateVendorRequest->file('image'));
-        }
+        $vendor = $this->vendorRepository->create($data);
 
-        return $this->vendorRepository->update($id, $data);
+        return [
+            'id'        => $vendor->id
+        ];
+    }
+
+    public function update($id, UpdateVendorRequest $updateVendorRequest)
+    {
+        $data = [];
+
+        $vendor = $this->vendorRepository->update($id, $data);
+
+        return [
+            'id'        => $vendor->id
+        ];
     }
 
     public function destroy($id)

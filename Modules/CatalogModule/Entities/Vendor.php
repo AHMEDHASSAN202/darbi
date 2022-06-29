@@ -5,9 +5,11 @@ namespace Modules\CatalogModule\Entities;
 
 use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Modules\CatalogModule\Database\factories\VendorFactory;
 use Modules\CommonModule\Entities\Country;
+use MongoDB\BSON\ObjectId;
 
 
 class Vendor extends Base
@@ -38,10 +40,17 @@ class Vendor extends Base
     //============= #END# Relations ===================\\
 
     //============= scopes ==============\\
-    public function scopeAdminSearch($query)
+    public function scopeSearch($query, Request $request)
     {
-        if ($q = request()->q) {
+        if ($q = $request->get('q')) {
             return $query->where('name', 'LIKE', '%' . $q .'%');
+        }
+    }
+
+    public function scopeFilter($query, Request $request)
+    {
+        if ($country = $request->get('country')) {
+            $query->where('country_id', new ObjectId($country));
         }
     }
     //============= #END# scopes ==============\\

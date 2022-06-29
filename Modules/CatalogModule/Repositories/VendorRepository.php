@@ -6,6 +6,7 @@
 
 namespace Modules\CatalogModule\Repositories;
 
+use Illuminate\Http\Request;
 use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Traits\CrudRepositoryTrait;
 use MongoDB\BSON\ObjectId;
@@ -21,9 +22,18 @@ class VendorRepository
         $this->model = $model;
     }
 
-    public function listOfVendors($limit = 20)
+    public function listOfVendors(Request $request)
     {
-        return $this->list($limit, 'adminSearch');
+        $paginated = $request->get('paginated');
+        $limit = $request->get('limit');
+
+        $query = $this->model->search($request)->filter($request)->latest()->with('country');
+
+        if ($paginated) {
+            return $query->paginate($limit);
+        }
+
+        return $query->get();
     }
 
     public function findOne($vendorId)

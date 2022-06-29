@@ -28,7 +28,7 @@ class AdminRepository
     {
         $meId = auth('admin_api')->id();
 
-        return $this->model->search($request)->filter($request)->with('role:id,name,guard')->where('_id', '!=', new ObjectId($meId))->where('type', $type)->paginate($limit);
+        return $this->model->search($request)->filter($request)->with('role')->where('_id', '!=', new ObjectId($meId))->where('type', $type)->paginate($limit);
     }
 
     public function update($id, $data)
