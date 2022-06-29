@@ -3,8 +3,9 @@
 namespace Modules\AuthModule\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use function asset;
 
-class UserResource extends JsonResource
+class FindUserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -24,6 +25,10 @@ class UserResource extends JsonResource
             'phone'     => $this->phone,
             'image'     => $image,
             'is_active' => (boolean)$this->is_active,
+            'identity'      => [
+                'frontside_image'   => imageUrl(@$this->identity['frontside_image']),
+                'backside_image'    => imageUrl(@$this->identity['backside_image'])
+            ],
             'is_profile_completed' => (!empty($this->name) && !empty(@$this->identity['frontside_image']) && !empty(@$this->identity['backside_image']))
         ];
     }

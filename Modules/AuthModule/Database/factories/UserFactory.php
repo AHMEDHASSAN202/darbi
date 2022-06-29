@@ -33,7 +33,6 @@ class UserFactory extends Factory
                 'backside_image'    => $this->faker->imageUrl(500, 250, null, false, 'BackSide')
             ],
             'name'          => $this->faker->name(),
-            'email'         => $this->faker->email,
             'is_active'     => $this->faker->boolean(),
 //            'verification_code' => (int)$this->faker->unique()->numerify('#####'),
         ];

@@ -4,15 +4,18 @@ namespace Modules\AuthModule\Entities;
 
 use App\Eloquent\BaseAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\AuthModule\Database\factories\UserFactory;
 use Modules\CommonModule\Entities\Country;
+use MongoDB\BSON\ObjectId;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends BaseAuthenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
 
     protected $guarded = [];
@@ -42,18 +45,29 @@ class User extends BaseAuthenticatable implements JWTSubject
 
     //============= Relations ===================\\
 
-    public function country()
-    {
-        return $this->belongsTo(Country::class);
-    }
 
     //============= #END# Relations ===================\\
 
     //============= scopes ==============\\
-    public function scopeAdminSearch($query)
+    public function scopeSearch($query, Request $request)
     {
-        if ($q = request()->q) {
+        if ($q = $request->get('q')) {
             return $query->where('name', 'LIKE', '%' . $q .'%');
+        }
+    }
+
+    public function scopeFilter($query, Request $request)
+    {
+        if ($phone = $request->get('phone')) {
+            $query->where('phone', 'LIKE', '%' . $phone . '%');
+        }
+
+        if ($request->get('active')) {
+            $query->where('is_active', true);
+        }
+
+        if ($userId = $request->get('userId')) {
+            $query->where('_id', new ObjectId($userId));
         }
     }
     //============= #END# scopes ==============\\

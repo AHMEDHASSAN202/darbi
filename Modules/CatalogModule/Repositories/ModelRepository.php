@@ -36,7 +36,7 @@ class ModelRepository
 
     public function listOfModelsForDashboard(Request $request, $wheres = [])
     {
-        $query = $this->model->adminSearch($request)->adminFilters($request)->latest()->where($wheres);
+        $query = $this->model->adminSearch($request)->adminFilters($request)->latest()->with('brand')->where($wheres);
 
         if ($request->has('paginated')) {
             return $query->paginate($request->get('limit', 20));

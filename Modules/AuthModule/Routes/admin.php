@@ -54,6 +54,20 @@ Route::group([
 
 
 
+//user routes
+Route::group([
+    'prefix'     => 'users',
+    'middleware' => ['auth:admin_api', 'permission:manage-admins'],
+    'namespace'  => 'CURD'
+], function () {
+    Route::get(''                       , 'UserController@index');
+    Route::get('{user}'                 , 'UserController@show');
+    Route::put('{user}/toggle-active'   , 'UserController@toggleActive');
+    Route::delete('{admin}'             , 'UserController@destroy');
+});
+
+
+
 //admin activities
 Route::group([
     'prefix'     => 'activities',

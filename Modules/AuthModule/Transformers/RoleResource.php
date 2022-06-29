@@ -17,7 +17,8 @@ class RoleResource extends JsonResource
         return [
             'id'            => $this->id,
             'name'          => $this->name,
-            'guard'         => $this->guard
+            'guard'         => $this->guard,
+            'permissions_count' => @count($this->permissions) ?? 0
         ];
     }
 }

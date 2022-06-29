@@ -7,6 +7,7 @@
 namespace Modules\CatalogModule\Services\Admin;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Http\Requests\Admin\CreateModelRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateModelRequest;
@@ -52,7 +53,7 @@ class ModelService
 
     public function find($id)
     {
-        $model = $this->modelRepository->find($id);
+        $model = $this->modelRepository->find($id, [], ['brand']);
 
         return new FindModelResource($model);
     }
@@ -65,7 +66,7 @@ class ModelService
         $data['images'] = $this->uploadImages($this->uploadDirectory, $createModelRequest->images);
         $data['is_active'] = ($createModelRequest->is_active === null) || (boolean)$createModelRequest->is_active;
         $data['entity_type'] = $brand->entity_type;
-        $data['specs']  = !empty($createModelRequest->specs) ? $createModelRequest->specs : [];
+        $data['specs']  = $this->handleSpecs([], $createModelRequest->specs ?? []);
 
         $model = $this->modelRepository->create($data);
 
@@ -85,7 +86,7 @@ class ModelService
             'is_active'  => ($updateModelRequest->is_active === null) || (boolean)$updateModelRequest->is_active,
             'entity_type'=> $brand->entity_type,
             'images'     => array_merge($images, $this->uploadImages($this->uploadDirectory, $updateModelRequest->images)),
-            'specs'      => !empty($updateModelRequest->specs) ? $updateModelRequest->specs : []
+            'specs'      => $this->handleSpecs($model->specs, $updateModelRequest->specs ?? [])
         ];
 
         $model = $this->modelRepository->update($id, $data);
@@ -116,5 +117,34 @@ class ModelService
         return [
             'id'    => $model->_id
         ];
+    }
+
+    private function handleSpecs(array $oldSpecs, array $newSpecs)
+    {
+        if (empty($newSpecs)) {
+            return $oldSpecs;
+        }
+
+        $specs = [];
+
+        foreach ($newSpecs as $spec) {
+            if (in_array($spec['key'], $oldSpecs)) {
+                //edit
+                $specs[$spec['key']] = [
+                    'key'   => $spec['key'],
+                    'value' => $spec['value'],
+                    'image' => (($spec['image'] instanceof UploadedFile) ? $this->uploadImage('specs', $spec['image']) : $oldSpecs[$spec['key']]['image'])
+                ];
+            }else {
+                //add
+                $specs[$spec['key']] = [
+                    'key'   => $spec['key'],
+                    'value' => $spec['value'],
+                    'image' => $this->uploadImage('specs', $spec['image'])
+                ];
+            }
+        }
+
+        return $specs;
     }
 }

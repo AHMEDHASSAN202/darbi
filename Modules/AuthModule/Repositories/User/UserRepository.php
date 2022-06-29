@@ -24,9 +24,33 @@ class UserRepository
     public function createUserFromSignin($phone, $phoneCode)
     {
         return $this->model->create([
-                'phone'         => $phone,
-                'phone_code'    => $phoneCode,
-                'is_active'     => true
-            ]);
+            'phone' => $phone,
+            'phone_code' => $phoneCode,
+            'is_active' => true
+        ]);
+    }
+
+    public function findAll(Request $request)
+    {
+        return $this->model->search($request)->filter($request)->latest()->paginate($request->get('limit', 20));
+    }
+
+    public function find($userId)
+    {
+        return $this->model->findOrFail($userId);
+    }
+
+    public function destroy($userId)
+    {
+        return $this->model->destroy($userId);
+    }
+
+    public function toggleActive($userId)
+    {
+        $user = $this->model->findOrFail($userId);
+        $user->is_active = !$user->is_active;
+        $user->save();
+
+        return $user;
     }
 }

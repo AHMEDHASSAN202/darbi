@@ -9,6 +9,7 @@ namespace Modules\AuthModule\Services;
 use Illuminate\Http\Request;
 use Modules\AdminModule\Transformers\RoleCollection;
 use Modules\AuthModule\Repositories\Admin\RoleRepository;
+use Modules\AuthModule\Transformers\FindRoleResource;
 use Modules\AuthModule\Transformers\RoleResource;
 use Modules\CommonModule\Transformers\PaginateResource;
 
@@ -33,21 +34,21 @@ class RoleService
     {
         $role = $this->roleRepository->find($roleId);
 
-        return new RoleResource($role);
+        return new FindRoleResource($role);
     }
 
     public function createRole($request)
     {
         $role = $this->roleRepository->create(['name' => $request->name, 'permissions' => json_encode($request->permissions), 'guard' => $request->guard]);
 
-        return new RoleResource($role);
+        return new FindRoleResource($role);
     }
 
     public function updateRole($roleId, $request)
     {
         $role = $this->roleRepository->update($roleId, ['name' => $request->name, 'permissions' => json_encode($request->permissions)]);
 
-        return  new RoleResource($role);
+        return  new FindRoleResource($role);
     }
 
     public function destroyRole($roleId)
