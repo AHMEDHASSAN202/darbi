@@ -64,3 +64,17 @@ Route::group([
     Route::delete('{model}'   , 'ModelController@destroy');
     Route::delete('{model}/images/{index}'  , 'ModelController@deleteImage');
 });
+
+
+
+//vendor routes
+Route::group([
+    'prefix'    => 'vendors',
+    'middleware'=> ['auth:admin_api']
+], function () {
+    Route::get(''             , 'VendorController@index');
+    Route::get('{vendor}'     , 'VendorController@show');
+    Route::post(''            , 'VendorController@store');
+    Route::put('{vendor}'     , 'VendorController@update');
+    Route::delete('{vendor}'  , 'VendorController@destroy');
+});

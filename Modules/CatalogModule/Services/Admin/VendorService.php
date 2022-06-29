@@ -7,15 +7,16 @@
 namespace Modules\CatalogModule\Services\Admin;
 
 use Illuminate\Http\Request;
-use Modules\AuthModule\Http\Requests\Admin\CreateUserRequest;
-use Modules\AuthModule\Http\Requests\Admin\UpdateUserRequest;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Http\Requests\Admin\CreateVendorRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateVendorRequest;
 use Modules\CatalogModule\Repositories\VendorRepository;
 use Modules\CatalogModule\Services\UserResource;
-use Modules\CatalogModule\Transformers\FindVendorResource;
+use Modules\CatalogModule\Transformers\Admin\FindVendorResource;
+use Modules\CatalogModule\Transformers\Admin\VendorResource;
 use Modules\CommonModule\Traits\ImageHelperTrait;
 use Modules\CommonModule\Transformers\PaginateResource;
+use MongoDB\BSON\ObjectId;
 
 class VendorService
 {
@@ -30,9 +31,13 @@ class VendorService
 
     public function findAll(Request $request)
     {
-        $vendors = $this->vendorRepository->listOfVendors($request->get('limit', 20), $request);
+        $vendors = $this->vendorRepository->listOfVendors($request);
 
-        return new PaginateResource(UserResource::collection($vendors));
+        if ($vendors instanceof LengthAwarePaginator) {
+            return new PaginateResource(VendorResource::collection($vendors));
+        }
+
+        return VendorResource::collection($vendors);
     }
 
     public function find($vendorId)
@@ -44,9 +49,17 @@ class VendorService
 
     public function create(CreateVendorRequest $createVendorRequest)
     {
-        $data = [];
-
-        $vendor = $this->vendorRepository->create($data);
+        $vendor = $this->vendorRepository->create([
+            'name'          => $createVendorRequest->name,
+            'image'         => $this->uploadImage('vendors', $createVendorRequest->image),
+            'phone'         => $createVendorRequest->phone,
+            'phone_code'    => $createVendorRequest->phone_code,
+            'is_active'     => ($createVendorRequest->is_active === null) || (boolean)$createVendorRequest->is_active,
+            'country_id'    => new ObjectId($createVendorRequest->country_id),
+            'email'         => $createVendorRequest->email,
+            'darbi_percentage'  => $createVendorRequest->darbi_percentage,
+            'settings'      => $createVendorRequest->settings
+        ]);
 
         return [
             'id'        => $vendor->id
@@ -55,7 +68,19 @@ class VendorService
 
     public function update($id, UpdateVendorRequest $updateVendorRequest)
     {
-        $data = [];
+        $data = [
+            'name'          => $updateVendorRequest->name,
+            'phone'         => $updateVendorRequest->phone,
+            'phone_code'    => $updateVendorRequest->phone_code,
+            'is_active'     => ($updateVendorRequest->is_active === null) || (boolean)$updateVendorRequest->is_active,
+            'email'         => $updateVendorRequest->email,
+            'darbi_percentage'  => $updateVendorRequest->darbi_percentage,
+            'settings'      => $updateVendorRequest->settings
+        ];
+
+        if ($updateVendorRequest->image) {
+            $data['image'] = $this->uploadImage('vendors', $updateVendorRequest->image);
+        }
 
         $vendor = $this->vendorRepository->update($id, $data);
 

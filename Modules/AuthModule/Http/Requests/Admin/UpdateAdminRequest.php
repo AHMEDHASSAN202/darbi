@@ -19,7 +19,7 @@ class UpdateAdminRequest extends FormRequest
         return [
             'name'          => ['required', 'max:100', new AlphaNumSpacesRule()],
             'email'         => ['required', 'email', Rule::unique('admins')->ignore($this->route('admin'), '_id')],
-            'role_id'       => ['required', Rule::exists('roles', 'id')->where('guard', $this->request->get('type') . '_api')],
+            'role_id'       => ['required', Rule::exists('roles', '_id')->where('guard', $this->request->get('type') . '_api')],
             'type'          => 'required|in:admin,vendor',
             'vendor_id'     => 'required_if:type,vendor',
             'password'      => ['sometimes', 'nullable', 'max:100', 'confirmed', Password::min(8)->letters()],

@@ -38,12 +38,12 @@ class BookingRepository
 
     public function bookingsByVendor(ObjectId $vendorId, Request $request)
     {
-        return $this->booking->latest()->adminSearch($request)->adminFilter($request)->where('vendor_id', $vendorId)->paginate($request->get('limit', 20));
+        return $this->booking->latest()->adminSearch($request)->adminFilter($request)->where('vendor_id', $vendorId)->where('status', '!=', BookingStatus::INIT)->paginate($request->get('limit', 20));
     }
 
     public function findAll(Request $request)
     {
-        return $this->booking->latest()->adminSearch($request)->adminFilter($request)->paginate($request->get('limit', 20));
+        return $this->booking->latest()->adminSearch($request)->adminFilter($request)->where('status', '!=', BookingStatus::INIT)->paginate($request->get('limit', 20));
     }
 
     public function findByAdmin(ObjectId $bookingId)

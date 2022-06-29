@@ -50,7 +50,7 @@ class VendorController extends Controller
 
     public function destroy($id)
     {
-        $this->vendorService->delete($id);
+        $this->vendorService->destroy($id);
 
         return $this->apiResponse([], 200, __('Data has been deleted successfully'));
     }

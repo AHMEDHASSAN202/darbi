@@ -24,8 +24,8 @@ class VendorRepository
 
     public function listOfVendors(Request $request)
     {
-        $paginated = $request->get('paginated');
-        $limit = $request->get('limit');
+        $paginated = $request->has('paginated');
+        $limit = $request->get('limit', 20);
 
         $query = $this->model->search($request)->filter($request)->latest()->with('country');
 

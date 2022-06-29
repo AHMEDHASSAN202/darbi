@@ -2,6 +2,8 @@
 
 namespace Modules\CatalogModule\Http\Requests\Admin;
 
+use App\Rules\AlphaNumSpacesRule;
+use App\Rules\PhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateVendorRequest extends FormRequest
@@ -14,7 +16,17 @@ class CreateVendorRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name'              => 'required',
+            'name.en'           => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
+            'name.ar'           => ['sometimes', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
+            'is_active'         => 'nullable|sometimes|boolean',
+            'image'             => 'required|image|max:5120', //5
+            'phone'             => ['required', 'sometimes', 'numeric', new PhoneRule($this->request->get('phone_code'))],
+            'phone_code'        => 'required_with:phone',
+            'email'             => 'required|email',
+            'darbi_percentage'  => 'nullable|sometimes|numeric',
+            'country_id'        => 'required|countries,_id',
+            'settings'          => 'nullable|sometimes|array'
         ];
     }
 
