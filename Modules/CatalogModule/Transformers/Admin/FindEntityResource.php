@@ -34,10 +34,6 @@ class FindEntityResource extends JsonResource
             'state'         => $this->state,
             'is_active'     => (boolean)$this->is_active,
             'unavailable_date'  => $this->unavailable_date,
-            'country_id'    => (string)$this->country_id,
-            'country'       => new CountryResource($this->country),
-            'city_id'       => (string)$this->city_id,
-            'city'          => new CityResource($this->city),
             'extras'        => FindExtraResource::collection(convertBsonArrayToCollection($this->attachPluginToExtra($this->extras, $this->plugins)))
         ];
 

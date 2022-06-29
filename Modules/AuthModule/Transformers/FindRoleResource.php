@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\CatalogModule\Transformers\Admin;
+namespace Modules\AuthModule\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FindPluginResource extends JsonResource
+class FindRoleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +17,8 @@ class FindPluginResource extends JsonResource
         return [
             'id'            => $this->id,
             'name'          => $this->name,
-            'desc'          => $this->desc,
-            'is_active'     => (boolean)$this->is_active,
-            'entity_type'   => $this->entity_type,
+            'permissions'   => is_string($this->permissions) ? json_decode($this->permissions) : (is_array($this->permissions) ? $this->permissions : []),
+            'guard'         => $this->guard
         ];
     }
-
 }

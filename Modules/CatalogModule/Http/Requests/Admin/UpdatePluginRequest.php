@@ -20,6 +20,7 @@ class UpdatePluginRequest extends FormRequest
             'name.en'   => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
             'desc.ar'   => ['nullable', 'min:2', 'max:500', new AlphaNumSpacesRule('ar')],
             'desc.en'   => ['nullable', 'min:2', 'max:500', new AlphaNumSpacesRule('en')],
+            'entity_type' => 'required|in:car,yacht',
             'is_active' => 'nullable|boolean'
         ];
     }

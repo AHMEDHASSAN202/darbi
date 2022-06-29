@@ -41,6 +41,16 @@ class BookingRepository
         return $this->booking->latest()->adminSearch($request)->adminFilter($request)->where('vendor_id', $vendorId)->paginate($request->get('limit', 20));
     }
 
+    public function findAll(Request $request)
+    {
+        return $this->booking->latest()->adminSearch($request)->adminFilter($request)->paginate($request->get('limit', 20));
+    }
+
+    public function findByAdmin(ObjectId $bookingId)
+    {
+        return $this->booking->where('_id', $bookingId)->firstOrFail();
+    }
+
     public function findByVendor(ObjectId $vendorId, ObjectId $bookingId)
     {
         return $this->booking->where('vendor_id', $vendorId)->where('_id', $bookingId)->firstOrFail();

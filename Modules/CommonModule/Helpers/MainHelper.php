@@ -72,10 +72,10 @@ function translateAttribute(array | object | null $attribute, $locale = null) {
     }
 
     if (is_array($attribute)) {
-        return $attribute[$locale] ?? $attribute['en'];
+        return @$attribute[$locale] ?? @$attribute['en'];
     }
 
-    return $attribute->{$locale} ?? $attribute->en;
+    return @$attribute->{$locale} ?? @$attribute->en;
 }
 
 function generatePriceLabelFromPrice(?float $price, $priceUnit) : string

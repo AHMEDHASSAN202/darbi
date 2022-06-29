@@ -19,7 +19,9 @@ class AdminResource extends JsonResource
             'name'          => $this->name,
             'email'         => $this->email,
             'role'          => new RoleResource($this->role),
-            'vendor'        => new VendorResource($this->vendor)
+            'type'          => $this->type,
+            'vendor'        => new VendorResource($this->vendor),
+            'image'         => imageUrl($this->image)
         ];
     }
 }

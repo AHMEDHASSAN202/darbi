@@ -9,6 +9,7 @@ namespace Modules\CatalogModule\Repositories;
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Entities\Car;
 use Modules\CatalogModule\Entities\Yacht;
+use Modules\CatalogModule\Enums\EntityType;
 use Modules\CommonModule\Traits\CrudRepositoryTrait;
 use MongoDB\BSON\ObjectId;
 
@@ -24,7 +25,7 @@ class YachtRepository
     public function listOfYachts(Request $request)
     {
         return $this->model->search($request)
-                           ->filter($request)
+                           ->filter($request, EntityType::YACHT)
                            ->filterDate($request)
                            ->active()
                            ->available()
@@ -45,7 +46,7 @@ class YachtRepository
     {
         return $this->model->adminSearch($request)
                             ->with(['port'])
-                            ->adminFilter($request)
+                            ->adminFilter($request, EntityType::YACHT)
                             ->latest()
                             ->where('vendor_id', new ObjectId($vendorId))
                             ->paginate($request->get('limit', 20));

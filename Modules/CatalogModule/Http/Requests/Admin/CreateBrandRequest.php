@@ -19,7 +19,8 @@ class CreateBrandRequest extends FormRequest
             'name.ar'       => ['nullable', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
             'name.en'       => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
             'logo'          => 'required|image|max:5120',
-            'is_active'     => 'nullable|boolean'
+            'is_active'     => 'nullable|boolean',
+            'entity_type'   => 'required|in:car,yacht'
         ];
     }
 

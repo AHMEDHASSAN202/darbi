@@ -49,7 +49,8 @@ class Port extends Base
 
     public function scopeFilters($query, $request)
     {
-        if ($countryId = $request->get('country_id')) {
+        $countryId = $request->get('country') ?? $request->get('country_id');
+        if ($countryId) {
             $query->where('country_id', new ObjectId($countryId));
         }
     }

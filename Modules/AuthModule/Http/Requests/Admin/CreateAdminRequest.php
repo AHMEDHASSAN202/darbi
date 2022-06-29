@@ -18,7 +18,10 @@ class CreateAdminRequest extends FormRequest
             'name'          => 'required|max:100',
             'email'         => 'required|email|unique:admins',
             'role_id'       => 'required|exists:roles,_id',
-            'password'      => ['required', Password::min(8)->letters(), 'confirmed']
+            'password'      => ['required', Password::min(8)->letters(), 'confirmed'],
+            'type'          => 'required|in:admin,vendor',
+            'vendor_id'     => 'required_if:type,vendor',
+            'image'         => 'sometimes|image|max:5120' //5m
         ];
     }
 

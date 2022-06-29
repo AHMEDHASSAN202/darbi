@@ -24,8 +24,6 @@ class UpdateEntityRequest extends FormRequest
             'images.*'          => 'nullable|sometimes|image|max:5120', //5m
             'extra_ids'         => 'nullable|array',
             'extra_ids.*'       => ['nullable', new MongoIdRule()],
-            'country_id'        => ['required', new MongoIdRule()],
-            'city_id'           => ['required', new MongoIdRule()],
             'price'             => 'required|numeric',
             'price_unit'        => 'required|in:day,hour',
             'unavailable_date'  => 'nullable|array',

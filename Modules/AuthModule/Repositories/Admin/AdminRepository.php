@@ -8,6 +8,7 @@ namespace Modules\AuthModule\Repositories\Admin;
 
 use Illuminate\Http\Request;
 use Modules\AuthModule\Entities\Admin;
+use MongoDB\BSON\ObjectId;
 
 class AdminRepository
 {
@@ -25,7 +26,9 @@ class AdminRepository
 
     public function list(Request $request, $type = 'admin', $limit = 20)
     {
-        return $this->model->search($request)->with('role:id,name')->where('type', $type)->paginate($limit);
+        $meId = auth('admin_api')->id();
+
+        return $this->model->search($request)->filter($request)->with('role:id,name,guard')->where('_id', '!=', new ObjectId($meId))->where('type', $type)->paginate($limit);
     }
 
     public function update($id, $data)
@@ -43,7 +46,9 @@ class AdminRepository
 
     public function find($id)
     {
-        return $this->model->findOrFail($id);
+        $meId = auth('admin_api')->id();
+
+        return $this->model->with('role')->where('_id', '!=', new ObjectId($meId))->findOrFail($id);
     }
 
     public function findByEmail($email, $type, $with = [])

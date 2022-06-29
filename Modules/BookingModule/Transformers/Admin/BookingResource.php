@@ -23,6 +23,7 @@ class BookingResource extends JsonResource
             'id'            => $this->_id,
             'name'          => $this->getName(),
             'user'          => $this->user,
+            'vendor_name'   => translateAttribute($this->vendor),
             'date'          => ['start_at' => $this->start_booking_at, 'end_at' => $this->end_booking_at],
             'status_label'  => __($this->status),
             'status'        => $this->status,

@@ -74,10 +74,12 @@ class BookingService
         }
 
         $extras = $this->getExtras($entity, $rentRequest->extras);
+        $country = $entity['country'];
 
         $booking = $this->bookingRepository->create([
             'user_id'       => new ObjectId(auth('api')->id()),
             'user'          => auth('api')->user()->only(['_id', 'phone', 'phone_code', 'name', 'email']),
+            'vendor'        => $vendor,
             'vendor_id'     => new ObjectId($entity['vendor_id']),
             'entity_id'     => new ObjectId($entity['id']),
             'entity_type'   => @$entity['entity_type'],
@@ -91,7 +93,9 @@ class BookingService
                 'brand_id'  => isset($entity['brand_id']) ? new ObjectId($entity['brand_id']) : null,
                 'brand_name'=> @$entity['brand_name'],
             ],
-            'currency_code' => @$entity['country']['currency_code'],
+            'country_id'    => new ObjectId($country['_id']),
+            'country'       => $country,
+            'currency_code' => $country['currency_code'],
             'status'        => BookingStatus::INIT,
             'extras'        => $extras,
             'start_booking_at' => $rentRequest->start_at,

@@ -141,6 +141,22 @@ class BookingService
     }
 
 
+    public function findAll(Request $request)
+    {
+        $bookings = $this->bookingRepository->findAll($request);
+
+        return new PaginateResource(BookingResource::collection($bookings));
+    }
+
+
+    public function find($bookingId)
+    {
+        $booking = $this->bookingRepository->findByAdmin(new ObjectId($bookingId));
+
+        return new FindBookingResource($booking);
+    }
+
+
     public function findBookingByVendor($bookingId)
     {
         $vendorId = new ObjectId(getVendorId());
@@ -164,5 +180,55 @@ class BookingService
         $vendorId = new ObjectId(getVendorId());
 
         return $this->bookingRepository->vendorOrders($vendorId);
+    }
+
+
+    public function cancelByAdmin($bookingId)
+    {
+        $session = DB::connection('mongodb')->getMongoClient()->startSession();
+        $session->startTransaction();
+
+        try {
+
+            $booking = $this->bookingRepository->findByAdmin(new ObjectId($bookingId));
+
+            abort_if(is_null($booking), 404);
+
+            if (in_array($booking->status, [BookingStatus::CANCELLED_AFTER_ACCEPT, BookingStatus::CANCELLED_BEFORE_ACCEPT, BookingStatus::FORCE_CANCELLED])) {
+                return [
+                    'data'      => [],
+                    'message'   => __('cancel booking not allowed'),
+                    'statusCode'=> 400
+                ];
+            }
+
+            $status = BookingStatus::FORCE_CANCELLED;
+            $data['status'] = $status;
+            $data['status_change_log'] = (new BookingChangeLog($booking, $status, auth('admin_api')->user()))->logs();
+            $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
+
+            $booking->refresh();
+
+            event(new BookingStatusChangedEvent($booking));
+
+            $session->commitTransaction();
+
+            return [
+                'data'       => [
+                    'booking_id'    => $bookingId,
+                ],
+                'message'    => '',
+                'statusCode' => 200
+            ];
+
+        } catch (\Exception $exception) {
+            Log::error($exception->getMessage());
+            $session->abortTransaction();
+            return [
+                'data'       => [],
+                'message'    => null,
+                'statusCode' => 500
+            ];
+        }
     }
 }

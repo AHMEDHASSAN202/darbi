@@ -5,8 +5,10 @@ namespace Modules\BookingModule\Database\factories;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\AuthModule\Entities\User;
+use Modules\AuthModule\Transformers\VendorResource;
 use Modules\CatalogModule\Entities\Car;
 use Modules\CatalogModule\Entities\Vendor;
+use Modules\CatalogModule\Transformers\FindVendorResource;
 use Modules\CommonModule\Entities\Country;
 use Modules\CommonModule\Entities\Region;
 use Modules\CommonModule\Transformers\CountryResource;
@@ -31,15 +33,13 @@ class BookingFactory extends Factory
         $vendor = Vendor::all()->random(1)->first();
         $user = User::all()->random(1)->first();
         $ent = Car::withoutGlobalScope('car')->with(['model', 'brand', 'country', 'city'])->get()->random(1)->first();
-        $branch = $vendor->branches()->first();
         $region = Region::active()->get()->random(1)->first();
 
         return [
             'user_id'               => $user->_id,
             'user'                  => $user->only(['_id', 'phone', 'phone_code', 'name', 'email']),
             'vendor_id'             => new ObjectId($vendor->_id),
-            'branch_id'             => $branch ? new ObjectId($branch->_id): null,
-            'branch'                => $branch,
+            'vendor'                => new FindVendorResource($vendor),
             'entity_id'             => new ObjectId($ent->_id),
             'entity_type'           => $ent->type,
             'start_booking_at'      => now()->subDay()->timestamp,
@@ -72,7 +72,6 @@ class BookingFactory extends Factory
                 'brand_id'  => @$ent->brand_id,
                 'brand_name'=> @$ent->brand->name,
                 'country'   => $ent->country->name,
-                'city'      => $ent->city->name,
                 'extras'    => [],
             ],
             'invoice_number'         => \Str::random(),

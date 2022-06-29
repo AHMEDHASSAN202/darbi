@@ -32,7 +32,6 @@ class YachtFactory extends Factory
     public function definition()
     {
         $country = Country::all()->random(1)->first();
-        $city = City::where('country_id', new ObjectId($country->_id))->get()->random(1)->first();
         $brand = Brand::where('entity_type', $this->type)->get()->random(1)->first();
         $model = Model::where('brand_id', new ObjectId($brand->_id))->get()->random(1)->first();
         $vendor = Vendor::where('type', $this->type)->get()->random(1)->first();
@@ -55,7 +54,6 @@ class YachtFactory extends Factory
             'state'             => ['free', 'reserved', 'pending'][mt_rand(0,2)],
             'extra_ids'         => generateObjectIdOfArrayValues($extras),
             'country_id'        => new ObjectId($country->_id),
-            'city_id'           => new ObjectId($city->_id),
             'require_activation'=> $this->faker->boolean,
             'price'             => $this->faker->randomFloat(2, 2000, 10000),
             'price_unit'        => 'hour',

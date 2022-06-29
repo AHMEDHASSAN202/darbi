@@ -9,6 +9,7 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Modules\AuthModule\Database\factories\AdminFactory;
 use Modules\AuthModule\Traits\RoleHelperTrait;
 use Modules\CatalogModule\Entities\Vendor;
+use MongoDB\BSON\ObjectId;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Admin extends BaseAuthenticatable implements JWTSubject
@@ -54,6 +55,14 @@ class Admin extends BaseAuthenticatable implements JWTSubject
             return $query->where('name', 'LIKE', '%' . $q .'%');
         }
     }
+
+    public function scopeFilter($query, Request $request)
+    {
+        if ($role = $request->get('role')) {
+            return $query->where('role_id', new ObjectId($role));
+        }
+    }
+
     //============= #END# scopes ==============\\
 
     //================ Helpers ====================\\

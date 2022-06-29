@@ -21,7 +21,7 @@ class RoleTableSeeder extends Seeder
             [
                 'name'        => 'super admin',
                 'guard'       => 'admin_api',
-                'permissions' => config('authmodule.permissions')
+                'permissions' => config('authmodule.permissions.admin_api')
             ],
             [
                 'name'        => 'admin',
@@ -35,7 +35,7 @@ class RoleTableSeeder extends Seeder
             [
                 'name'        => 'vendor manager',
                 'guard'       => 'vendor_api',
-                'permissions' => config('authmodule.vendor_permissions')
+                'permissions' => config('authmodule.permissions.vendor_api')
             ],
             [
                 'name'        => 'vendor support',

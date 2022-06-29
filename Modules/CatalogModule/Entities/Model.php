@@ -75,4 +75,14 @@ class Model extends Base
 
         return collect($specs)->sortBy('*.specs.order_weight');
     }
+
+    //=============== relations ======================\\
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    //================ #END# relations ================\\
+
 }

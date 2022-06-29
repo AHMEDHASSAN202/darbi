@@ -36,7 +36,7 @@ trait CrudRepositoryTrait
     public function list($limit = 20, $searchMethod = null, $moreScopeMethod = null, $with = [])
     {
         //model instance
-        $query = $this->model;
+        $query = $this->model->latest();
 
         //search scope method
         if ($searchMethod) {

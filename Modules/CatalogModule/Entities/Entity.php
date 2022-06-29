@@ -11,6 +11,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Modules\CatalogModule\Enums\EntityType;
+use Modules\CatalogModule\Repositories\BranchRepository;
+use Modules\CatalogModule\Repositories\PortRepository;
 use Modules\CommonModule\Entities\City;
 use Modules\CommonModule\Entities\Country;
 use MongoDB\BSON\ObjectId;
@@ -70,7 +73,7 @@ class Entity extends Base
         }
     }
 
-    public function scopeFilter($query, Request $request)
+    public function scopeFilter($query, Request $request, $type)
     {
         if ($brand = $request->get('brand')) {
             $query->where('brand_id', new ObjectId($brand));
@@ -81,22 +84,34 @@ class Entity extends Base
         }
 
         if ($city = $request->get('city')) {
-            $query->where('city_id', new ObjectId($city));
+            if ($type === EntityType::CAR) {
+                $branchIds = app(BranchRepository::class)->findAllBranchesByCity($city, true)->pluck('_id')->toArray();
+                $query->whereIn('branch_ids', generateObjectIdOfArrayValues($branchIds));
+
+            }elseif ($type === EntityType::YACHT) {
+                $portIds = app(PortRepository::class)->findAllPortsByCity($city)->pluck('_id')->toArray();
+                $query->whereIn('port_id', generateObjectIdOfArrayValues($portIds));
+            }
         }
 
         if ($country = $request->get('country')) {
             $query->where('country_id', new ObjectId($country));
         }
+
+        if ($region = $request->get('region')) {
+            $branchIds = app(BranchRepository::class)->findAllBranchesByRegion($region, true)->pluck('_id')->toArray();
+            $query->whereIn('branch_ids', generateObjectIdOfArrayValues($branchIds));
+        }
     }
 
-    public function scopeAdminFilter($query, Request $request)
+    public function scopeAdminFilter($query, Request $request, $type)
     {
         $state = $request->get('state');
         if ($state && $state != 'all') {
             $query->where('state', $state);
         }
 
-        return $this->scopeFilter($query, $request);
+        return $this->scopeFilter($query, $request, $type);
     }
 
     public function scopeAdminSearch($query, Request $request)

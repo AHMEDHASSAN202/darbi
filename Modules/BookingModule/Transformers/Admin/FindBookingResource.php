@@ -23,8 +23,10 @@ class FindBookingResource extends JsonResource
             'id'            => $this->_id,
             'status_label'  => __($this->status),
             'status'        => $this->status,
-            'user_id'       => $this->user_id,
+            'user_id'       => (string)$this->user_id,
             'user'          => $this->user,
+            'vendor_id'     => (string)$this->vendor_id,
+            'vendor'        => $this->vendor,
             'entity'        => $this->entity(),
             'start'         => ['month' => $this->start_booking_at->format('m F'), 'time' => $this->start_booking_at->format('H:s A')],
             'end'           => ['month' => $this->end_booking_at->format('m F'), 'time' => $this->end_booking_at->format('H:s A')],
@@ -36,7 +38,7 @@ class FindBookingResource extends JsonResource
             'price'         => ['total_price' => @$this->price_summary['total_price']],
             'created_at'    => $this->created_at,
             'expired_at'    => $this->expired_at,
-            'invoice_number' => $this->invoice_number
+            'invoice_number' => $this->invoice_number,
         ];
     }
 

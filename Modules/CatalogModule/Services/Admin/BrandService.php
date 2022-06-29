@@ -58,7 +58,8 @@ class BrandService
         $brand = $this->brandRepository->create([
             'name'       => $createBrandRequest->name,
             'logo'       => $this->uploadImage('brands', $createBrandRequest->logo),
-            'is_active'  => ($createBrandRequest->is_active === null) || (boolean)$createBrandRequest->is_active
+            'is_active'  => ($createBrandRequest->is_active === null) || (boolean)$createBrandRequest->is_active,
+            'entity_type'=> $createBrandRequest->entity_type
         ]);
 
         return [
@@ -70,7 +71,8 @@ class BrandService
     {
         $data = [
             'name'       => $updateBrandRequest->name,
-            'is_active'  => ($updateBrandRequest->is_active === null) || (boolean)$updateBrandRequest->is_active
+            'is_active'  => ($updateBrandRequest->is_active === null) || (boolean)$updateBrandRequest->is_active,
+            'entity_type' => $updateBrandRequest->entity_type
         ];
 
         if ($updateBrandRequest->hasFile('logo')) {

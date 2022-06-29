@@ -29,7 +29,8 @@ class PluginService
         $plugin = $this->pluginRepository->create([
             'name'          => $createPluginRequest->name,
             'desc'          => $createPluginRequest->desc,
-            'is_active'     => ($createPluginRequest->is_active === null) || (boolean)$createPluginRequest->is_active
+            'is_active'     => ($createPluginRequest->is_active === null) || (boolean)$createPluginRequest->is_active,
+            'entity_type'   => $createPluginRequest->entity_type
         ]);
 
         return [
@@ -42,7 +43,8 @@ class PluginService
         $plugin = $this->pluginRepository->update($id, [
             'name'          => $updatePluginRequest->name,
             'desc'          => $updatePluginRequest->desc,
-            'is_active'     => ($updatePluginRequest->is_active === null) || (boolean)$updatePluginRequest->is_active
+            'is_active'     => ($updatePluginRequest->is_active === null) || (boolean)$updatePluginRequest->is_active,
+            'entity_type'   => $updatePluginRequest->entity_type
         ]);
 
         return [
@@ -57,10 +59,9 @@ class PluginService
 
     public function list(Request $request, $onlyActive = true)
     {
-        $paginated = $request->has('paginated');
         $limit = $request->get('limit', 20);
 
-        $plugins = $this->pluginRepository->list($paginated ? $limit : null, 'filters', $onlyActive ? 'active' : '');
+        $plugins = $this->pluginRepository->list($limit, 'filters', $onlyActive ? 'active' : '');
 
         if ($plugins instanceof LengthAwarePaginator) {
             return new PaginateResource(PluginResource::collection($plugins));

@@ -33,7 +33,6 @@ class CarFactory extends Factory
     {
         $arFaker = \Faker\Factory::create('ar_EG');
         $country = Country::all()->random(1)->first();
-        $city = City::where('country_id', new ObjectId($country->_id))->get()->random(1)->first();
         $brand = Brand::where('entity_type', $this->type)->get()->random(1)->first();
         $model = Model::where('brand_id', new ObjectId($brand->_id))->get()->random(1)->first();
         $vendor = Vendor::where('type', $this->type)->get()->random(1)->first();
@@ -53,7 +52,6 @@ class CarFactory extends Factory
             'state'             => 'free',
             'extra_ids'         => $extras,
             'country_id'        => new ObjectId($country->_id),
-            'city_id'           => new ObjectId($city->_id),
             'require_activation'=> $this->faker->boolean,
             'price'             => $this->faker->randomFloat(2, 2000, 10000),
             'price_unit'        => 'day',

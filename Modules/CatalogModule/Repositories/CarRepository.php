@@ -8,6 +8,7 @@ namespace Modules\CatalogModule\Repositories;
 
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Entities\Car;
+use Modules\CatalogModule\Enums\EntityType;
 use MongoDB\BSON\ObjectId;
 
 class CarRepository
@@ -25,11 +26,7 @@ class CarRepository
                            ->with(['model', 'brand', 'country'])
                            ->whereHas('model', function ($query) { $query->active(); })
                            ->whereHas('brand', function ($query) { $query->active(); })
-                           ->when($request->region, function ($query) use ($request) {
-                               $branchIds = app(BranchRepository::class)->findAllBranchesByRegion($request->region, true)->pluck('_id')->toArray();
-                               $query->where('branch_ids', 'all', $branchIds);
-                           })
-                           ->filter($request)
+                           ->filter($request, EntityType::CAR)
                            ->filterDate($request)
                            ->active()
                            ->available()
@@ -49,7 +46,7 @@ class CarRepository
     {
         return $this->model->adminSearch($request)
                             ->with(['model', 'brand'])
-                            ->adminFilter($request)
+                            ->adminFilter($request, EntityType::CAR)
                             ->latest()
                             ->where('vendor_id', new ObjectId($vendorId))
                             ->paginate($request->get('limit', 20));

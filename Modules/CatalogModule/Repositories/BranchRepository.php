@@ -25,6 +25,11 @@ class BranchRepository
         return $this->model->where('region_id', new ObjectId($regionId))->when($isOpen, function ($q) { $q->opened(); })->active()->get();
     }
 
+    public function findAllBranchesByCity($cityId, $isOpen = null)
+    {
+        return $this->model->where('city_id', new ObjectId($cityId))->when($isOpen, function ($q) { $q->opened(); })->active()->get();
+    }
+
     public function findAllByVendor(ObjectId $vendorId, Request $request)
     {
         $query = $this->model->where('vendor_id', $vendorId)->adminSearch($request)->adminFilters($request)->latest();

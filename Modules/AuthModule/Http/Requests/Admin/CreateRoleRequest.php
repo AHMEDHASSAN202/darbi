@@ -14,7 +14,7 @@ class CreateRoleRequest extends FormRequest
      */
     public function rules()
     {
-        $permissions = config('authmodule.permissions');
+        $permissions = @config('authmodule.permissions.'.$this->request->get('guard')) ?? [];
 
         return [
             'name'          => 'required|max:100',

@@ -45,6 +45,7 @@ Route::group([
     'namespace'  => 'CURD'
 ], function () {
     Route::get(''                       , 'AdminController@index');
+    Route::get('{admin}'                , 'AdminController@show');
     Route::post(''                      , 'AdminController@store');
     Route::put('{admin}'                , 'AdminController@update');
     Route::put('{admin}/password'       , 'AdminController@updatePassword');
@@ -52,33 +53,6 @@ Route::group([
 });
 
 
-
-//admin routes admins
-Route::group([
-    'prefix'     => 'vendors',
-    'middleware' => ['auth:admin_api', 'permission:manage-admins'],
-    'namespace'  => 'CURD'
-], function () {
-    Route::get(''                       , 'VendorController@index');
-    Route::post(''                      , 'VendorController@store');
-    Route::put('{vendor}'               , 'VendorController@update');
-    Route::put('{vendor}/password'      , 'VendorController@updatePassword');
-    Route::delete('{vendor}'            , 'VendorController@destroy');
-});
-
-
-//admin routes admins
-Route::group([
-    'prefix'     => 'users',
-    'middleware' => ['auth:admin_api', 'permission:manage-admins'],
-    'namespace'  => 'CURD'
-], function () {
-    Route::get(''                       , 'UserController@index');
-    Route::post(''                      , 'UserController@store');
-    Route::put('{vendor}'               , 'UserController@update');
-    Route::put('{vendor}/password'      , 'UserController@updatePassword');
-    Route::delete('{vendor}'            , 'UserController@destroy');
-});
 
 //admin activities
 Route::group([

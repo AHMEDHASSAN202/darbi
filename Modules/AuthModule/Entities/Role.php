@@ -13,11 +13,6 @@ class Role extends Base
 
     protected $guarded = [];
 
-    protected $casts = [
-        'permissions'       => 'array'
-    ];
-
-
     //============= relations ==============\\
     public function admins()
     {

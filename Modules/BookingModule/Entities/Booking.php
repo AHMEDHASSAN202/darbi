@@ -5,6 +5,7 @@ namespace Modules\BookingModule\Entities;
 use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
+use MongoDB\BSON\ObjectId;
 
 class Booking extends Base
 {
@@ -47,6 +48,26 @@ class Booking extends Base
         $status = $request->get('status');
         if ($status && $status !== 'all') {
             $query->where('status', $status);
+        }
+
+        if ($vendor = $request->get('vendor')) {
+            $query->where('vendor_id', new ObjectId($vendor));
+        }
+
+        if ($user = $request->get('user')) {
+            $query->where('user_id', new ObjectId($user));
+        }
+
+        if ($bookId = $request->get('book_id')) {
+            $query->where('_id', new ObjectId($bookId));
+        }
+
+        if ($city = $request->get('city')) {
+
+        }
+
+        if ($country = $request->get('country')) {
+            $query->where('country_id', new ObjectId($country));
         }
     }
 

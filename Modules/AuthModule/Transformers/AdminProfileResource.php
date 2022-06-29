@@ -30,7 +30,7 @@ class AdminProfileResource extends JsonResource
             'name'      => $this->name,
             'email'     => $this->email,
             'image'     => imageUrl($this->image ?? $this->defualtImage),
-            'role'      => new RoleResource($this->role),
+            'role'      => new FindRoleResource($this->role),
             'type'      => $this->type
         ];
 

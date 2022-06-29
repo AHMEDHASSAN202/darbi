@@ -50,7 +50,6 @@ trait EntityHelperService
         }
 
         unset($images[$imageIndex]);
-
         $car->update(['images' => array_values($images)]);
 
         return $car;
@@ -65,6 +64,8 @@ trait EntityHelperService
 
         $unavailableDate = $this->prepareUnavailableDate($request->unavailable_date);
 
+        $countryId = auth('vendor_api')->user()->vendor->country_id;
+
         $data = [
                 'name'          => $request->name,
                 'vendor_id'     => new ObjectId(getVendorId()),
@@ -72,9 +73,9 @@ trait EntityHelperService
                 'brand_id'      => new ObjectId($model->brand_id),
                 'images'        => $images,
                 'is_active'     => ($request->is_active === null) || (boolean)$request->is_active,
+                'is_available'  => true,
                 'extra_ids'     => generateObjectIdOfArrayValues($request->extra_ids),
-                'country_id'    => new ObjectId($request->country_id),
-                'city_id'       => new ObjectId($request->city_id),
+                'country_id'    => new ObjectId($countryId),
                 'price'         => floatval($request->price),
                 'price_unit'    => $request->price_unit,
                 'unavailable_date'  => $unavailableDate
@@ -104,8 +105,6 @@ trait EntityHelperService
                 'images'        => $images,
                 'is_active'     => ($request->is_active === null) || (boolean)$request->is_active,
                 'extra_ids'     => generateObjectIdOfArrayValues($request->extra_ids),
-                'country_id'    => new ObjectId($request->country_id),
-                'city_id'       => new ObjectId($request->city_id),
                 'price'         => floatval($request->price),
                 'price_unit'    => $request->price_unit,
                 'unavailable_date'  => $unavailableDate

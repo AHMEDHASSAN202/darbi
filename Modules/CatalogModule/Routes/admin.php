@@ -44,9 +44,23 @@ Route::group([
     'prefix'    => 'brands',
     'middleware'=> ['auth:admin_api']
 ], function () {
-    Route::get(''             , 'BrandController@index');
+    Route::get(''              , 'BrandController@index');
     Route::get('{brand}'       , 'BrandController@show');
-    Route::post(''            , 'BrandController@store');
+    Route::post(''             , 'BrandController@store');
     Route::put('{brand}'       , 'BrandController@update');
     Route::delete('{brand}'    , 'BrandController@destroy');
+});
+
+
+//model routes
+Route::group([
+    'prefix'    => 'models',
+    'middleware'=> ['auth:admin_api']
+], function () {
+    Route::get(''             , 'ModelController@index');
+    Route::get('{model}'      , 'ModelController@show');
+    Route::post(''            , 'ModelController@store');
+    Route::put('{model}'      , 'ModelController@update');
+    Route::delete('{model}'   , 'ModelController@destroy');
+    Route::delete('{model}/images/{index}'  , 'ModelController@deleteImage');
 });
