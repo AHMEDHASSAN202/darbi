@@ -89,6 +89,7 @@ Route::group([
 ], function () {
     Route::get(''             , 'CarController@index');
     Route::get('{car}'        , 'CarController@show');
+    Route::delete('{car}'     , 'CarController@destroy');
 });
 
 
@@ -100,4 +101,5 @@ Route::group([
 ], function () {
     Route::get(''             , 'YachtController@index');
     Route::get('{yacht}'      , 'YachtController@show');
+    Route::delete('{yacht}'   , 'YachtController@destroy');
 });

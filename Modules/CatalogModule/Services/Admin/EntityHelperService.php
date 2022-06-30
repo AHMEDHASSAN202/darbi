@@ -8,6 +8,7 @@ namespace Modules\CatalogModule\Services\Admin;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Modules\CatalogModule\Enums\EntityStatus;
 use Modules\CatalogModule\Repositories\ModelRepository;
 use Modules\CatalogModule\Transformers\Admin\EntityResource;
 use Modules\CatalogModule\Transformers\Admin\FindEntityResource;
@@ -118,13 +119,45 @@ trait EntityHelperService
 
     public function delete($id)
     {
-        return $this->repository->destroy($id, ['vendor_id' => new ObjectId(getVendorId())]);
+        $entity = $this->repository->find($id, ['vendor_id' => new ObjectId(getVendorId())]);
+
+        if ($entity->state != EntityStatus::FREE) {
+            return [
+                'statusCode'    => 400,
+                'message'       => __('Entity is not free'),
+                'data'          => []
+            ];
+        }
+
+        $entity->delete();
+
+        return [
+            'statusCode'    => 200,
+            'message'       => __('Data has been deleted successfully'),
+            'data'          => []
+        ];
     }
 
 
     public function deleteByAdmin($id)
     {
-        return $this->repository->destroy($id);
+        $entity = $this->repository->find($id);
+
+        if ($entity->state != EntityStatus::FREE) {
+            return [
+                'statusCode'    => 400,
+                'message'       => __('Entity is not free'),
+                'data'          => []
+            ];
+        }
+
+        $entity->delete();
+
+        return [
+            'statusCode'    => 200,
+            'message'       => __('Data has been deleted successfully'),
+            'data'          => []
+        ];
     }
 
 

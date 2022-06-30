@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Modules\CatalogModule\Enums\EntityStatus;
 use Modules\CatalogModule\Enums\EntityType;
 use Modules\CatalogModule\Repositories\BranchRepository;
 use Modules\CatalogModule\Repositories\PortRepository;
@@ -47,7 +48,7 @@ class Entity extends Base
 
     public function scopeFree($query)
     {
-        return $query->where('state', 'free');
+        return $query->where('state', EntityStatus::FREE);
     }
 
     public function scopeFilterDate($query, Request $request)
