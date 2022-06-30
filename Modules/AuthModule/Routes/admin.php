@@ -16,11 +16,12 @@ use Illuminate\Http\Request;
 
 //admin routes roles
 Route::group([
-    'prefix'     => 'admin/roles',
+    'prefix'     => 'roles',
     'middleware' => ['auth:admin_api', 'permission:manage-roles'],
     'namespace'  => 'Role'
 ], function () {
     Route::get(''                       , 'RoleController@index');
+    Route::get('{role}'                 , 'RoleController@show');
     Route::post(''                      , 'RoleController@store');
     Route::put('{role}'                 , 'RoleController@update');
     Route::delete('{role}'              , 'RoleController@destroy');
@@ -29,7 +30,7 @@ Route::group([
 
 //permissions list
 Route::group([
-    'prefix'     => 'admin/permissions',
+    'prefix'     => 'permissions',
     'middleware' => ['auth:admin_api', 'permission:manage-roles'],
     'namespace'  => 'Role'
 ], function () {
@@ -39,11 +40,12 @@ Route::group([
 
 //admin routes admins
 Route::group([
-    'prefix'     => 'admin/admins',
+    'prefix'     => 'admins',
     'middleware' => ['auth:admin_api', 'permission:manage-admins'],
-    'namespace'  => 'Admin'
+    'namespace'  => 'CURD'
 ], function () {
     Route::get(''                       , 'AdminController@index');
+    Route::get('{admin}'                , 'AdminController@show');
     Route::post(''                      , 'AdminController@store');
     Route::put('{admin}'                , 'AdminController@update');
     Route::put('{admin}/password'       , 'AdminController@updatePassword');
@@ -51,9 +53,24 @@ Route::group([
 });
 
 
+
+//user routes
+Route::group([
+    'prefix'     => 'users',
+    'middleware' => ['auth:admin_api', 'permission:manage-admins'],
+    'namespace'  => 'CURD'
+], function () {
+    Route::get(''                       , 'UserController@index');
+    Route::get('{user}'                 , 'UserController@show');
+    Route::put('{user}/toggle-active'   , 'UserController@toggleActive');
+    Route::delete('{admin}'             , 'UserController@destroy');
+});
+
+
+
 //admin activities
 Route::group([
-    'prefix'     => 'admin/activities',
+    'prefix'     => 'activities',
     'middleware' => ['auth:admin_api', 'permission:manage-admins'],
 ], function () {
     Route::get('{admin}'                , 'ActivityController@show');
@@ -62,8 +79,8 @@ Route::group([
 
 //admin auth
 Route::group([
-    'prefix'     => 'admin/auth',
-    'namespace'  => 'Admin'
+    'prefix'     => 'auth',
+    'namespace'  => 'Auth'
 ], function () {
     Route::post('login'                 , 'AuthAdminController@login');
 });
@@ -71,31 +88,10 @@ Route::group([
 
 //admin profile
 Route::group([
-    'prefix'     => 'admin/profile',
+    'prefix'     => 'profile',
     'middleware' => 'auth:admin_api',
-    'namespace'  => 'Admin'
+    'namespace'  => 'Profile'
 ], function () {
     Route::get(''                       , 'AdminProfileController@getProfile');
     Route::put(''                       , 'AdminProfileController@updateProfile');
-});
-
-
-//vendor profile
-Route::group([
-    'prefix'     => 'vendor/profile',
-    'middleware' => 'auth:vendor_api',
-    'namespace'  => 'Vendor'
-], function () {
-    Route::get(''                       , 'VendorProfileController@getProfile');
-    Route::put(''                       , 'VendorProfileController@updateProfile');
-    Route::put('info'                   , 'VendorProfileController@updateInfo');
-});
-
-
-//vendor auth
-Route::group([
-    'prefix'     => 'vendor/auth',
-    'namespace'  => 'Vendor'
-], function () {
-    Route::post('login'                 , 'AuthVendorController@login');
 });

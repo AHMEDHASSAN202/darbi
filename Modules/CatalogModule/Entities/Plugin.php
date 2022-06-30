@@ -2,10 +2,11 @@
 
 namespace Modules\CatalogModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
-class Plugin extends \Jenssegers\Mongodb\Eloquent\Model
+class Plugin extends Base
 {
     use HasFactory, SoftDeletes;
 
@@ -21,9 +22,9 @@ class Plugin extends \Jenssegers\Mongodb\Eloquent\Model
     }
 
     //================== Relations ==================\\
-    public function cars()
+    public function entities()
     {
-        return $this->belongsToMany(Car::class, null, 'plugin_ids', 'car_ids');
+        return $this->belongsToMany(Entity::class, null, 'plugin_ids', 'entity_ids');
     }
     //===================#END# Relation ==============\\
 
@@ -32,6 +33,13 @@ class Plugin extends \Jenssegers\Mongodb\Eloquent\Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function scopeFilters($query)
+    {
+        if ($entityType = request()->get('entity_type')) {
+            $query->where('entity_type', $entityType);
+        }
     }
 
     //================ #END# Scopes =========================\\

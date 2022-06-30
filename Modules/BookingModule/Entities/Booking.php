@@ -2,30 +2,74 @@
 
 namespace Modules\BookingModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model;
-use Modules\CatalogModule\Entities\Entity;
+use Illuminate\Http\Request;
+use MongoDB\BSON\ObjectId;
 
-class Booking extends Model
+class Booking extends Base
 {
     use HasFactory;
 
     protected $guarded = [];
 
-    protected $dates = ['start_booking_at', 'end_booking_at'];
+    protected $dates = ['start_booking_at', 'end_booking_at', 'start_trip_at', 'end_trip_at', 'accepted_at'];
+
+    protected $appends = ['expired_at'];
 
     protected static function newFactory()
     {
         return \Modules\BookingModule\Database\factories\BookingFactory::new();
     }
 
-
-    //=================== relations ====================\\
-
-    public function entity()
+    //=============== Appends =====================\\
+    public function getExpiredAtAttribute()
     {
-        return $this->belongsTo(Entity::class);
+        $time_interval_user_accept_min = getOption('time_interval_user_accept_min', 22);
+
+        return optional($this->accepted_at)->addMinutes($time_interval_user_accept_min);
+    }
+    //=============== #END# Appends =====================\\
+
+    //===================== scopes ====================\\
+
+    public function scopeAdminSearch($query, Request $request)
+    {
+        if ($q = $request->get('q')) {
+            $query->where(function ($query) use ($q) {
+                $query->where('entity_details.name.ar', 'LIKE', '%'.$q.'%')->orWhere('entity_details.name.en', 'LIKE', '%'.$q.'%');
+            });
+        }
     }
 
-    //=================== #END# relations ====================\\
+
+    public function scopeAdminFilter($query, Request $request)
+    {
+        $status = $request->get('status');
+        if ($status && $status !== 'all') {
+            $query->where('status', $status);
+        }
+
+        if ($vendor = $request->get('vendor')) {
+            $query->where('vendor_id', new ObjectId($vendor));
+        }
+
+        if ($user = $request->get('user')) {
+            $query->where('user_id', new ObjectId($user));
+        }
+
+        if ($bookId = $request->get('book_id')) {
+            $query->where('_id', new ObjectId($bookId));
+        }
+
+        if ($city = $request->get('city')) {
+
+        }
+
+        if ($country = $request->get('country')) {
+            $query->where('country_id', new ObjectId($country));
+        }
+    }
+
+    //===================== #END# scopes ====================\\
 }

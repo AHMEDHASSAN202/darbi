@@ -21,11 +21,13 @@ class BrandFactory extends Factory
     public function definition()
     {
         $arFaker = \Faker\Factory::create('ar_EG');
+        $brandImages = getBrandTestImages();
 
         return [
             'name'      => ['ar' => $arFaker->company(), 'en' => $this->faker->company()],
-            'logo'      => $this->faker->imageUrl(150, 150, 'logo', false, 'Logo'),
-            'is_active' => $this->faker->boolean
+            'logo'      => $brandImages[mt_rand(0, (count($brandImages) - 1))],
+            'entity_type' => ['car', 'yacht'][mt_rand(0,1)],
+            'is_active' => true
         ];
     }
 }

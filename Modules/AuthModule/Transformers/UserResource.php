@@ -3,7 +3,6 @@
 namespace Modules\AuthModule\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use function asset;
 
 class UserResource extends JsonResource
 {
@@ -15,14 +14,17 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
+        $avatars = getAvatarTestImages();
+        $image = $avatars[mt_rand(0, (count($avatars) - 1))];
+
         return [
             'id'        => $this->_id,
             'name'      => $this->name,
-            'email'     => $this->email,
+            'phone_code'=> $this->phone_code,
             'phone'     => $this->phone,
-            'image'     => $this->image ? asset($this->image) : null,
-            'city'      => $this->city,
-            'country'   => $this->country
+            'image'     => $image,
+            'is_active' => (boolean)$this->is_active,
+            'is_profile_completed' => (!empty($this->name) && !empty(@$this->identity['frontside_image']) && !empty(@$this->identity['backside_image']))
         ];
     }
 }

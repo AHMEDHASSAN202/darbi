@@ -8,23 +8,24 @@ namespace Modules\CatalogModule\Services;
 
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Repositories\CarRepository;
-use Modules\CatalogModule\Transformers\CarDetailsResource;
+use Modules\CatalogModule\Transformers\FindCarResource;
 use Modules\CatalogModule\Transformers\CarResource;
+use Modules\CommonModule\Traits\ImageHelperTrait;
 use Modules\CommonModule\Transformers\PaginateResource;
 
 class CarService
 {
-    private $carRepository;
+    use ImageHelperTrait;
 
     public function __construct(CarRepository $carRepository)
     {
-        $this->carRepository = $carRepository;
+        $this->repository = $carRepository;
     }
 
 
     public function findAll(Request $request)
     {
-        $cars = $this->carRepository->listOfCars($request);
+        $cars = $this->repository->listOfCars($request);
 
         return new PaginateResource(CarResource::collection($cars));
     }
@@ -32,10 +33,10 @@ class CarService
 
     public function find($carId)
     {
-        $car = $this->carRepository->findCarWithDetailsById($carId);
+        $car = $this->repository->findCarWithDetailsById($carId);
 
         abort_if(is_null($car), 404);
 
-        return new CarDetailsResource($car);
+        return new FindCarResource($car);
     }
 }

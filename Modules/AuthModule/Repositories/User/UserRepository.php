@@ -8,8 +8,6 @@ namespace Modules\AuthModule\Repositories\User;
 
 use Illuminate\Http\Request;
 use Modules\AuthModule\Entities\User;
-use Modules\CommonModule\Traits\CrudRepositoryTrait;
-use MongoDB\BSON\ObjectId;
 
 class UserRepository
 {
@@ -23,14 +21,36 @@ class UserRepository
         return $this->model->where('phone', $phone)->where('phone_code', $phoneCode)->with($with)->first();
     }
 
-    public function createUserFromSignin($phone, $country)
+    public function createUserFromSignin($phone, $phoneCode)
     {
         return $this->model->create([
-                'phone'         => $phone,
-                'phone_code'    => $country->calling_code,
-                'country_id'    => new ObjectId($country->_id),
-                'is_active'     => true,
-                'is_verified'   => true
-            ]);
+            'phone' => $phone,
+            'phone_code' => $phoneCode,
+            'is_active' => true
+        ]);
+    }
+
+    public function findAll(Request $request)
+    {
+        return $this->model->search($request)->filter($request)->latest()->paginate($request->get('limit', 20));
+    }
+
+    public function find($userId)
+    {
+        return $this->model->findOrFail($userId);
+    }
+
+    public function destroy($userId)
+    {
+        return $this->model->destroy($userId);
+    }
+
+    public function toggleActive($userId)
+    {
+        $user = $this->model->findOrFail($userId);
+        $user->is_active = !$user->is_active;
+        $user->save();
+
+        return $user;
     }
 }

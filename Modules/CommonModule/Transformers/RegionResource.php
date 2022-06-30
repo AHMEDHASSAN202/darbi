@@ -14,17 +14,21 @@ class RegionResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $res = [
             'id'                => $this->_id,
-            'country_id'        => $this->country_id,
-            'city_id'           => $this->city_id,
+            'country_id'        => (string)$this->country_id,
+            'city_id'           => (string)$this->city_id,
             'name'              => translateAttribute($this->name),
-            $this->mergeWhen($this->relationLoaded('country'), [
-                'country'       => new CountryResource($this->country)
-            ]),
-            $this->mergeWhen($this->relationLoaded('city'), [
-                'city'          => new CityResource($this->city)
-            ])
         ];
+
+        if ($this->relationLoaded('country')) {
+            $res['country'] = new CountryResource($this->country);
+        }
+
+        if ($this->relationLoaded('city')) {
+            $res['city'] = new CityResource($this->city);
+        }
+
+        return $res;
     }
 }

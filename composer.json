@@ -6,14 +6,16 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.4",
         "intervention/image": "^2.7",
         "jenssegers/mongodb": "^3.9",
         "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
+        "league/flysystem-aws-s3-v3": "3.0",
         "nwidart/laravel-modules": "^9.0",
         "tymon/jwt-auth": "^1.0",
+        
         "symfony/console": "6.0.*",
         "symfony/error-handler": "6.0.*",
         "symfony/finder": "6.0.*",

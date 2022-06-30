@@ -38,6 +38,8 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapWebRoutes();
 
         $this->mapApiAdminRoutes();
+
+        $this->mapApiCommonRoutes();
     }
 
     /**
@@ -82,5 +84,21 @@ class RouteServiceProvider extends ServiceProvider
             ->middleware('api')
             ->namespace($this->moduleNamespace)
             ->group(module_path('CommonModule', '/Routes/admin.php'));
+    }
+
+
+    /**
+     * Define the "api common" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiCommonRoutes()
+    {
+        Route::prefix('api/common/v1')
+            ->middleware('api')
+            ->namespace($this->moduleNamespace)
+            ->group(module_path('CommonModule', '/Routes/common.php'));
     }
 }

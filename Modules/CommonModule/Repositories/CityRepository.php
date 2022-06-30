@@ -22,13 +22,6 @@ class CityRepository
     {
         $query = $this->model->active()->search($request)->filter($request);
 
-        if ($embedParam = $request->get('embed')) {
-            $embed = explode(',', $embedParam);
-            if (in_array('country', $embed)) {
-                $query->with('country');
-            }
-        }
-
         if ($request->has('paginated')) {
             return $query->paginate($request->get('limit', 20));
         }

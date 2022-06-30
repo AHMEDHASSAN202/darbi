@@ -9,8 +9,6 @@
         "Modules\\CommonModule\\Providers\\EventServiceProvider"
     ],
     "aliases": {},
-    "files": [
-        "Helpers/MainHelper.php"
-    ],
+    "files": [],
     "requires": []
 }

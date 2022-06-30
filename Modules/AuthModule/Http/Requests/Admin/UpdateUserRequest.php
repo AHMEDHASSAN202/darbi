@@ -1,0 +1,41 @@
+<?php
+
+namespace Modules\AuthModule\Http\Requests\Admin;
+
+use App\Rules\AlphaNumSpacesRule;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
+
+class UpdateUserRequest extends FormRequest
+{
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        $id = $this->route('id');
+
+        return [
+            'name'      => ['required', 'max:100', new AlphaNumSpacesRule()],
+            'email'     => ['required', 'email', Rule::unique('vendors')->ignore($id, '_id')],
+            'password'  => ['required', 'max:100', Password::min(8)->letters()],
+            'phone'     => ['required', 'numeric', 'digits_between:8,15', Rule::unique('vendors')->ignore($id, '_id')],
+            'image'     => 'nullable|image|max:5120', //5m
+            'country'   => 'required|string|size:2',
+            'city'      => 'required|string|size:2'
+        ];
+    }
+
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+}

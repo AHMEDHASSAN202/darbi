@@ -2,16 +2,14 @@
 
 namespace Modules\CommonModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model;
 
-class StartUpImage extends Model
+class StartUpImage extends Base
 {
     use HasFactory;
 
     protected $guarded = [];
-
-    protected $appends = ['image_full_path'];
 
     protected $dates = ['valid_from', 'valid_to'];
 
@@ -33,14 +31,4 @@ class StartUpImage extends Model
     }
 
     //========== #END# Scopes ==================\\
-
-
-    //========== Appends =======================\\
-
-   public function getImageFullPathAttribute()
-   {
-       return filter_var($this->image, FILTER_VALIDATE_URL) ? $this->image : asset($this->image);
-   }
-
-    //=============#END# Appends ====================\\
 }

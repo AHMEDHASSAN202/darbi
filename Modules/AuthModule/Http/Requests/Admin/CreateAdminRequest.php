@@ -2,6 +2,7 @@
 
 namespace Modules\AuthModule\Http\Requests\Admin;
 
+use App\Rules\AlphaNumSpacesRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
@@ -15,10 +16,13 @@ class CreateAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'          => 'required|max:100',
+            'name'          => ['required', 'max:100', new AlphaNumSpacesRule()],
             'email'         => 'required|email|unique:admins',
             'role_id'       => 'required|exists:roles,_id',
-            'password'      => ['required', Password::min(8)->letters(), 'confirmed']
+            'password'      => ['required', Password::min(8)->letters(), 'confirmed'],
+            'type'          => 'required|in:admin,vendor',
+            'vendor_id'     => 'required_if:type,vendor',
+            'image'         => 'sometimes|image|max:5120' //5m
         ];
     }
 

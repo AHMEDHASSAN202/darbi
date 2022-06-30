@@ -96,15 +96,17 @@ return [
         'mongodb' => [
             'driver' => 'mongodb',
             'host' => env('DB_MONGO_HOST', '127.0.0.1'),
+            'dsn'   => env('DB_MONGO_DSN'),
             'port' => env('DB_MONGO_PORT', 27017),
             'database' => env('DB_MONGO_DATABASE', 'homestead'),
-            'username' => env('DB_MONGO_USERNAME', 'homestead'),
-            'password' => env('DB_MONGO_PASSWORD', 'secret'),
+            'username' => env('DB_MONGO_USERNAME', ''),
+            'password' => env('DB_MONGO_PASSWORD', ''),
             'options' => [
                 // here you can pass more settings to the Mongo Driver Manager
                 // see https://www.php.net/manual/en/mongodb-driver-manager.construct.php under "Uri Options" for a list of complete parameters that you can use
 
                 'database' => env('DB_AUTHENTICATION_DATABASE', 'admin'), // required with Mongo 3+
+                'retryWrites' => false  //solved replica-sets issue
             ],
         ],
     ],
@@ -137,27 +139,34 @@ return [
 
         'client' => env('REDIS_CLIENT', 'phpredis'),
 
-        'options' => [
-            'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+        'default' => [
+//            'scheme' => 'tls',
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => env('REDIS_DB', 0),
         ],
 
-        'default' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'username' => env('REDIS_USERNAME'),
-            'password' => env('REDIS_PASSWORD'),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_DB', '0'),
+        'clusters' => [
+            'default' => [
+                [
+                    'scheme'   => env('REDIS_SCHEME', 'tcp'),
+                    'host'     => env('REDIS_HOST', 'localhost'),
+                    'password' => env('REDIS_PASSWORD', null),
+                    'port'     => env('REDIS_PORT', 6379),
+                    'database' => env('REDIS_DATABASE', 0),
+                ],
+            ],
+            'options' => [ // Clustering specific options
+                'cluster' => 'redis', // This tells Redis Client lib to follow redirects (from cluster)
+            ]
         ],
 
         'cache' => [
-            'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
-            'username' => env('REDIS_USERNAME'),
             'password' => env('REDIS_PASSWORD'),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => env('REDIS_CACHE_DB', 1),
         ],
 
     ],

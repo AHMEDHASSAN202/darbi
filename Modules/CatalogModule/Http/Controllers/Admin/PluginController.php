@@ -2,79 +2,62 @@
 
 namespace Modules\CatalogModule\Http\Controllers\Admin;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use function view;
+use Modules\CatalogModule\Http\Requests\Admin\CreatePluginRequest;
+use Modules\CatalogModule\Http\Requests\Admin\UpdatePluginRequest;
+use Modules\CatalogModule\Services\Admin\PluginService;
+use Modules\CommonModule\Traits\ApiResponseTrait;
 
 class PluginController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
-    public function index()
+    use ApiResponseTrait;
+
+    private $pluginService;
+
+    public function __construct(PluginService $pluginService)
     {
-        return view('addonsmodule::index');
+        $this->pluginService = $pluginService;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
+    public function index(Request $request)
     {
-        return view('addonsmodule::create');
+        $plugins = $this->pluginService->list($request, false);
+
+        return $this->apiResponse(compact('plugins'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
+
+
+    public function store(CreatePluginRequest $createPluginRequest)
     {
-        //
+        $plugin = $this->pluginService->create($createPluginRequest);
+
+        return $this->apiResponse(compact('plugin'), 201, __('Data has been added successfully'));
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
+
     public function show($id)
     {
-        return view('addonsmodule::show');
+        $plugin = $this->pluginService->find($id);
+
+        return $this->apiResponse(compact('plugin'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
+
+
+    public function update(UpdatePluginRequest $updatePluginRequest, $id)
     {
-        return view('addonsmodule::edit');
+        $plugin = $this->pluginService->update($id, $updatePluginRequest);
+
+        return $this->apiResponse(compact('plugin'), 200, __('Data has been updated successfully'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
     public function destroy($id)
     {
-        //
+        $this->pluginService->delete($id);
+
+        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
     }
 }

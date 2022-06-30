@@ -15,11 +15,10 @@ class PluginResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'            => $this->_id,
+            'id'            => (string)$this->_id,
             'name'          => translateAttribute($this->name),
-            'price'         => $this->price,
-            'price_unit'    => $this->price_unit,
-            'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit)
+            'desc'          => translateAttribute($this->desc),
         ];
     }
+
 }

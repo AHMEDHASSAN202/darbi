@@ -24,10 +24,9 @@ class PluginFactory extends Factory
 
         return [
             'name'          => ['ar' => $arFaker->text(50), 'en' => $this->faker->text(50)],
-            'price'         => $this->faker->numberBetween(1500, 6000),
-            'price_unit'    => ['day', 'hour'][mt_rand(0,1)],
+            'desc'          => [['ar' => $arFaker->text(50), 'en' => $this->faker->text(50)], ['ar' => '', 'en' => '']][mt_rand(0,1)],
             'is_active'     => $this->faker->boolean(),
-            'car_ids'       => []
+            'entity_type'   => ['car', 'yacht'][mt_rand(0,1)]
         ];
     }
 }

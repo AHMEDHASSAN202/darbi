@@ -4,10 +4,14 @@ namespace Modules\BookingModule\Database\factories;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\AuthModule\Entities\User;
+use Modules\AuthModule\Transformers\VendorResource;
 use Modules\CatalogModule\Entities\Car;
 use Modules\CatalogModule\Entities\Vendor;
+use Modules\CatalogModule\Transformers\FindVendorResource;
 use Modules\CommonModule\Entities\Country;
 use Modules\CommonModule\Entities\Region;
+use Modules\CommonModule\Transformers\CountryResource;
 use MongoDB\BSON\ObjectId;
 
 class BookingFactory extends Factory
@@ -27,16 +31,15 @@ class BookingFactory extends Factory
     public function definition()
     {
         $vendor = Vendor::all()->random(1)->first();
-        $ent = Car::withoutGlobalScope('car')->get()->random(1)->first();
-        $branch = $vendor->branches()->first();
-        $country = Country::all()->random(1)->first();
+        $user = User::all()->random(1)->first();
+        $ent = Car::withoutGlobalScope('car')->with(['model', 'brand', 'country', 'city'])->get()->random(1)->first();
         $region = Region::active()->get()->random(1)->first();
-        $pluginPrice = $this->faker->randomFloat(2,3);
 
         return [
+            'user_id'               => $user->_id,
+            'user'                  => $user->only(['_id', 'phone', 'phone_code', 'name', 'email']),
             'vendor_id'             => new ObjectId($vendor->_id),
-            'branch_id'             => $branch ? new ObjectId($branch->_id): null,
-            'country_id'            => new ObjectId($country->_id),
+            'vendor'                => new FindVendorResource($vendor),
             'entity_id'             => new ObjectId($ent->_id),
             'entity_type'           => $ent->type,
             'start_booking_at'      => now()->subDay()->timestamp,
@@ -50,7 +53,7 @@ class BookingFactory extends Factory
                 'state'             => $this->faker->streetAddress,
                 'region_id'         => new ObjectId($region->_id)
             ],
-            'drop_location_address'  => [
+            'drop_location_address' => [
                 'lat'               => $this->faker->latitude,
                 'lng'               => $this->faker->longitude,
                 'fully_addressed'   => $this->faker->address,
@@ -60,17 +63,20 @@ class BookingFactory extends Factory
                 'region_id'         => new ObjectId($region->_id)
             ],
             'entity_details'         => [
-                'price'         => $ent->price,
-                'price_unit'    => $ent->price_unit,
-                'image'         =>  $this->faker->imageUrl(300, 300, 'car', false, 'Car'),
-                'model_id'      => new ObjectId($ent->model_id),
-                'model_name'    => ['ar' => translateAttribute($ent->model->name, 'ar'), 'en' => translateAttribute($ent->model->name, 'en')],
-                'brand_id'      => new ObjectId($ent->brand_id),
-                'brand_name'    => ['ar' => translateAttribute($ent->brand->name), 'en' => translateAttribute($ent->model->name, 'en')],
-                'plugins'       => [['name' => ['ar' => $this->faker->text(10), 'en' => $this->faker->text(10)], 'price_per_day' => $pluginPrice]]
+                'name'      => @$ent->name,
+                'price'     => @$ent->price,
+                'price_unit'=> @$ent->price_unit,
+                'images'    => @$ent->images,
+                'model_id'  => @$ent->model_id,
+                'model_name'=> @$ent->model->name,
+                'brand_id'  => @$ent->brand_id,
+                'brand_name'=> @$ent->brand->name,
+                'country'   => $ent->country->name,
+                'extras'    => [],
             ],
             'invoice_number'         => \Str::random(),
             'price_summary'          => [
+                'total_price'       => 100,
                 'total_discount'    => 22.2,
                 'discount_value'    => 22,
                 'total_price_before_discount_before_vat' => 23.3,
@@ -83,6 +89,7 @@ class BookingFactory extends Factory
                 'charge_shop'   => ''
             ],
             'status' => ['pending','accepted','paid','cancelled_before_accept','cancelled_after_accept','rejected','picked_up','dropped','completed','force_cancelled'][mt_rand(0,9)],
+            'rejected_reason' => '',
             'status_change_log' => [
                 [
                     'old_status'    => '',

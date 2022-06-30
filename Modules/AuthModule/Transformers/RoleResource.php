@@ -17,7 +17,8 @@ class RoleResource extends JsonResource
         return [
             'id'            => $this->id,
             'name'          => $this->name,
-            'permissions'   => is_string($this->permissions) ? json_decode($this->permissions) : (is_array($this->permissions) ? $this->permissions : [])
+            'guard'         => $this->guard,
+            'permissions_count' => is_array($this->permissions) ? count($this->permissions) : 0
         ];
     }
 }

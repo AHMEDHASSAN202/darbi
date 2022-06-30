@@ -8,15 +8,17 @@ namespace Modules\AuthModule\Services;
 
 use Illuminate\Support\Facades\Hash;
 use Modules\AuthModule\Transformers\AdminProfileResource;
-use function auth;
+use Modules\CommonModule\Traits\ImageHelperTrait;
 
 class AdminProfileService
 {
+    use ImageHelperTrait;
+
     private $guardName = 'admin_api';
 
     public function getProfile()
     {
-        $me = auth($this->guardName)->user();
+        $me = auth($this->guardName)->user()->load('role');
 
         return (new AdminProfileResource($me));
     }
@@ -26,7 +28,15 @@ class AdminProfileService
         $me = auth($this->guardName)->user();
         $me->name = $request->name;
         $me->email = $request->email;
-        $me->password = Hash::make($request->password);
+
+        if ($request->password) {
+            $me->password = Hash::make($request->password);
+        }
+
+        if ($request->hasFile('image')) {
+            $me->image = $this->uploadImage('admins', $request->image);
+        }
+
         $me->save();
         return (new AdminProfileResource($me));
     }

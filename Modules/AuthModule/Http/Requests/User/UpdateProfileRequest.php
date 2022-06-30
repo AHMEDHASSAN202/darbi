@@ -2,9 +2,8 @@
 
 namespace Modules\AuthModule\Http\Requests\User;
 
+use App\Rules\AlphaNumSpacesRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Modules\AuthModule\Services\UserAuthService;
 
 class UpdateProfileRequest extends FormRequest
 {
@@ -15,12 +14,8 @@ class UpdateProfileRequest extends FormRequest
      */
     public function rules()
     {
-        $me = app(UserAuthService::class)->authUser();
-
         return [
-            'name'                      => 'required|min:3,max:50',
-            'phone'                     => ['required', 'numeric', 'digits_between:8,11', Rule::unique('users', 'phone')->where('phone_code', $me->phone_code)->ignore($me->_id, '_id')],
-            'email'                     => 'sometimes|nullable|email|unique:users',
+            'name'                      => ['required', 'min:3', 'max:50', new AlphaNumSpacesRule()],
             'identity_frontside_image'  => 'sometimes|nullable|image|max:5120', //5m
             'identity_backside_image'   => 'sometimes|nullable|image|max:5120', //5m
         ];

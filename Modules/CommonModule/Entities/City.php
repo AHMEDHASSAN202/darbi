@@ -2,12 +2,13 @@
 
 namespace Modules\CommonModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
-use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use MongoDB\BSON\ObjectId;
 
-class City extends Model
+class City extends Base
 {
     use HasFactory, SoftDeletes;
 
@@ -35,7 +36,7 @@ class City extends Model
     public function scopeFilter($query, Request $request)
     {
         if ($countryId = $request->get('country')) {
-            $query->where('country_id', $countryId);
+            $query->where('country_id', new ObjectId($countryId));
         }
     }
 

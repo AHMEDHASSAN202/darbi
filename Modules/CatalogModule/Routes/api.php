@@ -21,7 +21,6 @@ Route::group([
 ], function () {
     Route::get(''               , 'CarController@index');
     Route::get('{car}'          , 'CarController@show');
-    Route::get('{car}/plugins'  , 'PluginController@findAllPluginByCar');
 });
 
 
@@ -42,4 +41,32 @@ Route::group([
     'namespace' => 'User'
 ], function () {
     Route::get(''               , 'BrandController@index');
+});
+
+
+//entity routes
+Route::group([
+    'prefix'    => 'entities',
+    'namespace' => 'User'
+], function () {
+    Route::get('{entity}'        , 'EntityController@show');
+    Route::put('{entity}/state/{state}' , 'EntityController@ changeState')->whereIn('state', ['free', 'reserved', 'pending']);
+});
+
+
+//brand routes
+Route::group([
+    'prefix'    => 'ports',
+    'namespace' => 'User'
+], function () {
+    Route::get(''               , 'PortController@index');
+});
+
+
+//vendor routes
+Route::group([
+    'prefix'    => 'vendors',
+    'namespace' => 'User'
+], function () {
+    Route::get('{vendor}'               , 'VendorController@show');
 });

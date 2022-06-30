@@ -6,8 +6,12 @@
 
 namespace Modules\AuthModule\Services;
 
+use Illuminate\Http\Request;
 use Modules\AuthModule\Repositories\User\UserRepository;
+use Modules\AuthModule\Transformers\FindUserResource;
+use Modules\AuthModule\Transformers\UserResource;
 use Modules\CommonModule\Traits\ImageHelperTrait;
+use Modules\CommonModule\Transformers\PaginateResource;
 
 class UserService
 {
@@ -19,5 +23,33 @@ class UserService
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
+    }
+
+    public function findAll(Request $request)
+    {
+        $users = $this->userRepository->findAll($request);
+
+        return new PaginateResource(UserResource::collection($users));
+    }
+
+    public function find($userId)
+    {
+        $user = $this->userRepository->find($userId);
+
+        return new FindUserResource($user);
+    }
+
+    public function destroy($userId)
+    {
+        return $this->userRepository->destroy($userId);
+    }
+
+    public function toggleActive($userId)
+    {
+        $this->userRepository->toggleActive($userId);
+
+        return [
+            'id'    => $userId
+        ];
     }
 }

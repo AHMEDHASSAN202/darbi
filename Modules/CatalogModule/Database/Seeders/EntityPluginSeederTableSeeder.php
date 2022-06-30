@@ -5,6 +5,7 @@ namespace Modules\CatalogModule\Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use Modules\CatalogModule\Entities\Car;
+use Modules\CatalogModule\Entities\Entity;
 use Modules\CatalogModule\Entities\Plugin;
 
 class EntityPluginSeederTableSeeder extends Seeder
@@ -18,10 +19,11 @@ class EntityPluginSeederTableSeeder extends Seeder
     {
         Model::unguard();
 
-        $cars = Car::withoutGlobalScope('car')->get();
-        foreach ($cars as $car) {
+        $entities = Entity::get();
+
+        foreach ($entities as $entity) {
             $plugins = Plugin::all()->random(3)->pluck('_id')->toArray();
-            $car->plugins()->attach($plugins);
+            $entity->plugins()->attach($plugins);
         }
     }
 }

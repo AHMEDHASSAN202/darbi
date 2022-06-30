@@ -25,6 +25,6 @@ class UserDeviceTokenController extends Controller
     {
         $this->userDeviceTokenService->handleUserDeviceToken($storeDeviceTokenRequest);
 
-        return $this->apiResponse([]);
+        return $this->apiResponse([], 200, __('Token Saved'));
     }
 }

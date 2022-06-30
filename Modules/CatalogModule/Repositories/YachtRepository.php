@@ -9,9 +9,14 @@ namespace Modules\CatalogModule\Repositories;
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Entities\Car;
 use Modules\CatalogModule\Entities\Yacht;
+use Modules\CatalogModule\Enums\EntityType;
+use Modules\CommonModule\Traits\CrudRepositoryTrait;
+use MongoDB\BSON\ObjectId;
 
 class YachtRepository
 {
+    use EntityHelperRepository;
+
     public function __construct(Yacht $model)
     {
         $this->model = $model;
@@ -20,12 +25,13 @@ class YachtRepository
     public function listOfYachts(Request $request)
     {
         return $this->model->search($request)
-                           ->filter($request)
+                           ->filter($request, EntityType::YACHT)
+                           ->filterDate($request)
                            ->active()
                            ->available()
                            ->free()
+                           ->with(['model', 'country'])
                            ->whereHas('port', function ($query) { $query->active(); })
-                           ->with('plugins')
                            ->latest()
                            ->paginate($request->get('limit', 20));
     }
@@ -33,6 +39,16 @@ class YachtRepository
 
     public function findYachtWithDetailsById($yachtId)
     {
-        return $this->model->with(['model', 'port', 'plugins' => function ($query) { $query->active(); }])->find($yachtId);
+        return $this->model->with(['model', 'port'])->find($yachtId);
+    }
+
+    public function findAllByVendor(Request $request, $vendorId)
+    {
+        return $this->model->adminSearch($request)
+                            ->with(['port'])
+                            ->adminFilter($request, EntityType::YACHT)
+                            ->latest()
+                            ->where('vendor_id', new ObjectId($vendorId))
+                            ->paginate($request->get('limit', 20));
     }
 }

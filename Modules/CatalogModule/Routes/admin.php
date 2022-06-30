@@ -13,3 +13,68 @@
 */
 
 
+//plugin routes
+Route::group([
+    'prefix'    => 'plugins',
+    'middleware' => ['auth:admin_api']
+], function () {
+    Route::get(''               , 'PluginController@index');
+    Route::get('{plugin}'       , 'PluginController@show');
+    Route::post(''              , 'PluginController@store');
+    Route::put('{plugin}'       , 'PluginController@update');
+    Route::delete('{plugin}'    , 'PluginController@destroy');
+});
+
+
+//port routes
+Route::group([
+    'prefix'    => 'ports',
+    'middleware'=> ['auth:admin_api']
+], function () {
+    Route::get(''             , 'PortController@index');
+    Route::get('{port}'       , 'PortController@show');
+    Route::post(''            , 'PortController@store');
+    Route::put('{port}'       , 'PortController@update');
+    Route::delete('{port}'    , 'PortController@destroy');
+});
+
+
+//brand routes
+Route::group([
+    'prefix'    => 'brands',
+    'middleware'=> ['auth:admin_api']
+], function () {
+    Route::get(''              , 'BrandController@index');
+    Route::get('{brand}'       , 'BrandController@show');
+    Route::post(''             , 'BrandController@store');
+    Route::put('{brand}'       , 'BrandController@update');
+    Route::delete('{brand}'    , 'BrandController@destroy');
+});
+
+
+//model routes
+Route::group([
+    'prefix'    => 'models',
+    'middleware'=> ['auth:admin_api']
+], function () {
+    Route::get(''             , 'ModelController@index');
+    Route::get('{model}'      , 'ModelController@show');
+    Route::post(''            , 'ModelController@store');
+    Route::put('{model}'      , 'ModelController@update');
+    Route::delete('{model}'   , 'ModelController@destroy');
+    Route::delete('{model}/images/{index}'  , 'ModelController@deleteImage');
+});
+
+
+
+//vendor routes
+Route::group([
+    'prefix'    => 'vendors',
+    'middleware'=> ['auth:admin_api']
+], function () {
+    Route::get(''             , 'VendorController@index');
+    Route::get('{vendor}'     , 'VendorController@show');
+    Route::post(''            , 'VendorController@store');
+    Route::put('{vendor}'     , 'VendorController@update');
+    Route::delete('{vendor}'  , 'VendorController@destroy');
+});

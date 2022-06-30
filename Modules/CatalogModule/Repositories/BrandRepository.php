@@ -8,9 +8,12 @@ namespace Modules\CatalogModule\Repositories;
 
 use Illuminate\Http\Request;
 use Modules\CatalogModule\Entities\Brand;
+use Modules\CommonModule\Traits\CrudRepositoryTrait;
 
 class BrandRepository
 {
+    use CrudRepositoryTrait;
+
     public function __construct(Brand $model)
     {
         $this->model = $model;
@@ -19,8 +22,20 @@ class BrandRepository
     public function listOfBrands(Request $request)
     {
         $query = $this->model->search($request)
-                      ->active()
-                      ->latest();
+                             ->filters($request)
+                             ->active()
+                             ->latest();
+
+        if ($request->has('paginated')) {
+            return $query->paginate($request->get('limit', 20));
+        }
+
+        return $query->get();
+    }
+
+    public function listOfBrandsForDashboard(Request $request, $wheres = [])
+    {
+        $query = $this->model->adminSearch($request)->adminFilters($request)->latest()->where($wheres);
 
         if ($request->has('paginated')) {
             return $query->paginate($request->get('limit', 20));

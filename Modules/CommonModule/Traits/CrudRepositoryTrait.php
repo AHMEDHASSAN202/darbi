@@ -15,28 +15,28 @@ trait CrudRepositoryTrait
         return $this->model->create($data);
     }
 
-    public function update($id, $data)
+    public function update($id, $data, $wheres = [])
     {
-        $row = $this->model->findOrFail($id);
+        $row = $this->model->where($wheres)->findOrFail($id);
         $row->update($data);
         $row->refresh();
         return $row;
     }
 
-    public function destroy($id)
+    public function destroy($id, $wheres = [])
     {
-        return $this->model->findOrFail($id)->delete();
+        return $this->model->where($wheres)->findOrFail($id)->delete();
     }
 
-    public function find($id)
+    public function find($id, $wheres = [], $with = [])
     {
-        return $this->model->findOrFail($id);
+        return $this->model->where($wheres)->with($with)->findOrFail($id);
     }
 
     public function list($limit = 20, $searchMethod = null, $moreScopeMethod = null, $with = [])
     {
         //model instance
-        $query = $this->model;
+        $query = $this->model->latest();
 
         //search scope method
         if ($searchMethod) {

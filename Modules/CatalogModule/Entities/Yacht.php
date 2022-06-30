@@ -5,9 +5,9 @@ namespace Modules\CatalogModule\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Jenssegers\Mongodb\Eloquent\Builder;
-use Jenssegers\Mongodb\Eloquent\Model;
-use Modules\CommonModule\Entities\Country;
+use MongoDB\BSON\ObjectId;
 
 class Yacht extends Entity
 {
@@ -49,17 +49,6 @@ class Yacht extends Entity
             $q = '%' . $q . '%';
             $query->where('name.en', 'LIKE', $q)->orWhere('name.ar', 'LIKE', $q);
         });
-    }
-
-    public function scopeFilter($query, Request $request)
-    {
-        if ($city = $request->get('city')) {
-            $query->where('city_id', $city);
-        }
-
-        if ($country = $request->get('country')) {
-            $query->where('country_id', $country);
-        }
     }
 
     //================ #END# scopes =========================\\

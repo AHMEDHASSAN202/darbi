@@ -4,8 +4,10 @@ namespace Modules\CatalogModule\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use MongoDB\BSON\ObjectId;
 
 class Car extends Entity
 {
@@ -37,25 +39,5 @@ class Car extends Entity
                   ->orWhereHas('brand', function ($query) use ($q) { $query->where('name.en', 'LIKE', $q)->orWhere('name.ar', 'LIKE', $q); });
         });
     }
-
-    public function scopeFilter($query, Request $request)
-    {
-        if ($brand = $request->get('brand')) {
-            $query->where('brand_id', $brand);
-        }
-
-        if ($model = $request->get('model')) {
-            $query->where('model_id', $model);
-        }
-
-        if ($city = $request->get('city')) {
-            $query->where('city_id', $city);
-        }
-
-        if ($country = $request->get('country')) {
-            $query->where('country_id', $country);
-        }
-    }
-
     //================ #END# scopes =========================\\
 }

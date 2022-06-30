@@ -3,6 +3,7 @@
 namespace Modules\AuthModule\Http\Controllers\User;
 
 use Illuminate\Routing\Controller;
+use Modules\AuthModule\Http\Requests\CreatePlaceRequest;
 use Modules\AuthModule\Services\SavedPlaceService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
@@ -22,5 +23,12 @@ class SavedPlaceController extends Controller
         return $this->apiResponse([
             'places'    => $this->savedPlaceService->getUserPlaces()
         ]);
+    }
+
+    public function store(CreatePlaceRequest $createPlaceRequest)
+    {
+        $result = $this->savedPlaceService->createPlace($createPlaceRequest);
+
+        return $this->apiResponse(...$result);
     }
 }

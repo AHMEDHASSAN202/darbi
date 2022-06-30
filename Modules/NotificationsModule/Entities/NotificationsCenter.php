@@ -2,10 +2,10 @@
 
 namespace Modules\NotificationsModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model;
 
-class NotificationsCenter extends Model
+class NotificationsCenter extends Base
 {
     use HasFactory;
 

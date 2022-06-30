@@ -17,6 +17,9 @@ class RouteServiceProvider extends ServiceProvider
 
     protected $moduleNamespaceUser = 'Modules\AuthModule\Http\Controllers\User';
 
+
+    protected $moduleNamespaceAdmin = 'Modules\AuthModule\Http\Controllers\Admin';
+
     /**
      * Called before routes are registered.
      *
@@ -41,6 +44,8 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapWebRoutes();
 
         $this->mapApiAdminRoutes();
+
+        $this->mapApiVendorRoutes();
     }
 
     /**
@@ -83,7 +88,23 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('api/admin/v1')
             ->middleware('api')
-            ->namespace($this->moduleNamespace)
+            ->namespace($this->moduleNamespaceAdmin)
             ->group(module_path('AuthModule', '/Routes/admin.php'));
+    }
+
+
+    /**
+     * Define the "api vendor" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiVendorRoutes()
+    {
+        Route::prefix('api/vendor/v1')
+            ->middleware('api')
+            ->namespace($this->moduleNamespaceAdmin)
+            ->group(module_path('AuthModule', '/Routes/vendor.php'));
     }
 }

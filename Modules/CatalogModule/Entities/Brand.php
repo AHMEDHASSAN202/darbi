@@ -2,11 +2,12 @@
 
 namespace Modules\CatalogModule\Entities;
 
+use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
-class Brand extends \Jenssegers\Mongodb\Eloquent\Model
+class Brand extends Base
 {
     use HasFactory, SoftDeletes;
 
@@ -39,6 +40,23 @@ class Brand extends \Jenssegers\Mongodb\Eloquent\Model
             $query->where('name.en', 'LIKE', $q)->orWhere('name.ar', 'LIKE', $q);
         });
     }
-    
+
+    public function scopeFilters($query, Request $request)
+    {
+        if ($entityType = $request->get('entity_type')) {
+            $query->where('entity_type', $entityType);
+        }
+    }
+
+    public function scopeAdminSearch($query, Request $request)
+    {
+        return $this->scopeSearch($query, $request);
+    }
+
+    public function scopeAdminFilters($query, Request $request)
+    {
+        return $this->scopeFilters($query, $request);
+    }
+
     //================ #END# scopes =========================\\
 }

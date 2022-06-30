@@ -28,22 +28,13 @@ class UserFactory extends Factory
         return [
             'phone'         => str_replace('+', '', $this->faker->unique()->e164PhoneNumber()),
             'phone_code'    => $country->calling_code,
-            'country_id'    => new ObjectId($country->_id),
             'identity'      => [
-//                'type'              => ['passport', 'national_id'][mt_rand(0,1)],
-//                'value'             => (int)$this->faker->numerify('##########'),
                 'frontside_image'   => $this->faker->imageUrl(500, 250, null, false, 'FrontSide'),
                 'backside_image'    => $this->faker->imageUrl(500, 250, null, false, 'BackSide')
             ],
-//            'driving_license'=> [
-//                'frontside_image'   => $this->faker->imageUrl(500, 250, null, false, 'FrontSide'),
-//                'backside_image'    => $this->faker->imageUrl(500, 250, null, false, 'BackSide'),
-//                'value'             => (int)$this->faker->numerify('##########')
-//            ],
             'name'          => $this->faker->name(),
-            'email'         => $this->faker->email,
             'is_active'     => $this->faker->boolean(),
-            'verification_code' => (int)$this->faker->unique()->numerify('#####')
+//            'verification_code' => (int)$this->faker->unique()->numerify('#####'),
         ];
     }
 }

@@ -11,6 +11,3 @@
 |
 */
 
-Route::prefix('telescopemodule')->group(function() {
-    Route::get('/', 'TelescopeModuleController@index');
-});
