@@ -58,6 +58,7 @@ Route::group([
     'middleware'=> ['auth:admin_api']
 ], function () {
     Route::get(''             , 'ModelController@index');
+    Route::get('assets'       , 'ModelController@assets');
     Route::get('{model}'      , 'ModelController@show');
     Route::post(''            , 'ModelController@store');
     Route::put('{model}'      , 'ModelController@update');

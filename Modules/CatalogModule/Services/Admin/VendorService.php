@@ -6,10 +6,12 @@
 
 namespace Modules\CatalogModule\Services\Admin;
 
+use App\Proxy\Proxy;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Http\Requests\Admin\CreateVendorRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateVendorRequest;
+use Modules\CatalogModule\Proxy\CatalogProxy;
 use Modules\CatalogModule\Repositories\VendorRepository;
 use Modules\CatalogModule\Services\UserResource;
 use Modules\CatalogModule\Transformers\Admin\FindVendorResource;
@@ -62,6 +64,26 @@ class VendorService
             'type'          => $createVendorRequest->type,
             'created_by'    => new ObjectId(auth('admin_api')->id())
         ]);
+
+
+        //get vendor admin role
+
+
+        //create vendor admin
+//        $vendorAdminProxy = new CatalogProxy('CREATE_VENDOR_ADMIN', [
+//            'name'          => $createVendorRequest->name['en'],
+//            'email'         => $createVendorRequest->email,
+//            'password'      => $createVendorRequest->password,
+//            'password_confirmation' => $createVendorRequest->password,
+//            'role_id'       => '',
+//            'type'          => 'vendor'
+//        ]);
+
+//        $proxy = new Proxy($vendorAdminProxy);
+//
+//        $vendorAdminProxy = $proxy->result();
+//
+//        dd($vendorAdminProxy);
 
         return [
             'id'        => $vendor->id

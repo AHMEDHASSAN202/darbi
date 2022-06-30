@@ -21,12 +21,12 @@ class CreateModelRequest extends FormRequest
             'brand_id'          => 'required|exists:brands,_id',
             'is_active'         => 'nullable|sometimes|boolean',
             'images'            => 'nullable|sometimes|array',
-            'images.*'          => 'nullable|sometimes|image|max:5120', //5m
+            'images.*'          => 'required|image|max:5120', //5m
             'specs'             => 'nullable|sometimes|array',
             'specs.*'           => 'nullable|sometimes|array', //5m
             'specs.*.key'       => 'required|min:2|max:100',
             'specs.*.value'     => 'required|min:2|max:100',
-            'specs.*.image'     => 'required|image|max:5120',
+            'specs.*.image'     => 'required|string',
         ];
     }
 

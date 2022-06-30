@@ -33,6 +33,9 @@ class Role extends Base
         if ($guard = $request->get('guard')) {
             $query->where('guard', $guard);
         }
+        if (!$request->get('with-system-roles')) {
+            $query->whereNotIn('key', config('authmodule.system_roles', []));
+        }
     }
     //============= #END# scopes ==============\\
 }

@@ -5,6 +5,7 @@ namespace Modules\CatalogModule\Http\Requests\Admin;
 use App\Rules\AlphaNumSpacesRule;
 use App\Rules\PhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
 class CreateVendorRequest extends FormRequest
 {
@@ -26,7 +27,8 @@ class CreateVendorRequest extends FormRequest
             'email'             => 'required|email',
             'darbi_percentage'  => 'nullable|sometimes|numeric',
             'country_id'        => 'required|exists:countries,_id',
-            'settings'          => 'nullable|sometimes|array'
+            'settings'          => 'nullable|sometimes|array',
+            'password'          => ['required', Password::min(8)->letters(), 'confirmed']
         ];
     }
 
