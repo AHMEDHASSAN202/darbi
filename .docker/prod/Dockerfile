@@ -1,4 +1,6 @@
-FROM php:8.0-fpm
+
+FROM php:8.1.4-fpm
+
 
 # Add docker php ext repo
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
@@ -24,11 +26,19 @@ RUN apt-get update && apt-get install -y \
     libssl-dev pkg-config \
     nginx
 
-# Install Mongodb 
+
+# Install Mongodb
+
 RUN pecl install mongodb
 RUN pecl install redis
 
 RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/php.ini
+
+
+# Install redis extension
+RUN pecl install -o -f redis \
+&&  rm -rf /tmp/pear \
+&&  docker-php-ext-enable redis
 
 # Install supervisor
 RUN apt-get install -y supervisor
@@ -76,7 +86,7 @@ RUN mkdir /var/log/php
 RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 
 # Deployment steps
-RUN composer require mongodb/mongodb --ignore-platform-reqs -W && composer require jenssegers/mongodb --ignore-platform-reqs -W
+RUN composer require mongodb/mongodb --ignore-platform-reqs && composer require jenssegers/mongodb --ignore-platform-reqs
 RUN composer install --ignore-platform-reqs
 RUN chmod +x /var/www/docker/run.sh
 
