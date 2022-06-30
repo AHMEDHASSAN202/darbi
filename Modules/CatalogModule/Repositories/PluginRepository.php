@@ -31,7 +31,7 @@ class PluginRepository
         $paginated = $request->has('paginated');
 
         if ($paginated) {
-            return $query->paginated($request->get('limit', 20));
+            return $query->paginate($request->get('limit', 20));
         }
 
         return $query->get();

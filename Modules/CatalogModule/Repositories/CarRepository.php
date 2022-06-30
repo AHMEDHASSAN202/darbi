@@ -23,7 +23,7 @@ class CarRepository
     public function listOfCars(Request $request)
     {
         return $this->model->search($request)
-                           ->with(['model', 'brand', 'country'])
+                           ->with(['model', 'brand', 'country' => function ($q) { $q->withTrashed(); }])
                            ->whereHas('model', function ($query) { $query->active(); })
                            ->whereHas('brand', function ($query) { $query->active(); })
                            ->filter($request, EntityType::CAR)
@@ -38,14 +38,14 @@ class CarRepository
 
     public function findCarWithDetailsById($carId)
     {
-        return $this->model->with(['model', 'brand'])->findOrFail($carId);
+        return $this->model->with(['model' => function ($q) { $q->withTrashed(); }, 'brand' => function ($q) { $q->withTrashed(); }])->findOrFail($carId);
     }
 
 
     public function findAllByVendor(Request $request, $vendorId)
     {
         return $this->model->adminSearch($request)
-                            ->with(['model', 'brand'])
+                            ->with(['model' => function ($q) { $q->withTrashed(); }, 'brand' => function ($q) { $q->withTrashed(); }])
                             ->adminFilter($request, EntityType::CAR)
                             ->latest()
                             ->where('vendor_id', new ObjectId($vendorId))

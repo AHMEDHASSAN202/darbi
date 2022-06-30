@@ -30,7 +30,7 @@ class YachtRepository
                            ->active()
                            ->available()
                            ->free()
-                           ->with(['model', 'country'])
+                           ->with(['model' => function ($q) { $q->withTrashed(); }, 'country' => function ($q) { $q->withTrashed(); }])
                            ->whereHas('port', function ($query) { $query->active(); })
                            ->latest()
                            ->paginate($request->get('limit', 20));
@@ -39,13 +39,13 @@ class YachtRepository
 
     public function findYachtWithDetailsById($yachtId)
     {
-        return $this->model->with(['model', 'port'])->find($yachtId);
+        return $this->model->with(['model' => function ($q) { $q->withTrashed(); }, 'port' => function ($q) { $q->withTrashed(); }])->find($yachtId);
     }
 
     public function findAllByVendor(Request $request, $vendorId)
     {
         return $this->model->adminSearch($request)
-                            ->with(['port'])
+                            ->with(['port' => function ($q) { $q->withTrashed(); }])
                             ->adminFilter($request, EntityType::YACHT)
                             ->latest()
                             ->where('vendor_id', new ObjectId($vendorId))

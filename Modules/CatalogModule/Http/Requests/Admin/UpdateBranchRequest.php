@@ -27,7 +27,8 @@ class UpdateBranchRequest extends FormRequest
             'is_active'     => 'nullable|sometimes|boolean',
             'phone'         => 'nullable|sometimes|array',
             'phone'         => ['nullable', 'sometimes', 'numeric', new PhoneRule($this->request->get('phone_code'))],
-            'phone_code'    => 'required_with:phone'
+            'phone_code'    => 'required_with:phone',
+            'city_id'       => 'required|exists:cities,_id'
         ];
     }
 

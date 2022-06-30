@@ -174,22 +174,22 @@ class Entity extends Base
 
     public function brand()
     {
-        return $this->belongsTo(Brand::class)->withTrashed();
+        return $this->belongsTo(Brand::class);
     }
 
     public function model()
     {
-        return $this->belongsTo(Model::class)->withTrashed();
+        return $this->belongsTo(Model::class);
     }
 
     public function country()
     {
-        return $this->belongsTo(Country::class)->withTrashed();
+        return $this->belongsTo(Country::class);
     }
 
     public function city()
     {
-        return $this->belongsTo(City::class)->withTrashed();
+        return $this->belongsTo(City::class);
     }
 
     //=============== #END# relation =====================\\

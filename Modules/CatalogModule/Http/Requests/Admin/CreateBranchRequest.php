@@ -26,7 +26,8 @@ class CreateBranchRequest extends FormRequest
             'cover_images.*'=> 'nullable|sometimes|image|max:5120',
             'is_active'     => 'nullable|sometimes|boolean',
             'phone'         => ['nullable', 'sometimes', 'numeric', new PhoneRule($this->request->get('phone_code'))],
-            'phone_code'    => 'required_with:phone'
+            'phone_code'    => 'required_with:phone',
+            'city_id'       => 'required|exists:cities,_id'
         ];
     }
 

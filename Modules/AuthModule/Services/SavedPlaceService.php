@@ -58,10 +58,10 @@ class SavedPlaceService
                 'user_id'       => auth('api')->user()->_id,
                 'lat'           => $createPlaceRequest->lat,
                 'lng'           => $createPlaceRequest->lng,
-                'country'       => $location->country,
-                'city'          => $location->city,
-                'full_address'  => $location->fully_addressed,
-                'region_id'     => new ObjectId($region->id)
+                'country'       => $location['country'],
+                'city'          => $location['city'],
+                'full_address'  => $location['fully_addressed'],
+                'region_id'     => new ObjectId($region['id'])
             ]);
 
             $result['responseData'] = new SavedPlaceResource($created);
