@@ -86,9 +86,8 @@ class Entity extends Base
 
         if ($city = $request->get('city')) {
             if ($type === EntityType::CAR) {
-                $branchIds = app(BranchRepository::class)->findAllBranchesByCity($city, true)->pluck('_id')->toArray();
+                $branchIds = app(BranchRepository::class)->findAllBranchesByCity($city)->pluck('_id')->toArray();
                 $query->whereIn('branch_ids', generateObjectIdOfArrayValues($branchIds));
-
             }elseif ($type === EntityType::YACHT) {
                 $portIds = app(PortRepository::class)->findAllPortsByCity($city)->pluck('_id')->toArray();
                 $query->whereIn('port_id', generateObjectIdOfArrayValues($portIds));

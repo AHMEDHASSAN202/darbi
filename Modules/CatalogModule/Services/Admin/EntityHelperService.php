@@ -65,7 +65,7 @@ trait EntityHelperService
 
         $unavailableDate = $this->prepareUnavailableDate($request->unavailable_date);
 
-        $countryId = auth('vendor_api')->user()->vendor->country_id;
+        $countryId = optional(auth('vendor_api')->user()->vendor)->country_id;
 
         $data = [
                 'name'          => $request->name,
