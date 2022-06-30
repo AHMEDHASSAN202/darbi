@@ -79,3 +79,25 @@ Route::group([
     Route::put('{vendor}/toggle-active' , 'VendorController@toggleActive');
     Route::delete('{vendor}'  , 'VendorController@destroy');
 });
+
+
+
+//car routes
+Route::group([
+    'prefix'    => 'cars',
+    'middleware'=> ['auth:admin_api']
+], function () {
+    Route::get(''             , 'CarController@index');
+    Route::get('{car}'        , 'CarController@show');
+});
+
+
+
+//yacht routes
+Route::group([
+    'prefix'    => 'yachts',
+    'middleware'=> ['auth:admin_api']
+], function () {
+    Route::get(''             , 'YachtController@index');
+    Route::get('{yacht}'      , 'YachtController@show');
+});

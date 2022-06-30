@@ -27,7 +27,7 @@ class RoleRepository
 
     public function list(Request $request, $limit = 20)
     {
-        return $this->model->adminSearch($request)->paginate($limit);
+        return $this->model->adminSearch($request)->adminFilter($request)->paginate($limit);
     }
 
 

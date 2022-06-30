@@ -45,10 +45,28 @@ class CarRepository
     public function findAllByVendor(Request $request, $vendorId)
     {
         return $this->model->adminSearch($request)
-                            ->with(['model' => function ($q) { $q->withTrashed(); }, 'brand' => function ($q) { $q->withTrashed(); }])
+                            ->with([
+                                'model' => function ($q) { $q->withTrashed(); },
+                                'brand' => function ($q) { $q->withTrashed(); },
+                                'vendor' => function ($q) { $q->withTrashed(); }
+                            ])
                             ->adminFilter($request, EntityType::CAR)
                             ->latest()
                             ->where('vendor_id', new ObjectId($vendorId))
+                            ->paginate($request->get('limit', 20));
+    }
+
+
+    public function findAll(Request $request)
+    {
+        return $this->model->adminSearch($request)
+                            ->with([
+                                'model' => function ($q) { $q->withTrashed(); },
+                                'brand' => function ($q) { $q->withTrashed(); },
+                                'vendor' => function ($q) { $q->withTrashed(); }
+                            ])
+                            ->adminFilter($request, EntityType::CAR)
+                            ->latest()
                             ->paginate($request->get('limit', 20));
     }
 }

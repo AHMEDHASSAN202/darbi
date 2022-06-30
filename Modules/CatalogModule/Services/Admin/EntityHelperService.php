@@ -124,9 +124,9 @@ trait EntityHelperService
 
     public function findAllByVendor(Request $request)
     {
-        $cars = $this->repository->findAllByVendor($request, getVendorId());
+        $entity = $this->repository->findAllByVendor($request, getVendorId());
 
-        return new PaginateResource(EntityResource::collection($cars));
+        return new PaginateResource(EntityResource::collection($entity));
     }
 
 
@@ -134,8 +134,26 @@ trait EntityHelperService
     {
         $id = new ObjectId($id);
         $vendorId = new ObjectId(getVendorId());
-        $yacht = $this->repository->findByVendor($vendorId, $id);
+        $entity = $this->repository->findByVendor($vendorId, $id);
 
-        return new FindEntityResource($yacht);
+        return new FindEntityResource($entity);
+    }
+
+
+    public function findAll(Request $request)
+    {
+        $cars = $this->repository->findAll($request);
+
+        return new PaginateResource(EntityResource::collection($cars));
+    }
+
+
+    public function find($id)
+    {
+        $id = new ObjectId($id);
+
+        $entity = $this->repository->findOne($id);
+
+        return new FindEntityResource($entity);
     }
 }

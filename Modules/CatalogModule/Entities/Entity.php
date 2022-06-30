@@ -192,5 +192,10 @@ class Entity extends Base
         return $this->belongsTo(City::class);
     }
 
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class);
+    }
+
     //=============== #END# relation =====================\\
 }

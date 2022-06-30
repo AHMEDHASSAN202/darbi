@@ -27,5 +27,12 @@ class Role extends Base
             return $query->where('name', 'LIKE', '%' . $q .'%');
         }
     }
+
+    public function scopeAdminFilter($query, Request $request)
+    {
+        if ($guard = $request->get('guard')) {
+            $query->where('guard', $guard);
+        }
+    }
     //============= #END# scopes ==============\\
 }

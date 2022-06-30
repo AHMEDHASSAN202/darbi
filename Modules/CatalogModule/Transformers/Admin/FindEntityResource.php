@@ -25,6 +25,8 @@ class FindEntityResource extends JsonResource
             'id'            => $this->_id,
             'name'          => $this->name,
             'images'        => $this->getImagesFullPath(true),
+            'vendor_id'     => (string)$this->vendor_id,
+            'vendor'        => new VendorResource($this->vendor),
             'brand'         => new BrandResource($this->brand),
             'brand_id'      => (string)$this->brand_id,
             'model'         => new ModelResource($this->model),
