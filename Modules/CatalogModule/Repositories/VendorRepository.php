@@ -27,7 +27,7 @@ class VendorRepository
         $paginated = $request->has('paginated');
         $limit = $request->get('limit', 20);
 
-        $query = $this->model->search($request)->filter($request)->latest()->with('country');
+        $query = $this->model->search($request)->filter($request)->latest()->with(['country' => function ($q) { $q->withTrashed(); }, 'createdBy' => function ($q) { $q->withTrashed(); }]);
 
         if ($paginated) {
             return $query->paginate($limit);
@@ -38,6 +38,15 @@ class VendorRepository
 
     public function findOne($vendorId)
     {
-        return $this->model->with('country')->findOrFail(new ObjectId($vendorId));
+        return $this->model->with(['country' => function ($q) { $q->withTrashed(); }])->findOrFail(new ObjectId($vendorId));
+    }
+
+    public function toggleActive($vendorId)
+    {
+        $vendor = $this->model->findOrFail(new ObjectId($vendorId));
+        $vendor->is_active = !$vendor->is_active;
+        $vendor->save();
+
+        return $vendor;
     }
 }

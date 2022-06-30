@@ -39,7 +39,7 @@ class BookingPaymentTransactionFactory extends Factory
             'req'        => [],
             'res'        => [],
             'status'     => $this->faker->boolean,
-            'payment_method' => 'applypay'
+            'payment_method' => 'applepay'
         ];
     }
 }

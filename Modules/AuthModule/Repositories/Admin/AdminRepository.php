@@ -28,7 +28,7 @@ class AdminRepository
     {
         $meId = auth('admin_api')->id();
 
-        return $this->model->search($request)->filter($request)->with('role')->where('_id', '!=', new ObjectId($meId))->where('type', $type)->paginate($limit);
+        return $this->model->search($request)->filter($request)->with(['role', 'vendor' => function ($q) { $q->withTrashed(); }])->where('_id', '!=', new ObjectId($meId))->where('type', $type)->paginate($limit);
     }
 
     public function update($id, $data)
@@ -54,5 +54,10 @@ class AdminRepository
     public function findByEmail($email, $type, $with = [])
     {
         return $this->model->where('email', $email)->where('type', $type)->with($with)->first();
+    }
+
+    public function countAdminFromThisRole($roleId)
+    {
+        return $this->model->where('role_id', new ObjectId($roleId))->count();
     }
 }

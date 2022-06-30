@@ -21,7 +21,7 @@ class CreateAdminRequest extends FormRequest
             'role_id'       => 'required|exists:roles,_id',
             'password'      => ['required', Password::min(8)->letters(), 'confirmed'],
             'type'          => 'required|in:admin,vendor',
-            'vendor_id'     => 'required_if:type,vendor',
+            'vendor_id'     => 'required_if:type,vendor|exists:vendors,_id',
             'image'         => 'sometimes|image|max:5120' //5m
         ];
     }

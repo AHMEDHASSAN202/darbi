@@ -53,6 +53,9 @@ class Port extends Base
         if ($countryId) {
             $query->where('country_id', new ObjectId($countryId));
         }
+        if ($cityId = $request->get('city')) {
+            $query->where('city_id', new ObjectId($cityId));
+        }
     }
 
     public function scopeSearch($query, $request)

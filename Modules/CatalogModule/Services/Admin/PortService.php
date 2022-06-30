@@ -39,7 +39,7 @@ class PortService
 
     public function find($portId)
     {
-        $port = $this->portRepository->find($portId, [], ['country', 'city']);
+        $port = $this->portRepository->findOne($portId);
 
         return new FindPortResource($port);
     }

@@ -24,7 +24,7 @@ class PortRepository
     {
         $query = $this->model->search($request)
                              ->filters($request)
-                             ->with(['country', 'city'])
+                             ->with(['country' => function ($q) { $q->withTrashed(); }, 'city' => function ($q) { $q->withTrashed(); }])
                              ->active()
                              ->latest();
 
@@ -37,11 +37,16 @@ class PortRepository
 
     public function listOfPortsForDashboard(Request $request, $wheres = [])
     {
-        return $this->model->adminSearch($request)->adminFilters($request)->with('country')->latest()->where($wheres)->paginate($request->get('limit', 20));
+        return $this->model->adminSearch($request)->adminFilters($request)->with(['country' => function ($q) { $q->withTrashed(); }, 'city' => function ($q) { $q->withTrashed(); }])->latest()->where($wheres)->paginate($request->get('limit', 20));
     }
 
     public function findAllPortsByCity($cityId)
     {
         return $this->model->active()->where('city_id', new ObjectId($cityId))->get();
+    }
+
+    public function findOne($portId)
+    {
+        return $this->model->where('_id', new ObjectId($portId))->with(['country' => function ($q) { $q->withTrashed(); }, 'city' => function ($q) { $q->withTrashed(); }])->firstOrFail();
     }
 }

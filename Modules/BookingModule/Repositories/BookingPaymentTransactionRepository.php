@@ -22,11 +22,21 @@ class BookingPaymentTransactionRepository
 
     public function findAllByVendor(Request $request, ObjectId $vendorId)
     {
-        return $this->bookingPaymentTransaction->latest()->where('vendor_id', $vendorId)->adminSearch($request)->paginate($request->get('limit', 20));
+        return $this->bookingPaymentTransaction->latest()->where('vendor_id', $vendorId)->adminSearch($request)->adminFilter($request)->paginate($request->get('limit', 20));
+    }
+
+    public function findAll($request)
+    {
+        return $this->bookingPaymentTransaction->latest()->adminSearch($request)->adminFilter($request)->with('vendor')->paginate($request->get('limit', 20));
     }
 
     public function findAllByVendorForExport(ObjectId $vendorId)
     {
         return $this->bookingPaymentTransaction->latest()->where('vendor_id', $vendorId)->get();
+    }
+
+    public function findAllForExport($request)
+    {
+        return $this->bookingPaymentTransaction->latest()->adminSearch($request)->with('vendor')->adminFilter($request)->get();
     }
 }

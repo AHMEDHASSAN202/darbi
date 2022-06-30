@@ -23,3 +23,12 @@ Route::group([
     Route::get('{booking}'              , 'BookingController@show');
     Route::post('{booking}/cancel'      , 'BookingController@cancel');
 });
+
+
+//transactions
+Route::group([
+    'prefix'    => 'transactions',
+    'middleware'=> ['auth:admin_api']
+], function () {
+    Route::get(''                       , 'BookingPaymentTransactionController@index');
+});

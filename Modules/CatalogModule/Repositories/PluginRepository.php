@@ -19,4 +19,21 @@ class PluginRepository
     {
         $this->model = $model;
     }
+
+    public function findAll($request, $onlyActive = true)
+    {
+        $query = $this->model->latest()->filters($request)->search($request);
+
+        if ($onlyActive) {
+            $query->active();
+        }
+
+        $paginated = $request->has('paginated');
+
+        if ($paginated) {
+            return $query->paginated($request->get('limit', 20));
+        }
+
+        return $query->get();
+    }
 }

@@ -57,8 +57,10 @@ class VendorService
             'is_active'     => ($createVendorRequest->is_active === null) || (boolean)$createVendorRequest->is_active,
             'country_id'    => new ObjectId($createVendorRequest->country_id),
             'email'         => $createVendorRequest->email,
-            'darbi_percentage'  => $createVendorRequest->darbi_percentage,
-            'settings'      => $createVendorRequest->settings
+            'darbi_percentage'  => $createVendorRequest->darbi_percentage ? (int)$createVendorRequest->darbi_percentage : null,
+            'settings'      => $createVendorRequest->settings,
+            'type'          => $createVendorRequest->type,
+            'created_by'    => new ObjectId(auth('admin_api')->id())
         ]);
 
         return [
@@ -74,7 +76,7 @@ class VendorService
             'phone_code'    => $updateVendorRequest->phone_code,
             'is_active'     => ($updateVendorRequest->is_active === null) || (boolean)$updateVendorRequest->is_active,
             'email'         => $updateVendorRequest->email,
-            'darbi_percentage'  => $updateVendorRequest->darbi_percentage,
+            'darbi_percentage'  => $updateVendorRequest->darbi_percentage ? (int)$updateVendorRequest->darbi_percentage : null,
             'settings'      => $updateVendorRequest->settings
         ];
 
@@ -92,5 +94,14 @@ class VendorService
     public function destroy($id)
     {
         return $this->vendorRepository->destroy($id);
+    }
+
+    public function toggleActive($vendorId)
+    {
+        $this->vendorRepository->toggleActive($vendorId);
+
+        return [
+            'id'    => $vendorId
+        ];
     }
 }

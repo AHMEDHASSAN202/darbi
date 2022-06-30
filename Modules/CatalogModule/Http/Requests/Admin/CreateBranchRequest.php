@@ -17,8 +17,8 @@ class CreateBranchRequest extends FormRequest
     {
         return [
             'name'          => 'required|array',
-            'name.ar'       => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
-            'name.en'       => ['nullable', 'sometimes', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
+            'name.ar'       => ['nullable', 'sometimes', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
+            'name.en'       => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
             'address'       => 'required|min:2|max:100',
             'lat'           => 'required|numeric',
             'lng'           => 'required|numeric',

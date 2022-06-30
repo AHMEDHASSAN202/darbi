@@ -54,4 +54,11 @@ class VendorController extends Controller
 
         return $this->apiResponse([], 200, __('Data has been deleted successfully'));
     }
+
+    public function toggleActive($vendorId)
+    {
+        $result = $this->vendorService->toggleActive($vendorId);
+
+        return $this->apiResponse($result, 200, __('Data has been updated successfully'));
+    }
 }

@@ -76,5 +76,6 @@ Route::group([
     Route::get('{vendor}'     , 'VendorController@show');
     Route::post(''            , 'VendorController@store');
     Route::put('{vendor}'     , 'VendorController@update');
+    Route::put('{vendor}/toggle-active' , 'VendorController@toggleActive');
     Route::delete('{vendor}'  , 'VendorController@destroy');
 });

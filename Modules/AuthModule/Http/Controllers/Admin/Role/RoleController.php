@@ -56,8 +56,8 @@ class RoleController extends Controller
 
     public function destroy($roleId)
     {
-        $this->roleService->destroyRole($roleId);
+        $result = $this->roleService->destroyRole($roleId);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
     }
 }

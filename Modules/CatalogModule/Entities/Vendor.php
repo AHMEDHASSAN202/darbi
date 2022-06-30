@@ -7,6 +7,7 @@ use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Modules\AuthModule\Entities\Admin;
 use Modules\CatalogModule\Database\factories\VendorFactory;
 use Modules\CommonModule\Entities\Country;
 use MongoDB\BSON\ObjectId;
@@ -37,6 +38,10 @@ class Vendor extends Base
         return $this->belongsTo(Country::class);
     }
 
+    public function createdBy()
+    {
+        return $this->belongsTo(Admin::class, 'created_by');
+    }
     //============= #END# Relations ===================\\
 
     //============= scopes ==============\\

@@ -18,8 +18,8 @@ class UpdateEntityRequest extends FormRequest
         return [
             'name'              => 'required',
             'name.en'           => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
-            'name.ar'           => ['sometimes', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
-            'model_id'          => ['required', new MongoIdRule()],
+            'name.ar'           => ['sometimes', 'nullable', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
+            'model_id'          => ['required', 'exists:models,_id'],
             'images'            => 'nullable|sometimes|array',
             'images.*'          => 'nullable|sometimes|image|max:5120', //5m
             'extra_ids'         => 'nullable|array',

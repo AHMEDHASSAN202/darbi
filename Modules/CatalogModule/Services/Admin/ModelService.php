@@ -17,6 +17,7 @@ use Modules\CatalogModule\Transformers\Admin\FindModelResource;
 use Modules\CatalogModule\Transformers\Admin\ModelResource;
 use Modules\CommonModule\Traits\ImageHelperTrait;
 use Modules\CommonModule\Transformers\PaginateResource;
+use MongoDB\BSON\ObjectId;
 
 class ModelService
 {
@@ -53,7 +54,7 @@ class ModelService
 
     public function find($id)
     {
-        $model = $this->modelRepository->find($id, [], ['brand']);
+        $model = $this->modelRepository->findOne($id);
 
         return new FindModelResource($model);
     }

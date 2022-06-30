@@ -4,6 +4,7 @@ namespace Modules\CatalogModule\Entities;
 
 use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
 class Plugin extends Base
@@ -35,10 +36,19 @@ class Plugin extends Base
         return $query->where('is_active', true);
     }
 
-    public function scopeFilters($query)
+    public function scopeFilters($query, Request $request)
     {
-        if ($entityType = request()->get('entity_type')) {
+        if ($entityType = $request->get('entity_type')) {
             $query->where('entity_type', $entityType);
+        }
+    }
+
+    public function scopeSearch($query, Request $request)
+    {
+        if ($q = $request->get('q')) {
+            $query->where(function ($query) use ($q) {
+                $query->where('name.ar', 'LIKE', '%' . $q . '%')->orWhere('name.en', 'LIKE', '%' . $q . '%');
+            });
         }
     }
 

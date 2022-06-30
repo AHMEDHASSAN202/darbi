@@ -5,6 +5,8 @@ namespace Modules\BookingModule\Entities;
 use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
+use Modules\CatalogModule\Entities\Vendor;
+use MongoDB\BSON\ObjectId;
 
 class BookingPaymentTransaction extends Base
 {
@@ -29,5 +31,30 @@ class BookingPaymentTransaction extends Base
         }
     }
 
+
+    public function scopeAdminFilter($query, Request $request)
+    {
+        if ($vendorId = $request->get('vendor')) {
+            $query->where('vendor_id', new ObjectId($vendorId));
+        }
+
+        if ($entityId = $request->get('entity')) {
+            $query->where('entity_id', new ObjectId($entityId));
+        }
+
+        if ($paymentMethod = $request->get('payment_method')) {
+            $query->where('payment_method', $paymentMethod);
+        }
+    }
+
     //===================== #END# scopes ====================\\
+
+    //===================== Relations ========================\\
+
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class)->withTrashed();
+    }
+
+    //===================== #END# Relations ========================\\
 }

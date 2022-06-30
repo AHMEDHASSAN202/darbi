@@ -18,14 +18,14 @@ class CreateVendorRequest extends FormRequest
         return [
             'name'              => 'required',
             'name.en'           => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
-            'name.ar'           => ['sometimes', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
+            'name.ar'           => ['sometimes', 'nullable', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
             'is_active'         => 'nullable|sometimes|boolean',
             'image'             => 'required|image|max:5120', //5
-            'phone'             => ['required', 'sometimes', 'numeric', new PhoneRule($this->request->get('phone_code'))],
+            'phone'             => ['required', 'numeric', new PhoneRule($this->request->get('phone_code'))],
             'phone_code'        => 'required_with:phone',
             'email'             => 'required|email',
             'darbi_percentage'  => 'nullable|sometimes|numeric',
-            'country_id'        => 'required|countries,_id',
+            'country_id'        => 'required|exists:countries,_id',
             'settings'          => 'nullable|sometimes|array'
         ];
     }

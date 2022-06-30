@@ -21,7 +21,7 @@ class UpdateAdminRequest extends FormRequest
             'email'         => ['required', 'email', Rule::unique('admins')->ignore($this->route('admin'), '_id')],
             'role_id'       => ['required', Rule::exists('roles', '_id')->where('guard', $this->request->get('type') . '_api')],
             'type'          => 'required|in:admin,vendor',
-            'vendor_id'     => 'required_if:type,vendor',
+            'vendor_id'     => 'required_if:type,vendor|exists:vendors,_id',
             'password'      => ['sometimes', 'nullable', 'max:100', 'confirmed', Password::min(8)->letters()],
             'image'         => 'sometimes|image|max:5120' //5m
         ];

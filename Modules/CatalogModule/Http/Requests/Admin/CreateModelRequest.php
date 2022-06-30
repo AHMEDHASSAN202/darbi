@@ -17,7 +17,7 @@ class CreateModelRequest extends FormRequest
         return [
             'name'              => 'required',
             'name.en'           => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
-            'name.ar'           => ['sometimes', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
+            'name.ar'           => ['sometimes', 'nullable', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
             'brand_id'          => 'required|exists:brands,_id',
             'is_active'         => 'nullable|sometimes|boolean',
             'images'            => 'nullable|sometimes|array',

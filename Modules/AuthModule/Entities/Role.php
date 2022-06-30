@@ -16,7 +16,7 @@ class Role extends Base
     //============= relations ==============\\
     public function admins()
     {
-        return $this->hasMany(Admin::class);
+        return $this->hasMany(Admin::class, '_id');
     }
     //============= #END# relations ==============\\
 

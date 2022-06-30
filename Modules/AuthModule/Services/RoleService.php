@@ -8,6 +8,7 @@ namespace Modules\AuthModule\Services;
 
 use Illuminate\Http\Request;
 use Modules\AdminModule\Transformers\RoleCollection;
+use Modules\AuthModule\Repositories\Admin\AdminRepository;
 use Modules\AuthModule\Repositories\Admin\RoleRepository;
 use Modules\AuthModule\Transformers\FindRoleResource;
 use Modules\AuthModule\Transformers\RoleResource;
@@ -17,10 +18,12 @@ use Modules\CommonModule\Transformers\PaginateResource;
 class RoleService
 {
     private $roleRepository;
+    private $adminRepository;
 
-    public function __construct(RoleRepository $roleRepository)
+    public function __construct(RoleRepository $roleRepository, AdminRepository $adminRepository)
     {
         $this->roleRepository = $roleRepository;
+        $this->adminRepository = $adminRepository;
     }
 
     public function findAll(Request $request)
@@ -57,10 +60,20 @@ class RoleService
 
         //check if users related to this role
         //we will prevent deleting
-        if ($role->admins()->count()) {
-            return $this->apiResponse([], 422, __('Deletion is not allowed'));
+        if ($this->adminRepository->countAdminFromThisRole($roleId)) {
+            return [
+                'data'        => [],
+                'statusCode'  => 422,
+                'message'     =>__('Deletion is not allowed')
+            ];
         }
 
-        return $role->delete();
+        $role->delete();
+
+        return [
+            'data'        => [],
+            'statusCode'  => 200,
+            'message'     =>__('Data has been deleted successfully')
+        ];
     }
 }

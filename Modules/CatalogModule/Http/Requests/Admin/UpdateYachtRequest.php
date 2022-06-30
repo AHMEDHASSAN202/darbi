@@ -15,7 +15,7 @@ class UpdateYachtRequest extends UpdateEntityRequest
     public function rules()
     {
         $rules = parent::rules();
-        $rules['port_id'] = ['required', new MongoIdRule()];
+        $rules['port_id'] = ['required', 'exists:ports,_id'];
         return $rules;
     }
 
