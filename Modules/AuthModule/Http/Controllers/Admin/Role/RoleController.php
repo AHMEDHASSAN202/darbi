@@ -60,4 +60,12 @@ class RoleController extends Controller
 
         return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
     }
+
+
+    public function findVendorRole()
+    {
+        return $this->apiResponse([
+            'role'      => $this->roleService->findVendorRole()
+        ]);
+    }
 }

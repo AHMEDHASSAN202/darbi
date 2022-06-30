@@ -16,6 +16,7 @@ class CreateAdminRequest extends FormRequest
     public function rules()
     {
         return [
+            'name'          => ['required', 'max:100'],
             'name'          => ['required', 'max:100', new AlphaNumSpacesRule()],
             'email'         => 'required|email|unique:admins',
             'role_id'       => 'required|exists:roles,_id',

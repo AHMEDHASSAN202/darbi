@@ -50,4 +50,10 @@ class RoleRepository
     {
         return $this->model->findOrFail($id);
     }
+
+
+    public function findVendorRole()
+    {
+        return $this->model->where('key', 'vendor_manager')->firstOrFail();
+    }
 }

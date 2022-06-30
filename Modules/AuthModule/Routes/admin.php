@@ -25,6 +25,7 @@ Route::group([
     Route::post(''                      , 'RoleController@store');
     Route::put('{role}'                 , 'RoleController@update');
     Route::delete('{role}'              , 'RoleController@destroy');
+    Route::get('vendor-role/find'       , 'RoleController@findVendorRole');
 });
 
 

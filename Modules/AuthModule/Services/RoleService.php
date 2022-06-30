@@ -40,6 +40,13 @@ class RoleService
         return new FindRoleResource($role);
     }
 
+    public function findVendorRole()
+    {
+        $role = $this->roleRepository->findVendorRole();
+
+        return new FindRoleResource($role);
+    }
+
     public function createRole($request)
     {
         $role = $this->roleRepository->create(['name' => $request->name, 'permissions' => json_encode($request->permissions), 'guard' => $request->guard]);

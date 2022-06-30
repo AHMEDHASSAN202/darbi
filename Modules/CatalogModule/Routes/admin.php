@@ -76,6 +76,7 @@ Route::group([
     Route::get(''             , 'VendorController@index');
     Route::get('{vendor}'     , 'VendorController@show');
     Route::post(''            , 'VendorController@store');
+    Route::post('get-auth-token' , 'VendorController@authAsVendor');
     Route::put('{vendor}'     , 'VendorController@update');
     Route::put('{vendor}/toggle-active' , 'VendorController@toggleActive');
     Route::delete('{vendor}'  , 'VendorController@destroy');

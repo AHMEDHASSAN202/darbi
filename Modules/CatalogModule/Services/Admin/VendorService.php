@@ -9,6 +9,8 @@ namespace Modules\CatalogModule\Services\Admin;
 use App\Proxy\Proxy;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Modules\AuthModule\Entities\Admin;
+use Modules\CatalogModule\Entities\Vendor;
 use Modules\CatalogModule\Http\Requests\Admin\CreateVendorRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateVendorRequest;
 use Modules\CatalogModule\Proxy\CatalogProxy;
@@ -67,23 +69,22 @@ class VendorService
 
 
         //get vendor admin role
-
+        $roleProxy =  new CatalogProxy('GET_VENDOR_ROLE');
+        $role = (new Proxy($roleProxy))->result();
 
         //create vendor admin
-//        $vendorAdminProxy = new CatalogProxy('CREATE_VENDOR_ADMIN', [
-//            'name'          => $createVendorRequest->name['en'],
-//            'email'         => $createVendorRequest->email,
-//            'password'      => $createVendorRequest->password,
-//            'password_confirmation' => $createVendorRequest->password,
-//            'role_id'       => '',
-//            'type'          => 'vendor'
-//        ]);
+        $vendorAdminProxy = new CatalogProxy('CREATE_VENDOR_ADMIN', [
+            'name'          => $createVendorRequest->name['en'],
+            'email'         => $createVendorRequest->email,
+            'password'      => $createVendorRequest->password,
+            'password_confirmation' => $createVendorRequest->password,
+            'role_id'       => $role['id'],
+            'type'          => 'vendor',
+            'vendor_id'     => (string)$vendor->id
+        ]);
 
-//        $proxy = new Proxy($vendorAdminProxy);
-//
-//        $vendorAdminProxy = $proxy->result();
-//
-//        dd($vendorAdminProxy);
+        $proxy = new Proxy($vendorAdminProxy);
+        $vendorAdminProxy = $proxy->result();
 
         return [
             'id'        => $vendor->id
@@ -125,5 +126,12 @@ class VendorService
         return [
             'id'    => $vendorId
         ];
+    }
+
+    public function loginAsVendor(Request $request)
+    {
+        $admin = Admin::where('vendor_id', new ObjectId($request->vendor_id))->firstOrFail();
+
+        return auth('vendor_api')->login($admin);
     }
 }
