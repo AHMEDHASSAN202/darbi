@@ -122,6 +122,12 @@ trait EntityHelperService
     }
 
 
+    public function deleteByAdmin($id)
+    {
+        return $this->repository->destroy($id);
+    }
+
+
     public function findAllByVendor(Request $request)
     {
         $entity = $this->repository->findAllByVendor($request, getVendorId());

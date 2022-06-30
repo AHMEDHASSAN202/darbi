@@ -28,9 +28,7 @@ trait EntityHelperRepository
         ];
 
         if ($vendorId) {
-            $match[] = [
-                'vendor_id'    => [ '$eq' => $vendorId ],
-            ];
+            $match['vendor_id'] = [ '$eq' => $vendorId ];
         }
 
         $entity = $this->model->raw(function ($collection) use ($match) {

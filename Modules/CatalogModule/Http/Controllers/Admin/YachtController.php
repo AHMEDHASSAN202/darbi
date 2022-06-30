@@ -34,4 +34,11 @@ class YachtController extends Controller
 
         return $this->apiResponse(compact('yacht'));
     }
+
+    public function destroy($id)
+    {
+        $this->yachtService->deleteByAdmin($id);
+
+        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+    }
 }
