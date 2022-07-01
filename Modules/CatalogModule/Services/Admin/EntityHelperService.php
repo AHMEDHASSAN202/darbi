@@ -8,6 +8,7 @@ namespace Modules\CatalogModule\Services\Admin;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Modules\CatalogModule\Enums\EntityStatus;
 use Modules\CatalogModule\Repositories\ModelRepository;
 use Modules\CatalogModule\Transformers\Admin\EntityResource;
 use Modules\CatalogModule\Transformers\Admin\FindEntityResource;
@@ -64,7 +65,7 @@ trait EntityHelperService
 
         $unavailableDate = $this->prepareUnavailableDate($request->unavailable_date);
 
-        $countryId = auth('vendor_api')->user()->vendor->country_id;
+        $countryId = optional(auth('vendor_api')->user()->vendor)->country_id;
 
         $data = [
                 'name'          => $request->name,
@@ -118,15 +119,53 @@ trait EntityHelperService
 
     public function delete($id)
     {
-        return $this->repository->destroy($id, ['vendor_id' => new ObjectId(getVendorId())]);
+        $entity = $this->repository->find($id, ['vendor_id' => new ObjectId(getVendorId())]);
+
+        if ($entity->state != EntityStatus::FREE) {
+            return [
+                'statusCode'    => 400,
+                'message'       => __('Entity is not free'),
+                'data'          => []
+            ];
+        }
+
+        $entity->delete();
+
+        return [
+            'statusCode'    => 200,
+            'message'       => __('Data has been deleted successfully'),
+            'data'          => []
+        ];
+    }
+
+
+    public function deleteByAdmin($id)
+    {
+        $entity = $this->repository->find($id);
+
+        if ($entity->state != EntityStatus::FREE) {
+            return [
+                'statusCode'    => 400,
+                'message'       => __('Entity is not free'),
+                'data'          => []
+            ];
+        }
+
+        $entity->delete();
+
+        return [
+            'statusCode'    => 200,
+            'message'       => __('Data has been deleted successfully'),
+            'data'          => []
+        ];
     }
 
 
     public function findAllByVendor(Request $request)
     {
-        $cars = $this->repository->findAllByVendor($request, getVendorId());
+        $entity = $this->repository->findAllByVendor($request, getVendorId());
 
-        return new PaginateResource(EntityResource::collection($cars));
+        return new PaginateResource(EntityResource::collection($entity));
     }
 
 
@@ -134,8 +173,26 @@ trait EntityHelperService
     {
         $id = new ObjectId($id);
         $vendorId = new ObjectId(getVendorId());
-        $yacht = $this->repository->findByVendor($vendorId, $id);
+        $entity = $this->repository->findByVendor($vendorId, $id);
 
-        return new FindEntityResource($yacht);
+        return new FindEntityResource($entity);
+    }
+
+
+    public function findAll(Request $request)
+    {
+        $cars = $this->repository->findAll($request);
+
+        return new PaginateResource(EntityResource::collection($cars));
+    }
+
+
+    public function find($id)
+    {
+        $id = new ObjectId($id);
+
+        $entity = $this->repository->findOne($id);
+
+        return new FindEntityResource($entity);
     }
 }

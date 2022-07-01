@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Modules\CommonModule\Traits\ApiResponseTrait;
+use MongoDB\Driver\Exception\InvalidArgumentException;
 use Throwable;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Validation\ValidationException;
@@ -51,6 +52,8 @@ class Handler extends ExceptionHandler
                     return $this->apiResponse([], 422, null, $e->errors());
                 }elseif ($e instanceof AuthenticationException) {
                     return $this->apiResponse([], 401, 'Unauthenticated.');
+                }elseif ($e instanceof InvalidArgumentException) {
+                    abort(404);
                 }else {
                     return $this->apiResponse([], 500, app()->environment('local') ? $e->getMessage() : null);
                 }

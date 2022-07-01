@@ -19,7 +19,7 @@ class CreateEntityRequest extends FormRequest
             'name'              => 'required',
             'name.ar'           => ['sometimes', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
             'name.en'           => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
-            'model_id'          => ['required', new MongoIdRule()],
+            'model_id'          => ['required', 'exists:models,_id'],
             'images'            => 'nullable|sometimes|array',
             'images.*'          => 'nullable|sometimes|image|max:5120', //5m
             'extra_ids'         => 'nullable|array',

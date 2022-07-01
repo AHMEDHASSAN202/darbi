@@ -62,4 +62,31 @@ class ModelController extends Controller
 
         return $this->apiResponse([], 200, __('Data has been deleted successfully'));
     }
+
+
+    public function assets()
+    {
+        return $this->apiResponse([
+            'assets'    => [
+                [
+                    'key'       => 'engine_type',
+                    'value'     => 'https://i.ibb.co/q0bSNT5/liter.png',
+                    'full_url'  => 'https://i.ibb.co/q0bSNT5/liter.png',
+                    'name'      => 'engine_type'
+                ],
+                [
+                    'key'       => 'seats',
+                    'value'     => 'https://i.ibb.co/N1tNCy4/bedroom.png',
+                    'full_url'  => 'https://i.ibb.co/N1tNCy4/bedroom.png',
+                    'name'      => 'seats'
+                ],
+                [
+                    'key'       => 'passengers',
+                    'value'     => 'https://i.ibb.co/nBjwmhP/passengers.png',
+                    'full_url'  => 'https://i.ibb.co/nBjwmhP/passengers.png',
+                    'name'      => 'passengers'
+                ]
+            ]
+        ]);
+    }
 }

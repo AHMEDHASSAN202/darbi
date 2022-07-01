@@ -17,13 +17,24 @@ trait EntityHelperRepository
 
     public function findByVendor($vendorId, $entityId)
     {
-        $entity = $this->model->raw(function ($collection) use ($vendorId, $entityId) {
+        return $this->findOne($entityId, $vendorId);
+    }
+
+
+    public function findOne($entityId, $vendorId = null)
+    {
+        $match = [
+            '_id'          => [ '$eq' => $entityId ],
+        ];
+
+        if ($vendorId) {
+            $match['vendor_id'] = [ '$eq' => $vendorId ];
+        }
+
+        $entity = $this->model->raw(function ($collection) use ($match) {
             return $collection->aggregate([
                 [
-                    '$match'        => [
-                        'vendor_id'    => [ '$eq' => $vendorId ],
-                        '_id'          => [ '$eq' => $entityId ],
-                    ]
+                    '$match'        => $match
                 ],
                 [
                     '$lookup'   => [
@@ -50,6 +61,20 @@ trait EntityHelperRepository
                 [
                     '$unwind'    => [
                         "path"      => '$brand',
+                        "preserveNullAndEmptyArrays" => true
+                    ],
+                ],
+                [
+                    '$lookup'   => [
+                        'from'          => 'vendors',
+                        'localField'    => 'vendor_id',
+                        'foreignField'  => '_id',
+                        'as'            => 'vendor'
+                    ],
+                ],
+                [
+                    '$unwind'    => [
+                        "path"      => '$vendor',
                         "preserveNullAndEmptyArrays" => true
                     ],
                 ],

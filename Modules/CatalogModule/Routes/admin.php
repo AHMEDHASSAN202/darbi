@@ -58,6 +58,7 @@ Route::group([
     'middleware'=> ['auth:admin_api']
 ], function () {
     Route::get(''             , 'ModelController@index');
+    Route::get('assets'       , 'ModelController@assets');
     Route::get('{model}'      , 'ModelController@show');
     Route::post(''            , 'ModelController@store');
     Route::put('{model}'      , 'ModelController@update');
@@ -75,6 +76,32 @@ Route::group([
     Route::get(''             , 'VendorController@index');
     Route::get('{vendor}'     , 'VendorController@show');
     Route::post(''            , 'VendorController@store');
+    Route::post('get-auth-token' , 'VendorController@authAsVendor');
     Route::put('{vendor}'     , 'VendorController@update');
+    Route::put('{vendor}/toggle-active' , 'VendorController@toggleActive');
     Route::delete('{vendor}'  , 'VendorController@destroy');
+});
+
+
+
+//car routes
+Route::group([
+    'prefix'    => 'cars',
+    'middleware'=> ['auth:admin_api']
+], function () {
+    Route::get(''             , 'CarController@index');
+    Route::get('{car}'        , 'CarController@show');
+    Route::delete('{car}'     , 'CarController@destroy');
+});
+
+
+
+//yacht routes
+Route::group([
+    'prefix'    => 'yachts',
+    'middleware'=> ['auth:admin_api']
+], function () {
+    Route::get(''             , 'YachtController@index');
+    Route::get('{yacht}'      , 'YachtController@show');
+    Route::delete('{yacht}'   , 'YachtController@destroy');
 });

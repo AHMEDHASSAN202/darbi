@@ -14,8 +14,14 @@
 
 //vendor transactions
 Route::group([
-    'prefix'    => 'transactions'
+    'prefix'    => 'vendor'
 ], function () {
-    Route::get('{vendorId}'                  , 'Admin\Vendor\BookingPaymentTransactionController@export')->name('vendor.transactions');
+    Route::get('bookings/transactions/{vendorId}'                , 'Admin\Vendor\BookingPaymentTransactionController@export')->name('vendor.transactions.export');
 });
-//62b26a36d1a2b901470d15fe
+
+
+Route::group([
+    'prefix'    => 'admin'
+], function () {
+    Route::get('bookings/transactions'                           , 'Admin\BookingPaymentTransactionController@export')->name('admin.transactions.export');
+});

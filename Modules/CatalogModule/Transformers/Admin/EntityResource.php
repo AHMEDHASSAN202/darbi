@@ -20,6 +20,8 @@ class EntityResource extends JsonResource
     {
         $res = [
             'id'            => $this->_id,
+            'vendor_id'     => (string)$this->vendor_id,
+            'vendor_name'   => translateAttribute(optional($this->vendor)->name),
             'name'          => translateAttribute($this->name),
             'image'         => $this->getMainImage(),
             'brand'         => translateAttribute(optional($this->brand)->name),

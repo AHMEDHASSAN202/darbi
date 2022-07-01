@@ -59,9 +59,7 @@ class PluginService
 
     public function list(Request $request, $onlyActive = true)
     {
-        $limit = $request->get('limit', 20);
-
-        $plugins = $this->pluginRepository->list($limit, 'filters', $onlyActive ? 'active' : '');
+        $plugins = $this->pluginRepository->findAll($request, $onlyActive);
 
         if ($plugins instanceof LengthAwarePaginator) {
             return new PaginateResource(PluginResource::collection($plugins));

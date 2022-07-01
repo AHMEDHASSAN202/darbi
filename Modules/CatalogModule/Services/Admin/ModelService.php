@@ -17,6 +17,7 @@ use Modules\CatalogModule\Transformers\Admin\FindModelResource;
 use Modules\CatalogModule\Transformers\Admin\ModelResource;
 use Modules\CommonModule\Traits\ImageHelperTrait;
 use Modules\CommonModule\Transformers\PaginateResource;
+use MongoDB\BSON\ObjectId;
 
 class ModelService
 {
@@ -53,7 +54,7 @@ class ModelService
 
     public function find($id)
     {
-        $model = $this->modelRepository->find($id, [], ['brand']);
+        $model = $this->modelRepository->findOne($id);
 
         return new FindModelResource($model);
     }
@@ -66,7 +67,7 @@ class ModelService
         $data['images'] = $this->uploadImages($this->uploadDirectory, $createModelRequest->images);
         $data['is_active'] = ($createModelRequest->is_active === null) || (boolean)$createModelRequest->is_active;
         $data['entity_type'] = $brand->entity_type;
-        $data['specs']  = $this->handleSpecs([], $createModelRequest->specs ?? []);
+        $data['specs']  = $createModelRequest->specs ?? [];
 
         $model = $this->modelRepository->create($data);
 
@@ -86,7 +87,7 @@ class ModelService
             'is_active'  => ($updateModelRequest->is_active === null) || (boolean)$updateModelRequest->is_active,
             'entity_type'=> $brand->entity_type,
             'images'     => array_merge($images, $this->uploadImages($this->uploadDirectory, $updateModelRequest->images)),
-            'specs'      => $this->handleSpecs($model->specs, $updateModelRequest->specs ?? [])
+            'specs'      => $updateModelRequest->specs ?? []
         ];
 
         $model = $this->modelRepository->update($id, $data);

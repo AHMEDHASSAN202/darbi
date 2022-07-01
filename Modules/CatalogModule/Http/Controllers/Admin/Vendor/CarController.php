@@ -51,9 +51,9 @@ class CarController extends Controller
 
     public function destroy($id)
     {
-        $this->carService->delete($id);
+        $result = $this->carService->delete($id);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
     }
 
     public function deleteImage($id, $imageIndex)

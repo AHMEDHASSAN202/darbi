@@ -17,7 +17,7 @@ class UpdateBranchRequest extends FormRequest
     {
         return [
             'name'          => 'required|array',
-            'name.ar'       => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
+            'name.ar'       => ['nullable', 'sometimes', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
             'name.en'       => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
             'address'       => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule()],
             'lat'           => 'required|numeric',
@@ -27,7 +27,8 @@ class UpdateBranchRequest extends FormRequest
             'is_active'     => 'nullable|sometimes|boolean',
             'phone'         => 'nullable|sometimes|array',
             'phone'         => ['nullable', 'sometimes', 'numeric', new PhoneRule($this->request->get('phone_code'))],
-            'phone_code'    => 'required_with:phone'
+            'phone_code'    => 'required_with:phone',
+            'city_id'       => 'required|exists:cities,_id'
         ];
     }
 

@@ -12,7 +12,7 @@ use Modules\AuthModule\Proxy\Actions\GetRegionHttpProxyAction;
 
 class AuthProxy extends BaseProxy
 {
-    protected $action = [
+    protected $actions = [
         'GET_LOCATION'      => GetLocationHttpProxyAction::class,
         'GET_REGION'        => GetRegionHttpProxyAction::class,
     ];

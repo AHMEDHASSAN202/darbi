@@ -18,7 +18,8 @@ class BrandResource extends JsonResource
             'id'        => $this->_id,
             'name'      => translateAttribute($this->name),
             'logo'      => imageUrl($this->logo),
-            'is_active' => (boolean)$this->is_active
+            'is_active' => (boolean)$this->is_active,
+            'entity_type' => $this->entity_type,
         ];
     }
 }

@@ -16,7 +16,7 @@ class Role extends Base
     //============= relations ==============\\
     public function admins()
     {
-        return $this->hasMany(Admin::class);
+        return $this->hasMany(Admin::class, '_id');
     }
     //============= #END# relations ==============\\
 
@@ -25,6 +25,16 @@ class Role extends Base
     {
         if ($q = $request->get('q')) {
             return $query->where('name', 'LIKE', '%' . $q .'%');
+        }
+    }
+
+    public function scopeAdminFilter($query, Request $request)
+    {
+        if ($guard = $request->get('guard')) {
+            $query->where('guard', $guard);
+        }
+        if (!$request->get('with-system-roles')) {
+            $query->whereNotIn('key', config('authmodule.system_roles', []));
         }
     }
     //============= #END# scopes ==============\\

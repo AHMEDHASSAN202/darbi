@@ -6,10 +6,14 @@
 
 namespace Modules\CatalogModule\Services\Admin;
 
+use App\Proxy\Proxy;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Modules\AuthModule\Entities\Admin;
+use Modules\CatalogModule\Entities\Vendor;
 use Modules\CatalogModule\Http\Requests\Admin\CreateVendorRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateVendorRequest;
+use Modules\CatalogModule\Proxy\CatalogProxy;
 use Modules\CatalogModule\Repositories\VendorRepository;
 use Modules\CatalogModule\Services\UserResource;
 use Modules\CatalogModule\Transformers\Admin\FindVendorResource;
@@ -57,9 +61,30 @@ class VendorService
             'is_active'     => ($createVendorRequest->is_active === null) || (boolean)$createVendorRequest->is_active,
             'country_id'    => new ObjectId($createVendorRequest->country_id),
             'email'         => $createVendorRequest->email,
-            'darbi_percentage'  => $createVendorRequest->darbi_percentage,
-            'settings'      => $createVendorRequest->settings
+            'darbi_percentage'  => $createVendorRequest->darbi_percentage ? (int)$createVendorRequest->darbi_percentage : null,
+            'settings'      => $createVendorRequest->settings,
+            'type'          => $createVendorRequest->type,
+            'created_by'    => new ObjectId(auth('admin_api')->id())
         ]);
+
+
+        //get vendor admin role
+        $roleProxy =  new CatalogProxy('GET_VENDOR_ROLE');
+        $role = (new Proxy($roleProxy))->result();
+
+        //create vendor admin
+        $vendorAdminProxy = new CatalogProxy('CREATE_VENDOR_ADMIN', [
+            'name'          => $createVendorRequest->name['en'],
+            'email'         => $createVendorRequest->email,
+            'password'      => $createVendorRequest->password,
+            'password_confirmation' => $createVendorRequest->password,
+            'role_id'       => $role['id'],
+            'type'          => 'vendor',
+            'vendor_id'     => (string)$vendor->id
+        ]);
+
+        $proxy = new Proxy($vendorAdminProxy);
+        $vendorAdminProxy = $proxy->result();
 
         return [
             'id'        => $vendor->id
@@ -74,7 +99,7 @@ class VendorService
             'phone_code'    => $updateVendorRequest->phone_code,
             'is_active'     => ($updateVendorRequest->is_active === null) || (boolean)$updateVendorRequest->is_active,
             'email'         => $updateVendorRequest->email,
-            'darbi_percentage'  => $updateVendorRequest->darbi_percentage,
+            'darbi_percentage'  => $updateVendorRequest->darbi_percentage ? (int)$updateVendorRequest->darbi_percentage : null,
             'settings'      => $updateVendorRequest->settings
         ];
 
@@ -92,5 +117,21 @@ class VendorService
     public function destroy($id)
     {
         return $this->vendorRepository->destroy($id);
+    }
+
+    public function toggleActive($vendorId)
+    {
+        $this->vendorRepository->toggleActive($vendorId);
+
+        return [
+            'id'    => $vendorId
+        ];
+    }
+
+    public function loginAsVendor(Request $request)
+    {
+        $admin = Admin::where('vendor_id', new ObjectId($request->vendor_id))->firstOrFail();
+
+        return auth('vendor_api')->login($admin);
     }
 }

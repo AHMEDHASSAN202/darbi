@@ -27,7 +27,7 @@ class RoleRepository
 
     public function list(Request $request, $limit = 20)
     {
-        return $this->model->adminSearch($request)->paginate($limit);
+        return $this->model->adminSearch($request)->adminFilter($request)->paginate($limit);
     }
 
 
@@ -49,5 +49,11 @@ class RoleRepository
     public function find($id)
     {
         return $this->model->findOrFail($id);
+    }
+
+
+    public function findVendorRole()
+    {
+        return $this->model->where('key', 'vendor_manager')->firstOrFail();
     }
 }

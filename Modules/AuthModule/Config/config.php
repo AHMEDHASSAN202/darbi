@@ -4,16 +4,16 @@ return [
     'name' => 'AuthModule',
     'permissions'   => [
         'admin_api'     => [
-            'manage-booking-cars', 'manage-vendors-cars', 'manage-addons', 'manage-locations', 'manage-cars-searches',
-            'manage-booking-yachts', 'manage-vendors-yachts', 'manage-ports',
-            'manage-users', 'manage-currencies', 'manage-settings', 'manage-admins', 'manage-roles', 'manage-logs',
-            'manage-file-manager'
+            'manage-booking-entity', 'manage-extras', 'manage-branches', 'manage-orders', 'manage-payments',
+            'manage-vendors', 'manage-ports', 'manage-plugins', 'manage-reports', 'manage-queue-approval', 'manage-brands', 'manage-models',
+            'manage-users', 'manage-settings', 'manage-admins', 'manage-roles', 'manage-logs', 'manage-file-manager'
         ],
         'vendor_api'     => [
-            'manage-booking-cars', 'manage-addons', 'manage-locations', 'manage-cars-searches',
-            'manage-booking-yachts', 'manage-vendors-yachts', 'manage-ports'
+            'manage-booking-entity', 'manage-extras', 'manage-branches', 'manage-settings', 'manage-orders', 'accept-booking', 'manage-payments'
         ]
     ],
+    'default_vendor_role' => 'vendor_manager',
+    'system_roles' => ['super_admin', 'vendor_manager'],
     'used_otp_provider' => true,
     'otp_messages'  => [
         'Your darbi verification code is: %s',

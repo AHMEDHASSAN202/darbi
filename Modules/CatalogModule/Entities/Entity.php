@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Modules\CatalogModule\Enums\EntityStatus;
 use Modules\CatalogModule\Enums\EntityType;
 use Modules\CatalogModule\Repositories\BranchRepository;
 use Modules\CatalogModule\Repositories\PortRepository;
@@ -47,7 +48,7 @@ class Entity extends Base
 
     public function scopeFree($query)
     {
-        return $query->where('state', 'free');
+        return $query->where('state', EntityStatus::FREE);
     }
 
     public function scopeFilterDate($query, Request $request)
@@ -85,9 +86,8 @@ class Entity extends Base
 
         if ($city = $request->get('city')) {
             if ($type === EntityType::CAR) {
-                $branchIds = app(BranchRepository::class)->findAllBranchesByCity($city, true)->pluck('_id')->toArray();
+                $branchIds = app(BranchRepository::class)->findAllBranchesByCity($city)->pluck('_id')->toArray();
                 $query->whereIn('branch_ids', generateObjectIdOfArrayValues($branchIds));
-
             }elseif ($type === EntityType::YACHT) {
                 $portIds = app(PortRepository::class)->findAllPortsByCity($city)->pluck('_id')->toArray();
                 $query->whereIn('port_id', generateObjectIdOfArrayValues($portIds));
@@ -174,22 +174,27 @@ class Entity extends Base
 
     public function brand()
     {
-        return $this->belongsTo(Brand::class)->withTrashed();
+        return $this->belongsTo(Brand::class);
     }
 
     public function model()
     {
-        return $this->belongsTo(Model::class)->withTrashed();
+        return $this->belongsTo(Model::class);
     }
 
     public function country()
     {
-        return $this->belongsTo(Country::class)->withTrashed();
+        return $this->belongsTo(Country::class);
     }
 
     public function city()
     {
-        return $this->belongsTo(City::class)->withTrashed();
+        return $this->belongsTo(City::class);
+    }
+
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class);
     }
 
     //=============== #END# relation =====================\\

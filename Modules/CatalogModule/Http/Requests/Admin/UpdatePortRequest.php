@@ -18,10 +18,10 @@ class UpdatePortRequest extends FormRequest
     {
         return [
             'name'          => 'required|array',
-            'name.ar'       => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
-            'name.en'       => ['nullable', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
-            'country_id'    => ['required', new MongoIdRule()],
-            'city_id'       => ['required', new MongoIdRule()],
+            'name.ar'       => ['nullable', 'sometimes', 'min:2', 'max:100', new AlphaNumSpacesRule('ar')],
+            'name.en'       => ['required', 'min:2', 'max:100', new AlphaNumSpacesRule('en')],
+            'country_id'    => ['required', 'exists:countries,_id'],
+            'city_id'       => ['required', 'exists:cities,_id'],
             'lat'           => 'required|numeric',
             'lng'           => 'required|numeric',
             'is_active'     => 'nullable|boolean'
