@@ -75,7 +75,9 @@ class VendorService
             'darbi_percentage'  => $createVendorRequest->darbi_percentage ? (int)$createVendorRequest->darbi_percentage : null,
             'settings'      => $createVendorRequest->settings,
             'type'          => $createVendorRequest->type,
-            'created_by'    => new ObjectId(auth('admin_api')->id())
+            'created_by'    => new ObjectId(auth('admin_api')->id()),
+            'lat'           => (float)$createVendorRequest->lat,
+            'lng'           => (float)$createVendorRequest->lng
         ]);
 
         $admin = $this->createVendorAdmin([
@@ -137,7 +139,9 @@ class VendorService
             'is_active'     => ($updateVendorRequest->is_active === null) || (boolean)$updateVendorRequest->is_active,
             'email'         => $updateVendorRequest->email,
             'darbi_percentage'  => $updateVendorRequest->darbi_percentage ? (int)$updateVendorRequest->darbi_percentage : null,
-            'settings'      => $updateVendorRequest->settings
+            'settings'      => $updateVendorRequest->settings,
+            'lat'           => (float)$updateVendorRequest->lat,
+            'lng'           => (float)$updateVendorRequest->lng
         ];
 
         $oldImage = null;

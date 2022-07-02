@@ -25,8 +25,8 @@ class FindVendorResource extends JsonResource
             'type'      => $this->type,
             'darbi_percentage' => $this->darbi_percentage,
             'settings'  => $this->settings,
-            'lat'       => 21.4308438699227,
-            'lng'       => 39.82662334397889
+            'lat'       => $this->lat,
+            'lng'       => $this->lng
         ];
     }
 }

@@ -28,7 +28,9 @@ class CreateVendorRequest extends FormRequest
             'darbi_percentage'  => 'nullable|sometimes|numeric',
             'country_id'        => 'required|exists:countries,_id',
             'settings'          => 'nullable|sometimes|array',
-            'password'          => ['required', Password::min(8)->letters(), 'confirmed']
+            'password'          => ['required', Password::min(8)->letters(), 'confirmed'],
+            'lat'               => 'required|numeric',
+            'lng'               => 'required|numeric',
         ];
     }
 

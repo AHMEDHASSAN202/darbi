@@ -50,4 +50,12 @@ class BookingController extends Controller
 
         return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
     }
+
+
+    public function paid($bookingId)
+    {
+        $result = $this->bookingService->paidByVendor($bookingId);
+
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+    }
 }

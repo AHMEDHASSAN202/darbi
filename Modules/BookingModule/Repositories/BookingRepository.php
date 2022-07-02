@@ -68,6 +68,6 @@ class BookingRepository
 
     public function updateBookingCollection($bookingId, $data, $session)
     {
-        return DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update($data, ['session' => $session]);
+        return DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update($data);
     }
 }

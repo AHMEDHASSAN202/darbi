@@ -30,7 +30,9 @@ class VendorResource extends JsonResource
             'type'          => $this->type,
             'created_by'    => $this->created_by ? (string)$this->created_by : null,
             'created_by_name' => optional($this->createdBy)->name,
-            'is_active'     => (boolean)$this->is_active
+            'is_active'     => (boolean)$this->is_active,
+            'lat'           => (float)$this->lat,
+            'lng'           => (float)$this->lng
         ];
     }
 }

@@ -40,6 +40,8 @@ class VendorFactory extends Factory
             'require_activation'    => $this->faker->boolean,
             'settings'              => [],
             'type'                  => ['car', 'yacht'][mt_rand(0,1)],
+            'lat'                   => $this->lat,
+            'lng'                   => $this->lng
         ];
     }
 }

@@ -27,7 +27,7 @@ class BranchFactory extends Factory
         $vendor = Vendor::all()->random(1)->first();
         $region = Region::all()->random(1)->first();
         $arFaker = \Faker\Factory::create('ar_EG');
-        $cityId = City::all()->random(1)->first()->_id;
+        $city = City::all()->random(1)->first();
 
         return [
             'vendor_id'     => new ObjectId($vendor->_id),
@@ -44,9 +44,7 @@ class BranchFactory extends Factory
                 'phone_code'   => 966
             ],
             'address'       => $this->faker->address,
-            'lat'           => $this->faker->latitude,
-            'lng'           => $this->faker->longitude,
-            'city_id'       => new ObjectId($cityId),
+            'city_id'       => new ObjectId($city->_id),
             'require_activation' => $this->faker->boolean,
             'darbi_percentage'   => $this->faker->randomFloat(1, 1, 100),
             'region_id'    => new ObjectId($region->_id),
@@ -58,7 +56,9 @@ class BranchFactory extends Factory
                 ['day_number' => 6, 'day_name' => "Saturday", 'from' => "08:00", 'to' => "05:00"],
                 ['day_number' => 6, 'day_name' => "Saturday", 'from' => "09:00", 'to' => "05:00"],
                 ['day_number' => 7, 'day_name' => "Sunday", 'from' => "09:00", 'to' => "05:00"],
-            ]
+            ],
+            'lat'                   => $city->lat,
+            'lng'                   => $city->lng
         ];
     }
 }
