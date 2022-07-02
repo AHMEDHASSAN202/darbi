@@ -58,13 +58,17 @@ function addSizeToImageLink($imageLink, $size)
     return $imageInfo['dirname'] . '/' . $imageInfo['filename'] . '-resize-' . $size . '.' . $imageInfo['extension'];
 }
 
-function translateAttribute(array | object | null $attribute, $locale = null) {
+function translateAttribute(array | object | null | string $attribute, $locale = null) {
     if (!$attribute) {
         return '';
     }
 
     if (empty($attribute)) {
         return '';
+    }
+
+    if (is_string($attribute)) {
+        return $attribute;
     }
 
     if (!$locale) {

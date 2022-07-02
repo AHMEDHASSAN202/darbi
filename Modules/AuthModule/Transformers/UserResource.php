@@ -27,7 +27,8 @@ class UserResource extends JsonResource
                     'total_price'    => arrayGet(objectGet($this->lastBooking, 'price_summary'), 'total_price'),
                     'vendor_price'   => arrayGet(objectGet($this->lastBooking, 'price_summary'), 'vendor_price'),
                     'darbi_price'    => arrayGet(objectGet($this->lastBooking, 'price_summary'), 'darbi_price'),
-                ]
+                ],
+                'created_at'    => optional($this->created_at)->format('Y-m-d H:m')
             ];
         }
 
