@@ -30,13 +30,11 @@ class YachtResource extends JsonResource
 
     private function passengers()
     {
-        $passengers = @$this->model->specs['passengers'];
+        $passengers = arrayGet($this->model->specs, 'passengers');
         if (!$passengers) {
             return null;
         }
-        return [
-            'minimum'       => $passengers['value']['minimum'],
-            'maximum'       => $passengers['value']['maximum']
-        ];
+
+        return arrayGet($passengers, 'value');
     }
 }

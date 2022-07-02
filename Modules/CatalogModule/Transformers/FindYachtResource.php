@@ -26,7 +26,7 @@ class FindYachtResource extends JsonResource
             'built_date'    => $this->built_date,
             'port'          => translateAttribute(optional($this->port)->name),
             'extras'        => $this->getExtras(),
-            'specs'         => $this->model ? SpecsResource::collection($this->model->addons) : [],
+            'specs'         => $this->model ? SpecsResource::collection($this->model->specs) : [],
             'vendor'        => $this->getVendor()
         ];
     }
