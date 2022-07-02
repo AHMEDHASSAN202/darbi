@@ -3,6 +3,7 @@
 namespace Modules\CatalogModule\Database\factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\CatalogModule\Entities\Branch;
 use Modules\CatalogModule\Entities\Brand;
 use Modules\CatalogModule\Entities\Extra;
 use Modules\CatalogModule\Entities\Model;
@@ -35,7 +36,7 @@ class YachtFactory extends Factory
         $brand = Brand::where('entity_type', $this->type)->get()->random(1)->first();
         $model = Model::where('brand_id', new ObjectId($brand->_id))->get()->random(1)->first();
         $vendor = Vendor::where('type', $this->type)->get()->random(1)->first();
-        $branches = $vendor->branches()->limit(3)->pluck('_id')->toArray();
+        $branches = Branch::where('vendor_id', new ObjectId($vendor->_id))->limit(3)->pluck('_id')->toArray();
         $port = Port::all()->random(1)->first();
         $arFaker = \Faker\Factory::create('ar_EG');
         $plugins = Plugin::where('entity_type', $this->type)->get()->pluck('id')->toArray();
@@ -50,7 +51,7 @@ class YachtFactory extends Factory
             'is_available'      => $this->faker->boolean,
             'vendor_id'         => new ObjectId($vendor->_id),
             'port_id'           => new ObjectId($port->_id),
-            'branch_ids'        => $branches,
+            'branch_ids'        => generateObjectIdOfArrayValues($branches),
             'state'             => ['free', 'reserved', 'pending'][mt_rand(0,2)],
             'extra_ids'         => generateObjectIdOfArrayValues($extras),
             'country_id'        => new ObjectId($country->_id),

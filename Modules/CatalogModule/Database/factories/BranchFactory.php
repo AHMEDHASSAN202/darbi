@@ -37,8 +37,8 @@ class BranchFactory extends Factory
                 $this->faker->imageUrl(800, 400, null, false, 'Cover'),
                 $this->faker->imageUrl(800, 400, null, false, 'Cover'),
             ],
-            'is_active'     => $this->faker->boolean,
-            'is_open'       => $this->faker->boolean,
+            'is_active'     => true,
+            'is_open'       => true,
             'phone'         => [
                 'phone'        => $this->faker->numberBetween(1111111111, 9999999999),
                 'phone_code'   => 966

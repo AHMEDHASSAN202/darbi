@@ -25,7 +25,7 @@ class VendorFactory extends Factory
     {
         $arFaker = \Faker\Factory::create('ar_EG');
         $country = Country::all()->random(1)->first();
-        $subscription = Subscription::all();
+//        $subscription = Subscription::all();
 
         return [
             'name'                  => ['ar' => $arFaker->company, 'en' => $this->faker->company],
@@ -34,14 +34,14 @@ class VendorFactory extends Factory
             'email'                 => $this->faker->email,
             'phone'                 => $this->faker->phoneNumber,
             'phone_code'            => $country->calling_code,
-            'subscription_id'       => $subscription->isNotEmpty() ? new ObjectId($subscription->random(1)->first()->_id) : null,
+//            'subscription_id'       => $subscription->isNotEmpty() ? new ObjectId($subscription->random(1)->first()->_id) : null,
             'darbi_percentage'      => mt_rand(10, 100),
             'country_id'            => new ObjectId($country->_id),
             'require_activation'    => $this->faker->boolean,
             'settings'              => [],
             'type'                  => ['car', 'yacht'][mt_rand(0,1)],
-            'lat'                   => $this->lat,
-            'lng'                   => $this->lng
+            'lat'                   => 21.509020,
+            'lng'                   => 39.182270
         ];
     }
 }
