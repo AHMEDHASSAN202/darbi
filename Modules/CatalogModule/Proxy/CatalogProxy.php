@@ -7,17 +7,17 @@
 namespace Modules\CatalogModule\Proxy;
 
 use App\Proxy\BaseProxy;
-use Modules\BookingModule\Proxy\Actions\ChangeEntityStateToReservedHttpProxyAction;
-use Modules\BookingModule\Proxy\Actions\GetEntityHttpProxyAction;
-use Modules\CatalogModule\Proxy\Actions\CreateVendorAdmin;
+use Modules\CatalogModule\Proxy\Actions\CreateVendorAdminAction;
 use Modules\CatalogModule\Proxy\Actions\GetRegionAction;
-use Modules\CatalogModule\Proxy\Actions\GetVendorRole;
+use Modules\CatalogModule\Proxy\Actions\GetVendorAdminTokenAction;
+use Modules\CatalogModule\Proxy\Actions\GetVendorRoleAction;
 
 class CatalogProxy extends BaseProxy
 {
     protected $actions = [
         'GET_REGION'           => GetRegionAction::class,
-        'GET_VENDOR_ROLE'      => GetVendorRole::class,
-        'CREATE_VENDOR_ADMIN'  => CreateVendorAdmin::class
+        'GET_VENDOR_ROLE'      => GetVendorRoleAction::class,
+        'CREATE_VENDOR_ADMIN'  => CreateVendorAdminAction::class,
+        'GET_VENDOR_ADMIN_TOKEN'=> GetVendorAdminTokenAction::class,
     ];
 }

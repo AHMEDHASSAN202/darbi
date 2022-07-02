@@ -9,11 +9,11 @@ namespace Modules\CatalogModule\Proxy\Actions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-class GetVendorRole
+class GetVendorAdminTokenAction
 {
     public function __invoke($data)
     {
-        $url = '/api/admin/v1/roles/vendor-role/find';
+        $url = '/api/admin/v1/admins/'.$data['vendor_id'].'/token';
 
         $req = Request::create($url, 'GET', $data);
 
@@ -23,6 +23,6 @@ class GetVendorRole
 
         $jsonData = json_decode($res->getContent(), true);
 
-        return @$jsonData['data']['role'] ?? [];
+        return @$jsonData['data']['token'] ?? [];
     }
 }

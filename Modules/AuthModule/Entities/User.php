@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\AuthModule\Database\factories\UserFactory;
+use Modules\BookingModule\Entities\Booking;
 use Modules\CommonModule\Entities\Country;
 use MongoDB\BSON\ObjectId;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -80,4 +81,18 @@ class User extends BaseAuthenticatable implements JWTSubject
     }
 
     //=================== #END# helpers ===================\\
+
+    //=================== Bookings =========================\\
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function lastBooking()
+    {
+        return $this->hasOne(Booking::class, 'user_id')->latest();
+    }
+
+    //=================== #END# Bookings =========================\\
 }

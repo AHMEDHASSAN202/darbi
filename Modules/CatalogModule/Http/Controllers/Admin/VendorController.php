@@ -38,7 +38,7 @@ class VendorController extends Controller
     {
         $result = $this->vendorService->create($createVendorRequest);
 
-        return $this->apiResponse($result, 201, __('Data has been added successfully'));
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
     }
 
     public function update($id, UpdateVendorRequest $updateVendorRequest)
@@ -64,10 +64,8 @@ class VendorController extends Controller
 
     public function authAsVendor(Request $request)
     {
-        $request->validate(['vendor_id' => 'required']);
+        $result = $this->vendorService->loginAsVendor($request);
 
-        return $this->apiResponse([
-            'token'     => $this->vendorService->loginAsVendor($request)
-        ]);
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
     }
 }

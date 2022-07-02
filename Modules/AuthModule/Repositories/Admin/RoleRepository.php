@@ -54,6 +54,6 @@ class RoleRepository
 
     public function findVendorRole()
     {
-        return $this->model->where('key', 'vendor_manager')->firstOrFail();
+        return $this->model->where('key', config('authmodule.default_vendor_role'))->firstOrFail();
     }
 }

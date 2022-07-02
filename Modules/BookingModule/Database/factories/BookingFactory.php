@@ -39,7 +39,7 @@ class BookingFactory extends Factory
             'user_id'               => $user->_id,
             'user'                  => $user->only(['_id', 'phone', 'phone_code', 'name', 'email']),
             'vendor_id'             => new ObjectId($vendor->_id),
-            'vendor'                => new FindVendorResource($vendor),
+            'vendor'                => (new FindVendorResource($vendor))->toArray(request()),
             'entity_id'             => new ObjectId($ent->_id),
             'entity_type'           => $ent->type,
             'start_booking_at'      => now()->subDay()->timestamp,
@@ -86,7 +86,9 @@ class BookingFactory extends Factory
                 'total_price_after_discount_after_vat' => 23.3,
                 'darbi_percentage'  => '',
                 'charge_cc' => '',
-                'charge_shop'   => ''
+                'charge_shop'   => '',
+                'vendor_price'  => 80,
+                'darbi_price'   => 20
             ],
             'status' => ['pending','accepted','paid','cancelled_before_accept','cancelled_after_accept','rejected','picked_up','dropped','completed','force_cancelled'][mt_rand(0,9)],
             'rejected_reason' => '',

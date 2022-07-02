@@ -36,6 +36,7 @@ class SettingTableSeeder extends Seeder
             'ios_force_updated_link'                => '',
             'default_country'                       => 'AE',
             'default_city'                          => 'DU',
+            'darbi_percentage'                      => 20
         ];
 
         Setting::create($settings);

@@ -7,6 +7,7 @@
 namespace Modules\CatalogModule\Repositories;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Modules\CatalogModule\Entities\Vendor;
 use Modules\CommonModule\Traits\CrudRepositoryTrait;
 use MongoDB\BSON\ObjectId;

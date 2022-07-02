@@ -21,7 +21,7 @@ class CityService
         $this->cityRepository = $cityRepository;
     }
 
-    public function cities(Request $request)
+    public function findAll(Request $request)
     {
         $cities = $this->cityRepository->list($request);
 
@@ -30,5 +30,12 @@ class CityService
         }
 
         return CityResource::collection($cities);
+    }
+
+    public function find($id)
+    {
+        $city = $this->cityRepository->find($id);
+
+        return new CityResource($city);
     }
 }

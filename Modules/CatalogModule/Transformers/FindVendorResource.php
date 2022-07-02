@@ -17,7 +17,7 @@ class FindVendorResource extends JsonResource
     {
         return [
             'id'        => $this->_id,
-            'name'      => translateAttribute($this->name),
+            'name'      => $this->name,
             'image'     => imageUrl($this->image),
             'email'     => $this->email,
             'phone'     => $this->phone,

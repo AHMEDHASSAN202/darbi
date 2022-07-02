@@ -112,9 +112,14 @@ class ModelService
             return null;
         }
 
+        $image = $images[$imageIndex];
+
         unset($images[$imageIndex]);
+
         $model->update(['images' => array_values($images)]);
 
+        $this->_removeImage($image);
+        
         return [
             'id'    => $model->_id
         ];

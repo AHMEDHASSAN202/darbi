@@ -4,18 +4,19 @@
  * User: ahmed hasssan
  */
 
-namespace Modules\CatalogModule\Proxy\Actions;
+namespace Modules\BookingModule\Proxy\Actions;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-class CreateVendorAdmin
+
+class GetCityHttpProxyAction
 {
     public function __invoke($data)
     {
-        $url = '/api/admin/v1/admins';
+        $url = '/api/common/v1/cities/' . $data['city_id'];
 
-        $req = Request::create($url, 'POST', $data);
+        $req = Request::create($url, 'GET');
 
         $res = Route::dispatch($req);
 
@@ -23,6 +24,6 @@ class CreateVendorAdmin
 
         $jsonData = json_decode($res->getContent(), true);
 
-        return @$jsonData['data']['id'] ?? null;
+        return @$jsonData['data']['city'] ?? [];
     }
 }

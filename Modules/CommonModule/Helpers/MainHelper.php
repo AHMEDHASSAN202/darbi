@@ -240,3 +240,19 @@ function convertDateTimeToUTC($me, string $datetime)
 {
     return $datetime;
 }
+
+function arrayGet($array, $key, $default = null)
+{
+    if (!is_array($array)) {
+        return null;
+    }
+    return @$array[$key] ?? $default;
+}
+
+function objectGet($obj, $property, $default = null)
+{
+    if (!is_object($obj)) {
+        return null;
+    }
+    return @$obj->{$property} ?? $default;
+}

@@ -50,8 +50,15 @@ trait EntityHelperService
             return null;
         }
 
+        $image = $images[$imageIndex];
+
         unset($images[$imageIndex]);
-        $car->update(['images' => array_values($images)]);
+
+        $updated = $car->update(['images' => array_values($images)]);
+
+        if ($updated) {
+            $this->_removeImage($image);
+        }
 
         return $car;
     }

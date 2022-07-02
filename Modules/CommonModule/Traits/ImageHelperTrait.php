@@ -69,4 +69,21 @@ trait ImageHelperTrait
     {
         return $this->uploadImage($folder, $avatar, $sizes);
     }
+
+    public function _removeImage(null|string|array $images, $disc = 's3')
+    {
+        if (!$images) {
+            return;
+        }
+
+        if (is_string($images)) {
+            $images = [$images];
+        }
+
+        try {
+            return Storage::disk($disc)->delete($images);
+        } catch (\Exception $exception) {
+            Log::error($exception->getMessage());
+        }
+    }
 }

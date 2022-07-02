@@ -70,20 +70,6 @@ class EntityRepository
                 ],
                 [
                     '$lookup'   => [
-                        'from'          => 'cities',
-                        'localField'    => 'city_id',
-                        'foreignField'  => '_id',
-                        'as'            => 'city'
-                    ],
-                ],
-                [
-                    '$unwind'    => [
-                        "path"      => '$city',
-                        "preserveNullAndEmptyArrays" => true
-                    ],
-                ],
-                [
-                    '$lookup'   => [
                         'from'          => 'extras',
                         'localField'    => 'extra_ids',
                         'foreignField'  => '_id',

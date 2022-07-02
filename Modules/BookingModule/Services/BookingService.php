@@ -59,9 +59,9 @@ class BookingService
 
     public function rent(RentRequest $rentRequest)
     {
-
         $entity = (new Proxy(new BookingProxy('GET_ENTITY', ['entity_id' => $rentRequest->entity_id])))->result();
         $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => $entity['vendor_id']])))->result();
+        $city = (new Proxy(new BookingProxy('GET_CITY', ['city_id' => $rentRequest->city_id])))->result();
 
         abort_if((is_null($entity) || is_null($vendor)), 404);
 
@@ -96,6 +96,8 @@ class BookingService
             'country_id'    => new ObjectId($country['_id']),
             'country'       => $country,
             'currency_code' => $country['currency_code'],
+            'city_id'       => $city['id'],
+            'city'          => $city,
             'status'        => BookingStatus::INIT,
             'extras'        => $extras,
             'start_booking_at' => $rentRequest->start_at,
@@ -151,7 +153,7 @@ class BookingService
             ];
         }
 
-        $priceSummary = (new Price($entity, $booking->extras, $addBookDetailsRequest->start_at, $addBookDetailsRequest->end_at))->getPriceSummary();
+        $priceSummary = (new Price($entity, $booking->extras, $addBookDetailsRequest->start_at, $addBookDetailsRequest->end_at, $booking->vendor))->getPriceSummary();
         $booking->price_summary = $priceSummary;
         $booking->pickup_location_address = Arr::only($addBookDetailsRequest->pickup_location, [...locationInfoKeys()]);
         $booking->drop_location_address = Arr::only($addBookDetailsRequest->drop_location, [...locationInfoKeys()]);

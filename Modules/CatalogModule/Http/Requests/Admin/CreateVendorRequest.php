@@ -24,7 +24,7 @@ class CreateVendorRequest extends FormRequest
             'image'             => 'required|image|max:5120', //5
             'phone'             => ['required', 'numeric', new PhoneRule($this->request->get('phone_code'))],
             'phone_code'        => 'required_with:phone',
-            'email'             => 'required|email',
+            'email'             => 'required|email|unique:vendors,email|unique:admins,email',
             'darbi_percentage'  => 'nullable|sometimes|numeric',
             'country_id'        => 'required|exists:countries,_id',
             'settings'          => 'nullable|sometimes|array',

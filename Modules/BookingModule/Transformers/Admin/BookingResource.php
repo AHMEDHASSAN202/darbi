@@ -23,12 +23,17 @@ class BookingResource extends JsonResource
             'id'            => $this->_id,
             'name'          => $this->getName(),
             'user'          => $this->user,
-            'vendor_name'   => translateAttribute($this->vendor),
+            'vendor_name'   => translateAttribute(arrayGet($this->vendor, 'name')),
             'date'          => ['start_at' => $this->start_booking_at, 'end_at' => $this->end_booking_at],
             'status_label'  => __($this->status),
             'status'        => $this->status,
             'type'          => $this->entity_type,
-            'image'         => imageUrl(@$this->entity_details['images'][0] ?? $this->defaultImage)
+            'image'         => imageUrl(@$this->entity_details['images'][0] ?? $this->defaultImage),
+            'price'         => [
+                'total_price'   => arrayGet($this->price_summary, 'total_price'),
+                'vendor_price'  => arrayGet($this->price_summary, 'vendor_price'),
+                'darbi_price'   => arrayGet($this->price_summary, 'darbi_price')
+            ]
         ];
     }
 }

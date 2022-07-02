@@ -69,17 +69,23 @@ class BrandService
 
     public function update($id, UpdateBrandRequest $updateBrandRequest)
     {
+        $brand = $this->brandRepository->find($id);
+
         $data = [
             'name'       => $updateBrandRequest->name,
             'is_active'  => ($updateBrandRequest->is_active === null) || (boolean)$updateBrandRequest->is_active,
             'entity_type' => $updateBrandRequest->entity_type
         ];
 
+        $oldLogo = null;
         if ($updateBrandRequest->hasFile('logo')) {
+            $oldLogo = $brand->logo;
             $data['logo'] = $this->uploadImage('brands', $updateBrandRequest->logo);
         }
 
-        $brand = $this->brandRepository->update($id, $data);
+        $brand->update($data);
+
+        $this->_removeImage($oldLogo);
 
         return [
             'id'    => $brand->id

@@ -30,7 +30,7 @@ class AdminService
 
     public function findAll(Request $request)
     {
-        $admins = $this->adminRepository->list($request, $request->get('type', 'admin'), $request->get('limit', 20));
+        $admins = $this->adminRepository->list($request, $request->get('limit', 20));
 
         return new PaginateResource(AdminResource::collection($admins));
     }
@@ -69,6 +69,8 @@ class AdminService
 
     public function update($adminId, $request)
     {
+        $admin = $this->adminRepository->find($adminId, []);
+
         $data = [
             'name'      => $request->name,
             'email'     => $request->email,
@@ -84,11 +86,15 @@ class AdminService
             $data['vendor_id'] = new ObjectId($request->vendor_id);
         }
 
+        $oldImage = null;
         if ($request->hasFile('image')) {
+            $oldImage = $admin->image;
             $data['image'] = $this->uploadImage('avatars', $request->image);
         }
 
-        $this->adminRepository->update($adminId, $data);
+        $admin->update($data);
+
+        $this->_removeImage($oldImage);
 
         return [
             'id'    => $adminId
@@ -131,5 +137,28 @@ class AdminService
         $activities = app(ActivityService::class)->getAdminActivities($adminId, $limit);
 
         return new PaginateResource(ActivityResource::collection($activities));
+    }
+
+    public function getVendorAdminToken($vendorId)
+    {
+        $admin = $this->adminRepository->getVendorAdmin($vendorId);
+
+        if (!$admin) {
+            return [
+                'statusCode'    => 400,
+                'data'          => [],
+                'message'       => __('admin not exists')
+            ];
+        }
+
+        $token = auth('vendor_api')->login($admin);
+
+        return [
+            'statusCode'    => 200,
+            'data'          => [
+                'token'    => $token
+            ],
+            'message'       => ''
+        ];
     }
 }

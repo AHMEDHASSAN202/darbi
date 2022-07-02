@@ -31,7 +31,6 @@ class EntityResource extends JsonResource
             'state'         => $this->state,
             'specs'         => SpecsResource::collection($this->model->addons),
             'country'       => $this->country,
-            'city'          => $this->city,
             'vendor_id'     => (string)$this->vendor_id,
             'entity_type'   => $this->type
         ];

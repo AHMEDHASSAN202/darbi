@@ -33,11 +33,16 @@ class AdminProfileService
             $me->password = Hash::make($request->password);
         }
 
+        $oldImage = null;
         if ($request->hasFile('image')) {
+            $oldImage = $me->image;
             $me->image = $this->uploadImage('admins', $request->image);
         }
 
         $me->save();
+
+        $this->_removeImage($oldImage);
+
         return (new AdminProfileResource($me));
     }
 }

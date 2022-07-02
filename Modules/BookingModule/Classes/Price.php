@@ -14,33 +14,16 @@ class Price
     private $bookingPlugins;
     private $startedAt;
     private $endedAt;
+    private $vendor;
 
-    public function __construct($bookingEntity, $bookingPlugins = [], $startedAt, $endedAt)
+    public function __construct($bookingEntity, $bookingPlugins = [], $startedAt, $endedAt, $vendor)
     {
         $this->bookingEntity = $bookingEntity;
         $this->bookingPlugins = $bookingPlugins;
         $this->startedAt = Carbon::parse($startedAt);
         $this->endedAt = Carbon::parse($endedAt);
+        $this->vendor = $vendor;
     }
-
-
-    public function getInitialPriceSummary()
-    {
-        return [
-            'total_price'           => $this->getTotalPrice(),
-            'total_discount'        => $this->getTotalDiscount(),
-            'discount_value'        => $this->getDiscountValue(),
-            'total_price_before_discount_before_vat' => $this->getTotalPriceBeforeDiscountBeforeVat(),
-            'total_price_after_discount_before_vat'  => $this->getTotalPriceAfterDiscountBeforeVat(),
-            'total_vat'             => $this->getTotalVat(),
-            'vat_percentage'        => $this->getVatPercentage(),
-            'total_price_after_discount_after_vat' => $this->getTotalPriceAfterDiscountAfterVat(),
-            'darbi_percentage'      => $this->getDarbiPercentage(),
-            'charge_cc'             => $this->getChargeCC(),
-            'charge_shop'           => $this->getChargeShop(),
-        ];
-    }
-
 
     public function getPriceSummary()
     {
@@ -56,6 +39,8 @@ class Price
             'darbi_percentage'      => $this->getDarbiPercentage(),
             'charge_cc'             => $this->getChargeCC(),
             'charge_shop'           => $this->getChargeShop(),
+            'vendor_price'          => $this->getVendorPrice(),
+            'darbi_price'           => $this->getDarbiPrice()
         ];
     }
 
@@ -67,8 +52,8 @@ class Price
         foreach ($this->bookingPlugins as $bookingPlugin) {
             $pluginPrice += $bookingPlugin['price'];
         }
-        $totalPriceUnit = $entity + $pluginPrice;
-        return round($totalPriceUnit * $this->getUnitsCount(), 2);
+        $totalEntityPrice = ($entity * $this->getUnitsCount());
+        return round(($totalEntityPrice + $pluginPrice), 2);
     }
 
 
@@ -132,7 +117,13 @@ class Price
 
     public function getDarbiPercentage()
     {
+        $darbiPercentage = @$this->vendor['darbi_percentage'];
 
+        if (!$darbiPercentage) {
+            $darbiPercentage = getOption('darbi_percentage', 20);
+        }
+
+        return $darbiPercentage;
     }
 
 
@@ -145,5 +136,23 @@ class Price
     public function getChargeShop()
     {
 
+    }
+
+
+    public function getVendorPrice()
+    {
+        $darbiPrice = $this->getDarbiPrice();
+        $totalPrice = $this->getTotalPrice();
+
+        return round($totalPrice - $darbiPrice, 2);
+    }
+
+
+    public function getDarbiPrice()
+    {
+        $darbiPercentage = $this->getDarbiPercentage();
+        $totalPrice = $this->getTotalPrice();
+
+        return round($totalPrice * ($darbiPercentage / 100), 2);
     }
 }

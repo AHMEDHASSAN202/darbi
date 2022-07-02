@@ -14,6 +14,10 @@ class AdminResource extends JsonResource
      */
     public function toArray($request)
     {
+        $images = getAvatarTestImages();
+
+        $defaultImage = $images[mt_rand(0, count($images)-1)];
+
         return [
             'id'            => $this->id,
             'name'          => $this->name,
@@ -21,7 +25,7 @@ class AdminResource extends JsonResource
             'role'          => new RoleResource($this->role),
             'type'          => $this->type,
             'vendor'        => new VendorResource($this->vendor),
-            'image'         => imageUrl($this->image)
+            'image'         => imageUrl($this->image ?? $defaultImage)
         ];
     }
 }

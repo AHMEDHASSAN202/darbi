@@ -32,7 +32,7 @@ class UserRepository
 
     public function findAll(Request $request)
     {
-        return $this->model->search($request)->filter($request)->latest()->paginate($request->get('limit', 20));
+        return $this->model->with('lastBooking')->search($request)->filter($request)->latest()->paginate($request->get('limit', 20));
     }
 
     public function find($userId)

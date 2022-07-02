@@ -127,9 +127,13 @@ class BranchService
             return null;
         }
 
+        $image = $images[$imageIndex];
+
         unset($images[$imageIndex]);
 
         $branch->update(['cover_images' => array_values($images)]);
+
+        $this->_removeImage($image);
 
         return $branch;
     }

@@ -51,6 +51,7 @@ Route::group([
     Route::put('{admin}'                , 'AdminController@update');
     Route::put('{admin}/password'       , 'AdminController@updatePassword');
     Route::delete('{admin}'             , 'AdminController@destroy');
+    Route::get('{vendor}/token'         , 'AdminController@getVendorAdminToken');
 });
 
 
