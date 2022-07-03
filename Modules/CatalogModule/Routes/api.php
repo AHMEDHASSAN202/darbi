@@ -21,6 +21,7 @@ Route::group([
 ], function () {
     Route::get(''               , 'CarController@index');
     Route::get('{car}'          , 'CarController@show');
+    Route::get('{car}/share'    , 'CarController@share');
 });
 
 
@@ -32,6 +33,7 @@ Route::group([
 ], function () {
     Route::get(''               , 'YachtController@index');
     Route::get('{yacht}'        , 'YachtController@show');
+    Route::get('{yacht}/share'  , 'YachtController@share');
 });
 
 

@@ -42,6 +42,7 @@ class InitService
             'force_updated_link'    => $this->getForceUpdatedLink($request->platform),
             'default_country'       => $this->settings->default_country,
             'default_city'          => $this->settings->default_city,
+            'pages'                 => $this->pages(),
             'push_version'          => 18
         ];
     }
@@ -70,5 +71,15 @@ class InitService
     {
         $platform = $platform . '_force_updated_link';
         return $this->settings->{$platform};
+    }
+
+
+    private function pages()
+    {
+        return [
+            'aboutUs'         => url('about-us'),
+            'support'         => url('support'),
+            'privacyPolicy'   => url('privacy-policy')
+        ];
     }
 }

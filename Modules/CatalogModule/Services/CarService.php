@@ -15,7 +15,9 @@ use Modules\CommonModule\Transformers\PaginateResource;
 
 class CarService
 {
-    use ImageHelperTrait;
+    use ImageHelperTrait, EntityHelperService;
+
+    private $repository;
 
     public function __construct(CarRepository $carRepository)
     {

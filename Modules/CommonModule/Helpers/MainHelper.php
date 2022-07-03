@@ -260,3 +260,27 @@ function objectGet($obj, $property, $default = null)
     }
     return @$obj->{$property} ?? $default;
 }
+
+function slugify($text, string $divider = '-') {
+    if (is_null($text)) {
+        return '';
+    }
+
+    if (strlen($text) > 2000) {
+        $text = substr($text, 0, 2000);
+    }
+
+    $text = trim($text);
+
+    $text = mb_strtolower($text, "UTF-8");
+
+    $text = preg_replace('/[^\x{0600}-\x{06FF}a-z0-9_] /u','', $text);
+
+    $text = preg_replace("/[!@#$%^&?<>*()]+/", " ", $text);
+
+    $text = preg_replace("/[\s-]+/", " ", $text);
+
+    $text = preg_replace("/[\s_]/", $divider, $text);
+
+    return $text;
+}

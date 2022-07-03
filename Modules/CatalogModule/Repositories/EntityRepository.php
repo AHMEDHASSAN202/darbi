@@ -101,4 +101,49 @@ class EntityRepository
             return false;
         }
     }
+
+    public function findWithBasicData($id)
+    {
+        $entity = $this->model->raw(function ($collection) use ($id) {
+            return $collection->aggregate([
+                [
+                    '$match'        => [
+                        '_id'          => [ '$eq' => new ObjectId($id) ],
+                    ]
+                ],
+                [
+                    '$lookup'   => [
+                        'from'          => 'models',
+                        'localField'    => 'model_id',
+                        'foreignField'  => '_id',
+                        'as'            => 'model'
+                    ],
+                ],
+                [
+                    '$unwind'    => [
+                        "path"      => '$model',
+                        "preserveNullAndEmptyArrays" => true
+                    ],
+                ],
+                [
+                    '$lookup'   => [
+                        'from'          => 'brands',
+                        'localField'    => 'brand_id',
+                        'foreignField'  => '_id',
+                        'as'            => 'brand'
+                    ],
+                ],
+                [
+                    '$unwind'    => [
+                        "path"      => '$brand',
+                        "preserveNullAndEmptyArrays" => true
+                    ],
+                ]
+            ]);
+        });
+
+        abort_if(!$entity->count(), 404);
+
+        return $entity->first();
+    }
 }
