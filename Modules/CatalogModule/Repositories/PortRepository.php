@@ -37,7 +37,13 @@ class PortRepository
 
     public function listOfPortsForDashboard(Request $request, $wheres = [])
     {
-        return $this->model->adminSearch($request)->adminFilters($request)->with(['country' => function ($q) { $q->withTrashed(); }, 'city' => function ($q) { $q->withTrashed(); }])->latest()->where($wheres)->paginate($request->get('limit', 20));
+        $query = $this->model->adminSearch($request)->adminFilters($request)->with(['country' => function ($q) { $q->withTrashed(); }, 'city' => function ($q) { $q->withTrashed(); }])->latest()->where($wheres);
+
+        if ($request->has('paginated')) {
+            return $query->paginate($request->get('limit', 20));
+        }
+
+        return $query->get();
     }
 
     public function findAllPortsByCity($cityId)

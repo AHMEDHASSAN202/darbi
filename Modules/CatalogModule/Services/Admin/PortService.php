@@ -34,7 +34,11 @@ class PortService
 
         $ports = $this->portRepository->listOfPortsForDashboard($request, $wheres);
 
-        return new PaginateResource(PortResource::collection($ports));
+        if ($ports instanceof LengthAwarePaginator) {
+            return new PaginateResource(PortResource::collection($ports));
+        }
+
+        return PortResource::collection($ports);
     }
 
     public function find($portId)
