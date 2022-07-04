@@ -19,7 +19,11 @@ return new class extends Migration
             $table->index('brand_id');
             $table->index('vendor_id');
             $table->index('country_id');
-            $table->index('city_id');
+            $table->index('is_active');
+            $table->index('is_available');
+            $table->index('state');
+            $table->index('type');
+            $table->index('branch_ids');
             $table->index('unavailable_date.from');
             $table->index('unavailable_date.to');
             $table->softDeletes();

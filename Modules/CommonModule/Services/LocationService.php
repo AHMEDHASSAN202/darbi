@@ -43,8 +43,8 @@ class LocationService
             $locationInfo['city']       = $geoLocation->getCity();
             $locationInfo['fully_addressed'] =  $geoLocation->getAddress();
             $locationInfo['name'] =  $geoLocation->getName();
-            $locationInfo['lat']        = $lat;
-            $locationInfo['lng']        = $lng;
+            $locationInfo['lat']        = (float)$lat;
+            $locationInfo['lng']        = (float)$lng;
             $locationInfo['region_id']  = new ObjectId($region->id);
             $location = $this->locationRepository->create($locationInfo);
         }

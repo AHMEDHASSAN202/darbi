@@ -20,6 +20,8 @@ return new class extends Migration
             $table->index('branch_id');
             $table->index('country_id');
             $table->index('entity_id');
+            $table->index('city_id');
+            $table->index('status');
             $table->index('invoice_number');
             $table->dateTime('start_booking_at');
             $table->dateTime('end_booking_at');

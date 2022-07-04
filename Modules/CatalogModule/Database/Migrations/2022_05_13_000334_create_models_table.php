@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->index('brand_id');
             $table->index('entity_type');
+            $table->index('is_active');
             $table->softDeletes();
             $table->timestamps();
         });

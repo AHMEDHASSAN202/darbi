@@ -15,7 +15,9 @@ return new class extends Migration
     {
         Schema::create('user_device_tokens', function (Blueprint $table) {
             $table->id();
-            $table->index('phone_uuid');
+            $table->index('device_token');
+            $table->index('model');
+            $table->index('model_id');
             $table->timestamps();
         });
     }

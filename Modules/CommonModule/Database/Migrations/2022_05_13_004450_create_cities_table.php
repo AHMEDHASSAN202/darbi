@@ -17,7 +17,10 @@ return new class extends Migration
             $table->id();
             $table->index('country_id');
             $table->index('country_code');
+            $table->index('is_active');
             $table->unique('code');
+            $table->index('lat');
+            $table->index('lng');
             $table->softDeletes();
             $table->timestamps();
         });
