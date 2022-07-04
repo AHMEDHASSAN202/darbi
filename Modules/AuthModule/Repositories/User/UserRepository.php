@@ -26,7 +26,8 @@ class UserRepository
         return $this->model->create([
             'phone' => $phone,
             'phone_code' => $phoneCode,
-            'is_active' => true
+            'is_active' => true,
+            'verification_code' => generateOTPCode()
         ]);
     }
 
@@ -35,9 +36,9 @@ class UserRepository
         return $this->model->with('lastBooking')->search($request)->filter($request)->latest()->paginate($request->get('limit', 20));
     }
 
-    public function find($userId)
+    public function find($userId, $with = [])
     {
-        return $this->model->findOrFail($userId);
+        return $this->model->with($with)->findOrFail($userId);
     }
 
     public function destroy($userId)

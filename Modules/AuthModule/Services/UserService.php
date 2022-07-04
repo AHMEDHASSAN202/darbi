@@ -34,7 +34,7 @@ class UserService
 
     public function find($userId)
     {
-        $user = $this->userRepository->find($userId);
+        $user = $this->userRepository->find($userId, ['savedPlaces', 'lastBooking']);
 
         return new FindUserResource($user);
     }

@@ -7,6 +7,7 @@ use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use MongoDB\BSON\ObjectId;
 
 class Country extends Base
 {
@@ -36,6 +37,15 @@ class Country extends Base
             $q = '%'. $q .'%';
             $query->where('name.en', 'LIKE', $q)->orWhere('name.ar', 'LIKE', $q);
         });
+    }
+
+    public function scopeFilter($query, Request $request)
+    {
+        if ($me = auth(getCurrentGuard())->user()) {
+            if ($me->isVendor()) {
+                $query->where('_id', new ObjectId(optional($me->vendor)->country_id));
+            }
+        }
     }
 
     //========== #END# Scopes ==================\\

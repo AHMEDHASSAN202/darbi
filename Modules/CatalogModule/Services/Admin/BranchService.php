@@ -85,7 +85,7 @@ class BranchService
 
         $branch = $this->branchRepository->find($branchId, ['vendor_id' => $vendorId]);
 
-        $branchCoverImages  = array_merge($branch->cover_images ?? [], $this->uploadImages('branches', $updateBranchRequest->cover_images));;
+        $branchCoverImages  = array_merge($branch->cover_images ?? [], $this->uploadImages('branches', $updateBranchRequest->cover_images));
 
         $regionId = @$this->getRegion($updateBranchRequest->lat, $updateBranchRequest->lng)['id'];
 

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->index('lat');
             $table->index('lng');
             $table->index('region_id');
+            $table->geospatial('location', '2dsphere');
             $table->timestamps();
         });
     }

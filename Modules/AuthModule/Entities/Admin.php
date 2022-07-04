@@ -31,7 +31,9 @@ class Admin extends BaseAuthenticatable implements JWTSubject
 
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'version'       => config('authmodule.jwt_version'),
+        ];
     }
 
     protected static function newFactory()

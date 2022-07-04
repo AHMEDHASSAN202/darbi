@@ -36,14 +36,15 @@ class User extends BaseAuthenticatable implements JWTSubject
 
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'version'       => config('authmodule.jwt_version'),
+        ];
     }
 
     protected static function newFactory()
     {
         return UserFactory::new();
     }
-
     //============= Relations ===================\\
 
 
@@ -84,14 +85,14 @@ class User extends BaseAuthenticatable implements JWTSubject
 
     //=================== Bookings =========================\\
 
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
-
     public function lastBooking()
     {
         return $this->hasOne(Booking::class, 'user_id')->latest();
+    }
+
+    public function savedPlaces()
+    {
+        return $this->hasMany(SavedPlace::class)->latest()->limit(10);
     }
 
     //=================== #END# Bookings =========================\\

@@ -9,7 +9,7 @@ namespace Modules\CommonModule\Services;
 use Modules\CommonModule\Classes\GoogleFindLocation;
 use Modules\CommonModule\Repositories\LocationRepository;
 use Modules\CommonModule\Transformers\LocationResource;
-use MongoDB\BSON\ObjectId;
+
 
 class LocationService
 {
@@ -22,20 +22,8 @@ class LocationService
 
     public function handleLocation($lat, $lng)
     {
-        //get region
-        $regionService = new RegionService();
-        $region = $regionService->findRegionByLatAndLng($lat, $lng);
-        if (!$region) {
-            //region not supported
-            return [
-                'data'       => [],
-                'message'    => 'your region not supported',
-                'statusCode' => 400
-            ];
-        }
-
         //check if location exists in darbi database
-        $location = $this->locationRepository->findLocation($lat, $lng);
+        $location = $this->locationRepository->findNearLocation((float)$lat, (float)$lng);
 
         if (!$location) {
             $geoLocation = new GoogleFindLocation($lat, $lng);
@@ -43,9 +31,10 @@ class LocationService
             $locationInfo['city']       = $geoLocation->getCity();
             $locationInfo['fully_addressed'] =  $geoLocation->getAddress();
             $locationInfo['name'] =  $geoLocation->getName();
-            $locationInfo['lat']        = (float)$lat;
-            $locationInfo['lng']        = (float)$lng;
-            $locationInfo['region_id']  = new ObjectId($region->id);
+            $locationInfo['location'] = [
+                'type'          => 'Point',
+                'coordinates'   => [(float)$lng, (float)$lat]
+            ];
             $location = $this->locationRepository->create($locationInfo);
         }
 

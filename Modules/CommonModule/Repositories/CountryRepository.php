@@ -20,7 +20,7 @@ class CountryRepository
 
     public function list(Request $request)
     {
-        return $this->model->active()->search($request)->get();
+        return $this->model->active()->filter($request)->search($request)->get();
     }
 
     public function find($countryId)
