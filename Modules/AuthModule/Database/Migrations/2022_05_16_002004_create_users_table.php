@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            //comppund index phone and phone_code
             $table->index('phone');
             $table->index('phone_code');
             $table->index('is_active');

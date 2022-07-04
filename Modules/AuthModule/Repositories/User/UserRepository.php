@@ -33,6 +33,7 @@ class UserRepository
 
     public function findAll(Request $request)
     {
+        //please don't hard code any data "limit:20" should be global constants
         return $this->model->with('lastBooking')->search($request)->filter($request)->latest()->paginate($request->get('limit', 20));
     }
 

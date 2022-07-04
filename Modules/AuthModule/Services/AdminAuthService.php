@@ -35,6 +35,7 @@ class AdminAuthService
             !$me || !Hash::check($request->password, $me->password)
         ) {
             $response['statusCode'] = 400;
+            //TODO: don't add any hard coded messages to the service... just add constant file with all message resource
             $response['message'] = __('Your email or password is incorrect. try again');
             return $response;
         }
@@ -52,7 +53,9 @@ class AdminAuthService
                 'profile'   => new AdminProfileResource($me)
             ];
         }catch (\Exception $exception) {
+            //add to the log a tag message to show where the error happen "class name -> method_name -> operation desc -> error message"
             Log::error($exception->getMessage());
+            //TODO: add response message builder as mention before to handle error response
             $response['data'] = [];
             $response['statusCode'] = 500;
             $response['message'] = null;

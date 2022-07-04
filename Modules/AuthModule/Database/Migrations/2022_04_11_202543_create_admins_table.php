@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('admins', function (Blueprint $table) {
+            //TODO: add compound index for both email and type (because you always filter by both)
             $table->unique('email');
             $table->index('role_id');
             $table->index('type');
