@@ -34,29 +34,38 @@ class UserDeviceTokenService
     {
         $me = app(UserAuthService::class)->authUser();
 
-        return $this->storeDeviceToken($storeDeviceTokenRequest, 'user', $me);
+        return $this->handleDeviceToken($storeDeviceTokenRequest, 'user', $me);
     }
 
 
-    private function storeDeviceToken(StoreDeviceTokenRequest $storeDeviceTokenRequest, $appType, Model $user)
+    private function handleDeviceToken(StoreDeviceTokenRequest $storeDeviceTokenRequest, $appType, $user = null)
     {
-        $exists = $this->deviceTokenRepository->exists($storeDeviceTokenRequest->phone_uuid, $storeDeviceTokenRequest->device_os);
+        $token = $this->deviceTokenRepository->findByPlatform($storeDeviceTokenRequest->phone_uuid, $storeDeviceTokenRequest->device_os);
 
-        if (!$exists) {
+        if (!$token) {
             $this->deviceTokenRepository->create([
                 'phone_uuid'        => $storeDeviceTokenRequest->phone_uuid,
                 'app_type'          => $appType,
                 'device_os'         => $storeDeviceTokenRequest->device_os,
-                'lat'               => $storeDeviceTokenRequest->lat,
-                'lng'               => $storeDeviceTokenRequest->lng,
-                'region_id'         => $storeDeviceTokenRequest->region_id ? new ObjectId($storeDeviceTokenRequest->region_id) : null,
-                'user_details'      => [
+                'lat'               => (float)$storeDeviceTokenRequest->lat,
+                'lng'               => (float)$storeDeviceTokenRequest->lng,
+                'user_details'      => $user ? [
                     'id'                => new ObjectId($user->_id),
                     'on_model'          => get_class($user)
-                ]
+                ] : []
             ]);
+
+        }else {
+            //update token with current user
+            if (empty($token->user_details) && $user) {
+                $token->update([
+                    'user_details'      => [
+                        'id'                => new ObjectId($user->_id),
+                        'on_model'          => get_class($user)
+                    ]
+                ]);
+            }
         }
 
-        return null;
     }
 }

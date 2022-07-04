@@ -26,6 +26,17 @@ class LocationRepository
         return $this->model->where('lat', $lat)->where('lng', $lng)->first();
     }
 
+    public function findNearLocation($lat, $lng, $distance = 50)
+    {
+        return $this->model->where('location', 'near', [
+            '$geometry' => [
+                'type' => 'Point',
+                'coordinates' => [$lng, $lat],
+            ],
+            '$maxDistance' => $distance,
+        ])->first();
+    }
+
     public function create(array $location)
     {
         return $this->model->create($location);

@@ -41,4 +41,4 @@ Route::group([
 
 
 //device token
-Route::post('device-token'      , 'UserDeviceTokenController@storeDeviceToken')->middleware('auth:api');
+Route::post('device-token'      , 'UserDeviceTokenController@storeDeviceToken');

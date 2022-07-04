@@ -30,4 +30,10 @@ class UserDeviceTokenRepository
     {
         return $this->model->where('phone_uuid', $phone_uuid)->where('device_os', $platform)->exists();
     }
+
+
+    public function findByPlatform($phone_uuid, $platform)
+    {
+        return $this->model->where('phone_uuid', $phone_uuid)->where('device_os', $platform)->first();
+    }
 }
