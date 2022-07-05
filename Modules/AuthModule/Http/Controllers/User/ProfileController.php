@@ -27,6 +27,7 @@ class ProfileController extends Controller
     public function getProfile()
     {
         return $this->apiResponse([
+            //TODO: bad design because exception is not handled, ypu should make sure that the user is returned then do resp
             'profile'       => $this->userProfileService->getProfile()
         ]);
     }
