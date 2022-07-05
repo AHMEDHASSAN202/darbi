@@ -31,6 +31,7 @@ class CreateVendorRequest extends FormRequest
             'password'          => ['required', Password::min(8)->letters(), 'confirmed'],
             'lat'               => 'required|numeric',
             'lng'               => 'required|numeric',
+            'type'              => 'required|in:car,yacht'
         ];
     }
 

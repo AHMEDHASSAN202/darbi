@@ -6,6 +6,7 @@
 
 namespace Modules\NotificationsModule\Services;
 
+use Illuminate\Http\Request;
 use Modules\CommonModule\Transformers\PaginateResource;
 use Modules\NotificationsModule\Repositories\NotificationRepository;
 use Modules\NotificationsModule\Transformers\NotificationResource;
@@ -13,6 +14,8 @@ use Modules\NotificationsModule\Transformers\NotificationResource;
 class NotificationService
 {
     private $notificationRepository;
+
+    use HelperNotificationService;
 
     public function __construct(NotificationRepository $notificationRepository)
     {

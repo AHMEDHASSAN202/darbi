@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\AuthModule\Http\Requests;
+namespace Modules\NotificationsModule\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreDeviceTokenRequest extends FormRequest
+class SendNotificationRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,11 +14,10 @@ class StoreDeviceTokenRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_uuid'      => 'required',
-            'device_os'       => 'required|in:android,ios',
-            'lat'             => 'sometimes|nullable|numeric',
-            'lng'             => 'sometimes|nullable|numeric',
-            'region_id'       => 'sometimes|nullable|exists:regions,_id'
+            'tokens'        => 'required|array',
+            'title'         => 'required|string',
+            'subtitle'      => 'sometimes|nullable|string',
+            'url'           => 'sometimes|nullable|url'
         ];
     }
 

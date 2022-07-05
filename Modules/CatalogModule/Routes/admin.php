@@ -14,6 +14,9 @@
 
 
 //plugin routes
+use App\Proxy\Proxy;
+use Modules\CatalogModule\Proxy\CatalogProxy;
+
 Route::group([
     'prefix'    => 'plugins',
     'middleware' => ['auth:admin_api']
@@ -104,4 +107,10 @@ Route::group([
     Route::get(''             , 'YachtController@index');
     Route::get('{yacht}'      , 'YachtController@show');
     Route::delete('{yacht}'   , 'YachtController@destroy');
+});
+
+
+Route::get('notification-test', function () {
+    $proxy =  new CatalogProxy('SEND_NOTIFICATION', ['title' => 'TTYY', 'tokens' => ['5994e028-8a64-4db5-933f-c640685d0ad5']]);
+    return (new Proxy($proxy))->result();
 });

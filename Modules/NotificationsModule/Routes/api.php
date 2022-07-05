@@ -17,4 +17,16 @@ Route::group([
     'namespace'  => 'User'
 ], function () {
     Route::get(''               , 'NotificationController@findAll')->middleware('auth:api');
+    Route::post('send'           , 'NotificationController@send');
+    Route::post('send-all'       , 'NotificationController@sendAll');
+});
+
+
+
+Route::group([
+    'prefix'     => 'test/notifications',
+    'namespace'  => 'User'
+], function () {
+    Route::get('send'               , 'TestNotificationController@send');
+    Route::get('send-all'           , 'TestNotificationController@sendAll');
 });
