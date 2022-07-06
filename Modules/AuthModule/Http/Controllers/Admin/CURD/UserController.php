@@ -50,4 +50,12 @@ class UserController extends Controller
 
         return $this->apiResponse($result, 200, __('Data has been updated successfully'));
     }
+
+
+    public function findAllIds(Request $request)
+    {
+        return $this->apiResponse([
+            'users'     => $this->userService->findAllIds($request)
+        ]);
+    }
 }

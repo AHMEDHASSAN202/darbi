@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\NotificationsModule\Transformers;
+namespace Modules\NotificationsModule\Transformers\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 

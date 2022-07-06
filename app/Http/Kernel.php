@@ -70,6 +70,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'permission' => PermissionMiddleware::class,
-        'type'       => VendorTypeMiddleware::class
+        'type'       => VendorTypeMiddleware::class,
     ];
 }

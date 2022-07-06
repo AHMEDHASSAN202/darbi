@@ -15,7 +15,9 @@ class SendNotificationRequest extends FormRequest
     {
         return [
             'tokens'        => 'required|array',
+            'type'          => 'required|in:all,custom',
             'title'         => 'required|string',
+            'message'       => 'required|string',
             'subtitle'      => 'sometimes|nullable|string',
             'url'           => 'sometimes|nullable|url'
         ];

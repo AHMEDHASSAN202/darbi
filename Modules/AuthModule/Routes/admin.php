@@ -46,6 +46,7 @@ Route::group([
     'namespace'  => 'CURD'
 ], function () {
     Route::get(''                       , 'AdminController@index');
+    Route::get('ids'                    , 'AdminController@findAllIds');
     Route::get('{admin}'                , 'AdminController@show');
     Route::post(''                      , 'AdminController@store');
     Route::put('{admin}'                , 'AdminController@update');
@@ -63,6 +64,7 @@ Route::group([
     'namespace'  => 'CURD'
 ], function () {
     Route::get(''                       , 'UserController@index');
+    Route::get('ids'                    , 'UserController@findAllIds');
     Route::get('{user}'                 , 'UserController@show');
     Route::put('{user}/toggle-active'   , 'UserController@toggleActive');
     Route::delete('{admin}'             , 'UserController@destroy');

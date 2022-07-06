@@ -7,6 +7,7 @@
 namespace Modules\CatalogModule\Services;
 
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Repositories\CarRepository;
 use Modules\CatalogModule\Transformers\FindCarResource;
 use Modules\CatalogModule\Transformers\CarResource;
@@ -29,7 +30,11 @@ class CarService
     {
         $cars = $this->repository->listOfCars($request);
 
-        return new PaginateResource(CarResource::collection($cars));
+        if ($cars instanceof LengthAwarePaginator) {
+            return new PaginateResource(CarResource::collection($cars));
+        }
+
+        return CarResource::collection($cars);
     }
 
 

@@ -32,7 +32,7 @@ class CarRepository
                            ->available()
                            ->free()
                            ->latest()
-                           ->paginate($request->get('limit', 20));
+                           ->paginated();
     }
 
 
@@ -53,7 +53,7 @@ class CarRepository
                             ->adminFilter($request, EntityType::CAR)
                             ->latest()
                             ->where('vendor_id', new ObjectId($vendorId))
-                            ->paginate($request->get('limit', 20));
+                            ->paginated();
     }
 
 
@@ -67,6 +67,6 @@ class CarRepository
                             ])
                             ->adminFilter($request, EntityType::CAR)
                             ->latest()
-                            ->paginate($request->get('limit', 20));
+                            ->paginated();
     }
 }

@@ -24,11 +24,16 @@ class AdminRepository
         return $this->model->create($data);
     }
 
-    public function list(Request $request, $limit = 20)
+    public function list(Request $request)
     {
         $meId = auth('admin_api')->id();
 
-        return $this->model->search($request)->filter($request)->latest()->with(['role', 'vendor' => function ($q) { $q->withTrashed(); }])->where('_id', '!=', new ObjectId($meId))->paginate($limit);
+        return $this->model->search($request)->filter($request)->latest()->with(['role', 'vendor' => function ($q) { $q->withTrashed(); }])->where('_id', '!=', new ObjectId($meId))->paginated();
+    }
+
+    public function findAllIds(Request $request)
+    {
+        return $this->model->search($request)->filter($request)->latest()->paginated();
     }
 
     public function update($id, $data)

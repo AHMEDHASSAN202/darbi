@@ -47,8 +47,8 @@ class UserDeviceTokenService
                 'phone_uuid'        => $storeDeviceTokenRequest->phone_uuid,
                 'app_type'          => $appType,
                 'device_os'         => $storeDeviceTokenRequest->device_os,
-                'lat'               => (float)$storeDeviceTokenRequest->lat,
-                'lng'               => (float)$storeDeviceTokenRequest->lng,
+                'lat'               => $storeDeviceTokenRequest->lat ? (float)$storeDeviceTokenRequest->lat : null,
+                'lng'               => $storeDeviceTokenRequest->lng ? (float)$storeDeviceTokenRequest->lng : null,
                 'user_details'      => $user ? [
                     'id'                => new ObjectId($user->_id),
                     'on_model'          => get_class($user)

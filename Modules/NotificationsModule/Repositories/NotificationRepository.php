@@ -6,6 +6,7 @@
 
 namespace Modules\NotificationsModule\Repositories;
 
+use Illuminate\Http\Request;
 use Modules\NotificationsModule\Entities\NotificationsCenter;
 use MongoDB\BSON\ObjectId;
 
@@ -20,9 +21,18 @@ class NotificationRepository
 
     public function listOfMyNotifications($request)
     {
-        $me = auth()->user();
+        $me = auth('api')->user();
 
-        //->where('receiver.user_id', new ObjectId($me->_id))->where('receiver.on_model', 'user')
-        return $this->notificationsCenter->latest()->paginate($request->get('limit', 20));
+        return $this->notificationsCenter->latest()->where('receivers.user_id', new ObjectId($me->_id))->where('receivers.on_model', 'user')->paginated();
+    }
+
+    public function create($data)
+    {
+        return $this->notificationsCenter->create($data);
+    }
+
+    public function findAll(Request $request)
+    {
+        return $this->notificationsCenter->search($request)->filter($request)->latest()->paginated();
     }
 }

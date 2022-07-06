@@ -7,8 +7,10 @@
 namespace Modules\AuthModule\Services;
 
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\AuthModule\Repositories\User\UserRepository;
 use Modules\AuthModule\Transformers\FindUserResource;
+use Modules\AuthModule\Transformers\UserIdResource;
 use Modules\AuthModule\Transformers\UserResource;
 use Modules\CommonModule\Traits\ImageHelperTrait;
 use Modules\CommonModule\Transformers\PaginateResource;
@@ -29,7 +31,11 @@ class UserService
     {
         $users = $this->userRepository->findAll($request);
 
-        return new PaginateResource(UserResource::collection($users));
+        if ($users instanceof LengthAwarePaginator) {
+            return new PaginateResource(UserResource::collection($users));
+        }
+
+        return UserResource::collection($users);
     }
 
     public function find($userId)
@@ -51,5 +57,16 @@ class UserService
         return [
             'id'    => $userId
         ];
+    }
+
+    public function findAllIds(Request $request)
+    {
+        $userIds = $this->userRepository->findAllIds($request);
+
+        if ($userIds instanceof LengthAwarePaginator) {
+            return new PaginateResource(UserIdResource::collection($userIds));
+        }
+
+        return UserIdResource::collection($userIds);
     }
 }

@@ -8,6 +8,7 @@ namespace Modules\BookingModule\Services\Admin;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Modules\BookingModule\Classes\BookingChangeLog;
@@ -58,7 +59,11 @@ class BookingService
     {
         $bookings = $this->bookingRepository->findAll($request);
 
-        return new PaginateResource(BookingResource::collection($bookings));
+        if ($bookings instanceof LengthAwarePaginator) {
+            return new PaginateResource(BookingResource::collection($bookings));
+        }
+
+        return BookingResource::collection($bookings);
     }
 
 

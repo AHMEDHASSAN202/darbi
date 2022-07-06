@@ -7,6 +7,7 @@
 namespace Modules\CatalogModule\Services;
 
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Repositories\YachtRepository;
 use Modules\CatalogModule\Transformers\FindYachtResource;
 use Modules\CatalogModule\Transformers\YachtResource;
@@ -28,7 +29,11 @@ class YachtService
     {
         $yachts = $this->repository->listOfYachts($request);
 
-        return new PaginateResource(YachtResource::collection($yachts));
+        if ($yachts instanceof LengthAwarePaginator) {
+            return new PaginateResource(YachtResource::collection($yachts));
+        }
+
+        return YachtResource::collection($yachts);
     }
 
     public function find($yachtId)

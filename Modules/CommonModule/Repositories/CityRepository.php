@@ -21,13 +21,7 @@ class CityRepository
 
     public function list(Request $request)
     {
-        $query = $this->model->active()->search($request)->filter($request);
-
-        if ($request->has('paginated')) {
-            return $query->paginate($request->get('limit', 20));
-        }
-
-        return $query->get();
+        return $this->model->active()->search($request)->filter($request)->paginated();
     }
 
     public function find($id)

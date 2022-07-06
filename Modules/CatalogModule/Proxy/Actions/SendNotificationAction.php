@@ -13,7 +13,7 @@ class SendNotificationAction
 {
     public function __invoke($data)
     {
-        $url = '/api/admin/v1/notifications/send';
+        $url = '/api/admin/v1/notifications/send-all';
 
         $originalRequest = request();
 

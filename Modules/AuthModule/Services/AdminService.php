@@ -7,10 +7,12 @@
 namespace Modules\AuthModule\Services;
 
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
 use Modules\AdminModule\Transformers\RoleCollection;
 use Modules\AuthModule\Repositories\Admin\AdminRepository;
 use Modules\AuthModule\Transformers\ActivityResource;
+use Modules\AuthModule\Transformers\AdminIdResource;
 use Modules\AuthModule\Transformers\AdminResource;
 use Modules\CommonModule\Services\ActivityService;
 use Modules\CommonModule\Traits\ImageHelperTrait;
@@ -30,9 +32,24 @@ class AdminService
 
     public function findAll(Request $request)
     {
-        $admins = $this->adminRepository->list($request, $request->get('limit', 20));
+        $admins = $this->adminRepository->list($request);
 
-        return new PaginateResource(AdminResource::collection($admins));
+        if ($admins instanceof LengthAwarePaginator) {
+            return new PaginateResource(AdminResource::collection($admins));
+        }
+
+        return AdminResource::collection($admins);
+    }
+
+    public function findAllIds(Request $request)
+    {
+        $adminsIds = $this->adminRepository->findAllIds($request);
+
+        if ($adminsIds instanceof LengthAwarePaginator) {
+            return new PaginateResource(AdminIdResource::collection($adminsIds));
+        }
+
+        return AdminIdResource::collection($adminsIds);
     }
 
     public function find($adminId)

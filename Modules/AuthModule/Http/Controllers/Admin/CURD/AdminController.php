@@ -82,4 +82,12 @@ class AdminController extends Controller
 
         return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
     }
+
+
+    public function findAllIds(Request $request)
+    {
+        return $this->apiResponse([
+            'admins'        => $this->adminService->findAllIds($request)
+        ]);
+    }
 }

@@ -54,10 +54,6 @@ class Branch extends Base
         if ($vendorId = $request->get('vendor')) {
             $query->where('vendor_id', new ObjectId($vendorId));
         }
-
-//        if ($countryId = $request->get('country')) {
-//            $query->where('country_id', new ObjectId($cityId));
-//        }
     }
 
     //================ #END# scopes =========================\\

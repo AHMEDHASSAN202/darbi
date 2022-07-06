@@ -14,6 +14,8 @@ class TestNotificationController extends Controller
 {
     public function send(Request $request)
     {
+        OneSignal::sendNotificationToUser('Test', ['5994e028-8a64-4db5-933f-c640685d0ad5']);
+        return;
         $request->validate(['user_id' => 'required']);
 
         $title = $request->get('title', 'TitleTest');

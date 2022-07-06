@@ -21,9 +21,9 @@ class BookingRepository
         $this->booking = $booking;
     }
 
-    public function findAllByUser($userId, $limit = 20)
+    public function findAllByUser($userId)
     {
-        return $this->booking->latest()->where('user_id', new ObjectId($userId))->paginate($limit);
+        return $this->booking->latest()->where('user_id', new ObjectId($userId))->paginated();
     }
 
     public function findByUser($userId, $bookingId)
@@ -38,12 +38,12 @@ class BookingRepository
 
     public function bookingsByVendor(ObjectId $vendorId, Request $request)
     {
-        return $this->booking->latest()->adminSearch($request)->adminFilter($request)->where('vendor_id', $vendorId)->where('status', '!=', BookingStatus::INIT)->paginate($request->get('limit', 20));
+        return $this->booking->latest()->adminSearch($request)->adminFilter($request)->where('vendor_id', $vendorId)->where('status', '!=', BookingStatus::INIT)->paginated();
     }
 
     public function findAll(Request $request)
     {
-        return $this->booking->latest()->adminSearch($request)->adminFilter($request)->where('status', '!=', BookingStatus::INIT)->paginate($request->get('limit', 20));
+        return $this->booking->latest()->adminSearch($request)->adminFilter($request)->where('status', '!=', BookingStatus::INIT)->paginated();
     }
 
     public function findByAdmin(ObjectId $bookingId)

@@ -21,26 +21,11 @@ class BrandRepository
 
     public function listOfBrands(Request $request)
     {
-        $query = $this->model->search($request)
-                             ->filters($request)
-                             ->active()
-                             ->latest();
-
-        if ($request->has('paginated')) {
-            return $query->paginate($request->get('limit', 20));
-        }
-
-        return $query->get();
+        return $this->model->search($request)->filters($request)->active()->latest()->paginated();
     }
 
     public function listOfBrandsForDashboard(Request $request, $wheres = [])
     {
-        $query = $this->model->adminSearch($request)->adminFilters($request)->latest()->where($wheres);
-
-        if ($request->has('paginated')) {
-            return $query->paginate($request->get('limit', 20));
-        }
-
-        return $query->get();
+        return $this->model->adminSearch($request)->adminFilters($request)->latest()->where($wheres)->paginated();
     }
 }

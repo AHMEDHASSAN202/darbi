@@ -22,18 +22,6 @@ class PluginRepository
 
     public function findAll($request, $onlyActive = true)
     {
-        $query = $this->model->latest()->filters($request)->search($request);
-
-        if ($onlyActive) {
-            $query->active();
-        }
-
-        $paginated = $request->has('paginated');
-
-        if ($paginated) {
-            return $query->paginate($request->get('limit', 20));
-        }
-
-        return $query->get();
+        return $this->model->latest()->filters($request)->search($request)->when($onlyActive, function ($q) { $q->active(); })->paginated();
     }
 }

@@ -23,27 +23,12 @@ class ModelRepository
 
     public function listOfModels(Request $request)
     {
-        $query = $this->model->search($request)
-                             ->filter($request)
-                             ->active()
-                             ->latest();
-
-        if ($request->has('paginated')) {
-            return $query->paginate($request->get('limit', 20));
-        }
-
-        return $query->get();
+        return $this->model->search($request)->filter($request)->active()->latest()->paginated();
     }
 
     public function listOfModelsForDashboard(Request $request, $wheres = [])
     {
-        $query = $this->model->adminSearch($request)->adminFilters($request)->latest()->with(['brand' => function ($q) { $q->withTrashed(); }])->where($wheres);
-
-        if ($request->has('paginated')) {
-            return $query->paginate($request->get('limit', 20));
-        }
-
-        return $query->get();
+        return $this->model->adminSearch($request)->adminFilters($request)->latest()->with(['brand' => function ($q) { $q->withTrashed(); }])->where($wheres)->paginated();
     }
 
     public function findOne($modelId)

@@ -15,7 +15,7 @@
 
 //plugin routes
 use App\Proxy\Proxy;
-use Modules\CatalogModule\Proxy\CatalogProxy;
+use Modules\CatalogModule\Proxy\NotificationProxy;
 
 Route::group([
     'prefix'    => 'plugins',
@@ -111,6 +111,6 @@ Route::group([
 
 
 Route::get('notification-test', function () {
-    $proxy =  new CatalogProxy('SEND_NOTIFICATION', ['title' => 'TTYY', 'tokens' => ['5994e028-8a64-4db5-933f-c640685d0ad5']]);
+    $proxy =  new NotificationProxy('SEND_NOTIFICATION', ['title' => 'TTYY', 'tokens' => ['5994e028-8a64-4db5-933f-c640685d0ad5']]);
     return (new Proxy($proxy))->result();
 });

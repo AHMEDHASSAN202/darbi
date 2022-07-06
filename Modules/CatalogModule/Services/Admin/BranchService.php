@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Http\Requests\Admin\CreateBranchRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateBranchRequest;
-use Modules\CatalogModule\Proxy\CatalogProxy;
+use Modules\CatalogModule\Proxy\NotificationProxy;
 use Modules\CatalogModule\Repositories\BranchRepository;
 use Modules\CatalogModule\Transformers\Admin\BranchResource;
 use Modules\CatalogModule\Transformers\Admin\FindBranchResource;
@@ -141,7 +141,7 @@ class BranchService
 
     private function getRegion($lat, $lng)
     {
-        $locationProxy = new CatalogProxy('GET_REGION', ['lat' => $lat, 'lng' => $lng]);
+        $locationProxy = new NotificationProxy('GET_REGION', ['lat' => $lat, 'lng' => $lng]);
         $proxy = new Proxy($locationProxy);
         return $proxy->result();
     }

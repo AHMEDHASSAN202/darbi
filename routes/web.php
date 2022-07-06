@@ -20,3 +20,7 @@ Route::get('/', function () {
 Route::get('health-check', function () {
     return 'GOOD';
 });
+
+Route::get('tt', function () {
+    dd(\Modules\AuthModule\Entities\UserDeviceToken::all());
+});

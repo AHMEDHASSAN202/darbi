@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Http\Requests\Admin\CreateVendorRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateVendorRequest;
-use Modules\CatalogModule\Proxy\CatalogProxy;
+use Modules\CatalogModule\Proxy\NotificationProxy;
 use Modules\CatalogModule\Repositories\VendorRepository;
 use Modules\CatalogModule\Services\UserResource;
 use Modules\CatalogModule\Transformers\Admin\FindVendorResource;
@@ -111,7 +111,7 @@ class VendorService
     private function getVendorRole()
     {
         //get vendor admin role
-        $roleProxy =  new CatalogProxy('GET_VENDOR_ROLE');
+        $roleProxy =  new NotificationProxy('GET_VENDOR_ROLE');
 
         return (new Proxy($roleProxy))->result();
     }
@@ -120,7 +120,7 @@ class VendorService
     private function createVendorAdmin($data)
     {
         //create vendor admin
-        $vendorAdminProxy = new CatalogProxy('CREATE_VENDOR_ADMIN', $data);
+        $vendorAdminProxy = new NotificationProxy('CREATE_VENDOR_ADMIN', $data);
 
         $proxy = new Proxy($vendorAdminProxy);
 
@@ -201,7 +201,7 @@ class VendorService
     public function getVendorAdminToken($vendorId)
     {
         //get vendor admin
-        $catalogProxy =  new CatalogProxy('GET_VENDOR_ADMIN_TOKEN', ['vendor_id' => $vendorId]);
+        $catalogProxy =  new NotificationProxy('GET_VENDOR_ADMIN_TOKEN', ['vendor_id' => $vendorId]);
 
         return @(new Proxy($catalogProxy))->result();
     }

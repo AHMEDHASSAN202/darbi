@@ -7,6 +7,7 @@
 namespace Modules\AuthModule\Services;
 
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\AdminModule\Transformers\RoleCollection;
 use Modules\AuthModule\Repositories\Admin\AdminRepository;
 use Modules\AuthModule\Repositories\Admin\RoleRepository;
@@ -28,9 +29,13 @@ class RoleService
 
     public function findAll(Request $request)
     {
-        $roles = $this->roleRepository->list($request, $request->get('limit', 20));
+        $roles = $this->roleRepository->list($request);
 
-        return new PaginateResource(RoleResource::collection($roles));
+        if ($roles instanceof LengthAwarePaginator) {
+            return new PaginateResource(RoleResource::collection($roles));
+        }
+
+        return RoleResource::collection($roles);
     }
 
     public function find($roleId)

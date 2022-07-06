@@ -33,7 +33,7 @@ class YachtRepository
                            ->with(['model' => function ($q) { $q->withTrashed(); }, 'country' => function ($q) { $q->withTrashed(); }])
                            ->whereHas('port', function ($query) { $query->active(); })
                            ->latest()
-                           ->paginate($request->get('limit', 20));
+                           ->paginated();
     }
 
 
@@ -52,7 +52,7 @@ class YachtRepository
                             ->adminFilter($request, EntityType::YACHT)
                             ->latest()
                             ->where('vendor_id', new ObjectId($vendorId))
-                            ->paginate($request->get('limit', 20));
+                            ->paginated();
     }
 
     public function findAll(Request $request)
@@ -64,6 +64,6 @@ class YachtRepository
                             ])
                             ->adminFilter($request, EntityType::YACHT)
                             ->latest()
-                            ->paginate($request->get('limit', 20));
+                            ->paginated();
     }
 }

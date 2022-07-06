@@ -8,6 +8,7 @@ namespace Modules\BookingModule\Services;
 
 use App\Proxy\Proxy;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -41,9 +42,13 @@ class BookingService
     {
         $userId = auth('api')->id();
 
-        $bookings = $this->bookingRepository->findAllByUser($userId, $request->get('limit', 20));
+        $bookings = $this->bookingRepository->findAllByUser($userId);
 
-        return new PaginateResource(BookingResource::collection($bookings));
+        if ($bookings instanceof LengthAwarePaginator) {
+            return new PaginateResource(BookingResource::collection($bookings));
+        }
+
+        return BookingResource::collection($bookings);
     }
 
 
@@ -63,7 +68,7 @@ class BookingService
         $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => $entity['vendor_id']])))->result();
         $city = (new Proxy(new BookingProxy('GET_CITY', ['city_id' => $rentRequest->city_id])))->result();
 
-        abort_if((is_null($entity) || is_null($vendor)), 404);
+        abort_if((is_null($entity) || is_null($vendor) || is_null($city)), 404);
 
         if (!entityIsFree($entity['state'])) {
             return [

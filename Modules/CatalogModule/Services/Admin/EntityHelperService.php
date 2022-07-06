@@ -8,6 +8,7 @@ namespace Modules\CatalogModule\Services\Admin;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Enums\EntityStatus;
 use Modules\CatalogModule\Repositories\ModelRepository;
 use Modules\CatalogModule\Transformers\Admin\EntityResource;
@@ -170,9 +171,13 @@ trait EntityHelperService
 
     public function findAllByVendor(Request $request)
     {
-        $entity = $this->repository->findAllByVendor($request, getVendorId());
+        $entities = $this->repository->findAllByVendor($request, getVendorId());
 
-        return new PaginateResource(EntityResource::collection($entity));
+        if ($entities instanceof LengthAwarePaginator) {
+            return new PaginateResource(EntityResource::collection($entities));
+        }
+
+        return EntityResource::collection($entities);
     }
 
 
@@ -190,7 +195,11 @@ trait EntityHelperService
     {
         $cars = $this->repository->findAll($request);
 
-        return new PaginateResource(EntityResource::collection($cars));
+        if ($cars instanceof LengthAwarePaginator) {
+            return new PaginateResource(EntityResource::collection($cars));
+        }
+
+        return EntityResource::collection($cars);
     }
 
 

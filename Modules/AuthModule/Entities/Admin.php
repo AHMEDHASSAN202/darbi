@@ -67,6 +67,10 @@ class Admin extends BaseAuthenticatable implements JWTSubject
         if ($type = $request->get('type')) {
             $query->where('type', $type);
         }
+
+        if ($vendor = $request->get('vendor')) {
+            $query->where('vendor_id', new ObjectId($vendor));
+        }
     }
 
     //============= #END# scopes ==============\\
