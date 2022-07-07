@@ -6,18 +6,9 @@
 
 namespace Modules\AuthModule\Services;
 
-use Illuminate\Support\Facades\Log;
-use Jenssegers\Mongodb\Eloquent\Model;
-use Modules\AuthModule\Events\AfterUserLoginEvent;
+use Illuminate\Http\Request;
 use Modules\AuthModule\Http\Requests\StoreDeviceTokenRequest;
-use Modules\AuthModule\Http\Requests\User\SendOtpRequest;
-use Modules\AuthModule\Http\Requests\User\SigninRequest;
-use Modules\AuthModule\Http\Requests\User\SigninWithOtpRequest;
-use Modules\AuthModule\Jobs\SendOtpJob;
-use Modules\AuthModule\Repositories\User\UserRepository;
 use Modules\AuthModule\Repositories\UserDeviceTokenRepository;
-use Modules\AuthModule\Transformers\UserProfileResource;
-use Modules\CommonModule\Repositories\CountryRepository;
 use MongoDB\BSON\ObjectId;
 
 class UserDeviceTokenService
@@ -67,5 +58,21 @@ class UserDeviceTokenService
             }
         }
 
+    }
+
+
+    public function findAll(Request $request)
+    {
+        $request->validate(['receivers' => 'required_if:type,specified']);
+
+        try {
+            $players = $this->deviceTokenRepository->findAll($request);
+
+            return serviceResponse($players);
+
+        }catch (\Exception $exception) {
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
+            return serviceResponse([], 500, __('Unable get data'));
+        }
     }
 }

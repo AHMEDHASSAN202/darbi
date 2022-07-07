@@ -29,7 +29,8 @@ class CreateNotificationRequest extends FormRequest
             'receivers'     => 'required_if:receiver_type,'.NotificationReceiverTypes::SPECIFIED.'|array',
             'receivers.*.id'   => ['required', new MongoIdRule],
             'receivers.*.type' => ['required', 'in:user,vendor'],
-            'image'         => 'sometimes|nullable|image'
+            'image'         => 'sometimes|nullable|image',
+            'extra_data'    => 'sometimes|nullable|array'
         ];
     }
 

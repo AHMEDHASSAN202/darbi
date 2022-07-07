@@ -2,7 +2,8 @@
 
 namespace Modules\NotificationsModule\Observers;
 
-use App\Models\Modules\NotificationsModule\Entities\NotificationsCenter;
+use Modules\NotificationsModule\Entities\NotificationsCenter;
+use Modules\NotificationsModule\Jobs\SendNotificationJob;
 
 class NotificationObserver
 {
@@ -14,7 +15,7 @@ class NotificationObserver
      */
     public function created(NotificationsCenter $notificationsCenter)
     {
-        //
+        SendNotificationJob::dispatchSync($notificationsCenter);
     }
 
     /**

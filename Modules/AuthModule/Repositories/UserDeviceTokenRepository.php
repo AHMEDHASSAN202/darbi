@@ -6,8 +6,8 @@
 
 namespace Modules\AuthModule\Repositories;
 
+use Illuminate\Http\Request;
 use Modules\AuthModule\Entities\UserDeviceToken;
-use Modules\AuthModule\Http\Requests\StoreDeviceTokenRequest;
 
 class UserDeviceTokenRepository
 {
@@ -35,5 +35,11 @@ class UserDeviceTokenRepository
     public function findByPlatform($phone_uuid, $platform)
     {
         return $this->model->where('phone_uuid', $phone_uuid)->where('device_os', $platform)->first();
+    }
+
+
+    public function findAll(Request $request)
+    {
+        return $this->model->filters($request)->get();
     }
 }

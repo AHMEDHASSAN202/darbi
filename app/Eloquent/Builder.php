@@ -40,12 +40,15 @@ class Builder extends \Jenssegers\Mongodb\Eloquent\Builder
     }
 
 
-    public function paginated($limit = 20)
+    public function paginated($limit = null)
     {
+        $limit = (request('limit') && is_numeric(request('limit'))) ? request('limit') : $limit;
+
         if (request('paginated')) {
-            $limit = (request('limit') && is_numeric(request('limit'))) ? request('limit') : $limit;
+            $limit = $limit ?? config('options.per_page');
             return $this->paginate($limit);
         }
-        return $this->get();
+
+        return $this->when($limit, function ($q) use ($limit) { $q->limit($limit); })->get();
     }
 }

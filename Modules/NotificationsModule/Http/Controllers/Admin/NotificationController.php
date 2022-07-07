@@ -22,6 +22,22 @@ class NotificationController extends Controller
     }
 
 
+    public function index(Request $request)
+    {
+        $result = $this->notificationService->findAll($request);
+
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+    }
+
+
+    public function show($id)
+    {
+        $result = $this->notificationService->find($id);
+
+        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+    }
+
+
     public function store(CreateNotificationRequest $createNotificationRequest)
     {
         $result = $this->notificationService->create($createNotificationRequest);

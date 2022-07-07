@@ -9,11 +9,11 @@ namespace Modules\NotificationsModule\Proxy\Actions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-class GetUsersAction
+class GetPlayersAction
 {
     public function __invoke($data)
     {
-        $url = '/api/admin/v1/users/ids';
+        $url = '/api/admin/v1/players';
 
         $originalRequest = request();
 
@@ -29,6 +29,6 @@ class GetUsersAction
 
         $jsonData = json_decode($res->getContent(), true);
 
-        return @$jsonData['data']['users'] ?? [];
+        return @$jsonData['data']['players'] ?? [];
     }
 }

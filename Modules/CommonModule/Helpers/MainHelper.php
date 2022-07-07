@@ -284,3 +284,17 @@ function slugify($text, string $divider = '-') {
 
     return $text;
 }
+
+function serviceResponse($data, $statusCode = 200, $message = '')
+{
+    return [
+        'data'          => $data,
+        'statusCode'    => $statusCode,
+        'message'       => $message
+    ];
+}
+
+function helperLog($class, $method, $message = null)
+{
+    \Illuminate\Support\Facades\Log::error($class . ' -> ' . $method . ' -> ' . $message, request()->all());
+}

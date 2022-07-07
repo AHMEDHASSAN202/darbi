@@ -33,6 +33,11 @@ class NotificationRepository
 
     public function findAll(Request $request)
     {
-        return $this->notificationsCenter->search($request)->filter($request)->latest()->paginated();
+        return $this->notificationsCenter->search($request)->filters($request)->latest()->paginated();
+    }
+
+    public function find($id)
+    {
+        return $this->notificationsCenter->findOrFail($id);
     }
 }

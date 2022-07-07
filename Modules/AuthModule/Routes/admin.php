@@ -99,3 +99,13 @@ Route::group([
     Route::get(''                       , 'AdminProfileController@getProfile');
     Route::put(''                       , 'AdminProfileController@updateProfile');
 });
+
+
+
+//admin players
+Route::group([
+    'prefix'     => 'players',
+    'middleware' => 'auth:admin_api',
+], function () {
+    Route::get(''                       , 'UserDeviceTokenController@index');
+});

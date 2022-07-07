@@ -30,7 +30,6 @@ class NotificationsCenterFactory extends Factory
 
         return [
             'triggered_by'  => ['is_automatic' => $this->faker->boolean, 'user_id' => new ObjectId($user->_id), 'on_model' => 'user'],
-            'read_at'       => [Carbon::now()->toDateTimeString(), ''][mt_rand(0,1)],
             'receivers'      => [['user_id' => new ObjectId($receiver->_id), 'on_model' => 'user']],
             'notification_type' => ['offer', 'booking'][mt_rand(0,1)],
             'title'         => ['en' => $this->faker->text(50), 'ar' => $arFaker->text(50)],

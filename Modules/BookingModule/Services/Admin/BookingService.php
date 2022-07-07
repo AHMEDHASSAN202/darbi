@@ -51,7 +51,11 @@ class BookingService
 
         $bookings = $this->bookingRepository->bookingsByVendor($vendorId, $request);
 
-        return new PaginateResource(BookingResource::collection($bookings));
+        if ($bookings instanceof LengthAwarePaginator) {
+            return new PaginateResource(BookingResource::collection($bookings));
+        }
+
+        return BookingResource::collection($bookings);
     }
 
 
