@@ -17,7 +17,7 @@ class CreateVendorAdminAction
 
         $originalRequest = request();
 
-        $request = Request::create($url,'POST');
+        $request = Request::create($url,'POST', $data);
 
         app()->instance('request', $request);
 
@@ -29,6 +29,6 @@ class CreateVendorAdminAction
 
         $jsonData = json_decode($response->getContent(), true);
 
-        return @$jsonData['data']['admin'] ?? null;
+        return @$jsonData['data'] ?? null;
     }
 }
