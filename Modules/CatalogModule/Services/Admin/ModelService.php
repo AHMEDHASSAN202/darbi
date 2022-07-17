@@ -71,9 +71,7 @@ class ModelService
 
         $model = $this->modelRepository->create($data);
 
-        return [
-            'id'    => $model->_id
-        ];
+        return createdResponse(['id' => $model->_id]);
     }
 
     public function update($id, UpdateModelRequest $updateModelRequest)
@@ -92,14 +90,14 @@ class ModelService
 
         $model = $this->modelRepository->update($id, $data);
 
-        return [
-            'id'    => $model->_id
-        ];
+        return updatedResponse(['id' => $model->_id]);
     }
 
     public function delete($id)
     {
-        return $this->modelRepository->destroy($id);
+        $this->modelRepository->destroy($id);
+
+        return deletedResponse();
     }
 
     public function removeImage($id, $imageIndex)
@@ -120,9 +118,7 @@ class ModelService
 
         $this->_removeImage($image);
 
-        return [
-            'id'    => $model->_id
-        ];
+        return successResponse(['id' => $model->_id]);
     }
 
     private function handleSpecs(array $newSpecs)

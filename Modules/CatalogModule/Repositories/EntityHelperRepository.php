@@ -125,9 +125,15 @@ trait EntityHelperRepository
                 [
                     '$lookup'   => [
                         'from'          => 'branches',
-                        'localField'    => 'branch_ids',
+                        'localField'    => 'branch_id',
                         'foreignField'  => '_id',
-                        'as'            => 'branches'
+                        'as'            => 'branch'
+                    ],
+                ],
+                [
+                    '$unwind'    => [
+                        "path"      => '$branch',
+                        "preserveNullAndEmptyArrays" => true
                     ],
                 ],
                 [

@@ -24,13 +24,14 @@ class CreateNotificationRequest extends FormRequest
             'message.ar'    => 'required|string',
             'message.en'    => 'required|string',
             'url'           => 'sometimes|nullable|url',
-            'notification_type'  => 'required|string|in:'.implode(',', array_values(NotificationTypes::getTypes())),
-            'receiver_type' => 'required|in:'.implode(',', array_values(NotificationReceiverTypes::getTypes())),
-            'receivers'     => 'required_if:receiver_type,'.NotificationReceiverTypes::SPECIFIED.'|array',
-            'receivers.*.id'   => ['required', new MongoIdRule],
-            'receivers.*.type' => ['required', 'in:user,vendor'],
-            'image'         => 'sometimes|nullable|image',
-            'extra_data'    => 'sometimes|nullable|array'
+            'notification_type' => 'required|string|in:'.implode(',', array_values(NotificationTypes::getTypes())),
+            'receiver_type'     => 'required|in:'.implode(',', array_values(NotificationReceiverTypes::getTypes())),
+            'receivers'         => 'required_if:receiver_type,'.NotificationReceiverTypes::SPECIFIED.'|array|max:500',
+            'receivers.*.id'    => ['required', new MongoIdRule],
+            'receivers.*.type'  => ['required', 'in:user,vendor'],
+            'image'             => 'sometimes|nullable|image',
+            'extra_data'        => 'sometimes|nullable|array',
+            'is_automatic'      => 'sometimes|nullable|boolean'
         ];
     }
 

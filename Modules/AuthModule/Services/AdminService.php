@@ -35,10 +35,10 @@ class AdminService
         $admins = $this->adminRepository->list($request);
 
         if ($admins instanceof LengthAwarePaginator) {
-            return new PaginateResource(AdminResource::collection($admins));
+            return successResponse(['admins' => new PaginateResource(AdminResource::collection($admins))]);
         }
 
-        return AdminResource::collection($admins);
+        return successResponse(['admins' => AdminResource::collection($admins)]);
     }
 
     public function findAllIds(Request $request)
@@ -46,17 +46,17 @@ class AdminService
         $adminsIds = $this->adminRepository->findAllIds($request);
 
         if ($adminsIds instanceof LengthAwarePaginator) {
-            return new PaginateResource(AdminIdResource::collection($adminsIds));
+            return successResponse(['admins' => new PaginateResource(AdminIdResource::collection($adminsIds))]);
         }
 
-        return AdminIdResource::collection($adminsIds);
+        return successResponse(['admins' => AdminIdResource::collection($adminsIds)]);
     }
 
     public function find($adminId)
     {
         $admin = $this->adminRepository->find($adminId);
 
-        return new AdminResource($admin);
+        return successResponse(['admin' => new AdminResource($admin)]);
     }
 
     public function create($request)
@@ -79,9 +79,7 @@ class AdminService
 
         $admin = $this->adminRepository->create($data);
 
-        return [
-            'id'    => $admin->id
-        ];
+        return createdResponse(['id' => $admin->id]);
     }
 
     public function update($adminId, $request)
@@ -113,9 +111,7 @@ class AdminService
 
         $this->_removeImage($oldImage);
 
-        return [
-            'id'    => $adminId
-        ];
+        return successResponse(['id' => $adminId], __('Data has been updated successfully'));
     }
 
     public function updatePassword($adminId, $request)
@@ -124,28 +120,18 @@ class AdminService
             'password'  => Hash::make($request->password)
         ]);
 
-        return [
-            'id'        => $adminId
-        ];
+        return updatedResponse(['id' => $adminId]);
     }
 
     public function destroy($adminId)
     {
         if (auth('admin_api')->id() == $adminId) {
-            return [
-                'message'    => __('action not allowed'),
-                'statusCode' => 400,
-                'errors'     => []
-            ];
+            return badResponse([], __('action not allowed'));
         }
 
         $this->adminRepository->destroy($adminId);
 
-        return [
-            'message'    => __('Data has been deleted successfully'),
-            'statusCode' => 200,
-            'errors'     => []
-        ];
+        return deletedResponse([]);
     }
 
     public function getActivities($adminId, $request)
@@ -153,7 +139,7 @@ class AdminService
         $limit = $request->get('limit', 20);
         $activities = app(ActivityService::class)->getAdminActivities($adminId, $limit);
 
-        return new PaginateResource(ActivityResource::collection($activities));
+        return successResponse(['activities' => new PaginateResource(ActivityResource::collection($activities))]);
     }
 
     public function getVendorAdminToken($vendorId)
@@ -166,21 +152,11 @@ class AdminService
             //unprocessableEntityResponse
             //success
             //...
-            return [
-                'statusCode'    => 400,
-                'data'          => [],
-                'message'       => __('admin not exists')
-            ];
+            return badResponse([], __('admin not exists'));
         }
 
         $token = auth('vendor_api')->login($admin);
 
-        return [
-            'statusCode'    => 200,
-            'data'          => [
-                'token'    => $token
-            ],
-            'message'       => ''
-        ];
+        return successResponse(['token' => $token]);
     }
 }

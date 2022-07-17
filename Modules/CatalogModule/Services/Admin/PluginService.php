@@ -33,9 +33,7 @@ class PluginService
             'entity_type'   => $createPluginRequest->entity_type
         ]);
 
-        return [
-            'id'       => $plugin->id
-        ];
+        return createdResponse(['id' => $plugin->id]);
     }
 
     public function update($id, UpdatePluginRequest $updatePluginRequest)
@@ -47,14 +45,14 @@ class PluginService
             'entity_type'   => $updatePluginRequest->entity_type
         ]);
 
-        return [
-            'id'        => $plugin->id
-        ];
+        return updatedResponse(['id' => $plugin->id]);
     }
 
     public function delete($id)
     {
-        return $this->pluginRepository->destroy($id);
+        $this->pluginRepository->destroy($id);
+
+        return deletedResponse();
     }
 
     public function list(Request $request, $onlyActive = true)

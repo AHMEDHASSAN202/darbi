@@ -38,29 +38,29 @@ class ModelController extends Controller
     {
         $result = $this->modelService->create($createModelRequest);
 
-        return $this->apiResponse($result, 201, __('Data has been added successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function update($id, UpdateModelRequest $updateModelRequest)
     {
         $result = $this->modelService->update($id, $updateModelRequest);
 
-        return $this->apiResponse($result, 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function destroy($id)
     {
-        $this->modelService->delete($id);
+        $result = $this->modelService->delete($id);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function deleteImage($id, $imageIndex)
     {
-        $this->modelService->removeImage($id, $imageIndex);
+        $result = $this->modelService->removeImage($id, $imageIndex);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse(...$result);
     }
 
 

@@ -26,7 +26,7 @@ class NotificationController extends Controller
     {
         $result = $this->notificationService->findAll($request);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 
 
@@ -34,7 +34,7 @@ class NotificationController extends Controller
     {
         $result = $this->notificationService->find($id);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 
 
@@ -42,6 +42,6 @@ class NotificationController extends Controller
     {
         $result = $this->notificationService->create($createNotificationRequest);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 }

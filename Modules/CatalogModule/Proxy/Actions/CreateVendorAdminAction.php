@@ -17,7 +17,7 @@ class CreateVendorAdminAction
 
         $originalRequest = request();
 
-        $request = Request::create($url,'POST')->replace($data);
+        $request = Request::create($url,'POST');
 
         app()->instance('request', $request);
 

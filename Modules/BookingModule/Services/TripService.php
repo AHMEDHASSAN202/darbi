@@ -43,11 +43,7 @@ class TripService
         abort_if((is_null($booking) || $booking->status != BookingStatus::PAID), 404);
 
         if (!$booking->start_booking_at || $booking->start_booking_at->greaterThanOrEqualTo(now())) {
-            return [
-                'statusCode'    => 400,
-                'data'          => [],
-                'message'       => 'The booking start date has not started'
-            ];
+            return badResponse([], __('The booking start date has not started'));
         }
 
         $session = DB::connection('mongodb')->getMongoClient()->startSession();
@@ -64,20 +60,12 @@ class TripService
 
             $session->commitTransaction();
 
-            return [
-                'statusCode'    => 200,
-                'data'          => [],
-                'message'       => ''
-            ];
+            return successResponse();
 
         }catch (\Exception $exception) {
-            Log::error($exception->getMessage());
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
             $session->abortTransaction();
-            return [
-                'data'       => [],
-                'message'    => null,
-                'statusCode' => 500
-            ];
+            return serverErrorResponse();
         }
     }
 
@@ -104,20 +92,12 @@ class TripService
 
             $session->commitTransaction();
 
-            return [
-                'statusCode'    => 200,
-                'data'          => [],
-                'message'       => ''
-            ];
+            return successResponse();
 
         }catch (\Exception $exception) {
-            Log::error($exception->getMessage());
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
             $session->abortTransaction();
-            return [
-                'data'       => [],
-                'message'    => null,
-                'statusCode' => 500
-            ];
+            return serverErrorResponse();
         }
     }
 }

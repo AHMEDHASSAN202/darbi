@@ -32,38 +32,38 @@ class RoleService
         $roles = $this->roleRepository->list($request);
 
         if ($roles instanceof LengthAwarePaginator) {
-            return new PaginateResource(RoleResource::collection($roles));
+            return successResponse(['roles' => new PaginateResource(RoleResource::collection($roles))]);
         }
 
-        return RoleResource::collection($roles);
+        return successResponse(['roles' => RoleResource::collection($roles)]);
     }
 
     public function find($roleId)
     {
         $role = $this->roleRepository->find($roleId);
 
-        return new FindRoleResource($role);
+        return successResponse(['role' => new FindRoleResource($role)]);
     }
 
     public function findVendorRole()
     {
         $role = $this->roleRepository->findVendorRole();
 
-        return new FindRoleResource($role);
+        return successResponse(['role' => new FindRoleResource($role)]);
     }
 
     public function createRole($request)
     {
         $role = $this->roleRepository->create(['name' => $request->name, 'permissions' => json_encode($request->permissions), 'guard' => $request->guard]);
 
-        return new FindRoleResource($role);
+        return createdResponse(['role' => new FindRoleResource($role)]);
     }
 
     public function updateRole($roleId, $request)
     {
         $role = $this->roleRepository->update($roleId, ['name' => $request->name, 'permissions' => json_encode($request->permissions)]);
 
-        return  new FindRoleResource($role);
+        return  updatedResponse(['role' => new FindRoleResource($role)]);
     }
 
     public function destroyRole($roleId)
@@ -73,19 +73,11 @@ class RoleService
         //check if users related to this role
         //we will prevent deleting
         if ($this->adminRepository->countAdminFromThisRole($roleId)) {
-            return [
-                'data'        => [],
-                'statusCode'  => 422,
-                'message'     =>__('Deletion is not allowed')
-            ];
+            return badResponse([], __('Deletion is not allowed'));
         }
 
         $role->delete();
 
-        return [
-            'data'        => [],
-            'statusCode'  => 200,
-            'message'     =>__('Data has been deleted successfully')
-        ];
+        return deletedResponse();
     }
 }

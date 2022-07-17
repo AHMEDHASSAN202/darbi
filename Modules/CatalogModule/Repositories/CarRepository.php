@@ -26,6 +26,7 @@ class CarRepository
                            ->with(['model', 'brand', 'country' => function ($q) { $q->withTrashed(); }])
                            ->whereHas('model', function ($query) { $query->active(); })
                            ->whereHas('brand', function ($query) { $query->active(); })
+                           ->whereHas('branch', function ($query) { $query->active(); })
                            ->filter($request, EntityType::CAR)
                            ->filterDate($request)
                            ->active()
@@ -48,7 +49,8 @@ class CarRepository
                             ->with([
                                 'model' => function ($q) { $q->withTrashed(); },
                                 'brand' => function ($q) { $q->withTrashed(); },
-                                'vendor' => function ($q) { $q->withTrashed(); }
+                                'vendor' => function ($q) { $q->withTrashed(); },
+                                'branch' => function ($q) { $q->withTrashed(); }
                             ])
                             ->adminFilter($request, EntityType::CAR)
                             ->latest()
@@ -63,7 +65,8 @@ class CarRepository
                             ->with([
                                 'model' => function ($q) { $q->withTrashed(); },
                                 'brand' => function ($q) { $q->withTrashed(); },
-                                'vendor' => function ($q) { $q->withTrashed(); }
+                                'vendor' => function ($q) { $q->withTrashed(); },
+                                'branch' => function ($q) { $q->withTrashed(); }
                             ])
                             ->adminFilter($request, EntityType::CAR)
                             ->latest()

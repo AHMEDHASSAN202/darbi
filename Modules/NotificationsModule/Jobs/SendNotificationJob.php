@@ -54,14 +54,15 @@ class SendNotificationJob implements ShouldQueue
                 $filters = ['type' => 'vendors'];
                 break;
             case NotificationReceiverTypes::SPECIFIED:
-                $filter = [
-                    'type' => 'specified',
+                $filters = [
+                    'type'      => 'specified',
                     'receivers' => array_map(function ($receiver) {
                         return ['user_id' => (string)$receiver['user_id'], 'on_model' => $receiver['on_model']];
                     }, $this->notificationsCenter->receivers)
                 ];
                 break;
         }
+
         //get players
         $notificationProxy = new NotificationProxy("GET_PLAYERS", $filters);
         $proxy = new Proxy($notificationProxy);
@@ -69,8 +70,7 @@ class SendNotificationJob implements ShouldQueue
 
         if (!empty($playersResponse)) {
             $players = Arr::pluck($playersResponse, 'phone_uuid');
-            dd($players);
-            $notificationService->sendToUsers($title, $message, array_values($players));
+            $notificationService->sendToUsers($title, $message, array_unique(array_values($players)));
         }
     }
 }

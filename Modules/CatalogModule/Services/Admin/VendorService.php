@@ -11,9 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Http\Requests\Admin\CreateVendorRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateVendorRequest;
-use Modules\CatalogModule\Proxy\NotificationProxy;
+use Modules\CatalogModule\Proxy\CatalogProxy;
 use Modules\CatalogModule\Repositories\VendorRepository;
-use Modules\CatalogModule\Services\UserResource;
 use Modules\CatalogModule\Transformers\Admin\FindVendorResource;
 use Modules\CatalogModule\Transformers\Admin\VendorResource;
 use Modules\CommonModule\Traits\ImageHelperTrait;
@@ -57,11 +56,7 @@ class VendorService
         $role = $this->getVendorRole();
 
         if (!$role || !$role['id']) {
-            return [
-                'data'          => [],
-                'statusCode'    => 400,
-                'message'       => __('Default vendor role not exists.')
-            ];
+            return badResponse([], __('Default vendor role not exists.'));
         }
 
         $vendor = $this->vendorRepository->create([
@@ -91,27 +86,17 @@ class VendorService
         ]);
 
         if (!$admin || !$admin['id']) {
-            return [
-                'data'          => [],
-                'statusCode'    => 201,
-                'message'       => __('vendor admin cannot be created, please create it manually')
-            ];
+            return createdResponse([], __('vendor admin cannot be created, please create it manually'));
         }
 
-        return [
-            'data'          => [
-                'id'        => $vendor->id
-            ],
-            'statusCode'    => 201,
-            'message'       => __('Data has been added successfully')
-        ];
+        return createdResponse(['id' => $vendor->id]);
     }
 
 
     private function getVendorRole()
     {
         //get vendor admin role
-        $roleProxy =  new NotificationProxy('GET_VENDOR_ROLE');
+        $roleProxy =  new CatalogProxy('GET_VENDOR_ROLE');
 
         return (new Proxy($roleProxy))->result();
     }
@@ -120,7 +105,7 @@ class VendorService
     private function createVendorAdmin($data)
     {
         //create vendor admin
-        $vendorAdminProxy = new NotificationProxy('CREATE_VENDOR_ADMIN', $data);
+        $vendorAdminProxy = new CatalogProxy('CREATE_VENDOR_ADMIN', $data);
 
         $proxy = new Proxy($vendorAdminProxy);
 
@@ -154,15 +139,15 @@ class VendorService
 
         $this->_removeImage($oldImage);
 
-        return [
-            'id'        => $vendor->id
-        ];
+        return updatedResponse(['id' => $vendor->id]);
     }
 
 
     public function destroy($id)
     {
-        return $this->vendorRepository->destroy($id);
+        $this->vendorRepository->destroy($id);
+
+        return deletedResponse();
     }
 
 
@@ -170,9 +155,7 @@ class VendorService
     {
         $this->vendorRepository->toggleActive($vendorId);
 
-        return [
-            'id'    => $vendorId
-        ];
+        return updatedResponse(['id' => $vendorId]);
     }
 
 
@@ -183,25 +166,17 @@ class VendorService
         $token = $this->getVendorAdminToken($request->vendor_id);
 
         if (!$token) {
-            return [
-                'statusCode'        => 400,
-                'data'              => [],
-                'message'           => __('vendor admin not exists, please create it and try again')
-            ];
+            return badResponse([], __('vendor admin not exists, please create it and try again'));
         }
 
-        return [
-            'data'          => ['token' => $token],
-            'statusCode'    => 200,
-            'message'       => ''
-        ];
+        return successResponse(['token' => $token]);
     }
 
 
     public function getVendorAdminToken($vendorId)
     {
-        //get vendor admin
-        $catalogProxy =  new NotificationProxy('GET_VENDOR_ADMIN_TOKEN', ['vendor_id' => $vendorId]);
+        //get vendor admin token
+        $catalogProxy =  new CatalogProxy('GET_VENDOR_ADMIN_TOKEN', ['vendor_id' => $vendorId]);
 
         return @(new Proxy($catalogProxy))->result();
     }

@@ -27,9 +27,7 @@ class AuthController extends Controller
     {
         $result = $this->userAuthService->signin($signinRequest);
 
-        return $this->apiResponse(
-            $result['data'], $result['statusCode'], $result['message'], $result['errors']
-        );
+        return $this->apiResponse(...$result);
     }
 
 
@@ -37,9 +35,7 @@ class AuthController extends Controller
     {
         $result = $this->userAuthService->sendOtp($sendOtpRequest);
 
-        return $this->apiResponse(
-            $result['data'], $result['statusCode'], $result['message'], $result['errors']
-        );
+        return $this->apiResponse(...$result);
     }
 
 
@@ -47,8 +43,6 @@ class AuthController extends Controller
     {
         $result = $this->userAuthService->signInWithOTP($signinWithOtpRequest);
 
-        return $this->apiResponse(
-            $result['data'], $result['statusCode'], $result['message'], $result['errors']
-        );
+        return $this->apiResponse(...$result);
     }
 }

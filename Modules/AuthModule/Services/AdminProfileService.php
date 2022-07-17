@@ -20,7 +20,7 @@ class AdminProfileService
     {
         $me = auth($this->guardName)->user()->load('role');
 
-        return (new AdminProfileResource($me));
+        return successResponse(['profile' => (new AdminProfileResource($me))]);
     }
 
     public function updateProfile($request)
@@ -43,6 +43,6 @@ class AdminProfileService
 
         $this->_removeImage($oldImage);
 
-        return (new AdminProfileResource($me));
+        return updatedResponse(['profile' => (new AdminProfileResource($me))]);
     }
 }

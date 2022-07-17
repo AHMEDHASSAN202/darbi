@@ -58,8 +58,10 @@ class UserDeviceToken extends Base
         }
 
         if ($request->get('vendor')) {
-            $vendorAdmins = app(AdminService::class)->findAllIds($request);
-            $query->whereIn('user_details.id', generateObjectIdOfArrayValues($vendorAdmins->pluck('id')->toArray($request)))->where('user_details.on_model', Admin::class);
+            $vendorAdmins = @app(AdminService::class)->findAllIds($request)['admins'];
+            if ($vendorAdmins) {
+                $query->whereIn('user_details.id', generateObjectIdOfArrayValues($vendorAdmins->pluck('id')->toArray($request)))->where('user_details.on_model', Admin::class);
+            }
         }
     }
 

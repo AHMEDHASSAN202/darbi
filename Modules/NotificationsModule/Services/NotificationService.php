@@ -51,10 +51,10 @@ class NotificationService
             $notifications = $this->notificationRepository->findAll($request);
 
             if ($notifications instanceof LengthAwarePaginator) {
-                return serviceResponse(new PaginateResource(\Modules\NotificationsModule\Transformers\Admin\NotificationResource::collection($notifications)));
+                return serviceResponse(['notifications' => new PaginateResource(\Modules\NotificationsModule\Transformers\Admin\NotificationResource::collection($notifications))]);
             }
 
-            return serviceResponse(\Modules\NotificationsModule\Transformers\Admin\NotificationResource::collection($notifications));
+            return serviceResponse(['notifications' => \Modules\NotificationsModule\Transformers\Admin\NotificationResource::collection($notifications)]);
 
         }catch (\Exception $exception) {
             helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
@@ -72,7 +72,7 @@ class NotificationService
             return serviceResponse([], 500, __("Notification not found"));
         }
 
-        return serviceResponse(new FindNotificationResource($notification));
+        return serviceResponse(['notification' => new FindNotificationResource($notification)]);
     }
 
 
@@ -129,6 +129,8 @@ class NotificationService
             $image = $this->uploadImage('notifications', $createNotificationRequest->image);
         }
 
+        $me = auth(getCurrentGuard())->user();
+
         $notification = $this->notificationRepository->create([
             'title'             => $createNotificationRequest->title,
             'message'           => $createNotificationRequest->message,
@@ -137,7 +139,12 @@ class NotificationService
             'receivers'         => $this->getReceivers($createNotificationRequest),
             'notification_type' => $createNotificationRequest->notification_type,
             'receiver_type'     => $createNotificationRequest->receiver_type,
-            'extra_data'        => $createNotificationRequest->extra_data ?? []
+            'extra_data'        => $createNotificationRequest->extra_data ?? [],
+            'triggered_by'      => [
+                'is_automatic'       => !($createNotificationRequest->is_automatic === null) && (boolean)$createNotificationRequest->is_automatic,
+                'user_id'            => $me->id,
+                'on_model'           => get_class($me)
+            ]
         ]);
 
         if (!$notification) {
@@ -145,7 +152,7 @@ class NotificationService
             return serviceResponse([], 500, __("Unable to create new notification"));
         }
 
-        return serviceResponse([], 201, __('Data has been added successfully'));
+        return serviceResponse(['id' => $notification->id], 201, __('Data has been added successfully'));
     }
 
 

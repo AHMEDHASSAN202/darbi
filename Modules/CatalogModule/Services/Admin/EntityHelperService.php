@@ -48,7 +48,7 @@ trait EntityHelperService
         $images = $car->images;
 
         if (empty($images)) {
-            return null;
+            return badResponse();
         }
 
         $image = $images[$imageIndex];
@@ -61,7 +61,7 @@ trait EntityHelperService
             $this->_removeImage($image);
         }
 
-        return $car;
+        return deletedResponse($car);
     }
 
 
@@ -130,20 +130,12 @@ trait EntityHelperService
         $entity = $this->repository->find($id, ['vendor_id' => new ObjectId(getVendorId())]);
 
         if ($entity->state != EntityStatus::FREE) {
-            return [
-                'statusCode'    => 400,
-                'message'       => __('Entity is not free'),
-                'data'          => []
-            ];
+            return badResponse([], __('Entity is not free'));
         }
 
         $entity->delete();
 
-        return [
-            'statusCode'    => 200,
-            'message'       => __('Data has been deleted successfully'),
-            'data'          => []
-        ];
+        return deletedResponse();
     }
 
 
@@ -152,20 +144,12 @@ trait EntityHelperService
         $entity = $this->repository->find($id);
 
         if ($entity->state != EntityStatus::FREE) {
-            return [
-                'statusCode'    => 400,
-                'message'       => __('Entity is not free'),
-                'data'          => []
-            ];
+            return badResponse([], __('Entity is not free'));
         }
 
         $entity->delete();
 
-        return [
-            'statusCode'    => 200,
-            'message'       => __('Data has been deleted successfully'),
-            'data'          => []
-        ];
+        return deletedResponse();
     }
 
 

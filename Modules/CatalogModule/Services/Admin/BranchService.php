@@ -73,9 +73,7 @@ class BranchService
             'city_id'                   => new ObjectId($createBranchRequest->city_id)
         ]);
 
-        return [
-            'id'        => $branch->_id
-        ];
+        return createdResponse(['id' => $branch->_id]);
     }
 
 
@@ -101,9 +99,7 @@ class BranchService
             'city_id'                       => new ObjectId($updateBranchRequest->city_id)
         ], ['vendor_id' => $vendorId]);
 
-        return [
-            'id'        => $branch->_id
-        ];
+        return updatedResponse(['id' => $branch->_id]);
     }
 
 
@@ -111,7 +107,9 @@ class BranchService
     {
         $vendorId = new ObjectId(getVendorId());
 
-        return $this->branchRepository->destroy($branchId, ['vendor_id' => $vendorId]);
+        $this->branchRepository->destroy($branchId, ['vendor_id' => $vendorId]);
+
+        return deletedResponse();
     }
 
 
@@ -135,7 +133,7 @@ class BranchService
 
         $this->_removeImage($image);
 
-        return $branch;
+        return deletedResponse($branch);
     }
 
 

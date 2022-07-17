@@ -39,6 +39,6 @@ class CarController extends Controller
     {
         $result = $this->carService->deleteByAdmin($id);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 }

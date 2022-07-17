@@ -12,6 +12,9 @@ function getCurrentGuard() {
     if (auth('vendor_api')->check()) {
         return 'vendor_api';
     }
+    if (auth('api')->check()) {
+        return 'api';
+    }
     return null;
 }
 
@@ -292,6 +295,36 @@ function serviceResponse($data, $statusCode = 200, $message = '')
         'statusCode'    => $statusCode,
         'message'       => $message
     ];
+}
+
+function successResponse($data = [], $message = null)
+{
+    return serviceResponse($data, 200, $message);
+}
+
+function createdResponse($data = [], $message = null)
+{
+    return serviceResponse($data, 201, $message ?? __('Data has been added successfully'));
+}
+
+function updatedResponse($data = [], $message = null)
+{
+    return serviceResponse($data, 200, $message ?? __('Data has been updated successfully'));
+}
+
+function deletedResponse($data = [], $message = null)
+{
+    return serviceResponse($data, 200, $message ?? __('Data has been deleted successfully'));
+}
+
+function badResponse($data = [], $message = null)
+{
+    return serviceResponse($data, 400, $message);
+}
+
+function serverErrorResponse($data = [], $message = null)
+{
+    return serviceResponse($data, 500, $message ?? __('Internal server error'));
 }
 
 function helperLog($class, $method, $message = null)

@@ -109,3 +109,6 @@ Route::group([
 ], function () {
     Route::get(''                       , 'UserDeviceTokenController@index');
 });
+
+
+Route::post('device-token'              , 'UserDeviceTokenController@storeDeviceToken')->middleware('auth:admin_api');

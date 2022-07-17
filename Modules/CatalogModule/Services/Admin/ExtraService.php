@@ -49,9 +49,7 @@ class ExtraService
             'price'         => $createExtraRequest->price
         ]);
 
-        return [
-            'id'        => $plugin->id
-        ];
+        return createdResponse(['id'  => $plugin->id]);
     }
 
 
@@ -63,15 +61,15 @@ class ExtraService
             'price'         => $updateExtraRequest->price
         ]);
 
-        return [
-            'id'        => $plugin->id
-        ];
+        return updatedResponse(['id' => $plugin->id]);
     }
 
 
     public function delete($id)
     {
-        return $this->extraRepository->destroy($id);
+        $this->extraRepository->destroy($id);
+
+        return deletedResponse();
     }
 
 

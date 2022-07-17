@@ -52,10 +52,10 @@ class BookingService
         $bookings = $this->bookingRepository->bookingsByVendor($vendorId, $request);
 
         if ($bookings instanceof LengthAwarePaginator) {
-            return new PaginateResource(BookingResource::collection($bookings));
+            return successResponse(['bookings' => new PaginateResource(BookingResource::collection($bookings))]);
         }
 
-        return BookingResource::collection($bookings);
+        return successResponse(['bookings' => BookingResource::collection($bookings)]);
     }
 
 
@@ -64,10 +64,10 @@ class BookingService
         $bookings = $this->bookingRepository->findAll($request);
 
         if ($bookings instanceof LengthAwarePaginator) {
-            return new PaginateResource(BookingResource::collection($bookings));
+            return successResponse(['bookings' => new PaginateResource(BookingResource::collection($bookings))]);
         }
 
-        return BookingResource::collection($bookings);
+        return successResponse(['bookings' => BookingResource::collection($bookings)]);
     }
 
 
@@ -75,7 +75,7 @@ class BookingService
     {
         $booking = $this->bookingRepository->findByAdmin(new ObjectId($bookingId));
 
-        return new FindBookingResource($booking);
+        return successResponse(['booking' => new FindBookingResource($booking)]);
     }
 
 
@@ -85,7 +85,7 @@ class BookingService
 
         $booking = $this->bookingRepository->findByVendor($vendorId, new ObjectId($bookingId));
 
-        return new FindBookingResource($booking);
+        return successResponse(['booking' => new FindBookingResource($booking)]);
     }
 
 
@@ -129,11 +129,7 @@ class BookingService
             abort_if(is_null($booking), 404);
 
             if (!in_array($booking->status, $allowedStatus)) {
-                return [
-                    'data'      => [],
-                    'message'   => __($status . ' booking not allowed'),
-                    'statusCode'=> 400
-                ];
+                return badResponse([], __($status . ' booking not allowed'));
             }
 
             $data['status'] = $handleNewStatus ? $handleNewStatus($booking) : $status;
@@ -146,22 +142,12 @@ class BookingService
 
             $session->commitTransaction();
 
-            return [
-                'data'       => [
-                    'booking_id'    => $bookingId,
-                ],
-                'message'    => '',
-                'statusCode' => 200
-            ];
+            return successResponse(['booking_id' => $bookingId]);
 
         } catch (\Exception $exception) {
-            Log::error($exception->getMessage());
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
             $session->abortTransaction();
-            return [
-                'data'       => [],
-                'message'    => null,
-                'statusCode' => 500
-            ];
+            return serverErrorResponse();
         }
     }
 }

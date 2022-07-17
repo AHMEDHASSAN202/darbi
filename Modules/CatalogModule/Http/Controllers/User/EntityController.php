@@ -29,6 +29,6 @@ class EntityController extends Controller
     {
         $result = $this->entityService->changeState($entityId, $state);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 }

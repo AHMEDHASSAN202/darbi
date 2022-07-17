@@ -32,31 +32,31 @@ class UserService
         $users = $this->userRepository->findAll($request);
 
         if ($users instanceof LengthAwarePaginator) {
-            return new PaginateResource(UserResource::collection($users));
+            return successResponse(['users' => new PaginateResource(UserResource::collection($users))]);
         }
 
-        return UserResource::collection($users);
+        return successResponse(['users' => UserResource::collection($users)]);
     }
 
     public function find($userId)
     {
         $user = $this->userRepository->find($userId, ['savedPlaces', 'lastBooking']);
 
-        return new FindUserResource($user);
+        return successResponse(['user' => new FindUserResource($user)]);
     }
 
     public function destroy($userId)
     {
-        return $this->userRepository->destroy($userId);
+        $this->userRepository->destroy($userId);
+
+        return deletedResponse();
     }
 
     public function toggleActive($userId)
     {
         $this->userRepository->toggleActive($userId);
 
-        return [
-            'id'    => $userId
-        ];
+        return updatedResponse(['id' => $userId]);
     }
 
     public function findAllIds(Request $request)
@@ -64,9 +64,9 @@ class UserService
         $userIds = $this->userRepository->findAllIds($request);
 
         if ($userIds instanceof LengthAwarePaginator) {
-            return new PaginateResource(UserIdResource::collection($userIds));
+            return successResponse(['users' => new PaginateResource(UserIdResource::collection($userIds))]);
         }
 
-        return UserIdResource::collection($userIds);
+        return successResponse(['users' => UserIdResource::collection($userIds)]);
     }
 }

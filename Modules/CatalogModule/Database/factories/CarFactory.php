@@ -37,7 +37,7 @@ class CarFactory extends Factory
         $brand = Brand::where('entity_type', $this->type)->get()->random(1)->first();
         $model = Model::where('brand_id', new ObjectId($brand->_id))->get()->random(1)->first();
         $vendor = Vendor::where('type', $this->type)->first();
-        $branches = Branch::where('vendor_id', new ObjectId($vendor->_id))->limit(3)->pluck('_id')->toArray();
+        $branch = Branch::where('vendor_id', new ObjectId($vendor->_id))->first();
         $plugins = Plugin::where('entity_type', $this->type)->get()->pluck('id')->toArray();
         $extras = generateObjectIdOfArrayValues(Extra::whereIn('plugin_id', generateObjectIdOfArrayValues($plugins))->where('vendor_id', new ObjectId($vendor->_id))->get()->random(2)->pluck('_id')->toArray());
 
@@ -49,7 +49,7 @@ class CarFactory extends Factory
             'is_active'         => true,
             'is_available'      => true,
             'vendor_id'         => new ObjectId($vendor->_id),
-            'branch_ids'        => generateObjectIdOfArrayValues($branches),
+            'branch_id'         => new ObjectId($branch->id),
             'state'             => 'free',
             'extra_ids'         => $extras,
             'country_id'        => new ObjectId($country->_id),

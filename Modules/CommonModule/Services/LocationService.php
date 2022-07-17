@@ -22,28 +22,28 @@ class LocationService
 
     public function handleLocation($lat, $lng)
     {
-        //check if location exists in darbi database
-        $location = $this->locationRepository->findNearLocation((float)$lat, (float)$lng);
+        try {
+            //check if location exists in darbi database
+            $location = $this->locationRepository->findNearLocation((float)$lat, (float)$lng);
 
-        if (!$location) {
-            $geoLocation = new GoogleFindLocation($lat, $lng);
-            $locationInfo['country']    = $geoLocation->getCountry();
-            $locationInfo['city']       = $geoLocation->getCity();
-            $locationInfo['fully_addressed'] =  $geoLocation->getAddress();
-            $locationInfo['name'] =  $geoLocation->getName();
-            $locationInfo['location'] = [
-                'type'          => 'Point',
-                'coordinates'   => [(float)$lng, (float)$lat]
-            ];
-            $location = $this->locationRepository->create($locationInfo);
+            if (!$location) {
+                $geoLocation = new GoogleFindLocation($lat, $lng);
+                $locationInfo['country']    = $geoLocation->getCountry();
+                $locationInfo['city']       = $geoLocation->getCity();
+                $locationInfo['fully_addressed'] =  $geoLocation->getAddress();
+                $locationInfo['name'] =  $geoLocation->getName();
+                $locationInfo['location'] = [
+                    'type'          => 'Point',
+                    'coordinates'   => [(float)$lng, (float)$lat]
+                ];
+                $location = $this->locationRepository->create($locationInfo);
+            }
+
+            return successResponse(['location'  => new LocationResource($location)]);
+
+        }catch (\Exception $exception) {
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
+            return serverErrorResponse();
         }
-
-        return [
-            'data'       => [
-                'location'  => new LocationResource($location)
-            ],
-            'message'    => '',
-            'statusCode' => 200
-        ];
     }
 }

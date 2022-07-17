@@ -31,11 +31,6 @@ class UserAuthService
 
     public function signin(SigninRequest $signinRequest)
     {
-        $response['data'] = [];
-        $response['statusCode'] = 200;
-        $response['message'] = null;
-        $response['errors'] = [];
-
         //get user if exists
         $user = $this->userRepository->findByMobile($signinRequest->phone, $signinRequest->phone_code);
 
@@ -47,9 +42,8 @@ class UserAuthService
 
         //when can't create new user
         if (!$user) {
-            Log::error("(singin) can't get user by mobile and can't create it");
-            $response['statusCode'] = 500;
-            return $response;
+            helperLog(__CLASS__, __FUNCTION__, "(singin) can't get user by mobile and can't create it");
+            return serverErrorResponse();
         }
 
         //updated verification code
@@ -62,68 +56,47 @@ class UserAuthService
         //we will execute this code after response as a background job
         SendOtpJob::dispatch($user->phone, $user->phone_code, $user->verification_code)->afterResponse();
 
-        $response['message'] = __('OTP is successfully sent');
-
-        return $response;
+        return successResponse([], __('OTP is successfully sent'));
     }
 
 
     public function sendOtp(SendOtpRequest $sendOtpRequest)
     {
-        $response['data'] = [];
-        $response['statusCode'] = 200;
-        $response['message'] = null;
-        $response['errors'] = [];
-
         //get user if exists
         $user = $this->userRepository->findByMobile($sendOtpRequest->phone, $sendOtpRequest->phone_code);
 
         if (!$user) {
-            $response['statusCode'] = 422;
-            $response['message'] = __('Mobile not found');
-            return $response;
+            return badResponse([], __('Mobile not found'));
         }
 
         //sendOTP
         //we will execute this code after response as a background job
         SendOtpJob::dispatch($user->phone, $user->phone_code, $user->verification_code)->afterResponse();
 
-        $response['message'] = __('OTP is successfully sent');
-
-        return $response;
+        return successResponse([], __('OTP is successfully sent'));
     }
 
 
     public function signInWithOTP(SigninWithOtpRequest $signinWithOtpRequest)
     {
-        $response['data'] = [];
-        $response['statusCode'] = 200;
-        $response['message'] = null;
-        $response['errors'] = [];
-
         //get user if exists
         $me = $this->userRepository->findByMobile($signinWithOtpRequest->phone, $signinWithOtpRequest->phone_code);
 
         //if invalid otp
         if (!$me || ($me->verification_code != $signinWithOtpRequest->otp)) {
-            $response['statusCode'] = 422;
-            $response['message'] = __('Invalid OTP');
-            return $response;
+            return badResponse([], __('Invalid OTP'));
         }
 
         //if user blocked
         if ($me->isNotActive()) {
-            $response['statusCode'] = 422;
-            $response['message'] = __('Your account has been locked. Contact your support person to unlock it, then try again.');
-            return $response;
+            return badResponse([], __('Your account has been locked. Contact your support person to unlock it, then try again.'));
         }
 
         $me->last_login = now();
         $me->verification_code = null;
         $me->save();
 
-        $response['statusCode'] = 200;
-        $response['data'] = [
+        $data = [
             'profile'           => new UserProfileResource($me),
             'token'             => auth($this->authGuard)->login($me)
         ];
@@ -131,7 +104,7 @@ class UserAuthService
         //dispatch event after login
         event(new AfterUserLoginEvent($me));
 
-        return $response;
+        return successResponse($data);
     }
 
 

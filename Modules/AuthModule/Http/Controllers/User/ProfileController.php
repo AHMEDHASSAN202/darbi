@@ -26,10 +26,10 @@ class ProfileController extends Controller
 
     public function getProfile()
     {
-        return $this->apiResponse([
-            //TODO: bad design because exception is not handled, ypu should make sure that the user is returned then do resp
-            'profile'       => $this->userProfileService->getProfile()
-        ]);
+        $result = $this->userProfileService->getProfile();
+
+        //TODO: bad design because exception is not handled, ypu should make sure that the user is returned then do resp
+        return $this->apiResponse(...$result);
     }
 
 
@@ -37,7 +37,7 @@ class ProfileController extends Controller
     {
         $result = $this->userProfileService->updateProfile($updateProfileRequest);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 
 
@@ -45,7 +45,7 @@ class ProfileController extends Controller
     {
         $result = $this->userProfileService->updateIdentityProfile($uploadIdentityImageRequest, $type);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 
 
@@ -53,6 +53,6 @@ class ProfileController extends Controller
     {
         $result = $this->userProfileService->removeIdentityProfile($type);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 }

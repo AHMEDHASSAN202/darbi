@@ -8,7 +8,6 @@ use Modules\AuthModule\Http\Requests\Admin\CreateRoleRequest;
 use Modules\AuthModule\Http\Requests\Admin\UpdateRoleRequest;
 use Modules\AuthModule\Services\RoleService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
-use function __;
 
 
 class RoleController extends Controller
@@ -25,32 +24,33 @@ class RoleController extends Controller
 
     public function index(Request $request)
     {
-        $roles = $this->roleService->findAll($request);
+        $result = $this->roleService->findAll($request);
 
-        return $this->apiResponse(compact('roles'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function show($roleId)
     {
-        return $this->apiResponse([
-            'role'      => $this->roleService->find($roleId)
-        ]);
+        $result = $this->roleService->find($roleId);
+
+        return $this->apiResponse(...$result);
     }
+
 
     public function store(CreateRoleRequest $createRoleRequest)
     {
-        $role = $this->roleService->createRole($createRoleRequest);
+        $result = $this->roleService->createRole($createRoleRequest);
 
-        return $this->apiResponse(compact('role'), 201, __('Data has been added successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function update($roleId, UpdateRoleRequest $updateRoleRequest)
     {
-        $role = $this->roleService->updateRole($roleId, $updateRoleRequest);
+        $result = $this->roleService->updateRole($roleId, $updateRoleRequest);
 
-        return $this->apiResponse(compact('role'), 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
@@ -58,14 +58,14 @@ class RoleController extends Controller
     {
         $result = $this->roleService->destroyRole($roleId);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 
 
     public function findVendorRole()
     {
-        return $this->apiResponse([
-            'role'      => $this->roleService->findVendorRole()
-        ]);
+        $result = $this->roleService->findVendorRole();
+
+        return $this->apiResponse(...$result);
     }
 }

@@ -25,18 +25,33 @@ class UserDeviceTokenService
     {
         $me = app(UserAuthService::class)->authUser();
 
-        return $this->handleDeviceToken($storeDeviceTokenRequest, 'user', $me);
+        $this->handleDeviceToken($storeDeviceTokenRequest, $me);
+
+        return successResponse([], __('Token Saved'));
     }
 
 
-    private function handleDeviceToken(StoreDeviceTokenRequest $storeDeviceTokenRequest, $appType, $user = null)
+    public function handleAdminDeviceToken(StoreDeviceTokenRequest $storeDeviceTokenRequest)
+    {
+        $me = auth(getCurrentGuard())->user();
+
+        if (!$me) {
+            return badResponse();
+        }
+
+        $this->handleDeviceToken($storeDeviceTokenRequest, $me);
+
+        return successResponse([], __('Token Saved'));
+    }
+
+
+    private function handleDeviceToken(StoreDeviceTokenRequest $storeDeviceTokenRequest, $user = null)
     {
         $token = $this->deviceTokenRepository->findByPlatform($storeDeviceTokenRequest->phone_uuid, $storeDeviceTokenRequest->device_os);
 
         if (!$token) {
             $this->deviceTokenRepository->create([
                 'phone_uuid'        => $storeDeviceTokenRequest->phone_uuid,
-                'app_type'          => $appType,
                 'device_os'         => $storeDeviceTokenRequest->device_os,
                 'lat'               => $storeDeviceTokenRequest->lat ? (float)$storeDeviceTokenRequest->lat : null,
                 'lng'               => $storeDeviceTokenRequest->lng ? (float)$storeDeviceTokenRequest->lng : null,
@@ -57,7 +72,6 @@ class UserDeviceTokenService
                 ]);
             }
         }
-
     }
 
 
@@ -68,7 +82,7 @@ class UserDeviceTokenService
         try {
             $players = $this->deviceTokenRepository->findAll($request);
 
-            return serviceResponse($players);
+            return serviceResponse(['players' => $players]);
 
         }catch (\Exception $exception) {
             helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());

@@ -29,6 +29,6 @@ class AuthAdminController extends Controller
     {
         $result = $this->authAdminService->login($loginToDashboardRequest, 'admin');
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message'], @$result['errors']);
+        return $this->apiResponse(...$result);
     }
 }

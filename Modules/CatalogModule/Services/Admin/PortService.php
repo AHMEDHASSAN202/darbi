@@ -59,9 +59,7 @@ class PortService
             'is_active'  => ($createPortRequest->is_active === null) || (boolean)$createPortRequest->is_active
         ]);
 
-        return [
-            'id'        => $port->id
-        ];
+        return createdResponse(['id' => $port->id]);
     }
 
     public function update($id, UpdatePortRequest $updatePortRequest)
@@ -75,13 +73,13 @@ class PortService
             'is_active'  => ($updatePortRequest->is_active === null) || (boolean)$updatePortRequest->is_active
         ]);
 
-        return [
-            'id'    => $port->id
-        ];
+        return updatedResponse(['id' => $port->id]);
     }
 
     public function delete($id)
     {
-        return $this->portRepository->destroy($id);
+        $this->portRepository->destroy($id);
+
+        return deletedResponse();
     }
 }

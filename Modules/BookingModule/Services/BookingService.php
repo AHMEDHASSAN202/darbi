@@ -45,10 +45,10 @@ class BookingService
         $bookings = $this->bookingRepository->findAllByUser($userId);
 
         if ($bookings instanceof LengthAwarePaginator) {
-            return new PaginateResource(BookingResource::collection($bookings));
+            return successResponse(['bookings' => new PaginateResource(BookingResource::collection($bookings))]);
         }
 
-        return BookingResource::collection($bookings);
+        return successResponse(['bookings' => BookingResource::collection($bookings)]);
     }
 
 
@@ -58,7 +58,7 @@ class BookingService
 
         $booking = $this->bookingRepository->findByUser($userId, $bookingId);
 
-        return new FindBookingResource($booking);
+        return successResponse(['booking' => new FindBookingResource($booking)]);
     }
 
 
@@ -71,11 +71,7 @@ class BookingService
         abort_if((is_null($entity) || is_null($vendor) || is_null($city)), 404);
 
         if (!entityIsFree($entity['state'])) {
-            return [
-                'statusCode'    => 400,
-                'data'          => [],
-                'message'       => __('booking not allowed')
-            ];
+            return badResponse([], __('booking not allowed'));
         }
 
         $extras = $this->getExtras($entity, $rentRequest->extras);
@@ -86,6 +82,8 @@ class BookingService
             'user'          => auth('api')->user()->only(['_id', 'phone', 'phone_code', 'name', 'email']),
             'vendor'        => $vendor,
             'vendor_id'     => new ObjectId($entity['vendor_id']),
+            'branch_id'     => new ObjectId($entity['branch_id']),
+            'branch'        => @$entity['branch'],
             'entity_id'     => new ObjectId($entity['id']),
             'entity_type'   => @$entity['entity_type'],
             'entity_details' => [
@@ -109,13 +107,7 @@ class BookingService
             'end_booking_at'   => $rentRequest->end_at
         ]);
 
-        return [
-            'statusCode'    => 201,
-            'message'       => '',
-            'data'          => [
-                'booking_id'    => $booking->_id
-            ]
-        ];
+        return createdResponse(['booking_id' => $booking->_id]);
     }
 
 
@@ -151,11 +143,7 @@ class BookingService
         abort_if(is_null($entity), 404);
 
         if (!entityIsFree($entity['state'])) {
-            return [
-                'statusCode'    => 400,
-                'data'          => [],
-                'message'       => __('booking not allowed')
-            ];
+            return badResponse([], __('booking not allowed'));
         }
 
         $priceSummary = (new Price($entity, $booking->extras, $addBookDetailsRequest->start_at, $addBookDetailsRequest->end_at, $booking->vendor))->getPriceSummary();
@@ -169,11 +157,9 @@ class BookingService
         $booking->note = $addBookDetailsRequest->note;
         $booking->save();
 
-        return [
-            'data'          => [],
-            'message'       => '',
-            'statusCode'    => 200
-        ];
+        event(new BookingStatusChangedEvent($booking));
+
+        return successResponse();
     }
 
 
@@ -187,11 +173,7 @@ class BookingService
         abort_if(is_null($booking), 404);
 
         if (!in_array($booking->status, [BookingStatus::INIT, BookingStatus::PENDING, BookingStatus::ACCEPT])) {
-            return [
-                'data'      => [],
-                'message'   => __('cancel booking not allowed'),
-                'statusCode'=> 400
-            ];
+            return badResponse([], __('cancel booking not allowed'));
         }
 
         $session = DB::connection('mongodb')->getMongoClient()->startSession();
@@ -207,22 +189,12 @@ class BookingService
 
             $session->commitTransaction();
 
-            return [
-                'data'       => [
-                    'booking_id'    => $bookingId
-                ],
-                'message'    => '',
-                'statusCode' => 200
-            ];
+            return successResponse(['booking_id' => $bookingId]);
 
         }catch (\Exception $exception) {
-            Log::error($exception->getMessage());
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
             $session->abortTransaction();
-            return [
-                'data'       => [],
-                'message'    => null,
-                'statusCode' => 500
-            ];
+            return serverErrorResponse();
         }
     }
 
@@ -237,11 +209,7 @@ class BookingService
         abort_if((is_null($booking) || $booking->status != BookingStatus::ACCEPT), 404);
 
         if ($booking->status != BookingStatus::ACCEPT) {
-            return [
-                'data'      => [],
-                'message'   => __('proceed booking not allowed'),
-                'statusCode'=> 400
-            ];
+            return badResponse([], __('proceed booking not allowed'));
         }
 
         $session = DB::connection('mongodb')->getMongoClient()->startSession();
@@ -260,12 +228,9 @@ class BookingService
 
                 $session->commitTransaction();
 
-                Log::error('payment failed', $booking->toArray());
-                return [
-                    'statusCode'       => 400,
-                    'message'          => __('something error'),
-                    'data'             => []
-                ];
+                helperLog(__CLASS__, __FUNCTION__, 'Payment Failed');
+
+                return badResponse([], __('Payment Failed'));
             }
 
             $data['status'] = BookingStatus::PAID;
@@ -276,20 +241,12 @@ class BookingService
 
             $session->commitTransaction();
 
-            return [
-                'statusCode'       => 200,
-                'message'          => __('payment successful'),
-                'data'             => []
-            ];
+            return successResponse([], __('Payment Successful'));
 
         }catch (\Exception $exception) {
-            Log::error($exception->getMessage());
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
             $session->abortTransaction();
-            return [
-                'data'       => [],
-                'message'    => null,
-                'statusCode' => 500
-            ];
+            return serverErrorResponse();
         }
     }
 }

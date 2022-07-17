@@ -39,6 +39,6 @@ class YachtController extends Controller
     {
         $result = $this->yachtService->deleteByAdmin($id);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 }

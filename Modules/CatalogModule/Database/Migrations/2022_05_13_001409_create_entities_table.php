@@ -23,7 +23,7 @@ return new class extends Migration
             $table->index('is_available');
             $table->index('state');
             $table->index('type');
-            $table->index('branch_ids');
+            $table->index('branch_id');
             $table->index('unavailable_date.from');
             $table->index('unavailable_date.to');
             $table->softDeletes();

@@ -9,6 +9,8 @@ class BookingStatusChangedEvent
 {
     use SerializesModels;
 
+    public $booking;
+
     /**
      * Create a new event instance.
      *
@@ -16,7 +18,7 @@ class BookingStatusChangedEvent
      */
     public function __construct(Booking $booking)
     {
-
+        $this->booking = $booking;
     }
 
     /**

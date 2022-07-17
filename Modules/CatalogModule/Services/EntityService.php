@@ -37,17 +37,9 @@ class EntityService
         $changed = $this->entityRepository->changeState($entityId, $state);
 
         if (!$changed) {
-            return [
-                'statusCode'       => 400,
-                'message'          => '',
-                'data'             => []
-            ];
+            return badResponse();
         }
 
-        return [
-            'statusCode'       => 200,
-            'message'          => '',
-            'data'             => []
-        ];
+        return successResponse();
     }
 }
