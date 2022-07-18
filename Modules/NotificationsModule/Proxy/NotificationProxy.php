@@ -15,7 +15,7 @@ class NotificationProxy extends BaseProxy
 {
     protected $actions = [
         'GET_USERS'         => GetUsersAction::class,
-        'GET_VENDOR_ADMIN'  => GetVendorAdminsAction::class,
+        'GET_VENDOR_ADMINS_IDS' => GetVendorAdminsAction::class,
         'GET_PLAYERS'       => GetPlayersAction::class
     ];
 }

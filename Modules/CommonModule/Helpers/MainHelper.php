@@ -327,7 +327,12 @@ function serverErrorResponse($data = [], $message = null)
     return serviceResponse($data, 500, $message ?? __('Internal server error'));
 }
 
-function helperLog($class, $method, $message = null)
+function helperLog($class, $method, $message = null, $context = [])
 {
-    \Illuminate\Support\Facades\Log::error($class . ' -> ' . $method . ' -> ' . $message, request()->all());
+    \Illuminate\Support\Facades\Log::error($class . ' -> ' . $method . ' -> ' . $message, (empty($context) ? request()->all() : $context));
+}
+
+function getLocalesWord($key, $replace = [])
+{
+    return ['ar' => __($key, $replace, 'ar'), 'en' => __($key, $replace, 'en')];
 }

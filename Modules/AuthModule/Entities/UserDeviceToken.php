@@ -38,21 +38,24 @@ class UserDeviceToken extends Base
                     break;
                 case 'specified':
                     $users = [];
-                    $vendorAdmins = [];
-                    array_map(function ($receiver) use (&$users, &$vendorAdmins) {
+                    $admins = [];
+
+                    array_map(function ($receiver) use (&$users, &$admins) {
                         if ($receiver['on_model'] == 'user') {
                             $users[] = new ObjectId($receiver['user_id']);
-                        }elseif ($receiver['on_model'] == 'vendor') {
-                            $vendorAdmins[] = new ObjectId($receiver['user_id']);
+                        }elseif ($receiver['on_model'] == 'admin') {
+                            $admins[] = new ObjectId($receiver['user_id']);
                         }
                     }, $request->get('receivers'));
-                    $query->where(function ($q) use ($users, $vendorAdmins) {
+
+                    $query->where(function ($q) use ($users, $admins) {
                         $q->where(function ($qq) use ($users) {
                             $qq->whereIn('user_details.id', $users)->where('user_details.on_model', User::class);
-                        })->orWhere(function ($qq) use ($vendorAdmins) {
-                            $qq->whereIn('user_details.id', $vendorAdmins)->where('user_details.on_model', Admin::class);
+                        })->orWhere(function ($qq) use ($admins) {
+                            $qq->whereIn('user_details.id', $admins)->where('user_details.on_model', Admin::class);
                         });
                     });
+
                     break;
             }
         }
