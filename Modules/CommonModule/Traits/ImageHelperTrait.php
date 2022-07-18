@@ -35,10 +35,11 @@ trait ImageHelperTrait
 
     public function uploadImage($folder, UploadedFile $image, $resizes = [], $disc = 's3')
     {
+        //TODO:MM2 add only the image path without the hostname
         $imagePath = $image->store($folder, $disc);
 
         Storage::disk($disc)->setVisibility($imagePath, 'public');
-
+        //TODO:MM2 why you remove image resize
         if (!empty($resizes)) {
 //            $folderPath = Storage::disk($disc)->path($folder);
 //            $this->resizeImage($folderPath, $imagePath, $resizes);

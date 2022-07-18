@@ -133,6 +133,7 @@ class BookingService
             }
 
             $data['status'] = $handleNewStatus ? $handleNewStatus($booking) : $status;
+            //TODO:MM2 this always give empty array when i check the database
             $data['status_change_log'] = (new BookingChangeLog($booking, $status, auth(getCurrentGuard())->user()))->logs();
             $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
 

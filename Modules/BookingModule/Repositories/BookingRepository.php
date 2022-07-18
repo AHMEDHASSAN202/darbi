@@ -68,6 +68,7 @@ class BookingRepository
 
     public function updateBookingCollection($bookingId, $data, $session)
     {
+        //TODO:MM2 session are not added here
         return DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update($data);
     }
 }

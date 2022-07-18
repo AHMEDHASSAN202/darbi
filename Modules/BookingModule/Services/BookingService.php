@@ -77,6 +77,7 @@ class BookingService
         $extras = $this->getExtras($entity, $rentRequest->extras);
         $country = $entity['country'];
 
+        //Todo:MM2 move to repo layer
         $booking = $this->bookingRepository->create([
             'user_id'       => new ObjectId(auth('api')->id()),
             'user'          => auth('api')->user()->only(['_id', 'phone', 'phone_code', 'name', 'email']),
@@ -113,6 +114,7 @@ class BookingService
 
     private function getExtras($entity, $extras) : array
     {
+        //TODO:MM2 @$entity what @ mean
         $entityExtras = @$entity['extras'];
 
         if (!is_array($extras) || empty($extras) || empty($entity) || !is_array($entityExtras)) return [];
@@ -180,7 +182,7 @@ class BookingService
         $session->startTransaction();
 
         try {
-
+            //TODO:MM2 please eliminate code duplication as "BookingStatus::CANCELLED_BEFORE_ACCEPT" can be saved on variable and used many
             $data['status_change_log'] = (new BookingChangeLog($booking, BookingStatus::CANCELLED_BEFORE_ACCEPT, $me))->logs();
             $data['status'] = BookingStatus::CANCELLED_BEFORE_ACCEPT;
             $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
@@ -206,6 +208,8 @@ class BookingService
 
         $booking = $this->bookingRepository->findByUser($meId, $bookingId);
 
+        //TODO:MM2 if the booking status is accept so why we abort with 404??
+        //and please make all responses with same structure
         abort_if((is_null($booking) || $booking->status != BookingStatus::ACCEPT), 404);
 
         if ($booking->status != BookingStatus::ACCEPT) {
@@ -213,6 +217,7 @@ class BookingService
         }
 
         $session = DB::connection('mongodb')->getMongoClient()->startSession();
+        //TODO:MM2 why you use transaction here, however you make only one operation
         $session->startTransaction();
 
         try {
@@ -235,6 +240,8 @@ class BookingService
 
             $data['status'] = BookingStatus::PAID;
             $data['status_change_log'] = (new BookingChangeLog($booking, BookingStatus::PAID, $me))->logs();
+
+            //TODO:MM2 this is not acceptable(service is responsible business logic)should b retrieved from repo layer
             DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update($data, ['session' => $session]);
 
             event(new BookingStatusChangedEvent($booking));
