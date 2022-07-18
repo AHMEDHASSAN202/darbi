@@ -18,7 +18,7 @@ class CreateNotificationHttpProxyAction
 
         $originalRequest = request();
 
-        $req = Request::create($url, 'GET');
+        $req = Request::create($url);
 
         app()->instance('request', $req);
 
@@ -26,7 +26,7 @@ class CreateNotificationHttpProxyAction
 
         app()->instance('request', $originalRequest);
 
-        if ($res->status() !== 200) { return null; }
+        if ($res->status() !== 201) { return null; }
 
         $jsonData = json_decode($res->getContent(), true);
 

@@ -158,23 +158,10 @@ class NotificationService
 
     private function getReceivers(Request $request)
     {
-        switch ($request->receiver_type) {
-//            case NotificationReceiverTypes::ALL:
-//                $vendors = $this->getVendorReceivers();
-//                $users = $this->getUserReceivers();
-//                $receivers = array_merge($vendors, $users);
-//                break;
-//            case NotificationReceiverTypes::USERS:
-//                $receivers = $this->getUserReceivers();
-//                break;
-//            case NotificationReceiverTypes::VENDORS:
-//                $receivers = $this->getVendorReceivers();
-//                break;
-            case NotificationReceiverTypes::SPECIFIED:
-                $receivers = array_map(function ($receiver) { return ['user_id' => new ObjectId($receiver['id']), 'on_model' => $receiver['type']]; }, $request->receivers);
-                break;
-            default:
-                $receivers = [];
+        $receivers = [];
+
+        if ($request->receiver_type == NotificationReceiverTypes::SPECIFIED) {
+            $receivers = array_map(function ($receiver) { return ['user_id' => new ObjectId($receiver['id']), 'on_model' => $receiver['type']]; }, $request->receivers);
         }
 
         return $receivers;
@@ -190,11 +177,11 @@ class NotificationService
     }
 
 
-    private function getVendorReceivers()
+    private function getVendorAdminIds($vendorId)
     {
-        $notificationProxy = new NotificationProxy('GET_VENDOR_ADMIN', ['type' => 'vendor']);
+        $notificationProxy = new NotificationProxy('GET_VENDOR_ADMINS_IDS', ['type' => 'vendor', 'vendor' => $vendorId]);
         $proxy = new Proxy($notificationProxy);
         $adminVendors = $proxy->result() ?? [];
-        return array_map(function ($admin) { return ['user_id' => new ObjectId($admin['id']), 'on_model' => 'admin']; }, $adminVendors);
+        return array_map(function ($admin) { return ['id' => new ObjectId($admin['id']), 'type' => 'admin']; }, $adminVendors);
     }
 }
