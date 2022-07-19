@@ -11,36 +11,47 @@ use Illuminate\Support\Facades\Storage;
 
 trait ImageHelperTrait
 {
-    public function resizeImage($folder, $image, $sizes = ['400x400'])
+    private $sizes = ['200x200', '600x600'];
+
+    public function resizeImage($disc, $imageFullPath, UploadedFile $imageSrc, $sizes)
     {
-        $imageInfo = pathinfo($image);
+        $imageInfo = pathinfo($imageFullPath);
         $imageResizeName = $imageInfo['filename'];
+
         foreach ($sizes as $size) {
             $s = explode('x', $size, 2);
             $width = $s[0];
             $height = $s[1];
             $imageResizeName .= '-resize-' . $size . '.' . $imageInfo['extension'];
+            $imageFullPath = $imageInfo['dirname'] . DIRECTORY_SEPARATOR . $imageResizeName;
 
             try {
-                \Image::make(Storage::path($image))->fit($width, $height)->save($folder . DIRECTORY_SEPARATOR . $imageResizeName);
+
+                $img = \Image::make($imageSrc)->resize($width, $height, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+                Storage::disk($disc)->put($imageFullPath, $img->stream());
+                Storage::disk($disc)->setVisibility($imageFullPath, 'public');
+
             }catch (\Exception $exception) {
                 helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
-                if (app()->environment('local')) {
-                    dd($exception);
-                }
             }
         }
     }
 
-    public function uploadImage($folder, UploadedFile $image, $resizes = [], $disc = 's3')
+    public function uploadImage($folder, UploadedFile $image, $resizes = null, $disc = 's3')
     {
+        if (!$resizes) {
+            $resizes = $this->sizes;
+        }
+
         $imagePath = $image->store($folder, $disc);
 
         Storage::disk($disc)->setVisibility($imagePath, 'public');
-        //TODO:MM2 why you remove image resize
+
         if (!empty($resizes)) {
-//            $folderPath = Storage::disk($disc)->path($folder);
-//            $this->resizeImage($folderPath, $imagePath, $resizes);
+            $this->resizeImage($disc, $imagePath, $image, $resizes);
         }
 
         return $imagePath;
@@ -64,7 +75,7 @@ trait ImageHelperTrait
         return $imagePaths;
     }
 
-    public function uploadAvatar(UploadedFile $avatar, $folder = 'avatars', $sizes =  ['300x300'])
+    public function uploadAvatar(UploadedFile $avatar, $folder = 'avatars', $sizes = ['200x200'])
     {
         return $this->uploadImage($folder, $avatar, $sizes);
     }
@@ -80,7 +91,16 @@ trait ImageHelperTrait
         }
 
         try {
-            return Storage::disk($disc)->delete($images);
+            $deleted = Storage::disk($disc)->delete($images);
+
+            if ($deleted) {
+                foreach ($images as $image) {
+                    foreach ($this->sizes as $size) {
+                        Storage::disk($disc)->delete(addSizeToImageLink($image, $size));
+                    }
+                }
+            }
+
         } catch (\Exception $exception) {
             helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
         }

@@ -28,7 +28,7 @@ class BookingResource extends JsonResource
             'status_label'  => __($this->status),
             'status'        => $this->status,
             'type'          => $this->entity_type,
-            'image'         => imageUrl(@$this->entity_details['images'][0] ?? $this->defaultImage),
+            'image'         => imageUrl(@$this->entity_details['images'][0] ?? $this->defaultImage, 'thumbnail'),
             'price'         => [
                 'total_price'   => arrayGet($this->price_summary, 'total_price'),
                 'vendor_price'  => arrayGet($this->price_summary, 'vendor_price'),

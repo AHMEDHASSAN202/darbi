@@ -25,7 +25,7 @@ class AdminResource extends JsonResource
             'role'          => new RoleResource($this->role),
             'type'          => $this->type,
             'vendor'        => new VendorResource($this->vendor),
-            'image'         => imageUrl($this->image ?? $defaultImage)
+            'image'         => imageUrl($this->image ?? $defaultImage, 'thumbnail')
         ];
     }
 }

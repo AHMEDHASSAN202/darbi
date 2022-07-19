@@ -16,7 +16,7 @@ trait EntityTrait
 
 
     //this object maybe car or yacht
-    private function getMainImage() : string
+    private function getMainImage($displayType = 'middle') : string
     {
         $entityMainImage = @$this->images[0];
 
@@ -27,12 +27,12 @@ trait EntityTrait
             }
         }
 
-        return imageUrl($entityMainImage ?? $this->defaultImage);
+        return imageUrl($entityMainImage ?? $this->defaultImage, $displayType);
     }
 
 
     //get entity images
-    private function getImagesFullPath($onlyEntityImages = false) : array
+    private function getImagesFullPath($onlyEntityImages = false, $displayType = 'middle') : array
     {
         $entityMainImages = @(array)$this->images;
 
@@ -44,7 +44,7 @@ trait EntityTrait
             return [];
         }
 
-        return array_map(function ($image) { return imageUrl($image); }, $entityMainImages);
+        return array_map(function ($image) use ($displayType) { return imageUrl($image, $displayType); }, $entityMainImages);
     }
 
 

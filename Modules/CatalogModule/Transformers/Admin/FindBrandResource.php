@@ -17,7 +17,7 @@ class FindBrandResource extends JsonResource
         return [
             'id'        => $this->_id,
             'name'      => $this->name,
-            'logo'      => imageUrl($this->logo),
+            'logo'      => imageUrl($this->logo, 'thumbnail'),
             'is_active' => (boolean)$this->is_active,
             'entity_type' => $this->entity_type
         ];

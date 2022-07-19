@@ -2,10 +2,7 @@
 
 namespace Modules\CatalogModule\Http\Requests\Admin;
 
-use App\Rules\MongoIdRule;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use MongoDB\BSON\ObjectId;
 
 class CreateCarRequest extends CreateEntityRequest
 {
@@ -17,7 +14,7 @@ class CreateCarRequest extends CreateEntityRequest
     public function rules()
     {
         $rules = parent::rules();
-        $rules['branch_id']    = ['required', Rule::exists('branches', '_id')->where('vendor_id', new ObjectId(getVendorId()))];
+        $rules['branch_id'] = ['required', Rule::exists('branches', '_id')->where('vendor_id', [getVendorId()])];
         return $rules;
     }
 

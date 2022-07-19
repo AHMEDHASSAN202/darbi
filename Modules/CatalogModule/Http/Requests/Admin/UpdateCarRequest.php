@@ -16,7 +16,7 @@ class UpdateCarRequest extends UpdateEntityRequest
     public function rules()
     {
         $rules = parent::rules();
-        $rules['branch_id']  = ['required', Rule::exists('branches', '_id')->where('vendor_id', new ObjectId(getVendorId()))];
+        $rules['branch_id']  = ['required', Rule::exists('branches', '_id')->where('vendor_id', [new ObjectId(getVendorId())])];
         return $rules;
     }
 

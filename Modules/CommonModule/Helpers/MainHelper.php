@@ -34,22 +34,35 @@ function assetsHelper() {
     return \Modules\CommonModule\Helpers\Assets::instance();
 }
 
-function imageUrl(?string $image, $dir = '', $size = null) {
+function imageUrl(?string $image, $displayType = 'middle', $customSize = null) {
     if (!$image) {
         return '';
     }
 
-    $image = filter_var($image, FILTER_VALIDATE_URL) ? $image : \Illuminate\Support\Facades\Storage::disk('s3')->url($image);
+    if (filter_var($image, FILTER_VALIDATE_URL)) {
+        return $image;
+    }
 
-    if ($size) {
-        $image = addSizeToImageLink($image, $size);
+    $image = \Illuminate\Support\Facades\Storage::disk('s3')->url($image);
+
+    if ($displayType === 'thumbnail') {
+        $image = addSizeToImageLink($image, 200);
+    }elseif ($displayType === 'middle') {
+        $image = addSizeToImageLink($image, 600);
+    }elseif ($displayType === 'original') {
+        return $image;
+    }
+
+    if ($customSize) {
+        $image = addSizeToImageLink($image, $customSize);
     }
 
     return $image;
 }
 
-function imagesUrl(array $images, $dir = '', $size = null) {
-    return array_map(function ($image) use ($dir, $size) { return imageUrl($image, $dir, $size); }, $images);
+
+function imagesUrl(array $images, $displayType = 'middle') {
+    return array_map(function ($image) use ($displayType) { return imageUrl($image, $displayType); }, $images);
 }
 
 function addSizeToImageLink($imageLink, $size)
@@ -58,7 +71,7 @@ function addSizeToImageLink($imageLink, $size)
     if (!isset($imageInfo['extension'])) {
         return $imageLink;
     }
-    return $imageInfo['dirname'] . '/' . $imageInfo['filename'] . '-resize-' . $size . '.' . $imageInfo['extension'];
+    return $imageInfo['dirname'] . '/' . $imageInfo['filename'] . '-resize-' . $size . 'x' . $size . '.' . $imageInfo['extension'];
 }
 
 function translateAttribute(array | object | null | string $attribute, $locale = null) {

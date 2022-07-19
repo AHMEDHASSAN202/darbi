@@ -20,7 +20,7 @@ class ModelResource extends JsonResource
             'name'      => translateAttribute($this->name),
             'brand_id'  => (string)$this->brand_id,
             'brand'     => new BrandResource($this->brand),
-            'images'    => imagesUrl($this->images),
+            'images'    => imagesUrl($this->images, 'thumbnail'),
             'is_active' => (boolean)$this->is_active,
             'entity_type' => $this->entity_type
         ];

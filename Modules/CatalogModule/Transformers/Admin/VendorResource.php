@@ -24,7 +24,7 @@ class VendorResource extends JsonResource
             'phone'         => $this->phone,
             'phone_code'    => $this->phone_code  ?? @$country['calling_code'],
             'darbi_percentage' => $this->darbi_percentage,
-            'image'         => imageUrl($this->image),
+            'image'         => imageUrl($this->image, 'thumbnail'),
             'country_id'    => (string)$this->country_id,
             'country'       => new CountryResource($country),
             'type'          => $this->type,

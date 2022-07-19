@@ -24,7 +24,7 @@ class EntityResource extends JsonResource
             'vendor_id'     => (string)$this->vendor_id,
             'vendor_name'   => translateAttribute(optional($this->vendor)->name),
             'name'          => translateAttribute($this->name),
-            'image'         => $this->getMainImage(),
+            'image'         => $this->getMainImage('thumbnail'),
             'brand'         => translateAttribute(optional($this->brand)->name),
             'model'         => translateAttribute(optional($this->model)->name),
             'price'         => $this->price,
