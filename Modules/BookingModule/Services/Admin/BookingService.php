@@ -137,7 +137,7 @@ class BookingService
             abort_if(is_null($booking), 404);
 
             if (!in_array($booking->status, $allowedStatus)) {
-                return badResponse([], __($status . ' booking not allowed'));
+                return badResponse([], __('booking not allowed', ['status' => __($status)]));
             }
 
             $data['status'] = $handleNewStatus ? $handleNewStatus($booking) : $status;

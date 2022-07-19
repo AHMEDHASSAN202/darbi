@@ -36,7 +36,7 @@ class SavedPlaceService
         $location = (new Proxy(new AuthProxy('GET_LOCATION', ['lat' => $createPlaceRequest->lat, 'lng' => $createPlaceRequest->lng])))->result();
 
         if (!$location) {
-            return badResponse([], __('location not found!'));
+            return badResponse([], __('Location not found!'));
         }
 
         try {

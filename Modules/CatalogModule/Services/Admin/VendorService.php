@@ -86,7 +86,7 @@ class VendorService
         ]);
 
         if (!$admin || !$admin['id']) {
-            return createdResponse([], __('vendor admin cannot be created, please create it manually'));
+            return createdResponse([], __('Vendor admin cannot be created, please create it manually'));
         }
 
         return createdResponse(['id' => $vendor->id]);
@@ -166,7 +166,7 @@ class VendorService
         $token = $this->getVendorAdminToken($request->vendor_id);
 
         if (!$token) {
-            return badResponse([], __('vendor admin not exists, please create it and try again'));
+            return badResponse([], __('Vendor admin not exists, please create it and try again'));
         }
 
         return successResponse(['token' => $token]);

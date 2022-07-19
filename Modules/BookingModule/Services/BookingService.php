@@ -65,7 +65,7 @@ class BookingService
     public function rent(RentRequest $rentRequest)
     {
         $entity = (new Proxy(new BookingProxy('GET_ENTITY', ['entity_id' => $rentRequest->entity_id])))->result();
-        $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => $entity['vendor_id']])))->result();
+        $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => @$entity['vendor_id']])))->result();
         $city = (new Proxy(new BookingProxy('GET_CITY', ['city_id' => $rentRequest->city_id])))->result();
 
         abort_if((is_null($entity) || is_null($vendor) || is_null($city)), 404);
@@ -173,7 +173,7 @@ class BookingService
         abort_if(is_null($booking), 404);
 
         if (!in_array($booking->status, [BookingStatus::INIT, BookingStatus::PENDING, BookingStatus::ACCEPT])) {
-            return badResponse([], __('cancel booking not allowed'));
+            return badResponse([], __('booking not allowed', ['status' => __('cancel')]));
         }
 
         $session = DB::connection('mongodb')->getMongoClient()->startSession();
@@ -209,7 +209,7 @@ class BookingService
         abort_if((is_null($booking)), 404);
 
         if ($booking->status != BookingStatus::ACCEPT) {
-            return badResponse([], __('proceed booking not allowed'));
+            return badResponse([], __('booking not allowed', ['status' => __('proceed')]));
         }
 
         $session = DB::connection('mongodb')->getMongoClient()->startSession();

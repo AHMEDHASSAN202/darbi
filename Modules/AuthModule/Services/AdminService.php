@@ -126,7 +126,7 @@ class AdminService
     public function destroy($adminId)
     {
         if (auth('admin_api')->id() == $adminId) {
-            return badResponse([], __('action not allowed'));
+            return badResponse([], __('Action not allowed'));
         }
 
         $this->adminRepository->destroy($adminId);
@@ -147,7 +147,7 @@ class AdminService
         $admin = $this->adminRepository->getVendorAdmin($vendorId);
 
         if (!$admin) {
-            return badResponse([], __('admin not exists'));
+            return badResponse([], __('Admin not exists'));
         }
 
         $token = auth('vendor_api')->login($admin);
