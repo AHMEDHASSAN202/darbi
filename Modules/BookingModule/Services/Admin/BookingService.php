@@ -17,13 +17,17 @@ use Modules\BookingModule\Enums\BookingStatus;
 use Modules\BookingModule\Events\BookingStatusChangedEvent;
 use Modules\BookingModule\Proxy\BookingProxy;
 use Modules\BookingModule\Repositories\BookingRepository;
+use Modules\BookingModule\Services\BookingHelperService;
 use Modules\BookingModule\Transformers\Admin\BookingResource;
 use Modules\BookingModule\Transformers\Admin\FindBookingResource;
 use Modules\CommonModule\Transformers\PaginateResource;
 use MongoDB\BSON\ObjectId;
+use function PHPUnit\Framework\isInstanceOf;
 
 class BookingService
 {
+    use BookingHelperService;
+
     private $bookingRepository;
 
 
@@ -127,34 +131,33 @@ class BookingService
 
     private function changeBookingStatus($bookingId, $status, array $allowedStatus = [], $handleNewStatus = null)
     {
+        $booking = $this->bookingRepository->findByAdmin(new ObjectId($bookingId));
+
+        if (!in_array($booking->status, $allowedStatus)) {
+            return badResponse([], __('booking not allowed', ['status' => __($status)]));
+        }
+
         $session = DB::connection('mongodb')->getMongoClient()->startSession();
         $session->startTransaction();
 
         try {
 
-            $booking = $this->bookingRepository->findByAdmin(new ObjectId($bookingId));
-
-            abort_if(is_null($booking), 404);
-
-            if (!in_array($booking->status, $allowedStatus)) {
-                return badResponse([], __('booking not allowed', ['status' => __($status)]));
-            }
-
             $data['status'] = $handleNewStatus ? $handleNewStatus($booking) : $status;
             $data['status_change_log'] = (new BookingChangeLog($booking, $status, auth(getCurrentGuard())->user()))->logs();
             $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
+
+            $this->updateEntityState($data['status'], $booking);
+
+            $session->commitTransaction();
 
             $booking->refresh();
 
             event(new BookingStatusChangedEvent($booking));
 
-            $session->commitTransaction();
-
             return successResponse(['booking_id' => $bookingId]);
 
         } catch (\Exception $exception) {
             $session->abortTransaction();
-            dd($exception);
             helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
             return serverErrorResponse();
         }

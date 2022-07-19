@@ -14,7 +14,6 @@ class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
         BookingStatusChangedEvent::class => [
-            UpdateEntityStateListener::class,
             SendNotificationListener::class,
         ]
     ];

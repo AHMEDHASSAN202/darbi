@@ -6,26 +6,16 @@
 
 namespace Modules\BookingModule\Services;
 
-use App\Proxy\Proxy;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Modules\BookingModule\Classes\BookingChangeLog;
-use Modules\BookingModule\Classes\Payments\Payment;
-use Modules\BookingModule\Classes\Price;
 use Modules\BookingModule\Enums\BookingStatus;
 use Modules\BookingModule\Events\BookingStatusChangedEvent;
-use Modules\BookingModule\Http\Requests\AddBookDetailsRequest;
-use Modules\BookingModule\Http\Requests\ProceedRequest;
-use Modules\BookingModule\Http\Requests\RentRequest;
-use Modules\BookingModule\Proxy\BookingProxy;
 use Modules\BookingModule\Repositories\BookingRepository;
-use Modules\BookingModule\Transformers\BookingResource;
-use Modules\CommonModule\Transformers\PaginateResource;
-use MongoDB\BSON\ObjectId;
 
 class TripService
 {
+    use BookingHelperService;
+
     private $bookingRepository;
 
     public function __construct(BookingRepository $bookingRepository)
@@ -60,17 +50,19 @@ class TripService
             $data['status_change_log'] = (new BookingChangeLog($booking, BookingStatus::PICKED_UP, $me))->logs();
             $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
 
+            $this->updateEntityState($data['status'], $booking);
+
+            $session->commitTransaction();
+
             $booking->refresh();
 
             event(new BookingStatusChangedEvent($booking));
 
-            $session->commitTransaction();
-
             return successResponse();
 
         }catch (\Exception $exception) {
-            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
             $session->abortTransaction();
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
             return serverErrorResponse();
         }
     }
@@ -84,28 +76,16 @@ class TripService
 
         abort_if(is_null($booking), 404);
 
-        $session = DB::connection('mongodb')->getMongoClient()->startSession();
-        $session->startTransaction();
+        $this->bookingRepository->update($bookingId, [
+            'status'        => BookingStatus::DROPPED,
+            'end_trip_at'   => new \MongoDB\BSON\UTCDateTime(now()->timestamp),
+            'status_change_log' => (new BookingChangeLog($booking, BookingStatus::PICKED_UP, $me))->logs()
+        ]);
 
-        try {
+        $booking->refresh();
 
-            $data['status'] = BookingStatus::DROPPED;
-            $data['end_trip_at'] = new \MongoDB\BSON\UTCDateTime(now()->timestamp);
-            $data['status_change_log'] = (new BookingChangeLog($booking, BookingStatus::PICKED_UP, $me))->logs();
-            $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
+        event(new BookingStatusChangedEvent($booking));
 
-            $booking->refresh();
-
-            event(new BookingStatusChangedEvent($booking));
-
-            $session->commitTransaction();
-
-            return successResponse();
-
-        }catch (\Exception $exception) {
-            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
-            $session->abortTransaction();
-            return serverErrorResponse();
-        }
+        return successResponse();
     }
 }
