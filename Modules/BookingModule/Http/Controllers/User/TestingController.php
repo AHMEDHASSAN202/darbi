@@ -24,7 +24,7 @@ class TestingController extends Controller
         }
         $booking->save();
 
-        $entityStatus = (new Proxy(new BookingProxy('CHANGE_ENTITY_STATE_TO_RESERVED', ['entity_id' => (string)$booking->entity_id])))->result();
+        $entityStatus = (new Proxy(new BookingProxy('UPDATE_ENTITY_STATE', ['id' => (string)$booking->entity_id, 'state' => 'pending'])))->result();
 
         return $this->apiResponse([]);
     }

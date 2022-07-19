@@ -58,4 +58,12 @@ class BookingController extends Controller
 
         return $this->apiResponse(...$result);
     }
+
+
+    public function complete($bookingId)
+    {
+        $result = $this->bookingService->completeByVendor($bookingId);
+
+        return $this->apiResponse(...$result);
+    }
 }

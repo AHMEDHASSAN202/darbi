@@ -29,7 +29,6 @@ class AdminAuthService
         if (
             !$me || !Hash::check($request->password, $me->password)
         ) {
-            //TODO: don't add any hard coded messages to the service... just add constant file with all message resource
             return badResponse([], __('Your email or password is incorrect. try again'));
         }
 
@@ -45,9 +44,7 @@ class AdminAuthService
             ]);
 
         }catch (\Exception $exception) {
-            //add to the log a tag message to show where the error happen "class name -> method_name -> operation desc -> error message"
             helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
-            //TODO: add response message builder as mention before to handle error response
             return serverErrorResponse();
         }
     }

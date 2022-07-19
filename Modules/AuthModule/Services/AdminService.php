@@ -147,11 +147,6 @@ class AdminService
         $admin = $this->adminRepository->getVendorAdmin($vendorId);
 
         if (!$admin) {
-            //TODO: add global response function which take (data, message) as args (please check all the same resp)
-            //badRequestResponse
-            //unprocessableEntityResponse
-            //success
-            //...
             return badResponse([], __('admin not exists'));
         }
 

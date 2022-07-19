@@ -7,7 +7,6 @@
 namespace Modules\CommonModule\Traits;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 trait ImageHelperTrait
@@ -25,7 +24,7 @@ trait ImageHelperTrait
             try {
                 \Image::make(Storage::path($image))->fit($width, $height)->save($folder . DIRECTORY_SEPARATOR . $imageResizeName);
             }catch (\Exception $exception) {
-                Log::error($exception->getMessage());
+                helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
                 if (app()->environment('local')) {
                     dd($exception);
                 }
@@ -35,7 +34,6 @@ trait ImageHelperTrait
 
     public function uploadImage($folder, UploadedFile $image, $resizes = [], $disc = 's3')
     {
-        //TODO:MM2 add only the image path without the hostname
         $imagePath = $image->store($folder, $disc);
 
         Storage::disk($disc)->setVisibility($imagePath, 'public');
@@ -59,7 +57,7 @@ trait ImageHelperTrait
             try {
                 $imagePaths[] = $this->uploadImage($folder, $image, $resizes, $disc);
             }catch (\Exception $exception) {
-                Log::error($exception->getMessage(), $images);
+                helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
             }
         }
 
@@ -84,7 +82,7 @@ trait ImageHelperTrait
         try {
             return Storage::disk($disc)->delete($images);
         } catch (\Exception $exception) {
-            Log::error($exception->getMessage());
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
         }
     }
 }

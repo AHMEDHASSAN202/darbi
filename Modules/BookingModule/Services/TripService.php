@@ -40,7 +40,11 @@ class TripService
 
         $booking = $this->bookingRepository->findByUser($meId, $bookingId);
 
-        abort_if((is_null($booking) || $booking->status != BookingStatus::PAID), 404);
+        abort_if((is_null($booking)), 404);
+
+        if ($booking->status != BookingStatus::PAID) {
+            return badResponse([], __('Please pay first'));
+        }
 
         if (!$booking->start_booking_at || $booking->start_booking_at->greaterThanOrEqualTo(now())) {
             return badResponse([], __('The booking start date has not started'));
@@ -54,7 +58,9 @@ class TripService
             $data['status'] = BookingStatus::PICKED_UP;
             $data['start_trip_at'] = new \MongoDB\BSON\UTCDateTime(now()->timestamp);
             $data['status_change_log'] = (new BookingChangeLog($booking, BookingStatus::PICKED_UP, $me))->logs();
-            DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update($data, ['session' => $session]);
+            $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
+
+            $booking->refresh();
 
             event(new BookingStatusChangedEvent($booking));
 
@@ -86,7 +92,9 @@ class TripService
             $data['status'] = BookingStatus::DROPPED;
             $data['end_trip_at'] = new \MongoDB\BSON\UTCDateTime(now()->timestamp);
             $data['status_change_log'] = (new BookingChangeLog($booking, BookingStatus::PICKED_UP, $me))->logs();
-            DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update($data, ['session' => $session]);
+            $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
+
+            $booking->refresh();
 
             event(new BookingStatusChangedEvent($booking));
 

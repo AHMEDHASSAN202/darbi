@@ -36,7 +36,7 @@ class BookingFactory extends Factory
         $region = Region::active()->get()->random(1)->first();
 
         return [
-            'user_id'               => $user->_id,
+            'user_id'               => new ObjectId($user->_id),
             'user'                  => $user->only(['_id', 'phone', 'phone_code', 'name', 'email']),
             'vendor_id'             => new ObjectId($vendor->_id),
             'vendor'                => (new FindVendorResource($vendor))->toArray(request()),

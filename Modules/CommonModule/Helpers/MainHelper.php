@@ -111,7 +111,7 @@ function hasEmbed($param) : bool
 
 function entityIsFree($state) : bool
 {
-    return ($state === 'free');
+    return ($state === \Modules\CatalogModule\Enums\EntityStatus::FREE);
 }
 
 function getCarTestImages()

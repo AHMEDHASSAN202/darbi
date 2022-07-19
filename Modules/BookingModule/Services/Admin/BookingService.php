@@ -7,6 +7,7 @@
 namespace Modules\BookingModule\Services\Admin;
 
 
+use App\Proxy\Proxy;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Modules\BookingModule\Classes\BookingChangeLog;
 use Modules\BookingModule\Enums\BookingStatus;
 use Modules\BookingModule\Events\BookingStatusChangedEvent;
+use Modules\BookingModule\Proxy\BookingProxy;
 use Modules\BookingModule\Repositories\BookingRepository;
 use Modules\BookingModule\Transformers\Admin\BookingResource;
 use Modules\BookingModule\Transformers\Admin\FindBookingResource;
@@ -117,6 +119,12 @@ class BookingService
     }
 
 
+    public function completeByVendor($bookingId)
+    {
+        return $this->changeBookingStatus($bookingId, BookingStatus::COMPLETED, [BookingStatus::DROPPED, BookingStatus::PICKED_UP]);
+    }
+
+
     private function changeBookingStatus($bookingId, $status, array $allowedStatus = [], $handleNewStatus = null)
     {
         $session = DB::connection('mongodb')->getMongoClient()->startSession();
@@ -133,7 +141,6 @@ class BookingService
             }
 
             $data['status'] = $handleNewStatus ? $handleNewStatus($booking) : $status;
-            //TODO:MM2 this always give empty array when i check the database
             $data['status_change_log'] = (new BookingChangeLog($booking, $status, auth(getCurrentGuard())->user()))->logs();
             $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
 
@@ -146,8 +153,9 @@ class BookingService
             return successResponse(['booking_id' => $bookingId]);
 
         } catch (\Exception $exception) {
-            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
             $session->abortTransaction();
+            dd($exception);
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
             return serverErrorResponse();
         }
     }

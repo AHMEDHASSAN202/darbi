@@ -2,7 +2,7 @@
 
 namespace Modules\NotificationsModule\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Modules\NotificationsModule\Entities\NotificationsCenter;
 use Modules\NotificationsModule\Observers\NotificationObserver;
 

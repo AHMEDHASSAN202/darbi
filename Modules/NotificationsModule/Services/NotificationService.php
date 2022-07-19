@@ -177,7 +177,7 @@ class NotificationService
     }
 
 
-    private function getVendorAdminIds($vendorId)
+    public function getVendorAdminIds($vendorId)
     {
         $notificationProxy = new NotificationProxy('GET_VENDOR_ADMINS_IDS', ['type' => 'vendor', 'vendor' => $vendorId]);
         $proxy = new Proxy($notificationProxy);

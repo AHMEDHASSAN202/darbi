@@ -25,9 +25,9 @@ class EntityController extends Controller
         ]);
     }
 
-    public function changeState($entityId, $state)
+    public function updateState($entityId, $state)
     {
-        $result = $this->entityService->changeState($entityId, $state);
+        $result = $this->entityService->updateState($entityId, $state);
 
         return $this->apiResponse(...$result);
     }

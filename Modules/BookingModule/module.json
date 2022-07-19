@@ -5,7 +5,8 @@
     "keywords": [],
     "priority": 4,
     "providers": [
-        "Modules\\BookingModule\\Providers\\BookingModuleServiceProvider"
+        "Modules\\BookingModule\\Providers\\BookingModuleServiceProvider",
+        "Modules\\BookingModule\\Providers\\EventServiceProvider"
     ],
     "aliases": {},
     "files": [],

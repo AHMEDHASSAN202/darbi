@@ -2,7 +2,7 @@
 
 namespace Modules\CatalogModule\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Modules\CatalogModule\Entities\Car;
 use Modules\CatalogModule\Entities\Yacht;
 use Modules\CatalogModule\Observers\CarObserver;

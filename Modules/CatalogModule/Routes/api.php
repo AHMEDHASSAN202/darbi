@@ -51,8 +51,8 @@ Route::group([
     'prefix'    => 'entities',
     'namespace' => 'User'
 ], function () {
-    Route::get('{entity}'        , 'EntityController@show');
-    Route::put('{entity}/state/{state}' , 'EntityController@ changeState')->whereIn('state', ['free', 'reserved', 'pending']);
+    Route::get('{entity}'               , 'EntityController@show');
+    Route::put('{entity}/{state}'       , 'EntityController@updateState')->whereIn('state', \Modules\CatalogModule\Enums\EntityStatus::getTypes());
 });
 
 

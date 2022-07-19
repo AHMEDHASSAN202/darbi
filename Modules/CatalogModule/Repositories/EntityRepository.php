@@ -106,15 +106,6 @@ class EntityRepository
         return $entity->first();
     }
 
-    public function changeState($entityId, $state)
-    {
-        try {
-            return $this->model->where('_id', new ObjectId($entityId))->update(['state' => $state]);
-        }catch (\Exception $exception) {
-            Log::error('change state error: ' . $exception->getMessage());
-            return false;
-        }
-    }
 
     public function findWithBasicData($id)
     {
@@ -159,5 +150,13 @@ class EntityRepository
         abort_if(!$entity->count(), 404);
 
         return $entity->first();
+    }
+
+
+    public function updateState($id, $state)
+    {
+        $entity = $this->model->findOrFail(new ObjectId($id));
+
+        return $entity->update(['state' => $state]);
     }
 }

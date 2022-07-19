@@ -4,8 +4,6 @@ namespace Modules\CatalogModule\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\CatalogModule\Http\Requests\Admin\CreateCarRequest;
-use Modules\CatalogModule\Http\Requests\Admin\UpdateCarRequest;
 use Modules\CatalogModule\Services\Admin\CarService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
