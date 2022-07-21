@@ -21,9 +21,9 @@ class BookingRepository
         $this->booking = $booking;
     }
 
-    public function findAllByUser($userId)
+    public function findAllByUser($userId, Request $request)
     {
-        return $this->booking->latest()->where('user_id', new ObjectId($userId))->paginated();
+        return $this->booking->latest()->userFilter($request)->where('user_id', new ObjectId($userId))->paginated();
     }
 
     public function findByUser($userId, $bookingId)
@@ -74,5 +74,24 @@ class BookingRepository
     public function update($bookingId, $data)
     {
         return $this->booking->where('_id', new ObjectId($bookingId))->update($data);
+    }
+
+    public function getTimeoutBookings()
+    {
+        $timeIntervalUserAccept = intval(getOption('time_interval_user_accept_min', Booking::TIME_INTERVAL_USER_ACCEPT_MIN));
+        $timeIntervalVendorAccept = intval(getOption('time_interval_vendor_accept_min', Booking::TIME_INTERVAL_VENDOR_ACCEPT_MIN));
+
+        $timeoutUser = now()->subMinutes($timeIntervalUserAccept);
+        $timeoutVendor = now()->subMinutes($timeIntervalVendorAccept);
+
+        return $this->booking->where(function ($query) use ($timeoutVendor) {
+
+            $query->where('status', BookingStatus::PENDING)->where('pending_at', '<', $timeoutVendor);
+
+        })->orWhere(function ($query) use ($timeoutUser) {
+
+            $query->where('status', BookingStatus::ACCEPT)->where('accepted_at', '<', $timeoutUser);
+
+        })->get();
     }
 }

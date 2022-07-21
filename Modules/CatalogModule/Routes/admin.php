@@ -108,9 +108,3 @@ Route::group([
     Route::get('{yacht}'      , 'YachtController@show');
     Route::delete('{yacht}'   , 'YachtController@destroy');
 });
-
-
-Route::get('notification-test', function () {
-    $proxy =  new NotificationProxy('SEND_NOTIFICATION', ['title' => 'TTYY', 'tokens' => ['5994e028-8a64-4db5-933f-c640685d0ad5']]);
-    return (new Proxy($proxy))->result();
-});

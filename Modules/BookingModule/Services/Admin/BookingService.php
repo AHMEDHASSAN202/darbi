@@ -142,6 +142,10 @@ class BookingService
 
         try {
 
+            if ($status === BookingStatus::ACCEPT) {
+                $data['accepted_at'] = new \MongoDB\BSON\UTCDateTime();
+            }
+
             $data['status'] = $handleNewStatus ? $handleNewStatus($booking) : $status;
             $data['status_change_log'] = (new BookingChangeLog($booking, $status, auth(getCurrentGuard())->user()))->logs();
             $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);

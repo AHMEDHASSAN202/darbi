@@ -13,7 +13,7 @@ class GetPlayersAction
 {
     public function __invoke($data)
     {
-        $url = '/api/admin/v1/players';
+        $url = '/api/internal/v1/players';
 
         $originalRequest = request();
 

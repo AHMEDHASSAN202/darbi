@@ -13,7 +13,7 @@ class GetUsersAction
 {
     public function __invoke($data)
     {
-        $url = '/api/admin/v1/users/ids';
+        $url = '/api/internal/v1/users/ids';
 
         $originalRequest = request();
 

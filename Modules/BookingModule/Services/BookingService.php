@@ -42,7 +42,7 @@ class BookingService
     {
         $userId = auth('api')->id();
 
-        $bookings = $this->bookingRepository->findAllByUser($userId);
+        $bookings = $this->bookingRepository->findAllByUser($userId, $request);
 
         if ($bookings instanceof LengthAwarePaginator) {
             return successResponse(['bookings' => new PaginateResource(BookingResource::collection($bookings))]);
@@ -65,10 +65,14 @@ class BookingService
     public function rent(RentRequest $rentRequest)
     {
         $entity = (new Proxy(new BookingProxy('GET_ENTITY', ['entity_id' => $rentRequest->entity_id])))->result();
-        $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => @$entity['vendor_id']])))->result();
+
+        abort_if(is_null($entity), 404);
+
+        $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => $entity['vendor_id']])))->result();
+
         $city = (new Proxy(new BookingProxy('GET_CITY', ['city_id' => $rentRequest->city_id])))->result();
 
-        abort_if((is_null($entity) || is_null($vendor) || is_null($city)), 404);
+        abort_if((is_null($vendor) || is_null($city)), 404);
 
         if (!entityIsFree($entity['state'])) {
             return badResponse([], __('booking not allowed'));
@@ -155,6 +159,7 @@ class BookingService
             'status'                        => BookingStatus::PENDING,
             'start_booking_at'              => convertDateTimeToUTC($me, $addBookDetailsRequest->start_at),
             'end_booking_at'                => convertDateTimeToUTC($me, $addBookDetailsRequest->end_at),
+            'pending_at'                    => new \MongoDB\BSON\UTCDateTime(),
             'note'                          => $addBookDetailsRequest->note
         ]);
 
@@ -227,5 +232,30 @@ class BookingService
         event(new BookingStatusChangedEvent($booking));
 
         return successResponse([], __('Payment Successful'));
+    }
+
+
+    public function updateBookingsTimeout()
+    {
+        $bookings = $this->bookingRepository->getTimeoutBookings();
+
+        foreach ($bookings as $booking) {
+            try {
+
+                $this->bookingRepository->update($booking->id, [
+                    'status'    => BookingStatus::TIMEOUT,
+                    'status_change_log' => (new BookingChangeLog($booking, BookingStatus::TIMEOUT))->logs()
+                ]);
+
+                $booking->refresh();
+
+                event(new BookingStatusChangedEvent($booking));
+
+            }catch (\Exception $exception) {
+                helperLog(__CLASS__, __FUNCTION__, $exception->getMessage(), $booking->toArray());
+            }
+        }
+
+        return successResponse();
     }
 }

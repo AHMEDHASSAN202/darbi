@@ -46,15 +46,6 @@ Route::group([
 });
 
 
-//entity routes
-Route::group([
-    'prefix'    => 'entities',
-    'namespace' => 'User'
-], function () {
-    Route::get('{entity}'               , 'EntityController@show');
-    Route::put('{entity}/{state}'       , 'EntityController@updateState')->whereIn('state', \Modules\CatalogModule\Enums\EntityStatus::getTypes());
-});
-
 
 //brand routes
 Route::group([
@@ -62,13 +53,4 @@ Route::group([
     'namespace' => 'User'
 ], function () {
     Route::get(''               , 'PortController@index');
-});
-
-
-//vendor routes
-Route::group([
-    'prefix'    => 'vendors',
-    'namespace' => 'User'
-], function () {
-    Route::get('{vendor}'               , 'VendorController@show');
 });

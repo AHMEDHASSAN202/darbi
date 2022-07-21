@@ -28,12 +28,6 @@ Route::post('signin'            , 'AuthController@signin')->middleware('throttle
 Route::post('send-otp'          , 'AuthController@sendOtp')->middleware('throttle:auth');
 Route::post('signin-with-otp'   , 'AuthController@signinWithOtp')->middleware('throttle:auth');
 
-Route::post('refresh-token', function () {
-    return [
-        'refresh_token' => auth('api')->refresh()
-    ];
-})->middleware('auth');
-
 
 //profile
 Route::group([

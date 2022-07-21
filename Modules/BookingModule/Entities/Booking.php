@@ -5,6 +5,8 @@ namespace Modules\BookingModule\Entities;
 use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Modules\BookingModule\Enums\BookingStatus;
 use MongoDB\BSON\ObjectId;
 
 class Booking extends Base
@@ -17,6 +19,9 @@ class Booking extends Base
 
     protected $appends = ['expired_at'];
 
+    const TIME_INTERVAL_USER_ACCEPT_MIN = 60;
+    const TIME_INTERVAL_VENDOR_ACCEPT_MIN = 60;
+
     protected static function newFactory()
     {
         return \Modules\BookingModule\Database\factories\BookingFactory::new();
@@ -25,7 +30,7 @@ class Booking extends Base
     //=============== Appends =====================\\
     public function getExpiredAtAttribute()
     {
-        $time_interval_user_accept_min = getOption('time_interval_user_accept_min', 22);
+        $time_interval_user_accept_min = getOption('time_interval_user_accept_min', self::TIME_INTERVAL_USER_ACCEPT_MIN);
 
         return optional($this->accepted_at)->addMinutes($time_interval_user_accept_min);
     }
@@ -68,6 +73,19 @@ class Booking extends Base
 
         if ($country = $request->get('country')) {
             $query->where('country_id', new ObjectId($country));
+        }
+    }
+
+
+    public function scopeUserFilter($query, Request $request)
+    {
+        if ($status = $request->get('status')) {
+            $request->validate(['status' => Rule::in([...BookingStatus::getStatus(), 'canceled'])]);
+            if ($status === 'canceled') {
+                $query->whereIn('status', ['cancelled_before_accept', 'cancelled_after_accept', 'force_cancelled']);
+            }else {
+                $query->where('status', $status);
+            }
         }
     }
 

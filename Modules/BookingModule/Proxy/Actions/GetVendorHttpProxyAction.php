@@ -14,7 +14,7 @@ class GetVendorHttpProxyAction
 {
     public function __invoke($data)
     {
-        $url = '/api/mobile/v1/vendors/' . $data['vendor_id'];
+        $url = '/api/internal/v1/vendors/' . $data['vendor_id'];
 
         $req = Request::create($url, 'GET');
 

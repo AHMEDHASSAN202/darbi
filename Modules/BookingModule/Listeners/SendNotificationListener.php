@@ -122,6 +122,18 @@ class SendNotificationListener
                     'receivers' => [['id' => (string)$event->booking->user_id, 'type' => 'user']]
                 ];
                 break;
+            case BookingStatus::TIMEOUT:
+                $notifications[] = [
+                    'title'     => getLocalesWord('Timeout'),
+                    'message'   => getLocalesWord('Booking Timeout'),
+                    'receivers' => [['id' => (string)$event->booking->user_id, 'type' => 'user']]
+                ];
+                $notifications[] = [
+                    'title'     => getLocalesWord('Timeout'),
+                    'message'   => getLocalesWord('Booking Timeout'),
+                    'receivers' => app(NotificationService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
+                ];
+                break;
         }
 
         foreach ($notifications as $notification) {

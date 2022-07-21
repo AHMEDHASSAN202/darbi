@@ -11,6 +11,7 @@ use Modules\BookingModule\Proxy\Actions\CreateNotificationHttpProxyAction;
 use Modules\BookingModule\Proxy\Actions\GetCityHttpProxyAction;
 use Modules\BookingModule\Proxy\Actions\GetEntityHttpProxyAction;
 use Modules\BookingModule\Proxy\Actions\GetVendorHttpProxyAction;
+use Modules\BookingModule\Proxy\Actions\TimeoutBookingsHttpProxyAction;
 use Modules\BookingModule\Proxy\Actions\UpdateEntityStateHttpProxyAction;
 
 class BookingProxy extends BaseProxy
@@ -20,6 +21,7 @@ class BookingProxy extends BaseProxy
         'GET_VENDOR'            => GetVendorHttpProxyAction::class,
         'GET_CITY'              => GetCityHttpProxyAction::class,
         'CREATE_NOTIFICATION'   => CreateNotificationHttpProxyAction::class,
-        'UPDATE_ENTITY_STATE'   => UpdateEntityStateHttpProxyAction::class
+        'UPDATE_ENTITY_STATE'   => UpdateEntityStateHttpProxyAction::class,
+        'TIMEOUT_BOOKINGS'      => TimeoutBookingsHttpProxyAction::class,
     ];
 }

@@ -50,12 +50,4 @@ class UserController extends Controller
 
         return $this->apiResponse(...$result);
     }
-
-
-    public function findAllIds(Request $request)
-    {
-        $result = $this->userService->findAllIds($request);
-
-        return $this->apiResponse(...$result);
-    }
 }

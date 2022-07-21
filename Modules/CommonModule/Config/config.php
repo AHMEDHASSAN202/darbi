@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'name' => 'CommonModule'
+    'name' => 'CommonModule',
+    'preventAccessInternal' => false
 ];

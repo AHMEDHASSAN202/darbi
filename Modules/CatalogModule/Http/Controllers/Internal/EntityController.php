@@ -1,8 +1,7 @@
 <?php
 
-namespace Modules\CatalogModule\Http\Controllers\User;
+namespace Modules\CatalogModule\Http\Controllers\Internal;
 
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\CatalogModule\Services\EntityService;
 use Modules\CommonModule\Traits\ApiResponseTrait;

@@ -74,20 +74,4 @@ class AdminController extends Controller
 
         return $this->apiResponse(...$result);
     }
-
-
-    public function getVendorAdminToken($vendorId)
-    {
-        $result = $this->adminService->getVendorAdminToken($vendorId);
-
-        return $this->apiResponse(...$result);
-    }
-
-
-    public function findAllIds(Request $request)
-    {
-        $result = $this->adminService->findAllIds($request);
-
-        return $this->apiResponse(...$result);
-    }
 }

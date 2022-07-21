@@ -14,7 +14,7 @@ class UpdateEntityStateHttpProxyAction
 {
     public function __invoke($data)
     {
-        $url = '/api/mobile/v1/entities/' . $data['id'] . '/' . $data['state'];
+        $url = '/api/internal/v1/entities/' . $data['id'] . '/' . $data['state'];
 
         $originalRequest = request();
 

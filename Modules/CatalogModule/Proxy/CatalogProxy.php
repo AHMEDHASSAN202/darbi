@@ -20,6 +20,5 @@ class CatalogProxy extends BaseProxy
         'GET_VENDOR_ROLE'      => GetVendorRoleAction::class,
         'CREATE_VENDOR_ADMIN'  => CreateVendorAdminAction::class,
         'GET_VENDOR_ADMIN_TOKEN'=> GetVendorAdminTokenAction::class,
-        'SEND_NOTIFICATION'     => SendNotificationAction::class,
     ];
 }

@@ -13,7 +13,7 @@ class GetVendorAdminsAction
 {
     public function __invoke($data)
     {
-        $url = '/api/admin/v1/admins/ids';
+        $url = '/api/internal/v1/admins/ids';
 
         $originalRequest = request();
 

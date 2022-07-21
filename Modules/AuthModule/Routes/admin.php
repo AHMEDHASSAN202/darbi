@@ -25,7 +25,6 @@ Route::group([
     Route::post(''                      , 'RoleController@store');
     Route::put('{role}'                 , 'RoleController@update');
     Route::delete('{role}'              , 'RoleController@destroy');
-    Route::get('vendor-role/find'       , 'RoleController@findVendorRole');
 });
 
 
@@ -46,13 +45,11 @@ Route::group([
     'namespace'  => 'CURD'
 ], function () {
     Route::get(''                       , 'AdminController@index');
-    Route::get('ids'                    , 'AdminController@findAllIds');
     Route::get('{admin}'                , 'AdminController@show');
     Route::post(''                      , 'AdminController@store');
     Route::put('{admin}'                , 'AdminController@update');
     Route::put('{admin}/password'       , 'AdminController@updatePassword');
     Route::delete('{admin}'             , 'AdminController@destroy');
-    Route::get('{vendor}/token'         , 'AdminController@getVendorAdminToken');
 });
 
 
@@ -64,7 +61,6 @@ Route::group([
     'namespace'  => 'CURD'
 ], function () {
     Route::get(''                       , 'UserController@index');
-    Route::get('ids'                    , 'UserController@findAllIds');
     Route::get('{user}'                 , 'UserController@show');
     Route::put('{user}/toggle-active'   , 'UserController@toggleActive');
     Route::delete('{admin}'             , 'UserController@destroy');
@@ -101,14 +97,6 @@ Route::group([
 });
 
 
-
-//admin players
-Route::group([
-    'prefix'     => 'players',
-    'middleware' => 'auth:admin_api',
-], function () {
-    Route::get(''                       , 'UserDeviceTokenController@index');
-});
 
 
 Route::post('device-token'              , 'UserDeviceTokenController@storeDeviceToken')->middleware('auth:admin_api');

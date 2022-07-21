@@ -6,7 +6,8 @@
     "priority": 4,
     "providers": [
         "Modules\\BookingModule\\Providers\\BookingModuleServiceProvider",
-        "Modules\\BookingModule\\Providers\\EventServiceProvider"
+        "Modules\\BookingModule\\Providers\\EventServiceProvider",
+        "Modules\\BookingModule\\Providers\\ScheduleServiceProvider"
     ],
     "aliases": {},
     "files": [],

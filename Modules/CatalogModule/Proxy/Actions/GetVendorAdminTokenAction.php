@@ -13,7 +13,7 @@ class GetVendorAdminTokenAction
 {
     public function __invoke($data)
     {
-        $url = '/api/admin/v1/admins/'.$data['vendor_id'].'/token';
+        $url = '/api/internal/v1/admins/'.$data['vendor_id'].'/token';
 
         $req = Request::create($url, 'GET', $data);
 

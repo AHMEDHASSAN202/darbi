@@ -13,7 +13,7 @@ class GetVendorRoleAction
 {
     public function __invoke($data)
     {
-        $url = '/api/admin/v1/roles/vendor-role/find';
+        $url = '/api/internal/v1/roles/vendor-role/find';
 
         $req = Request::create($url, 'GET', $data);
 

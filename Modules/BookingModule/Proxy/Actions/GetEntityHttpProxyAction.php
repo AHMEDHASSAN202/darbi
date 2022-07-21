@@ -14,7 +14,7 @@ class GetEntityHttpProxyAction
 {
     public function __invoke($data)
     {
-        $url = '/api/mobile/v1/entities/' . $data['entity_id'];
+        $url = '/api/internal/v1/entities/' . $data['entity_id'];
 
         $req = Request::create($url, 'GET');
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\AuthModule\Http\Controllers\Admin;
+namespace Modules\AuthModule\Http\Controllers\Internal;
 
 
 use Illuminate\Http\Request;
@@ -22,9 +22,9 @@ class UserDeviceTokenController extends Controller
     }
 
 
-    public function storeDeviceToken(StoreDeviceTokenRequest $storeDeviceTokenRequest)
+    public function index(Request $request)
     {
-        $result = $this->userDeviceTokenService->handleAdminDeviceToken($storeDeviceTokenRequest);
+        $result = $this->userDeviceTokenService->findAll($request);
 
         return $this->apiResponse(...$result);
     }

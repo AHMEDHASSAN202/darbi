@@ -23,10 +23,15 @@ return new class extends Migration
             $table->index('city_id');
             $table->index('status');
             $table->index('invoice_number');
+            $table->index('created_at');
+            $table->index('accepted_at');
+            $table->index('pending_at');
             $table->dateTime('start_booking_at');
             $table->dateTime('end_booking_at');
             $table->dateTime('start_trip_at');
             $table->dateTime('end_trip_at');
+            $table->dateTime('accepted_at');
+            $table->dateTime('pending_at');
             $table->timestamps();
         });
     }
