@@ -51,8 +51,13 @@ class Booking extends Base
     public function scopeAdminFilter($query, Request $request)
     {
         $status = $request->get('status');
+
         if ($status && $status !== 'all') {
-            $query->where('status', $status);
+            if ($status === 'canceled') {
+                $query->whereIn('status', [BookingStatus::CANCELLED_AFTER_ACCEPT, BookingStatus::CANCELLED_BEFORE_ACCEPT, BookingStatus::FORCE_CANCELLED]);
+            }else {
+                $query->where('status', $status);
+            }
         }
 
         if ($vendor = $request->get('vendor')) {
@@ -82,7 +87,7 @@ class Booking extends Base
         if ($status = $request->get('status')) {
             $request->validate(['status' => Rule::in([...BookingStatus::getStatus(), 'canceled'])]);
             if ($status === 'canceled') {
-                $query->whereIn('status', ['cancelled_before_accept', 'cancelled_after_accept', 'force_cancelled']);
+                $query->whereIn('status', [BookingStatus::CANCELLED_AFTER_ACCEPT, BookingStatus::CANCELLED_BEFORE_ACCEPT, BookingStatus::FORCE_CANCELLED]);
             }else {
                 $query->where('status', $status);
             }
