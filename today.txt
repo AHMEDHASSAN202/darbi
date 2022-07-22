@@ -1,7 +1,0 @@
-- OTP
-- JWT version
-- Indexs
-- Removed Check Regions From Get Location
-- geo location distance 100
-- List Of Saved Locations
-- Make device token service
