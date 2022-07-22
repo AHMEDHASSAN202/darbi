@@ -2,6 +2,7 @@
 
 namespace Modules\CommonModule\Http\Middleware;
 
+use App\Proxy\InternalRequest;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,11 @@ class VendorTypeMiddleware
     {
         $me = auth(getCurrentGuard())->user();
 
-        abort_if(!(optional($me->vendor)->type === $type), 403);
+        if (optional($me->vendor)->type !== $type) {
+            if (!($request instanceof InternalRequest)) {
+                abort(403);
+            }
+        }
 
         return $next($request);
     }

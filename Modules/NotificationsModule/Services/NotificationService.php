@@ -142,8 +142,8 @@ class NotificationService
             'extra_data'        => $createNotificationRequest->extra_data ?? [],
             'triggered_by'      => [
                 'is_automatic'       => !($createNotificationRequest->is_automatic === null) && (boolean)$createNotificationRequest->is_automatic,
-                'user_id'            => $me->id,
-                'on_model'           => get_class($me)
+                'user_id'            => optional($me)->id,
+                'on_model'           => $me ? get_class($me) : null
             ]
         ]);
 

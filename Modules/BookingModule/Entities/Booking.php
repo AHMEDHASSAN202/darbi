@@ -21,6 +21,8 @@ class Booking extends Base
 
     const TIME_INTERVAL_USER_ACCEPT_MIN = 60;
     const TIME_INTERVAL_VENDOR_ACCEPT_MIN = 60;
+    const TIME_REMINDER_BEFORE_PICKED_UP = 120;
+    const TIME_REMINDER_BEFORE_DROPPED = 120;
 
     protected static function newFactory()
     {
@@ -73,7 +75,7 @@ class Booking extends Base
         }
 
         if ($city = $request->get('city')) {
-
+            $query->where('city_id', new ObjectId($city));
         }
 
         if ($country = $request->get('country')) {

@@ -6,7 +6,7 @@
 
 namespace Modules\CatalogModule\Proxy\Actions;
 
-use Illuminate\Http\Request;
+use App\Proxy\InternalRequest;
 use Illuminate\Support\Facades\Route;
 
 class GetVendorAdminTokenAction
@@ -15,7 +15,7 @@ class GetVendorAdminTokenAction
     {
         $url = '/api/internal/v1/admins/'.$data['vendor_id'].'/token';
 
-        $req = Request::create($url, 'GET', $data);
+        $req = InternalRequest::create($url, 'GET', $data);
 
         $res = Route::dispatch($req);
 

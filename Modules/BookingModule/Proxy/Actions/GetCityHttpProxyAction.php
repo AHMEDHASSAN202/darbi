@@ -6,7 +6,7 @@
 
 namespace Modules\BookingModule\Proxy\Actions;
 
-use Illuminate\Http\Request;
+use App\Proxy\InternalRequest;
 use Illuminate\Support\Facades\Route;
 
 
@@ -16,7 +16,7 @@ class GetCityHttpProxyAction
     {
         $url = '/api/common/v1/cities/' . $data['city_id'];
 
-        $req = Request::create($url, 'GET');
+        $req = InternalRequest::create($url, 'GET');
 
         $res = Route::dispatch($req);
 

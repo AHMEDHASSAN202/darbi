@@ -4,25 +4,32 @@
  * User: ahmed hasssan
  */
 
-namespace Modules\CatalogModule\Proxy\Actions;
+namespace Modules\BookingModule\Proxy\Actions;
 
 use App\Proxy\InternalRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-class GetVendorRoleAction
+class GetVendorAdminsAction
 {
     public function __invoke($data)
     {
-        $url = '/api/internal/v1/roles/vendor-role/find';
+        $url = '/api/internal/v1/admins/ids';
+
+        $originalRequest = request();
 
         $req = InternalRequest::create($url, 'GET', $data);
 
+        app()->instance('request', $req);
+
         $res = Route::dispatch($req);
+
+        app()->instance('request', $originalRequest);
 
         if ($res->status() !== 200) { return null; }
 
         $jsonData = json_decode($res->getContent(), true);
 
-        return @$jsonData['data']['role'] ?? [];
+        return @$jsonData['data']['admins'] ?? [];
     }
 }

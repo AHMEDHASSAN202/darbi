@@ -10,8 +10,6 @@ use App\Proxy\Proxy;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Modules\BookingModule\Classes\BookingChangeLog;
 use Modules\BookingModule\Classes\Payments\Payment;
 use Modules\BookingModule\Classes\Price;
@@ -103,7 +101,7 @@ class BookingService
             'country_id'    => new ObjectId($country['_id']),
             'country'       => $country,
             'currency_code' => $country['currency_code'],
-            'city_id'       => $city['id'],
+            'city_id'       => new ObjectId($city['id']),
             'city'          => $city,
             'status'        => BookingStatus::INIT,
             'extras'        => $extras,
@@ -257,5 +255,83 @@ class BookingService
         }
 
         return successResponse();
+    }
+
+
+    public function reminderBookings()
+    {
+        $bookings = $this->bookingRepository->getReminderBookings();
+
+        foreach ($bookings as $booking) {
+
+            if ($booking->status === BookingStatus::PAID) {
+
+                //notification to user
+                $this->createNotification(
+                    getLocalesWord('Reminder'),
+                    getLocalesWord('Booking Reminder Picked up'),
+                    [['id' => new ObjectId($booking->user_id), 'type' => 'user']],
+                    $booking->id
+                );
+
+                //notification to vendor admins
+                $vendorAdminIds = $this->getVendorAdminIds((string)$booking->vendor_id);
+                $this->createNotification(
+                    getLocalesWord('Reminder'),
+                    getLocalesWord('Booking Reminder Picked up'),
+                    $vendorAdminIds,
+                    $booking->id
+                );
+
+            }elseif ($booking->status === BookingStatus::PICKED_UP) {
+
+                //notification to user
+                $this->createNotification(
+                    getLocalesWord('Reminder'),
+                    getLocalesWord('Booking Reminder Dropped'),
+                    [['id' => new ObjectId($booking->user_id), 'type' => 'user']],
+                    $booking->id
+                );
+
+                //notification to vendor admin
+                $vendorAdminIds = $this->getVendorAdminIds((string)$booking->vendor_id);
+                $this->createNotification(
+                    getLocalesWord('Reminder'),
+                    getLocalesWord('Booking Reminder Dropped'),
+                    $vendorAdminIds,
+                    $booking->id
+                );
+
+            }
+        }
+
+        return successResponse();
+    }
+
+
+    public function createNotification(array $title, array $message, array $receivers, $bookingId)
+    {
+        $bookingProxy = new BookingProxy('CREATE_NOTIFICATION', [
+            'title'             => $title,
+            'message'           => $message,
+            'notification_type' => 'booking',
+            'receiver_type'     => 'specified',
+            'receivers'         => $receivers,
+            'extra_data'        => ['booking_id' => $bookingId],
+            'is_automatic'      => true,
+        ]);
+
+        $proxy = new Proxy($bookingProxy);
+
+        return $proxy->result();
+    }
+
+
+    public function getVendorAdminIds($vendorId)
+    {
+        $notificationProxy = new BookingProxy('GET_VENDOR_ADMINS_IDS', ['type' => 'vendor', 'vendor' => $vendorId]);
+        $proxy = new Proxy($notificationProxy);
+        $adminVendors = $proxy->result() ?? [];
+        return array_map(function ($admin) { return ['id' => new ObjectId($admin['id']), 'type' => 'admin']; }, $adminVendors);
     }
 }

@@ -258,7 +258,7 @@ function exportData($filename, array $columns, array $data)
 
 function convertDateTimeToUTC($me, string $datetime)
 {
-    return $datetime;
+    return new \MongoDB\BSON\UTCDateTime(new DateTime($datetime));
 }
 
 function arrayGet($array, $key, $default = null)

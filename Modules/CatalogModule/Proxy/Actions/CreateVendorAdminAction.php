@@ -6,7 +6,7 @@
 
 namespace Modules\CatalogModule\Proxy\Actions;
 
-use Illuminate\Http\Request;
+use App\Proxy\InternalRequest;
 use Illuminate\Support\Facades\Route;
 
 class CreateVendorAdminAction
@@ -17,7 +17,7 @@ class CreateVendorAdminAction
 
         $originalRequest = request();
 
-        $request = Request::create($url,'POST', $data);
+        $request = InternalRequest::create($url,'POST', $data);
 
         app()->instance('request', $request);
 

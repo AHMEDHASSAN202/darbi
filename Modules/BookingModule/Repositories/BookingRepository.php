@@ -94,4 +94,23 @@ class BookingRepository
 
         })->get();
     }
+
+    public function getReminderBookings()
+    {
+        $timeReminderBeforePickedUp = intval(getOption('time_reminder_before_picked_up', Booking::TIME_REMINDER_BEFORE_PICKED_UP));
+        $timeReminderBeforeDropped = intval(getOption('time_reminder_before_dropped', Booking::TIME_REMINDER_BEFORE_DROPPED));
+
+        $timeReminderBeforePickedUpFromNow = now()->addMinutes($timeReminderBeforePickedUp);
+        $timeReminderBeforeDroppedFromNow = now()->addMinutes($timeReminderBeforeDropped);
+
+        return $this->booking->where(function ($query) use ($timeReminderBeforePickedUpFromNow) {
+
+            $query->where('status', BookingStatus::PAID)->whereBetween('start_booking_at', [new \DateTime($timeReminderBeforePickedUpFromNow->format('Y-m-d H:i:00')), new \DateTime($timeReminderBeforePickedUpFromNow->format('Y-m-d H:i:59'))]);
+
+        })->orWhere(function ($query) use ($timeReminderBeforeDroppedFromNow) {
+
+            $query->where('status', BookingStatus::PICKED_UP)->whereBetween('end_booking_at', [new \DateTime($timeReminderBeforeDroppedFromNow->format('Y-m-d H:i:00')), new \DateTime($timeReminderBeforeDroppedFromNow->format('Y-m-d H:i:59'))]);
+
+        })->get();
+    }
 }

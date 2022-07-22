@@ -2,13 +2,9 @@
 
 namespace Modules\BookingModule\Listeners;
 
-use App\Proxy\Proxy;
 use Modules\BookingModule\Enums\BookingStatus;
 use Modules\BookingModule\Events\BookingStatusChangedEvent;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Modules\BookingModule\Proxy\BookingProxy;
-use Modules\NotificationsModule\Services\NotificationService;
+use Modules\BookingModule\Services\BookingService;
 
 class SendNotificationListener
 {
@@ -37,7 +33,7 @@ class SendNotificationListener
                 $notifications[] = [
                     'title'     => getLocalesWord('New Booking'),
                     'message'   => getLocalesWord('There is a new booking waiting for your approval'),
-                    'receivers' => app(NotificationService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
+                    'receivers' => app(BookingService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
                 ];
                 break;
             case BookingStatus::CANCELLED_BEFORE_ACCEPT:
@@ -64,7 +60,7 @@ class SendNotificationListener
                 $notifications[] = [
                     'title'     => getLocalesWord('Booking canceled'),
                     'message'   => getLocalesWord('Booking has been canceled successfully'),
-                    'receivers' => app(NotificationService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
+                    'receivers' => app(BookingService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
                 ];
                 break;
             case BookingStatus::PAID:
@@ -76,7 +72,7 @@ class SendNotificationListener
                 $notifications[] = [
                     'title'     => getLocalesWord('Booking paid'),
                     'message'   => getLocalesWord('Payment completed successfully'),
-                    'receivers' => app(NotificationService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
+                    'receivers' => app(BookingService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
                 ];
                 break;
             case BookingStatus::PICKED_UP:
@@ -88,7 +84,7 @@ class SendNotificationListener
                 $notifications[] = [
                     'title'     => getLocalesWord('Picked up'),
                     'message'   => getLocalesWord('Entity received successfully'),
-                    'receivers' => app(NotificationService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
+                    'receivers' => app(BookingService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
                 ];
                 break;
             case BookingStatus::DROPPED:
@@ -100,7 +96,7 @@ class SendNotificationListener
                 $notifications[] = [
                     'title'     => getLocalesWord('Dropped'),
                     'message'   => getLocalesWord('Entity dropped successfully'),
-                    'receivers' => app(NotificationService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
+                    'receivers' => app(BookingService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
                 ];
                 break;
             case BookingStatus::COMPLETED:
@@ -112,7 +108,7 @@ class SendNotificationListener
                 $notifications[] = [
                     'title'     => getLocalesWord('Completed'),
                     'message'   => getLocalesWord('Booking completed successfully'),
-                    'receivers' => app(NotificationService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
+                    'receivers' => app(BookingService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
                 ];
                 break;
             case BookingStatus::REJECTED:
@@ -131,13 +127,13 @@ class SendNotificationListener
                 $notifications[] = [
                     'title'     => getLocalesWord('Timeout'),
                     'message'   => getLocalesWord('Booking Timeout'),
-                    'receivers' => app(NotificationService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
+                    'receivers' => app(BookingService::class)->getVendorAdminIds((string)$event->booking->vendor_id)
                 ];
                 break;
         }
 
         foreach ($notifications as $notification) {
-            $notificationId = $this->createNotification(
+            $notificationId = app(BookingService::class)->createNotification(
                 $notification['title'],
                 $notification['message'],
                 $notification['receivers'],
@@ -148,23 +144,5 @@ class SendNotificationListener
                 helperLog(__CLASS__, __FUNCTION__, "Can't create notification", $notification);
             }
         }
-    }
-
-
-    private function createNotification(array $title, array $message, array $receivers, $bookingId)
-    {
-        $bookingProxy = new BookingProxy('CREATE_NOTIFICATION', [
-            'title'             => $title,
-            'message'           => $message,
-            'notification_type' => 'booking',
-            'receiver_type'     => 'specified',
-            'receivers'         => $receivers,
-            'extra_data'        => ['booking_id' => $bookingId],
-            'is_automatic'      => true,
-        ]);
-
-        $proxy = new Proxy($bookingProxy);
-
-        return $proxy->result();
     }
 }

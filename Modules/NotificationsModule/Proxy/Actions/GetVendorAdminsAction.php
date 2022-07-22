@@ -6,7 +6,7 @@
 
 namespace Modules\NotificationsModule\Proxy\Actions;
 
-use Illuminate\Http\Request;
+use App\Proxy\InternalRequest;
 use Illuminate\Support\Facades\Route;
 
 class GetVendorAdminsAction
@@ -17,7 +17,7 @@ class GetVendorAdminsAction
 
         $originalRequest = request();
 
-        $req = Request::create($url, 'GET', $data)->replace($data);
+        $req = InternalRequest::create($url, 'GET', $data)->replace($data);
 
         app()->instance('request', $req);
 

@@ -6,7 +6,7 @@
 
 namespace Modules\BookingModule\Proxy\Actions;
 
-use Illuminate\Http\Request;
+use App\Proxy\InternalRequest;
 use Illuminate\Support\Facades\Route;
 
 
@@ -16,7 +16,7 @@ class ChangeEntityStateToReservedHttpProxyAction
     {
         $url = '/api/internal/v1/entities/' . $data['entity_id'] . '/state/reserved';
 
-        $req = Request::create($url, 'PUT');
+        $req = InternalRequest::create($url, 'PUT');
 
         $res = Route::dispatch($req);
 

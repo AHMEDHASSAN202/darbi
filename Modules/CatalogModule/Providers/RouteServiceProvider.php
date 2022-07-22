@@ -18,7 +18,7 @@ class RouteServiceProvider extends ServiceProvider
 
     protected $moduleNamespaceVendor = 'Modules\CatalogModule\Http\Controllers\Admin\Vendor';
 
-    protected $moduleNamespaceInternal = 'Modules\CatalogModule\Http\Controllers\Admin\Internal';
+    protected $moduleNamespaceInternal = 'Modules\CatalogModule\Http\Controllers\Internal';
 
     /**
      * Called before routes are registered.

@@ -6,7 +6,7 @@
 
 namespace Modules\BookingModule\Proxy\Actions;
 
-use Illuminate\Http\Request;
+use App\Proxy\InternalRequest;
 use Illuminate\Support\Facades\Route;
 
 
@@ -18,7 +18,7 @@ class UpdateEntityStateHttpProxyAction
 
         $originalRequest = request();
 
-        $req = Request::create($url, 'PUT');
+        $req = InternalRequest::create($url, 'PUT');
 
         app()->instance('request', $req);
 

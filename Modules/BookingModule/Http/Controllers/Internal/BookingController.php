@@ -24,4 +24,11 @@ class BookingController extends Controller
 
         return $this->apiResponse(...$result);
     }
+
+    public function reminder()
+    {
+        $result = $this->bookingService->reminderBookings();
+
+        return $this->apiResponse(...$result);
+    }
 }

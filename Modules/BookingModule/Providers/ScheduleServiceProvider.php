@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Modules\BookingModule\schedule\BookingTimeout;
+use Modules\BookingModule\schedule\NotificationsReminderBooking;
 
 class ScheduleServiceProvider extends ServiceProvider
 {
@@ -35,6 +36,7 @@ class ScheduleServiceProvider extends ServiceProvider
         $this->app->booted(function () {
             $schedule = $this->app->make(Schedule::class);
             $schedule->call(new BookingTimeout)->name('BookingTimeout')->everyMinute()->onOneServer();
+            $schedule->call(new NotificationsReminderBooking)->name('NotificationsReminderBooking')->everyMinute()->onOneServer();
         });
     }
 }

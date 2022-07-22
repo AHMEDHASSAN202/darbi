@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use MongoDB\BSON\ObjectId;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,5 +23,5 @@ Route::get('health-check', function () {
 });
 
 Route::get('tt', function () {
-    dd(\Modules\AuthModule\Entities\UserDeviceToken::all());
+    dd(now());
 });

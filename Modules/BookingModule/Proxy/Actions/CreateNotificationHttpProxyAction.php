@@ -6,7 +6,8 @@
 
 namespace Modules\BookingModule\Proxy\Actions;
 
-use Illuminate\Http\Request;
+use App\Proxy\InternalRequest;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 
@@ -18,7 +19,7 @@ class CreateNotificationHttpProxyAction
 
         $originalRequest = request();
 
-        $req = Request::create($url);
+        $req = InternalRequest::create($url, 'POST', $data);
 
         app()->instance('request', $req);
 
@@ -26,7 +27,10 @@ class CreateNotificationHttpProxyAction
 
         app()->instance('request', $originalRequest);
 
-        if ($res->status() !== 201) { return null; }
+        if ($res->status() !== 201) {
+            Log::error(json_encode($res));
+            return null;
+        }
 
         $jsonData = json_decode($res->getContent(), true);
 

@@ -19,4 +19,5 @@ Route::group([
     'prefix'    => 'bookings',
 ], function () {
     Route::post('timeout'               , 'BookingController@timeout');
+    Route::post('reminder'              , 'BookingController@reminder');
 });

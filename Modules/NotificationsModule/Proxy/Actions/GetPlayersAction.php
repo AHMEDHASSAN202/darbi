@@ -6,7 +6,7 @@
 
 namespace Modules\NotificationsModule\Proxy\Actions;
 
-use Illuminate\Http\Request;
+use App\Proxy\InternalRequest;
 use Illuminate\Support\Facades\Route;
 
 class GetPlayersAction
@@ -17,7 +17,7 @@ class GetPlayersAction
 
         $originalRequest = request();
 
-        $req = Request::create($url, 'GET', $data);
+        $req = InternalRequest::create($url, 'GET', $data);
 
         app()->instance('request', $req);
 
