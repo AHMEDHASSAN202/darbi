@@ -16,13 +16,12 @@ trait ImageHelperTrait
     public function resizeImage($disc, $imageFullPath, UploadedFile $imageSrc, $sizes)
     {
         $imageInfo = pathinfo($imageFullPath);
-        $imageResizeName = $imageInfo['filename'];
 
         foreach ($sizes as $size) {
             $s = explode('x', $size, 2);
             $width = $s[0];
             $height = $s[1];
-            $imageResizeName .= '-resize-' . $size . '.' . $imageInfo['extension'];
+            $imageResizeName = $imageInfo['filename'] . '-resize-' . $size . '.' . $imageInfo['extension'];
             $imageFullPath = $imageInfo['dirname'] . DIRECTORY_SEPARATOR . $imageResizeName;
 
             try {
@@ -31,6 +30,7 @@ trait ImageHelperTrait
                     $constraint->aspectRatio();
                     $constraint->upsize();
                 });
+
                 Storage::disk($disc)->put($imageFullPath, $img->stream());
                 Storage::disk($disc)->setVisibility($imageFullPath, 'public');
 
