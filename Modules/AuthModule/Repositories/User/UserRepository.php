@@ -59,4 +59,9 @@ class UserRepository
 
         return $user;
     }
+
+    public function findAllByPhones($phones)
+    {
+        dd($phones);
+    }
 }

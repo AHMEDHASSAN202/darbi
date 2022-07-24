@@ -61,12 +61,30 @@ class UserService
 
     public function findAllIds(Request $request)
     {
-        $userIds = $this->userRepository->findAllIds($request);
+        if ($request->hasFile('users_file')) {
+            $phones = $this->getPhonesFromExcelFile($request->file('users_file')->getRealPath());
+            $userIds = $this->userRepository->findAllByPhones($phones);
+        }else {
+            $userIds = $this->userRepository->findAllIds($request);
+        }
 
         if ($userIds instanceof LengthAwarePaginator) {
             return successResponse(['users' => new PaginateResource(UserIdResource::collection($userIds))]);
         }
 
         return successResponse(['users' => UserIdResource::collection($userIds)]);
+    }
+
+    private function getPhonesFromExcelFile($filePath)
+    {
+        $collection = fastexcel()->import($filePath);
+        $phones = $collection->map(function ($row) {
+            if (!isset($row['phone_code']) || !isset($row['phone'])) {
+                return;
+            }
+            return $row['phone_code'] . $row['phone'];
+        })->toArray();
+
+        return array_values($phones);
     }
 }

@@ -102,6 +102,14 @@ class Entity extends Base
             $branchIds = app(BranchRepository::class)->findAllBranchesByRegion($region, true)->pluck('_id')->toArray();
             $query->whereIn('branch_id', generateObjectIdOfArrayValues($branchIds));
         }
+
+        if ($priceFrom = $request->get('price_from')) {
+            $query->where('price', '>=', intval($priceFrom));
+        }
+
+        if ($priceTo = $request->get('price_to')) {
+            $query->where('price', '<=', intval($priceTo));
+        }
     }
 
     public function scopeAdminFilter($query, Request $request, $type)

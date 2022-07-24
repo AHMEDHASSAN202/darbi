@@ -17,7 +17,7 @@ class GetUsersAction
 
         $originalRequest = request();
 
-        $req = InternalRequest::create($url, 'GET', $data);
+        $req = InternalRequest::create($url, 'GET', $data, [],  ['users_file' => $data['users_file'] ?? []]);
 
         app()->instance('request', $req);
 

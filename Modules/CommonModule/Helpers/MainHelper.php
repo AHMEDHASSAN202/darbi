@@ -236,24 +236,9 @@ function convertBsonArrayToNormalArray($bsonArray)
 
 function exportData($filename, array $columns, array $data)
 {
-    return function () use ($filename, $columns, $data) {
-        header("Content-Description: File Transfer");
-        header("Content-Disposition: attachment; filename=".$filename);
-        header("Content-Type: application/csv; ");
+    array_unshift($data, $columns);
 
-        $file = fopen('php://output', 'w');
-        fputcsv($file, array_values($columns));
-
-        foreach ($data as $lines){
-            $row = [];
-            foreach (array_keys($columns) as $columnKey) {
-                $row[] = \Illuminate\Support\Arr::get($lines, $columnKey);
-            }
-            fputcsv($file, [...$row]);
-        }
-
-        fclose($file);
-    };
+    return fastexcel()->data(collect($data))->download($filename);
 }
 
 function convertDateTimeToUTC($me, string $datetime)

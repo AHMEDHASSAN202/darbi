@@ -14,8 +14,6 @@
 
 
 //plugin routes
-use App\Proxy\Proxy;
-use Modules\CatalogModule\Proxy\NotificationProxy;
 
 Route::group([
     'prefix'    => 'plugins',

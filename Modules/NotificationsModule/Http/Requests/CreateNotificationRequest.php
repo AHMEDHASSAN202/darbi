@@ -4,6 +4,7 @@ namespace Modules\NotificationsModule\Http\Requests;
 
 use App\Rules\MongoIdRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Modules\NotificationsModule\Enums\NotificationReceiverTypes;
 use Modules\NotificationsModule\Enums\NotificationTypes;
 
@@ -16,7 +17,7 @@ class CreateNotificationRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'title'         => 'required|array',
             'title.ar'      => 'required|string',
             'title.en'      => 'required|string',
@@ -26,13 +27,20 @@ class CreateNotificationRequest extends FormRequest
             'url'           => 'sometimes|nullable|url',
             'notification_type' => 'required|string|in:'.implode(',', array_values(NotificationTypes::getTypes())),
             'receiver_type'     => 'required|in:'.implode(',', array_values(NotificationReceiverTypes::getTypes())),
-            'receivers'         => 'required_if:receiver_type,'.NotificationReceiverTypes::SPECIFIED.'|array|max:500',
-            'receivers.*.id'    => ['required', new MongoIdRule],
-            'receivers.*.type'  => ['required', 'in:user,admin'],
             'image'             => 'sometimes|nullable|image',
             'extra_data'        => 'sometimes|nullable|array',
             'is_automatic'      => 'sometimes|nullable|boolean'
         ];
+
+        if (!$this->hasFile('receivers_file')) {
+            $rules['receivers']         = ['required_if:receiver_type,'.NotificationReceiverTypes::SPECIFIED, '|array'];
+            $rules['receivers.*.id']    = ['required', new MongoIdRule];
+            $rules['receivers.*.type']  = ['required', 'in:user,admin'];
+        }else {
+            $rules['receivers_file'] = 'required|file|mimes:csv,xlsx|max:5120';
+        }
+
+        return $rules;
     }
 
     /**

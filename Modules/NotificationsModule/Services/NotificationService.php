@@ -130,29 +130,38 @@ class NotificationService
         }
 
         $me = auth(getCurrentGuard())->user();
+        $receivers = $this->getReceivers($createNotificationRequest);
 
-        $notification = $this->notificationRepository->create([
-            'title'             => $createNotificationRequest->title,
-            'message'           => $createNotificationRequest->message,
-            'url'               => $createNotificationRequest->url,
-            'image'             => $image,
-            'receivers'         => $this->getReceivers($createNotificationRequest),
-            'notification_type' => $createNotificationRequest->notification_type,
-            'receiver_type'     => $createNotificationRequest->receiver_type,
-            'extra_data'        => $createNotificationRequest->extra_data ?? [],
-            'triggered_by'      => [
-                'is_automatic'       => !($createNotificationRequest->is_automatic === null) && (boolean)$createNotificationRequest->is_automatic,
-                'user_id'            => optional($me)->id,
-                'on_model'           => $me ? get_class($me) : null
-            ]
-        ]);
+        $receiversParts = array_chunk($receivers, 500);
 
-        if (!$notification) {
-            helperLog(__CLASS__, __FUNCTION__, 'Unable to create new notification');
-            return serviceResponse([], 500, __("Unable to create new notification"));
+        if(empty($receiversParts)) {
+            $receiversParts[] = [];
         }
 
-        return serviceResponse(['id' => $notification->id], 201, __('Data has been added successfully'));
+        foreach ($receiversParts as $receiversPart) {
+            $notification = $this->notificationRepository->create([
+                'title'             => $createNotificationRequest->title,
+                'message'           => $createNotificationRequest->message,
+                'url'               => $createNotificationRequest->url,
+                'image'             => $image,
+                'receivers'         => $receiversPart,
+                'notification_type' => $createNotificationRequest->notification_type,
+                'receiver_type'     => $createNotificationRequest->receiver_type,
+                'extra_data'        => $createNotificationRequest->extra_data ?? [],
+                'triggered_by'      => [
+                    'is_automatic'       => !($createNotificationRequest->is_automatic === null) && (boolean)$createNotificationRequest->is_automatic,
+                    'user_id'            => optional($me)->id,
+                    'on_model'           => $me ? get_class($me) : null
+                ]
+            ]);
+
+            if (!$notification) {
+                helperLog(__CLASS__, __FUNCTION__, 'Unable to create new notification');
+                return serviceResponse([], 500, __("Unable to create new notification"));
+            }
+        }
+
+        return serviceResponse(['id' => isset($notification) ? $notification->id : null], 201, __('Data has been added successfully'));
     }
 
 
@@ -161,16 +170,20 @@ class NotificationService
         $receivers = [];
 
         if ($request->receiver_type == NotificationReceiverTypes::SPECIFIED) {
-            $receivers = array_map(function ($receiver) { return ['user_id' => new ObjectId($receiver['id']), 'on_model' => $receiver['type']]; }, $request->receivers);
+            if ($request->hasFile('receivers_file')) {
+                $receivers = $this->getUserReceiversFromExcelFile($request->receivers_file);
+            }else {
+                $receivers = array_map(function ($receiver) { return ['user_id' => new ObjectId($receiver['id']), 'on_model' => $receiver['type']]; }, $request->receivers);
+            }
         }
 
         return $receivers;
     }
 
 
-    private function getUserReceivers()
+    private function getUserReceiversFromExcelFile($file)
     {
-        $notificationProxy = new NotificationProxy('GET_USERS');
+        $notificationProxy = new NotificationProxy('GET_USERS', ['users_file' => $file]);
         $proxy = new Proxy($notificationProxy);
         $users = $proxy->result() ?? [];
         return array_map(function ($user) { return ['user_id' => new ObjectId($user['id']), 'on_model' => 'user']; }, $users);

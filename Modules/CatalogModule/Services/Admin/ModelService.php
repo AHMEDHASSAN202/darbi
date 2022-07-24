@@ -62,7 +62,7 @@ class ModelService
     public function create(CreateModelRequest $createModelRequest)
     {
         $brand = app(BrandRepository::class)->find($createModelRequest->brand_id);
-        $data['brand_id'] = $createModelRequest->brand_id;
+        $data['brand_id'] = new ObjectId($createModelRequest->brand_id);
         $data['name']   = $createModelRequest->name;
         $data['images'] = $this->uploadImages($this->uploadDirectory, $createModelRequest->images);
         $data['is_active'] = ($createModelRequest->is_active === null) || (boolean)$createModelRequest->is_active;
@@ -80,7 +80,7 @@ class ModelService
         $model = $this->modelRepository->find($id);
         $images = $model->images ?? [];
         $data = [
-            'brand_id'   => $updateModelRequest->brand_id,
+            'brand_id'   => new ObjectId($updateModelRequest->brand_id),
             'name'       => $updateModelRequest->name,
             'is_active'  => ($updateModelRequest->is_active === null) || (boolean)$updateModelRequest->is_active,
             'entity_type'=> $brand->entity_type,
