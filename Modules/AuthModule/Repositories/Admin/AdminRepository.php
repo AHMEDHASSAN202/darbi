@@ -24,11 +24,16 @@ class AdminRepository
         return $this->model->create($data);
     }
 
-    public function list(Request $request, $type = 'admin', $limit = 20)
+    public function list(Request $request)
     {
         $meId = auth('admin_api')->id();
 
-        return $this->model->search($request)->filter($request)->with(['role', 'vendor' => function ($q) { $q->withTrashed(); }])->where('_id', '!=', new ObjectId($meId))->where('type', $type)->paginate($limit);
+        return $this->model->search($request)->filter($request)->latest()->with(['role', 'vendor' => function ($q) { $q->withTrashed(); }])->where('_id', '!=', new ObjectId($meId))->paginated();
+    }
+
+    public function findAllIds(Request $request)
+    {
+        return $this->model->search($request)->filter($request)->latest()->paginated();
     }
 
     public function update($id, $data)
@@ -44,11 +49,11 @@ class AdminRepository
         return $this->model->findOrFail($id)->delete();
     }
 
-    public function find($id)
+    public function find($id, $with = ['role'])
     {
         $meId = auth('admin_api')->id();
 
-        return $this->model->with('role')->where('_id', '!=', new ObjectId($meId))->findOrFail($id);
+        return $this->model->with($with)->where('_id', '!=', new ObjectId($meId))->findOrFail($id);
     }
 
     public function findByEmail($email, $type, $with = [])
@@ -59,5 +64,10 @@ class AdminRepository
     public function countAdminFromThisRole($roleId)
     {
         return $this->model->where('role_id', new ObjectId($roleId))->count();
+    }
+
+    public function getVendorAdmin($vendorId)
+    {
+        return $this->model->where('vendor_id', new ObjectId($vendorId))->where('type', 'vendor')->whereHas('role', function ($q) { $q->where('key', config('authmodule.default_vendor_role')); })->first();
     }
 }

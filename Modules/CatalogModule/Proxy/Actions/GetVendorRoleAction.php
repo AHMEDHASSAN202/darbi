@@ -6,16 +6,16 @@
 
 namespace Modules\CatalogModule\Proxy\Actions;
 
-use Illuminate\Http\Request;
+use App\Proxy\InternalRequest;
 use Illuminate\Support\Facades\Route;
 
-class GetVendorRole
+class GetVendorRoleAction
 {
     public function __invoke($data)
     {
-        $url = '/api/admin/v1/roles/vendor-role/find';
+        $url = '/api/internal/v1/roles/vendor-role/find';
 
-        $req = Request::create($url, 'GET', $data);
+        $req = InternalRequest::create($url, 'GET', $data);
 
         $res = Route::dispatch($req);
 

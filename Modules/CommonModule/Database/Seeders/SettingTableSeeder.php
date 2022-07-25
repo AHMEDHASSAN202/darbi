@@ -16,8 +16,10 @@ class SettingTableSeeder extends Seeder
     public function run()
     {
         $settings = [
-            'time_interval_vendor_accept_min'       => 22,
-            'time_interval_user_accept_min'         => 22,
+            'time_interval_vendor_accept_min'       => 22,   //minute
+            'time_interval_user_accept_min'         => 22,   //minute
+            'time_reminder_before_picked_up'        => 120,  //minute
+            'time_reminder_before_dropped'          => 120,  //minute
             'walk_through_images'                   => [
                 ['title' => ['ar' => 'هذا النص هو مثال', 'en' => 'Lorem Ipsum'], 'desc' => ['ar' => 'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى', 'en' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'], 'image' => 'https://i.ibb.co/bXcRvgx/intro1.png'],
                 ['title' => ['ar' => 'هذا النص هو مثال', 'en' => 'Lorem Ipsum'], 'desc' => ['ar' => 'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى', 'en' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'], 'image' => 'https://i.ibb.co/bXcRvgx/intro1.png']
@@ -36,6 +38,7 @@ class SettingTableSeeder extends Seeder
             'ios_force_updated_link'                => '',
             'default_country'                       => 'AE',
             'default_city'                          => 'DU',
+            'darbi_percentage'                      => 20
         ];
 
         Setting::create($settings);

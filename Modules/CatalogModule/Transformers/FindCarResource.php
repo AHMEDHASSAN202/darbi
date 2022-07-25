@@ -25,7 +25,7 @@ class FindCarResource extends JsonResource
             'price_unit'    => $this->price_unit,
             'extras'        => $this->getExtras(),
             'state'         => $this->state,
-            'specs'         => SpecsResource::collection($this->model->addons),
+            'specs'         => optional($this->model)->specs ? SpecsResource::collection(@array_values($this->model->specs)) : [],
             'vendor'        => $this->getVendor()
         ];
     }

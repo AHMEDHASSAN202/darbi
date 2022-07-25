@@ -56,6 +56,20 @@ class EntityRepository
                 ],
                 [
                     '$lookup'   => [
+                        'from'          => 'branches',
+                        'localField'    => 'branch_id',
+                        'foreignField'  => '_id',
+                        'as'            => 'branch'
+                    ],
+                ],
+                [
+                    '$unwind'    => [
+                        "path"      => '$branch',
+                        "preserveNullAndEmptyArrays" => true
+                    ],
+                ],
+                [
+                    '$lookup'   => [
                         'from'          => 'countries',
                         'localField'    => 'country_id',
                         'foreignField'  => '_id',
@@ -65,20 +79,6 @@ class EntityRepository
                 [
                     '$unwind'    => [
                         "path"      => '$country',
-                        "preserveNullAndEmptyArrays" => true
-                    ],
-                ],
-                [
-                    '$lookup'   => [
-                        'from'          => 'cities',
-                        'localField'    => 'city_id',
-                        'foreignField'  => '_id',
-                        'as'            => 'city'
-                    ],
-                ],
-                [
-                    '$unwind'    => [
-                        "path"      => '$city',
                         "preserveNullAndEmptyArrays" => true
                     ],
                 ],
@@ -106,13 +106,57 @@ class EntityRepository
         return $entity->first();
     }
 
-    public function changeState($entityId, $state)
+
+    public function findWithBasicData($id)
     {
-        try {
-            return $this->model->where('_id', new ObjectId($entityId))->update(['state' => $state]);
-        }catch (\Exception $exception) {
-            Log::error('change state error: ' . $exception->getMessage());
-            return false;
-        }
+        $entity = $this->model->raw(function ($collection) use ($id) {
+            return $collection->aggregate([
+                [
+                    '$match'        => [
+                        '_id'          => [ '$eq' => new ObjectId($id) ],
+                    ]
+                ],
+                [
+                    '$lookup'   => [
+                        'from'          => 'models',
+                        'localField'    => 'model_id',
+                        'foreignField'  => '_id',
+                        'as'            => 'model'
+                    ],
+                ],
+                [
+                    '$unwind'    => [
+                        "path"      => '$model',
+                        "preserveNullAndEmptyArrays" => true
+                    ],
+                ],
+                [
+                    '$lookup'   => [
+                        'from'          => 'brands',
+                        'localField'    => 'brand_id',
+                        'foreignField'  => '_id',
+                        'as'            => 'brand'
+                    ],
+                ],
+                [
+                    '$unwind'    => [
+                        "path"      => '$brand',
+                        "preserveNullAndEmptyArrays" => true
+                    ],
+                ]
+            ]);
+        });
+
+        abort_if(!$entity->count(), 404);
+
+        return $entity->first();
+    }
+
+
+    public function updateState($id, $state)
+    {
+        $entity = $this->model->findOrFail(new ObjectId($id));
+
+        return $entity->update(['state' => $state]);
     }
 }

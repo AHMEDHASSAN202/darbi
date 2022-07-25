@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('saved_places', function (Blueprint $table) {
             $table->id();
+            $table->index('user_id');
+            $table->index('lat');
+            $table->index('lng');
+            $table->index('region_id');
             $table->softDeletes();
             $table->timestamps();
         });

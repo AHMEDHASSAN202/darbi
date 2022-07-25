@@ -6,7 +6,7 @@
 
 namespace Modules\CatalogModule\Proxy\Actions;
 
-use Illuminate\Http\Request;
+use App\Proxy\InternalRequest;
 use Illuminate\Support\Facades\Route;
 
 class GetRegionAction
@@ -15,7 +15,7 @@ class GetRegionAction
     {
         $url = '/api/mobile/v1/regions/find';
 
-        $req = Request::create($url, 'GET', $data);
+        $req = InternalRequest::create($url, 'GET', $data);
 
         $res = Route::dispatch($req);
 

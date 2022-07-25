@@ -28,12 +28,11 @@ class PluginController extends Controller
     }
 
 
-
     public function store(CreatePluginRequest $createPluginRequest)
     {
-        $plugin = $this->pluginService->create($createPluginRequest);
+        $result = $this->pluginService->create($createPluginRequest);
 
-        return $this->apiResponse(compact('plugin'), 201, __('Data has been added successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
@@ -45,19 +44,18 @@ class PluginController extends Controller
     }
 
 
-
     public function update(UpdatePluginRequest $updatePluginRequest, $id)
     {
-        $plugin = $this->pluginService->update($id, $updatePluginRequest);
+        $result = $this->pluginService->update($id, $updatePluginRequest);
 
-        return $this->apiResponse(compact('plugin'), 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function destroy($id)
     {
-        $this->pluginService->delete($id);
+        $result = $this->pluginService->delete($id);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse(...$result);
     }
 }

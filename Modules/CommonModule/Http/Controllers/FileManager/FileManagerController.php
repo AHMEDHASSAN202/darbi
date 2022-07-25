@@ -59,7 +59,7 @@ class FileManagerController extends Controller
             return $this->apiResponse([], 400, $result['msg']);
         }
 
-        return $this->apiResponse(['file' => $result['file']], 200, __('file uploaded successfully'));
+        return $this->apiResponse(['file' => $result['file']], 200, __('File uploaded successfully'));
     }
 
     /**
@@ -77,7 +77,7 @@ class FileManagerController extends Controller
             return $this->apiResponse([], 400,$result['msg']);
         }
 
-        return $this->apiResponse(['file' => $result['file']], 200, __('file uploaded successfully'));
+        return $this->apiResponse(['file' => $result['file']], 200, __('File uploaded successfully'));
     }
 
     /**
@@ -98,7 +98,7 @@ class FileManagerController extends Controller
             return $this->apiResponse([], 400, $result['msg']);
         }
 
-        return $this->apiResponse(['file' => $result['file']], 200, __('photo cropped successfully'));
+        return $this->apiResponse(['file' => $result['file']], 200, __('Photo cropped successfully'));
     }
 
     /**
@@ -115,7 +115,7 @@ class FileManagerController extends Controller
             return $this->apiResponse([], 400, $result['msg']);
         }
 
-        return $this->apiResponse([], 200, __('the file has been deleted successfully'));
+        return $this->apiResponse([], 200, __('The file has been deleted successfully'));
     }
 
     /**
@@ -133,7 +133,7 @@ class FileManagerController extends Controller
             return $this->apiResponse([], 400, $result['msg']);
         }
 
-        return $this->apiResponse([], 200, __('folder created successfully'));
+        return $this->apiResponse([], 200, __('Folder created successfully'));
     }
 
     /**
@@ -152,7 +152,7 @@ class FileManagerController extends Controller
             return $this->apiResponse([], 400, $result['msg']);
         }
 
-        return $this->apiResponse([], 200, __('name changed successfully'));
+        return $this->apiResponse([], 200, __('Name changed successfully'));
     }
 
     /**
@@ -173,6 +173,6 @@ class FileManagerController extends Controller
             return $this->apiResponse([], 400, $result['msg']);
         }
 
-        return $this->apiResponse([], 200, __('the file has been moved successfully'));
+        return $this->apiResponse([], 200, __('The file has been moved successfully'));
     }
 }

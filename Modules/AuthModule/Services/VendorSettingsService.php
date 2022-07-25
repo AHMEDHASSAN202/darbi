@@ -27,13 +27,13 @@ class VendorSettingsService
     {
         $vendor = $this->vendorSettingsRepository->updateVendorInfo($updateVendorInfoRequest);
 
-        return new FindVendorResource($vendor);
+        return updatedResponse(['vendor' => new FindVendorResource($vendor)]);
     }
 
     public function getSettings()
     {
         $vendor = auth('vendor_api')->user()->vendor->load('country');
 
-        return new FindVendorResource($vendor);
+        return successResponse(['vendor' => new FindVendorResource($vendor)]);
     }
 }

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('extras', function (Blueprint $table) {
             $table->id();
             $table->index('plugin_id');
+            $table->index('vendor_id');
             $table->timestamps();
         });
     }

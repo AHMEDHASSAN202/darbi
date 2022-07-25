@@ -26,13 +26,14 @@ class CarRepository
                            ->with(['model', 'brand', 'country' => function ($q) { $q->withTrashed(); }])
                            ->whereHas('model', function ($query) { $query->active(); })
                            ->whereHas('brand', function ($query) { $query->active(); })
+                           ->whereHas('branch', function ($query) { $query->active(); })
                            ->filter($request, EntityType::CAR)
                            ->filterDate($request)
                            ->active()
                            ->available()
                            ->free()
                            ->latest()
-                           ->paginate($request->get('limit', 20));
+                           ->paginated();
     }
 
 
@@ -48,12 +49,13 @@ class CarRepository
                             ->with([
                                 'model' => function ($q) { $q->withTrashed(); },
                                 'brand' => function ($q) { $q->withTrashed(); },
-                                'vendor' => function ($q) { $q->withTrashed(); }
+                                'vendor' => function ($q) { $q->withTrashed(); },
+                                'branch' => function ($q) { $q->withTrashed(); }
                             ])
                             ->adminFilter($request, EntityType::CAR)
                             ->latest()
                             ->where('vendor_id', new ObjectId($vendorId))
-                            ->paginate($request->get('limit', 20));
+                            ->paginated();
     }
 
 
@@ -63,10 +65,11 @@ class CarRepository
                             ->with([
                                 'model' => function ($q) { $q->withTrashed(); },
                                 'brand' => function ($q) { $q->withTrashed(); },
-                                'vendor' => function ($q) { $q->withTrashed(); }
+                                'vendor' => function ($q) { $q->withTrashed(); },
+                                'branch' => function ($q) { $q->withTrashed(); }
                             ])
                             ->adminFilter($request, EntityType::CAR)
                             ->latest()
-                            ->paginate($request->get('limit', 20));
+                            ->paginated();
     }
 }

@@ -4,8 +4,6 @@ namespace Modules\CatalogModule\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\CatalogModule\Http\Requests\Admin\CreateYachtRequest;
-use Modules\CatalogModule\Http\Requests\Admin\UpdateYachtRequest;
 use Modules\CatalogModule\Services\Admin\YachtService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
@@ -39,6 +37,6 @@ class YachtController extends Controller
     {
         $result = $this->yachtService->deleteByAdmin($id);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 }

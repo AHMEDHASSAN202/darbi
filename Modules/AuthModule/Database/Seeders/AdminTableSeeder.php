@@ -39,29 +39,21 @@ class AdminTableSeeder extends Seeder
                'type'       => 'admin',
                'image'      => $avatars[mt_rand(0, (count($avatars) - 1))]
            ],
-           [
-               'name'       => 'anas',
-               'email'      => 'anas@gmail.com',
-               'password'   => Hash::make(123456),
-               'role_id'    => new ObjectId(Role::where('name', 'admin')->first()->id),
-               'type'       => 'admin',
-               'image'      => $avatars[mt_rand(0, (count($avatars) - 1))]
-           ],
             [
-                'name'       => 'vendor name',
-                'email'      => 'vendor@gmail.com',
+                'name'       => 'Car Vendor',
+                'email'      => 'car-vendor@gmail.com',
                 'password'   => Hash::make(123456),
                 'role_id'    => new ObjectId(Role::where('guard', 'vendor_api')->first()->id),
-                'vendor_id'  => new ObjectId(Vendor::first()->id),
+                'vendor_id'  => new ObjectId(Vendor::where('type', 'car')->first()->id),
                 'type'       => 'vendor',
                 'image'      => $avatars[mt_rand(0, (count($avatars) - 1))]
             ],
             [
-                'name'       => 'vendor name2',
-                'email'      => 'vendor2@gmail.com',
+                'name'       => 'Yacht Vendor',
+                'email'      => 'yacht-vendor@gmail.com',
                 'password'   => Hash::make(123456),
-                'role_id'    => new ObjectId(Role::where('guard', 'vendor_api')->latest()->first()->id),
-                'vendor_id'  => new ObjectId(Vendor::first()->id),
+                'role_id'    => new ObjectId(Role::where('guard', 'vendor_api')->first()->id),
+                'vendor_id'  => new ObjectId(Vendor::where('type', 'yacht')->first()->id),
                 'type'       => 'vendor',
                 'image'      => $avatars[mt_rand(0, (count($avatars) - 1))]
             ]

@@ -21,9 +21,7 @@ class SavedPlaceResource extends JsonResource
             'lng'           => $this->lng,
             'city'          => $this->city,
             'country'       => $this->country,
-            'full_address'  => $this->full_address,
-            'region'        => translateAttribute($this->region->name),
-            'region_id'     => (string)$this->region_id
+            'full_address'  => $this->full_address
         ];
     }
 }

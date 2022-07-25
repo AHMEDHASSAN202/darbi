@@ -8,51 +8,51 @@ namespace Modules\CommonModule\Traits;
 
 trait ApiResponseTrait
 {
-    private function apiResponse($responseData, $statusCode = 200, $message = null, $errors = [])
+    private function apiResponse($data, $statusCode = 200, $message = null, $errors = [])
     {
-        $data['data'] = (object)$responseData;
-        $data['errors'] = (object)$errors;
+        $response['data'] = (object)$data;
+        $response['errors'] = (object)$errors;
 
         switch ($statusCode) {
             case 200:
-                $data['message'] = $message ?? '';
-                $data['success'] = true;
+                $response['message'] = $message ?? '';
+                $response['success'] = true;
                 break;
             case 201:
-                $data['message'] = $message ?? __('Created');
-                $data['success'] = true;
+                $response['message'] = $message ?? __('Created');
+                $response['success'] = true;
                 break;
             case 400:
-                $data['message'] = $message ?? __('Bad Request');
-                $data['success'] = false;
+                $response['message'] = $message ?? __('Bad Request');
+                $response['success'] = false;
                 break;
             case 401:
-                $data['message'] = $message ?? __('Unauthorized');
-                $data['success'] = false;
+                $response['message'] = $message ?? __('Unauthorized');
+                $response['success'] = false;
                 break;
             case 403:
-                $data['message'] = $message ?? __('Forbidden');
-                $data['success'] = false;
+                $response['message'] = $message ?? __('Forbidden');
+                $response['success'] = false;
                 break;
             case 404:
-                $data['message'] = $message ?? __('Not Found');
-                $data['success'] = false;
+                $response['message'] = $message ?? __('Not Found');
+                $response['success'] = false;
                 break;
             case 405:
-                $data['message'] = $message ?? __('Method Not Allowed');
-                $data['success'] = false;
+                $response['message'] = $message ?? __('Method Not Allowed');
+                $response['success'] = false;
                 break;
             case 422:
-                $data['message'] = $message ?? __('The given data was invalid.');
-                $data['success'] = false;
+                $response['message'] = $message ?? __('The given data was invalid.');
+                $response['success'] = false;
                 break;
             default:
-                $data['message'] = $message ?? __('Whoops, looks like something went wrong');
-                $data['success'] = false;
+                $response['message'] = $message ?? __('Whoops, looks like something went wrong');
+                $response['success'] = false;
                 break;
         }
 
-        return response()->json($data, $statusCode);
+        return response()->json($response, $statusCode);
     }
 
 }

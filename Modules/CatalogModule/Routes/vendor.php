@@ -38,7 +38,7 @@ Route::group([
 //cars routes
 Route::group([
     'prefix'    => 'cars',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'type:car']
 ], function () {
     Route::get(''               , 'CarController@index');
     Route::post(''              , 'CarController@store');
@@ -52,7 +52,7 @@ Route::group([
 //yachts routes
 Route::group([
     'prefix'    => 'yachts',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'type:yacht']
 ], function () {
     Route::get(''                 , 'YachtController@index');
     Route::post(''                , 'YachtController@store');
@@ -87,7 +87,7 @@ Route::group([
 //ports routes
 Route::group([
     'prefix'    => 'ports',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'type:yacht']
 ], function () {
     Route::get(''                 , 'PortController@index');
 });
@@ -97,7 +97,7 @@ Route::group([
 //branches routes
 Route::group([
     'prefix'    => 'branches',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'type:car']
 ], function () {
     Route::get(''                  , 'BranchController@index');
     Route::post(''                 , 'BranchController@store');

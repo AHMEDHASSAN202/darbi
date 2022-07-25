@@ -22,15 +22,10 @@ class RegionRepository
 
     public function list(Request $request)
     {
-        $query = $this->model->active()->search($request)->filter($request)
-                             ->when(hasEmbed('country'), function ($q) { $q->with('country'); })
-                             ->when(hasEmbed('city'), function ($q) { $q->with('city'); });
-
-        if ($request->has('paginated')) {
-            return $query->paginate($request->get('limit', 20));
-        }
-
-        return $query->get();
+        return $this->model->active()->search($request)->filter($request)
+                           ->when(hasEmbed('country'), function ($q) { $q->with('country'); })
+                           ->when(hasEmbed('city'), function ($q) { $q->with('city'); })
+                           ->paginated();
     }
 
 

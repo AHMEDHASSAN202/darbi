@@ -33,6 +33,8 @@ Route::group([
 });
 
 
+Route::post('device-token'              , 'UserDeviceTokenController@storeDeviceToken')->middleware('auth:vendor_api');
+
 //vendor profile
 Route::group([
     'prefix'     => 'settings',

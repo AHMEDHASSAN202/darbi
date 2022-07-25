@@ -24,16 +24,16 @@ class VendorProfileController extends Controller
 
     public function getProfile()
     {
-        $profile = $this->vendorProfileService->getProfile();
+        $result = $this->vendorProfileService->getProfile();
 
-        return $this->apiResponse(compact('profile'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function updateProfile(UpdateVendorProfileRequest $updateVendorProfile)
     {
-        $profile = $this->vendorProfileService->updateProfile($updateVendorProfile);
+        $result = $this->vendorProfileService->updateProfile($updateVendorProfile);
 
-        return $this->apiResponse(compact('profile'), 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 }

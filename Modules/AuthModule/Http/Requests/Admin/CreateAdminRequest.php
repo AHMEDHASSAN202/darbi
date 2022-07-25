@@ -4,6 +4,7 @@ namespace Modules\AuthModule\Http\Requests\Admin;
 
 use App\Rules\AlphaNumSpacesRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules\Password;
 
 class CreateAdminRequest extends FormRequest
@@ -16,7 +17,6 @@ class CreateAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'          => ['required', 'max:100'],
             'name'          => ['required', 'max:100', new AlphaNumSpacesRule()],
             'email'         => 'required|email|unique:admins',
             'role_id'       => 'required|exists:roles,_id',

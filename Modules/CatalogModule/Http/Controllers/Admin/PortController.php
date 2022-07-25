@@ -38,20 +38,20 @@ class PortController extends Controller
     {
         $result = $this->portService->create($createPortRequest);
 
-        return $this->apiResponse($result, 201, __('Data has been added successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function update($id, UpdatePortRequest $updatePortRequest)
     {
         $result = $this->portService->update($id, $updatePortRequest);
 
-        return $this->apiResponse($result, 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function destroy($id)
     {
-        $this->portService->delete($id);
+        $result = $this->portService->delete($id);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse(...$result);
     }
 }

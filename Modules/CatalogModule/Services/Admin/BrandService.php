@@ -40,17 +40,17 @@ class BrandService
         $brands = $this->brandRepository->listOfBrandsForDashboard($request, $wheres);
 
         if ($brands instanceof LengthAwarePaginator) {
-            return new PaginateResource(BrandResource::collection($brands));
+            return successResponse(['brands' => new PaginateResource(BrandResource::collection($brands))]);
         }
 
-        return BrandResource::collection($brands);
+        return successResponse(['brands' => BrandResource::collection($brands)]);
     }
 
     public function find($brandId)
     {
         $brand = $this->brandRepository->find($brandId);
 
-        return new FindBrandResource($brand);
+        return successResponse(['brand' => new FindBrandResource($brand)]);
     }
 
     public function create(CreateBrandRequest $createBrandRequest)
@@ -62,32 +62,36 @@ class BrandService
             'entity_type'=> $createBrandRequest->entity_type
         ]);
 
-        return [
-            'id'        => $brand->id
-        ];
+        return createdResponse(['id' => $brand->id]);
     }
 
     public function update($id, UpdateBrandRequest $updateBrandRequest)
     {
+        $brand = $this->brandRepository->find($id);
+
         $data = [
             'name'       => $updateBrandRequest->name,
             'is_active'  => ($updateBrandRequest->is_active === null) || (boolean)$updateBrandRequest->is_active,
             'entity_type' => $updateBrandRequest->entity_type
         ];
 
+        $oldLogo = null;
         if ($updateBrandRequest->hasFile('logo')) {
+            $oldLogo = $brand->logo;
             $data['logo'] = $this->uploadImage('brands', $updateBrandRequest->logo);
         }
 
-        $brand = $this->brandRepository->update($id, $data);
+        $brand->update($data);
 
-        return [
-            'id'    => $brand->id
-        ];
+        $this->_removeImage($oldLogo);
+
+        return updatedResponse(['id' => $brand->id]);
     }
 
     public function delete($id)
     {
-        return $this->brandRepository->destroy($id);
+        $this->brandRepository->destroy($id);
+
+        return deletedResponse();
     }
 }

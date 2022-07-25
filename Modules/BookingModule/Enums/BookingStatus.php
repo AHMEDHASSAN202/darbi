@@ -19,6 +19,7 @@ class BookingStatus
     const DROPPED = 'dropped';
     const COMPLETED = 'completed';
     const FORCE_CANCELLED = 'force_cancelled';
+    const TIMEOUT = 'timeout';
 
     public static function getStatus()
     {

@@ -2,6 +2,7 @@
 
 namespace Modules\BookingModule\Http\Requests;
 
+use App\Rules\MongoIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RentRequest extends FormRequest
@@ -16,7 +17,8 @@ class RentRequest extends FormRequest
         return [
             'entity_id'         => 'required',
             'entity_type'       => 'required|in:car,yacht',
-            'plugins'           => 'nullable|array'
+            'plugins'           => 'nullable|array',
+            'city_id'           => ['required', new MongoIdRule]
         ];
     }
 

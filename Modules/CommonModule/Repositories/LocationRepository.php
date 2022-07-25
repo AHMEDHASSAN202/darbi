@@ -21,9 +21,21 @@ class LocationRepository
         $this->model = $model;
     }
 
-    public function findLocation($lat, $lng)
+    /**
+     * @param float $lat
+     * @param float $lng
+     * @param $distance unit => m
+     * @return mixed
+     */
+    public function findNearLocation(float $lat, float $lng, $distance = 100)
     {
-        return $this->model->where('lat', $lat)->where('lng', $lng)->first();
+        return $this->model->where('location', 'near', [
+                    '$geometry' => [
+                        'type' => 'Point',
+                        'coordinates' => [$lng, $lat],
+                    ],
+                    '$maxDistance' => $distance,
+                ])->first();
     }
 
     public function create(array $location)

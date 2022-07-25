@@ -19,9 +19,6 @@ class Model extends Base
         'is_active'         => 'boolean'
     ];
 
-    protected $appends = ['addons'];
-
-
     protected static function newFactory()
     {
         return \Modules\CatalogModule\Database\factories\ModelFactory::new();
@@ -59,22 +56,6 @@ class Model extends Base
 
     //================ #END# scopes =========================\\
 
-    public function getAddonsAttribute()
-    {
-        if (!$this->specs || !is_array($this->specs)) {
-            return [];
-        }
-
-        $specs = [];
-
-        foreach ($this->specs as $key => $spec) {
-            $specs[$spec['group_details']['key']]['group_key'] = $spec['group_details']['key'];
-            $specs[$spec['group_details']['key']]['group_name'] = translateAttribute($spec['group_details']);
-            $specs[$spec['group_details']['key']]['specs'][] = $spec + ['key' => $key];
-        }
-
-        return collect($specs)->sortBy('*.specs.order_weight');
-    }
 
     //=============== relations ======================\\
 

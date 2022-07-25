@@ -38,36 +38,34 @@ class VendorController extends Controller
     {
         $result = $this->vendorService->create($createVendorRequest);
 
-        return $this->apiResponse($result, 201, __('Data has been added successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function update($id, UpdateVendorRequest $updateVendorRequest)
     {
         $result = $this->vendorService->update($id, $updateVendorRequest);
 
-        return $this->apiResponse($result, 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function destroy($id)
     {
-        $this->vendorService->destroy($id);
+        $result = $this->vendorService->destroy($id);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function toggleActive($vendorId)
     {
         $result = $this->vendorService->toggleActive($vendorId);
 
-        return $this->apiResponse($result, 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function authAsVendor(Request $request)
     {
-        $request->validate(['vendor_id' => 'required']);
+        $result = $this->vendorService->loginAsVendor($request);
 
-        return $this->apiResponse([
-            'token'     => $this->vendorService->loginAsVendor($request)
-        ]);
+        return $this->apiResponse(...$result);
     }
 }

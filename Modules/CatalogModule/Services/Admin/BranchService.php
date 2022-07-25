@@ -73,9 +73,7 @@ class BranchService
             'city_id'                   => new ObjectId($createBranchRequest->city_id)
         ]);
 
-        return [
-            'id'        => $branch->_id
-        ];
+        return createdResponse(['id' => $branch->_id]);
     }
 
 
@@ -85,7 +83,7 @@ class BranchService
 
         $branch = $this->branchRepository->find($branchId, ['vendor_id' => $vendorId]);
 
-        $branchCoverImages  = array_merge($branch->cover_images ?? [], $this->uploadImages('branches', $updateBranchRequest->cover_images));;
+        $branchCoverImages  = array_merge($branch->cover_images ?? [], $this->uploadImages('branches', $updateBranchRequest->cover_images));
 
         $regionId = @$this->getRegion($updateBranchRequest->lat, $updateBranchRequest->lng)['id'];
 
@@ -101,9 +99,7 @@ class BranchService
             'city_id'                       => new ObjectId($updateBranchRequest->city_id)
         ], ['vendor_id' => $vendorId]);
 
-        return [
-            'id'        => $branch->_id
-        ];
+        return updatedResponse(['id' => $branch->_id]);
     }
 
 
@@ -111,7 +107,9 @@ class BranchService
     {
         $vendorId = new ObjectId(getVendorId());
 
-        return $this->branchRepository->destroy($branchId, ['vendor_id' => $vendorId]);
+        $this->branchRepository->destroy($branchId, ['vendor_id' => $vendorId]);
+
+        return deletedResponse();
     }
 
 
@@ -127,11 +125,15 @@ class BranchService
             return null;
         }
 
+        $image = $images[$imageIndex];
+
         unset($images[$imageIndex]);
 
         $branch->update(['cover_images' => array_values($images)]);
 
-        return $branch;
+        $this->_removeImage($image);
+
+        return deletedResponse($branch);
     }
 
 

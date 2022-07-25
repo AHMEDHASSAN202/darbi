@@ -40,4 +40,13 @@ class Car extends Entity
         });
     }
     //================ #END# scopes =========================\\
+
+    //=============== Relations =====================\\
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
+
+    //=============== #END# relation =====================\\
 }

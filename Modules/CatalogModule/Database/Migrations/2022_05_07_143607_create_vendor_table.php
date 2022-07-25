@@ -16,6 +16,13 @@ return new class extends Migration
         Schema::create('vendors', function (Blueprint $table) {
             $table->index('subscription_id');
             $table->index('country_id');
+            $table->unique('email');
+            $table->index('phone');
+            $table->index('phone_code');
+            $table->index('type');
+            $table->index('lat');
+            $table->index('lng');
+            $table->index('is_active');
             $table->softDeletes();
             $table->timestamps();
         });

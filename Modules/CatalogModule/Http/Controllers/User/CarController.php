@@ -31,4 +31,11 @@ class CarController extends Controller
             'car'       => $this->carService->find($carId)
         ]);
     }
+
+    public function share($carId)
+    {
+        return $this->apiResponse([
+            'shareLink' => $this->carService->getShareLink($carId)
+        ]);
+    }
 }

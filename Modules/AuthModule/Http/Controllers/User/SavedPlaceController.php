@@ -20,9 +20,9 @@ class SavedPlaceController extends Controller
 
     public function findAll()
     {
-        return $this->apiResponse([
-            'places'    => $this->savedPlaceService->getUserPlaces()
-        ]);
+        $result = $this->savedPlaceService->getUserPlaces();
+
+        return $this->apiResponse(...$result);
     }
 
     public function store(CreatePlaceRequest $createPlaceRequest)

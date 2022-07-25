@@ -50,7 +50,8 @@ class GoogleFindLocation
     public function getCity($short_name = false)
     {
         return $this->findLongNameGivenType('administrative_area_level_2', $this->data["results"][1]["address_components"], $short_name) ??
-               $this->findLongNameGivenType('administrative_area_level_2', $this->data["results"][2]["address_components"], $short_name);
+               $this->findLongNameGivenType('administrative_area_level_2', $this->data["results"][2]["address_components"], $short_name) ??
+               $this->getProvince();
     }
 
     public function getCountryCode()

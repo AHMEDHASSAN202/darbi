@@ -34,9 +34,7 @@ class YachtService
 
         $yacht = $this->createEntity($createEntityRequest, $data);
 
-        return [
-            'id'        => $yacht->_id
-        ];
+        return createdResponse(['id' => $yacht->_id]);
     }
 
 
@@ -48,8 +46,6 @@ class YachtService
 
         $yacht = $this->updateEntity($id, $updateEntityRequest, $data);
 
-        return [
-            'id'        => $yacht->_id
-        ];
+        return updatedResponse(['id' => $yacht->_id]);
     }
 }

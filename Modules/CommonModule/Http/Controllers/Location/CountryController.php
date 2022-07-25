@@ -26,4 +26,3 @@ class CountryController extends Controller
         return $this->apiResponse(compact('countries'));
     }
 }
-//booking-cart

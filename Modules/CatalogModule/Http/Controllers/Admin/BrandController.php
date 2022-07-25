@@ -25,36 +25,36 @@ class BrandController extends Controller
 
     public function index(Request $request)
     {
-        $brands = $this->brandService->findAllForDashboard($request, false);
+        $result = $this->brandService->findAllForDashboard($request, false);
 
-        return $this->apiResponse(compact('brands'));
+        return $this->apiResponse(...$result);
     }
 
     public function show($brandId)
     {
-        return $this->apiResponse([
-            'brand'      => $this->brandService->find($brandId)
-        ]);
+        $result = $this->brandService->find($brandId);
+
+        return $this->apiResponse(...$result);
     }
 
     public function store(CreateBrandRequest $createBrandRequest)
     {
         $result = $this->brandService->create($createBrandRequest);
 
-        return $this->apiResponse($result, 201, __('Data has been added successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function update($id, UpdateBrandRequest $updateBrandRequest)
     {
         $result = $this->brandService->update($id, $updateBrandRequest);
 
-        return $this->apiResponse($result, 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function destroy($id)
     {
-        $this->brandService->delete($id);
+        $result = $this->brandService->delete($id);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse(...$result);
     }
 }

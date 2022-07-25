@@ -23,6 +23,6 @@ class LocationController extends Controller
     {
         $result = $this->locationService->handleLocation($latAndLngRequest->lat, $latAndLngRequest->lng);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 }

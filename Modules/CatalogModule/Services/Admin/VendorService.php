@@ -9,13 +9,10 @@ namespace Modules\CatalogModule\Services\Admin;
 use App\Proxy\Proxy;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Modules\AuthModule\Entities\Admin;
-use Modules\CatalogModule\Entities\Vendor;
 use Modules\CatalogModule\Http\Requests\Admin\CreateVendorRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateVendorRequest;
 use Modules\CatalogModule\Proxy\CatalogProxy;
 use Modules\CatalogModule\Repositories\VendorRepository;
-use Modules\CatalogModule\Services\UserResource;
 use Modules\CatalogModule\Transformers\Admin\FindVendorResource;
 use Modules\CatalogModule\Transformers\Admin\VendorResource;
 use Modules\CommonModule\Traits\ImageHelperTrait;
@@ -33,6 +30,7 @@ class VendorService
         $this->vendorRepository = $vendorRepository;
     }
 
+
     public function findAll(Request $request)
     {
         $vendors = $this->vendorRepository->listOfVendors($request);
@@ -44,6 +42,7 @@ class VendorService
         return VendorResource::collection($vendors);
     }
 
+
     public function find($vendorId)
     {
         $vendor = $this->vendorRepository->findOne($vendorId);
@@ -51,8 +50,15 @@ class VendorService
         return new FindVendorResource($vendor);
     }
 
+
     public function create(CreateVendorRequest $createVendorRequest)
     {
+        $role = $this->getVendorRole();
+
+        if (!$role || !$role['id']) {
+            return badResponse([], __('Default vendor role not exists.'));
+        }
+
         $vendor = $this->vendorRepository->create([
             'name'          => $createVendorRequest->name,
             'image'         => $this->uploadImage('vendors', $createVendorRequest->image),
@@ -64,16 +70,12 @@ class VendorService
             'darbi_percentage'  => $createVendorRequest->darbi_percentage ? (int)$createVendorRequest->darbi_percentage : null,
             'settings'      => $createVendorRequest->settings,
             'type'          => $createVendorRequest->type,
-            'created_by'    => new ObjectId(auth('admin_api')->id())
+            'created_by'    => new ObjectId(auth('admin_api')->id()),
+            'lat'           => (float)$createVendorRequest->lat,
+            'lng'           => (float)$createVendorRequest->lng
         ]);
 
-
-        //get vendor admin role
-        $roleProxy =  new CatalogProxy('GET_VENDOR_ROLE');
-        $role = (new Proxy($roleProxy))->result();
-
-        //create vendor admin
-        $vendorAdminProxy = new CatalogProxy('CREATE_VENDOR_ADMIN', [
+        $admin = $this->createVendorAdmin([
             'name'          => $createVendorRequest->name['en'],
             'email'         => $createVendorRequest->email,
             'password'      => $createVendorRequest->password,
@@ -83,16 +85,38 @@ class VendorService
             'vendor_id'     => (string)$vendor->id
         ]);
 
-        $proxy = new Proxy($vendorAdminProxy);
-        $vendorAdminProxy = $proxy->result();
+        if (!$admin || !$admin['id']) {
+            return createdResponse([], __('Vendor admin cannot be created, please create it manually'));
+        }
 
-        return [
-            'id'        => $vendor->id
-        ];
+        return createdResponse(['id' => $vendor->id]);
     }
+
+
+    private function getVendorRole()
+    {
+        //get vendor admin role
+        $roleProxy =  new CatalogProxy('GET_VENDOR_ROLE');
+
+        return (new Proxy($roleProxy))->result();
+    }
+
+
+    private function createVendorAdmin($data)
+    {
+        //create vendor admin
+        $vendorAdminProxy = new CatalogProxy('CREATE_VENDOR_ADMIN', $data);
+
+        $proxy = new Proxy($vendorAdminProxy);
+
+        return $proxy->result();
+    }
+
 
     public function update($id, UpdateVendorRequest $updateVendorRequest)
     {
+        $vendor = $this->vendorRepository->find($id);
+
         $data = [
             'name'          => $updateVendorRequest->name,
             'phone'         => $updateVendorRequest->phone,
@@ -100,38 +124,60 @@ class VendorService
             'is_active'     => ($updateVendorRequest->is_active === null) || (boolean)$updateVendorRequest->is_active,
             'email'         => $updateVendorRequest->email,
             'darbi_percentage'  => $updateVendorRequest->darbi_percentage ? (int)$updateVendorRequest->darbi_percentage : null,
-            'settings'      => $updateVendorRequest->settings
+            'settings'      => $updateVendorRequest->settings,
+            'lat'           => (float)$updateVendorRequest->lat,
+            'lng'           => (float)$updateVendorRequest->lng
         ];
 
+        $oldImage = null;
         if ($updateVendorRequest->image) {
+            $oldImage = $vendor->image;
             $data['image'] = $this->uploadImage('vendors', $updateVendorRequest->image);
         }
 
-        $vendor = $this->vendorRepository->update($id, $data);
+        $vendor->update($data);
 
-        return [
-            'id'        => $vendor->id
-        ];
+        $this->_removeImage($oldImage);
+
+        return updatedResponse(['id' => $vendor->id]);
     }
+
 
     public function destroy($id)
     {
-        return $this->vendorRepository->destroy($id);
+        $this->vendorRepository->destroy($id);
+
+        return deletedResponse();
     }
+
 
     public function toggleActive($vendorId)
     {
         $this->vendorRepository->toggleActive($vendorId);
 
-        return [
-            'id'    => $vendorId
-        ];
+        return updatedResponse(['id' => $vendorId]);
     }
+
 
     public function loginAsVendor(Request $request)
     {
-        $admin = Admin::where('vendor_id', new ObjectId($request->vendor_id))->firstOrFail();
+        $request->validate(['vendor_id' => 'required']);
 
-        return auth('vendor_api')->login($admin);
+        $token = $this->getVendorAdminToken($request->vendor_id);
+
+        if (!$token) {
+            return badResponse([], __('Vendor admin not exists, please create it and try again'));
+        }
+
+        return successResponse(['token' => $token]);
+    }
+
+
+    public function getVendorAdminToken($vendorId)
+    {
+        //get vendor admin token
+        $catalogProxy =  new CatalogProxy('GET_VENDOR_ADMIN_TOKEN', ['vendor_id' => $vendorId]);
+
+        return @(new Proxy($catalogProxy))->result();
     }
 }

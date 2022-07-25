@@ -8,7 +8,7 @@ use Modules\AuthModule\Entities\User;
 class UserObserver
 {
     /**
-     * Handle the Vendor "created" event.
+     * Handle the User "created" event.
      *
      * @param  \Modules\AuthModule\Entities\User $user
      * @return void
@@ -19,7 +19,7 @@ class UserObserver
     }
 
     /**
-     * Handle the Vendor "updated" event.
+     * Handle the User "updated" event.
      *
      * @param  \Modules\AuthModule\Entities\User $user
      * @return void
@@ -30,7 +30,7 @@ class UserObserver
     }
 
     /**
-     * Handle the Vendor "deleted" event.
+     * Handle the User "deleted" event.
      *
      * @param  \Modules\AuthModule\Entities\User $user
      * @return void
@@ -41,7 +41,7 @@ class UserObserver
     }
 
     /**
-     * Handle the Vendor "restored" event.
+     * Handle the User "restored" event.
      *
      * @param  \Modules\AuthModule\Entities\User $user
      * @return void
@@ -52,7 +52,7 @@ class UserObserver
     }
 
     /**
-     * Handle the Vendor "force deleted" event.
+     * Handle the User "force deleted" event.
      *
      * @param  \Modules\AuthModule\Entities\User $user
      * @return void

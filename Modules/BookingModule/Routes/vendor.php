@@ -23,6 +23,8 @@ Route::group([
     Route::get('{booking}'              , 'BookingController@show');
     Route::post('{booking}/cancel'      , 'BookingController@cancel');
     Route::post('{booking}/accept'      , 'BookingController@accept');
+    Route::post('{booking}/paid'        , 'BookingController@paid');
+    Route::post('{booking}/complete'    , 'BookingController@complete');
 });
 
 
