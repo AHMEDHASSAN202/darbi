@@ -2,6 +2,7 @@
 
 namespace Modules\AuthModule\Http\Requests\User;
 
+use App\Rules\PhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SigninWithOtpRequest extends FormRequest
@@ -13,8 +14,10 @@ class SigninWithOtpRequest extends FormRequest
      */
     public function rules()
     {
+        $this->merge(['phone_code' => phoneCodeCleaning($this->request->get('phone_code'))]);
+
         return [
-            'phone'         => 'required|numeric|digits_between:8,11',
+            'phone'         => ['required', 'numeric', new PhoneRule($this->request->get('phone_code'))],
             'phone_code'    => 'required',
             'otp'           => 'required|numeric'
         ];

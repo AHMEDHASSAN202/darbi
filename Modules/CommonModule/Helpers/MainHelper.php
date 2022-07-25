@@ -334,3 +334,14 @@ function getLocalesWord($key, $replace = [])
 {
     return ['ar' => __($key, $replace, 'ar'), 'en' => __($key, $replace, 'en')];
 }
+
+function phoneCodeCleaning($phoneCode)
+{
+    if (str_starts_with($phoneCode, '+')) {
+        $phoneCode = substr($phoneCode, 1);
+    }
+    if (str_starts_with($phoneCode, '00')) {
+        $phoneCode = substr($phoneCode, 2);
+    }
+    return $phoneCode;
+}

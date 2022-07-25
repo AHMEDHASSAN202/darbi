@@ -3,7 +3,6 @@
 namespace Modules\AuthModule\Http\Requests\Admin;
 
 use App\Rules\AlphaNumSpacesRule;
-use App\Rules\MongoIdRule;
 use App\Rules\PhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 
