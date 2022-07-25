@@ -2,10 +2,7 @@
 
 namespace Modules\AuthModule\Http\Controllers\User;
 
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\AuthModule\Http\Requests\User\UpdateProfilePhoneRequest;
 use Modules\AuthModule\Http\Requests\User\UpdateProfileRequest;
 use Modules\AuthModule\Http\Requests\User\UploadIdentityImageRequest;
 use Modules\AuthModule\Services\UserProfileService;

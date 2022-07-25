@@ -14,7 +14,7 @@ class SendOtpRequest extends FormRequest
      */
     public function rules()
     {
-        $this->merge(['phone_code' => phoneCodeCleaning($this->request->get('phone_code'))]);
+        $this->request->set('phone_code', phoneCodeCleaning($this->request->get('phone_code')));
 
         return [
             'phone'         => ['required', 'numeric', new PhoneRule($this->request->get('phone_code'))],

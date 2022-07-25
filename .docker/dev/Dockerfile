@@ -90,6 +90,11 @@ RUN composer require jenssegers/mongodb --ignore-platform-reqs --with-all-depend
 RUN composer install --ignore-platform-reqs
 RUN chmod +x /var/www/docker/run.sh
 
+
+# Setup cron job
+#RUN (crontab -l ; echo "* * * * * cd /var/www && php artisan schedule:run >> /dev/null 2>&1") | crontab
+
+
 # open port 80
 EXPOSE 80
 
