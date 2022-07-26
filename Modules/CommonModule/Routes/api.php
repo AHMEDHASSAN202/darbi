@@ -22,7 +22,5 @@ Route::group([
     Route::get('countries'          , 'CountryController@index');
     Route::get('cities'             , 'CityController@index');
     Route::get('regions'            , 'RegionController@index');
-    Route::get('regions/nearme'     , 'RegionController@findRegionsByNorthEastAndSouthWest');
-    Route::get('regions/find'       , 'RegionController@findRegionByLatAndLng');
     Route::get('locations/find'     , 'LocationController@find');
 });

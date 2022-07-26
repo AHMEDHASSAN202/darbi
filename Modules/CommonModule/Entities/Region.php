@@ -47,6 +47,10 @@ class Region extends Base
         if (is_array($in)) {
             $query->whereIn('_id', generateObjectIdOfArrayValues($in));
         }
+
+        if ($branch = $request->get('branch')) {
+            $query->where('branches_ids', new ObjectId($branch));
+        }
     }
 
     public function scopeActive($query)
