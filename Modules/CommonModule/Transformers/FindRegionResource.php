@@ -4,7 +4,7 @@ namespace Modules\CommonModule\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RegionResource extends JsonResource
+class FindRegionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,6 +17,7 @@ class RegionResource extends JsonResource
         return [
             'id'                => $this->_id,
             'name'              => translateAttribute($this->name),
+            'location'          => $this->location,
             'is_active'         => (boolean)$this->is_active
         ];
     }

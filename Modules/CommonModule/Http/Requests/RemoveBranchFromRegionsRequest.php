@@ -2,9 +2,10 @@
 
 namespace Modules\CommonModule\Http\Requests;
 
+use App\Rules\MongoIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ValidateLatAndLngRequest extends FormRequest
+class RemoveBranchFromRegionsRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,8 +15,7 @@ class ValidateLatAndLngRequest extends FormRequest
     public function rules()
     {
         return [
-            'lat'           => 'required|numeric',
-            'lng'           => 'required|numeric',
+            'branch_id'     => ['required', new MongoIdRule],
         ];
     }
 

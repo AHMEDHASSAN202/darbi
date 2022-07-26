@@ -1,0 +1,48 @@
+<?php
+
+namespace Modules\CommonModule\Http\Requests;
+
+use App\Rules\AlphaNumSpacesRule;
+use Illuminate\Foundation\Http\FormRequest;
+
+class UpdateSettingsRequest extends FormRequest
+{
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'time_interval_vendor_accept_min'       => 'sometimes|nullable|integer|min:1',
+            'time_interval_user_accept_min'         => 'sometimes|nullable|integer|min:1',
+            'walk_through_images'                   => 'sometimes|nullable|array',
+            'walk_through_images.*.title'           => 'required|array',
+            'walk_through_images.*.title.ar'        => ['required', new AlphaNumSpacesRule()],
+            'walk_through_images.*.title.en'        => ['required', new AlphaNumSpacesRule()],
+            'walk_through_images.*.desc.ar'         => ['required', new AlphaNumSpacesRule()],
+            'walk_through_images.*.desc.en'         => ['required', new AlphaNumSpacesRule()],
+            'home_main_theme'                       => 'sometimes|nullable|image',
+            'android_app_version'                   => 'sometimes|nullable|numeric',
+            'android_force_updated'                 => 'sometimes|nullable|boolean',
+            'android_force_updated_link'            => 'sometimes|nullable|url',
+            'ios_app_version'                       => 'sometimes|nullable|numeric',
+            'ios_force_updated'                     => 'sometimes|nullable|boolean',
+            'ios_force_updated_link'                => 'sometimes|nullable|url',
+            'default_country'                       => 'sometimes|nullable|exists:countries,code',
+            'default_city'                          => 'sometimes|nullable|cities:cities,code',
+            'darbi_percentage'                      => 'sometimes|nullable|numeric'
+        ];
+    }
+
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+}

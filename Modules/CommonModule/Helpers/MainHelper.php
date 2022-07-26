@@ -211,6 +211,15 @@ function generateObjectIdOfArrayValues($ids) : array
     return array_map(function ($id) { return new \MongoDB\BSON\ObjectId($id); }, $ids);
 }
 
+function generateStringIdOfArrayValues($ids) : array
+{
+    if (empty($ids)) {
+        return [];
+    }
+
+    return array_map(function ($id) { return (string)$id; }, $ids);
+}
+
 function locationInfoKeys() : array
 {
     return [

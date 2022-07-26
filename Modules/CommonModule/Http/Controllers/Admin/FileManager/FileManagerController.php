@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\CommonModule\Http\Controllers\FileManager;
+namespace Modules\CommonModule\Http\Controllers\Admin\FileManager;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

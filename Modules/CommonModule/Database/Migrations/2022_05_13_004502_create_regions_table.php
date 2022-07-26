@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('regions', function (Blueprint $table) {
             $table->id();
-            $table->index('city_id');
             $table->index('country_id');
             $table->index('is_active');
             $table->geospatial('location', '2dsphere');
+            $table->index('branches_ids');
             $table->softDeletes();
             $table->timestamps();
         });

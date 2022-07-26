@@ -20,9 +20,16 @@ class LocationService
         $this->locationRepository = $locationRepository;
     }
 
-    public function handleLocation($lat, $lng)
+    public function handleLocation($lat, $lng, $branchId = null)
     {
         try {
+
+            $region = app(RegionService::class)->findRegionByLatAndLng($lat, $lng, $branchId);
+
+            if (!$region) {
+                return badResponse([], 'Region not supported');
+            }
+
             //check if location exists in darbi database
             $location = $this->locationRepository->findNearLocation((float)$lat, (float)$lng);
 

@@ -80,8 +80,13 @@ trait EntityTrait
     {
         $vendorId = $this->vendor_id;
         $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => $vendorId])))->result();
-        if (isset($vendor['darbi_percentage'])) unset($vendor['darbi_percentage']);
-        if (isset($vendor['settings'])) unset($vendor['settings']);
-        return $vendor;
+        return [
+            'id'     => arrayGet($vendor, 'id'),
+            'type'   => arrayGet($vendor, 'type'),
+            'phone'  => arrayGet($vendor, 'phone'),
+            'lat'    => arrayGet($vendor, 'lat'),
+            'lng'    => arrayGet($vendor, 'lng'),
+            'currency_code' => arrayGet($vendor['country'], 'currency_code')
+        ];
     }
 }
