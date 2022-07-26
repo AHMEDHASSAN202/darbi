@@ -28,7 +28,7 @@ class RegionRepository
 
     public function listOfRegions(Request $request)
     {
-        return $this->model->search($request)->filter($request)->paginated();
+        return $this->model->search($request)->filter($request)->active()->paginated();
     }
 
 

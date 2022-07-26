@@ -20,11 +20,14 @@ class LocationService
         $this->locationRepository = $locationRepository;
     }
 
-    public function handleLocation($lat, $lng, $branchId = null)
+    public function handleLocation($request)
     {
         try {
 
-            $region = app(RegionService::class)->findRegionByLatAndLng($lat, $lng, $branchId);
+            $lat = $request->lat;
+            $lng = $request->lng;
+
+            $region = app(RegionService::class)->findRegionByLatAndLng($lat, $lng, $request->branch);
 
             if (!$region) {
                 return badResponse([], 'Region not supported');

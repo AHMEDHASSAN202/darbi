@@ -85,18 +85,18 @@ class BookingService
             'vendor'        => $vendor,
             'vendor_id'     => new ObjectId($entity['vendor_id']),
             'branch_id'     => new ObjectId($entity['branch_id']),
-            'branch'        => @$entity['branch'],
+            'branch'        => arrayGet($entity, 'branch'),
             'entity_id'     => new ObjectId($entity['id']),
-            'entity_type'   => @$entity['entity_type'],
+            'entity_type'   => arrayGet($entity, 'entity_type'),
             'entity_details' => [
-                'name'      => @$entity['name'] ?? "",
-                'price'     => @$entity['price'],
-                'price_unit'=> @$entity['price_unit'],
-                'images'    => @$entity['images'],
+                'name'      => arrayGet($entity, 'name', ''),
+                'price'     => arrayGet($entity, 'price'),
+                'price_unit'=> arrayGet($entity, 'price_unit'),
+                'images'    => arrayGet($entity, 'images'),
                 'model_id'  => isset($entity['model_id']) ? new ObjectId($entity['model_id']) : null,
-                'model_name'=> @$entity['model_name'],
+                'model_name'=> arrayGet($entity, 'model_name'),
                 'brand_id'  => isset($entity['brand_id']) ? new ObjectId($entity['brand_id']) : null,
-                'brand_name'=> @$entity['brand_name'],
+                'brand_name'=> arrayGet($entity, 'brand_name'),
             ],
             'country_id'    => new ObjectId($country['_id']),
             'country'       => $country,
@@ -115,7 +115,7 @@ class BookingService
 
     private function getExtras($entity, $extras) : array
     {
-        $entityExtras = @$entity['extras'];
+        $entityExtras = arrayGet($entity, 'extras');
 
         if (!is_array($extras) || empty($extras) || empty($entity) || !is_array($entityExtras)) return [];
 

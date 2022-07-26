@@ -6,6 +6,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class FindRegionResource extends JsonResource
 {
+    use HelperRegionResource;
+
     /**
      * Transform the resource into an array.
      *
@@ -17,7 +19,7 @@ class FindRegionResource extends JsonResource
         return [
             'id'                => $this->_id,
             'name'              => translateAttribute($this->name),
-            'location'          => $this->location,
+            'location'          => $this->getLocationPoints(),
             'is_active'         => (boolean)$this->is_active
         ];
     }
