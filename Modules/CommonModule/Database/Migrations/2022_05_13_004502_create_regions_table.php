@@ -19,6 +19,7 @@ return new class extends Migration
             $table->index('is_active');
             $table->geospatial('location', '2dsphere');
             $table->index('branches_ids');
+            $table->index('vendor_id');
             $table->softDeletes();
             $table->timestamps();
         });

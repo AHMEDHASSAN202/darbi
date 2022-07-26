@@ -13,11 +13,19 @@
 */
 
 
-//branches routes
+//regions routes
 Route::group([
     'prefix'    => 'regions',
 ], function () {
     Route::get(''                  , 'RegionController@index');
     Route::post('add-branch'       , 'RegionController@addBranchToRegions');
     Route::post('remove-branch'    , 'RegionController@removeBranchFromRegions');
+});
+
+
+//countries routes
+Route::group([
+    'prefix'    => 'countries',
+], function () {
+    Route::get('{country}'         , 'CountryController@find');
 });

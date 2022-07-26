@@ -56,20 +56,6 @@ class EntityRepository
                 ],
                 [
                     '$lookup'   => [
-                        'from'          => 'branches',
-                        'localField'    => 'branch_id',
-                        'foreignField'  => '_id',
-                        'as'            => 'branch'
-                    ],
-                ],
-                [
-                    '$unwind'    => [
-                        "path"      => '$branch',
-                        "preserveNullAndEmptyArrays" => true
-                    ],
-                ],
-                [
-                    '$lookup'   => [
                         'from'          => 'countries',
                         'localField'    => 'country_id',
                         'foreignField'  => '_id',

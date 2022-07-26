@@ -37,6 +37,7 @@ class VendorFactory extends Factory
 //            'subscription_id'       => $subscription->isNotEmpty() ? new ObjectId($subscription->random(1)->first()->_id) : null,
             'darbi_percentage'      => mt_rand(10, 100),
             'country_id'            => new ObjectId($country->_id),
+            'country_currency_code' => $country->currency_code,
             'require_activation'    => $this->faker->boolean,
             'settings'              => [],
             'type'                  => ['car', 'yacht'][mt_rand(0,1)],

@@ -37,10 +37,10 @@ class NotificationService
         $notifications = $this->notificationRepository->listOfMyNotifications($request);
 
         if ($notifications instanceof LengthAwarePaginator) {
-            return new PaginateResource(NotificationResource::collection($notifications));
+            return successResponse(['notifications' => new PaginateResource(NotificationResource::collection($notifications))]);
         }
 
-        return NotificationResource::collection($notifications);
+        return successResponse(['notifications' => NotificationResource::collection($notifications)]);
     }
 
 

@@ -24,7 +24,7 @@ class CarResource extends JsonResource
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
             'state'         => $this->state,
-            'currency_code' => optional($this->country)->currency_code
+            'currency_code' => optional($this->vendor)->country_currency_code
         ];
     }
 }

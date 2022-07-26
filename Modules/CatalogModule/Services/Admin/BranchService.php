@@ -131,4 +131,12 @@ class BranchService
 
         return deletedResponse($branch);
     }
+
+
+    public function find($branchId)
+    {
+        $branch = $this->branchRepository->find($branchId);
+
+        return new BranchResource($branch);
+    }
 }

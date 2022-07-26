@@ -30,7 +30,7 @@ class VendorRepository
 
     public function findOne($vendorId)
     {
-        return $this->model->with(['country' => function ($q) { $q->withTrashed(); }])->findOrFail(new ObjectId($vendorId));
+        return $this->model->findOrFail(new ObjectId($vendorId));
     }
 
     public function toggleActive($vendorId)

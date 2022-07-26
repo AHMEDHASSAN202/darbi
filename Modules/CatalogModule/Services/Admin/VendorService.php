@@ -59,6 +59,12 @@ class VendorService
             return badResponse([], __('Default vendor role not exists.'));
         }
 
+        $country = $this->getCountry($createVendorRequest->country_id);
+
+        if (!$country) {
+            return badResponse([], __('country not exists.'));
+        }
+
         $vendor = $this->vendorRepository->create([
             'name'          => $createVendorRequest->name,
             'image'         => $this->uploadImage('vendors', $createVendorRequest->image),
@@ -66,6 +72,7 @@ class VendorService
             'phone_code'    => $createVendorRequest->phone_code,
             'is_active'     => ($createVendorRequest->is_active === null) || (boolean)$createVendorRequest->is_active,
             'country_id'    => new ObjectId($createVendorRequest->country_id),
+            'country_currency_code' => arrayGet($country, 'currency_code'),
             'email'         => $createVendorRequest->email,
             'darbi_percentage'  => $createVendorRequest->darbi_percentage ? (int)$createVendorRequest->darbi_percentage : null,
             'settings'      => $createVendorRequest->settings,
@@ -177,6 +184,13 @@ class VendorService
     {
         //get vendor admin token
         $catalogProxy =  new CatalogProxy('GET_VENDOR_ADMIN_TOKEN', ['vendor_id' => $vendorId]);
+
+        return @(new Proxy($catalogProxy))->result();
+    }
+
+    private function getCountry($countryId)
+    {
+        $catalogProxy =  new CatalogProxy('GET_COUNTRY', ['country_id' => $countryId]);
 
         return @(new Proxy($catalogProxy))->result();
     }

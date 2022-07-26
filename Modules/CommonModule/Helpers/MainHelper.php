@@ -127,6 +127,16 @@ function entityIsFree($state) : bool
     return ($state === \Modules\CatalogModule\Enums\EntityStatus::FREE);
 }
 
+function entityIsCar($type) : bool
+{
+    return ($type === \Modules\CatalogModule\Enums\EntityType::CAR);
+}
+
+function entityIsYacht($type) : bool
+{
+    return ($type === \Modules\CatalogModule\Enums\EntityType::YACHT);
+}
+
 function getCarTestImages()
 {
     return [

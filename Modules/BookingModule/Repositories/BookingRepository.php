@@ -23,7 +23,7 @@ class BookingRepository
 
     public function findAllByUser($userId, Request $request)
     {
-        return $this->booking->latest()->userFilter($request)->where('user_id', new ObjectId($userId))->paginated();
+        return $this->booking->latest()->userFilter($request)->where('user_id', new ObjectId($userId))->where('status', '!=', BookingStatus::INIT)->paginated();
     }
 
     public function findByUser($userId, $bookingId)
