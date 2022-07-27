@@ -18,12 +18,14 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="col-1">
-                            <img src="{{asset('images/phone.png')}}" class="img-fluid w-50" alt="">
-                        </div>
-                        <div class="col-11">
-                            <h4 style="font-weight: bold">Phone</h4>
-                            <p>1534 5405 333</p>
+                        <div class="row">
+                            <div class="col-3">
+                                <img src="{{asset('images/phone.png')}}" class="img-fluid w-50" alt="">
+                            </div>
+                            <div class="col-9">
+                                <h4 style="font-weight: bold">Phone</h4>
+                                <p style="color: #888">1534 5405 333</p>
+                            </div>
                         </div>
                     </div>
                 </div>
