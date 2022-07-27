@@ -18,7 +18,7 @@ class FindRegionResource extends JsonResource
     {
         return [
             'id'                => $this->_id,
-            'name'              => translateAttribute($this->name),
+            'name'              => $this->name,
             'location'          => $this->getLocationPoints(),
             'is_active'         => (boolean)$this->is_active
         ];
