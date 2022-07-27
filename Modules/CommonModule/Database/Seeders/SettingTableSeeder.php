@@ -38,7 +38,11 @@ class SettingTableSeeder extends Seeder
             'ios_force_updated_link'                => '',
             'default_country'                       => 'AE',
             'default_city'                          => 'DU',
-            'darbi_percentage'                      => 20
+            'darbi_percentage'                      => 20,
+            'darbi_phone'                           => '9668003041666',
+            'darbi_whatsapp_phone'                  => '9668003041666',
+            'darbi_twitter'                         => 'godarbi',
+            'darbi_email'                           => 'apps@godarbi.com'
         ];
 
         Setting::create($settings);

@@ -346,7 +346,6 @@ function phoneCodeCleaning($phoneCode)
     return $phoneCode;
 }
 
-
 function getLanguage($default = 'ar'){
     if (\Cookie::has('language')) {
         $languageInCookie = explode('|', \Illuminate\Support\Facades\Crypt::decrypt(\Cookie::get('language'), false));
@@ -363,4 +362,13 @@ function setLanguage($lang){
         \Cookie::queue('language', $lang, 120);
     }
     return $lang;
+}
+
+function getTwitterUsernameFromUrl($url)
+{
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        return $url;
+    }
+    $path = parse_url($url,PHP_URL_PATH);
+    return @explode('/', trim($path, '/'))[0];
 }
