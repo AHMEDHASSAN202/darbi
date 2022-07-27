@@ -19,12 +19,13 @@
                 <div class="justify-content-center align-items-center text-center p-4">
                     <img src="{{asset('images/contact.png')}}" class="img-fluid w-50" alt="">
                 </div>
-                <p style="padding-top:10px;color: #888;text-align: center;font-size: 15px">Reach out to our support at
+                <p style="margin: 25px 52px 40px 2px;font-size: 14px;  font-weight: normal;  font-stretch: normal;  font-style: normal;  line-height: normal;  letter-spacing: normal;  text-align: center;  color: #757575;">
+                    Reach out to our support at
                     the below channels</p>
             </div>
             <div class="col-md-12">
                 <div class="card"
-                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;">
+                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 35px">
                     <div class="card-body" style="padding: 15px 26px;">
                         <div class="row" style="direction: ltr">
                             <div class="col-3">
@@ -44,7 +45,7 @@
             </div>
             <div class="col-md-12">
                 <div class="card"
-                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;">
+                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 35px">
                     <div class="card-body" style="padding: 15px 26px;">
                         <div class="row" style="direction: ltr">
                             <div class="col-3">
@@ -64,7 +65,7 @@
             </div>
             <div class="col-md-12">
                 <div class="card"
-                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;">
+                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 35px">
                     <div class="card-body" style="padding: 15px 26px;">
                         <div class="row" style="direction: ltr">
                             <div class="col-3">
@@ -84,7 +85,7 @@
             </div>
             <div class="col-md-12">
                 <div class="card"
-                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;">
+                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 35px">
                     <div class="card-body" style="padding: 15px 26px;">
                         <div class="row" style="direction: ltr">
                             <div class="col-3">

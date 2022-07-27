@@ -2,6 +2,13 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('front/custom.css?v=4') }}"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+        body, div, h1, h2, h3, h4, h5, p {
+            font-family: 'Open Sans', sans-serif !important;
+        }
+    </style>
 @endpush
 
 
