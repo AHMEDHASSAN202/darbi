@@ -23,8 +23,8 @@
                                 <img src="{{asset('images/phone.png')}}" class="img-fluid" alt="">
                             </div>
                             <div class="col-9 p-0" style="display: flex;flex-direction: column;justify-content: center;">
-                                <h4 style="font-weight: bold">Phone</h4>
-                                <p style="color: #888">1534 5405 333</p>
+                                <h4 style="font-weight: bold;margin: 0">Phone</h4>
+                                <p style="color: #888;margin: 0">1534 5405 333</p>
                             </div>
                         </div>
                     </div>
