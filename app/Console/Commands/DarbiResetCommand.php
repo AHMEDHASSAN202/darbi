@@ -29,9 +29,9 @@ class DarbiResetCommand extends Command
     {
         $this->call("route:clear");
         $this->call("config:clear");
-        $this->call("module:migrate-refresh");
-        $this->call("module:seed");
+//        $this->call("module:migrate-refresh");
+//        $this->call("module:seed");
         $this->call("cache:clear");
-        $this->call("optimize");
+//        $this->call("optimize");
     }
 }
