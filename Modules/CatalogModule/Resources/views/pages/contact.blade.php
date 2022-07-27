@@ -19,8 +19,8 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-3">
-                                <img src="{{asset('images/phone.png')}}" class="img-fluid w-50" alt="">
+                            <div class="col-3" style="padding: 5px">
+                                <img src="{{asset('images/phone.png')}}" class="img-fluid" alt="">
                             </div>
                             <div class="col-9">
                                 <h4 style="font-weight: bold">Phone</h4>
