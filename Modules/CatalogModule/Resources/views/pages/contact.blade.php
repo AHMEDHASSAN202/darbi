@@ -8,13 +8,14 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <img src="{{}}" alt="">
+            <div class="col-md-12 mb-4">
+                <img src="{{asset('images/contact.png')}}" class="img-fluid w-100" alt="">
+                <p style="padding-top:10px;color: #888;text-align: center">Reach out to our support at the below channels</p>
             </div>
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        
+
                     </div>
                 </div>
             </div>
