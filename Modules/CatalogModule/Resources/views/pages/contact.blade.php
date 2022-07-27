@@ -12,7 +12,7 @@
                 <div class="justify-content-center align-items-center p-3">
                     <img src="{{asset('images/contact.png')}}" class="img-fluid w-100" alt="">
                 </div>
-                <p style="padding-top:10px;color: #888;text-align: center">Reach out to our support at the below channels</p>
+                <p style="padding-top:10px;color: #888;text-align: center;font-size: 15px">Reach out to our support at the below channels</p>
             </div>
             <div class="col-md-12">
                 <div class="card">
