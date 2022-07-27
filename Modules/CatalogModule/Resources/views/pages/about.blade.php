@@ -8,11 +8,11 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 p-0">
                 <img src="{{asset('front/bg/europe-'.app()->getLocale().'.jpg')}}" class="img-fluid w-100" alt="">
             </div>
             <div class="col-md-12">
-                <h4>About Darbi</h4>
+                <h2 class="mt-2" style="font-weight: bold">About Darbi</h2>
                 <p>
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                     Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an unknown
