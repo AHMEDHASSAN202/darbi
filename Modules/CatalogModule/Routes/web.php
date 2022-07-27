@@ -12,4 +12,13 @@
 */
 
 
-Route::get('share/{id}-{slug}', \Modules\CatalogModule\Http\Controllers\Web\ShareController::class);
+Route::get(''               , 'HomeController@index');
+Route::get('about'          , 'HomeController@about');
+Route::get('contact'        , 'HomeController@contact');
+Route::get('policy'         , 'HomeController@policy');
+
+
+Route::get('/lang/{lang}', function ($lang) {
+    __set_lang($lang);
+    return redirect()->back();
+})->whereIn('lang', ['ar', 'en']);

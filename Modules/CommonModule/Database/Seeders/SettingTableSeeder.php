@@ -21,12 +21,12 @@ class SettingTableSeeder extends Seeder
             'time_reminder_before_picked_up'        => 120,  //minute
             'time_reminder_before_dropped'          => 120,  //minute
             'walk_through_images'                   => [
-                ['title' => ['ar' => 'هذا النص هو مثال', 'en' => 'Lorem Ipsum'], 'desc' => ['ar' => 'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى', 'en' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'], 'image' => 'https://i.ibb.co/bXcRvgx/intro1.png'],
-                ['title' => ['ar' => 'هذا النص هو مثال', 'en' => 'Lorem Ipsum'], 'desc' => ['ar' => 'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى', 'en' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'], 'image' => 'https://i.ibb.co/bXcRvgx/intro1.png']
+                ['title' => ['ar' => 'رحلة تستحقها', 'en' => 'Trip you deserve'], 'desc' => ['ar' => 'يساعدك داربي في العثور على أفضل السيارات واليخوت لقضاء رحلة استثنائية.', 'en' => 'Darbi helps you to find the best exotics and yachts to have an exceptional trip.'], 'image' => 'https://i.ibb.co/bXcRvgx/intro1.png'],
+                ['title' => ['ar' => 'مجموعة واسعة من الخيارات', 'en' => 'Wide range of Choices'], 'desc' => ['ar' => 'يقدم لك داربي مجموعة واسعة من السيارات واليخوت مع خيارات لتخصيص رحلتك.', 'en' => 'Darbi offers you a wide range of exotics & yachts with options to customize your ride.'], 'image' => 'https://i.ibb.co/bXcRvgx/intro1.png']
             ],
             'categories'                            => [
-                ['name' => ['ar' => 'سيارات', 'en' => 'Exotics'], 'desc' => ['ar' => 'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى', 'en' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'], 'image' => 'https://i.ibb.co/QbpZh9c/cars.png', 'template' => 0],
-                ['name' => ['ar' => 'اليخوت', 'en' => 'Yachts'], 'desc' => ['ar' => 'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى', 'en' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'], 'image' => 'https://i.ibb.co/b5mGQHx/yachts-1.png', 'template' => 1],
+                ['name' => ['ar' => 'سيارات', 'en' => 'Exotics'], 'desc' => ['ar' => 'سيارات فاخرة راقية.', 'en' => 'High-end luxury exotics.'], 'image' => 'https://i.ibb.co/QbpZh9c/cars.png', 'template' => 0],
+                ['name' => ['ar' => 'اليخوت', 'en' => 'Yachts'], 'desc' => ['ar' => 'اليخوت الفاخرة لك.', 'en' => 'Premium yachts for you.'], 'image' => 'https://i.ibb.co/b5mGQHx/yachts-1.png', 'template' => 1],
             ],
             'home_main_theme'                       => 'https://i.ibb.co/r0j7mGx/home-Header.png',
             'specs_keys'                            => ['engine_type'],
