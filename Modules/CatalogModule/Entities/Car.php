@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Modules\CatalogModule\Enums\EntityType;
 use MongoDB\BSON\ObjectId;
 
 class Car extends Entity
@@ -21,7 +22,7 @@ class Car extends Entity
     protected static function booted()
     {
         static::addGlobalScope('car', function (Builder $builder) {
-            $builder->where('type', 'car');
+            $builder->where('type', EntityType::CAR);
         });
     }
 

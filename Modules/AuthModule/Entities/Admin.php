@@ -16,6 +16,8 @@ class Admin extends BaseAuthenticatable implements JWTSubject
 {
     use HasFactory, SoftDeletes, RoleHelperTrait;
 
+    protected $table = 'admins';
+
     protected $guarded = [];
 
     protected $hidden = ['password', 'deleted_at'];

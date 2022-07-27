@@ -8,15 +8,21 @@ namespace Modules\AuthModule\Repositories\Admin;
 
 use Illuminate\Http\Request;
 use Modules\AuthModule\Entities\Admin;
+use Modules\AuthModule\Entities\SuperAdmin;
+use Modules\AuthModule\Entities\VendorAdmin;
 use MongoDB\BSON\ObjectId;
 
 class AdminRepository
 {
     private $model;
+    private $superAdminModel;
+    private $vendorAdminModel;
 
-    public function __construct(Admin $admin)
+    public function __construct(Admin $admin, SuperAdmin $superAdmin, VendorAdmin $vendorAdmin)
     {
         $this->model = $admin;
+        $this->superAdminModel = $superAdmin;
+        $this->vendorAdminModel = $vendorAdmin;
     }
 
     public function create($data)
@@ -58,7 +64,16 @@ class AdminRepository
 
     public function findByEmail($email, $type, $with = [])
     {
-        return $this->model->where('email', $email)->where('type', $type)->with($with)->first();
+        if ($type == 'admin') {
+
+            return $this->superAdminModel->where('email', $email)->with($with)->first();
+
+        }elseif ($type == 'vendor') {
+
+            return $this->vendorAdminModel->where('email', $email)->with($with)->first();
+        }
+
+        return null;
     }
 
     public function countAdminFromThisRole($roleId)
@@ -68,6 +83,6 @@ class AdminRepository
 
     public function getVendorAdmin($vendorId)
     {
-        return $this->model->where('vendor_id', new ObjectId($vendorId))->where('type', 'vendor')->whereHas('role', function ($q) { $q->where('key', config('authmodule.default_vendor_role')); })->first();
+        return $this->vendorAdminModel->where('vendor_id', new ObjectId($vendorId))->whereHas('role', function ($q) { $q->where('key', config('authmodule.default_vendor_role')); })->first();
     }
 }
