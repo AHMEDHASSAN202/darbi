@@ -12,8 +12,8 @@
                 <img src="{{asset('front/bg/europe-'.app()->getLocale().'.jpg')}}" class="img-fluid w-100" alt="">
             </div>
             <div class="col-md-12">
-                <h2 class="mt-2" style="font-weight: bold">About Darbi</h2>
-                <p>
+                <h2 class="mt-2 mb-0" style="font-weight: bold">About Darbi</h2>
+                <p style="padding-top:10px;color: #888;text-align: justify">
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                     Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an unknown
                     printer took a galley of type and scrambled it to make a type specimen book. It has survived not
