@@ -25,7 +25,7 @@
             </div>
             <div class="col-md-12">
                 <div class="card"
-                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 35px">
+                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 15px">
                     <div class="card-body" style="padding: 15px 26px;">
                         <div class="row" style="direction: ltr">
                             <div class="col-3">
@@ -45,7 +45,7 @@
             </div>
             <div class="col-md-12">
                 <div class="card"
-                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 35px">
+                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 15px">
                     <div class="card-body" style="padding: 15px 26px;">
                         <div class="row" style="direction: ltr">
                             <div class="col-3">
@@ -65,7 +65,7 @@
             </div>
             <div class="col-md-12">
                 <div class="card"
-                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 35px">
+                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 15px">
                     <div class="card-body" style="padding: 15px 26px;">
                         <div class="row" style="direction: ltr">
                             <div class="col-3">
@@ -84,24 +84,26 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="card"
-                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 35px">
-                    <div class="card-body" style="padding: 15px 26px;">
-                        <div class="row" style="direction: ltr">
-                            <div class="col-3">
-                                <img src="{{asset('images/email.png')}}" style="width: 50px;height: 50px" alt="">
-                            </div>
-                            <div class="col-9 p-0"
-                                 style="display: flex;flex-direction: column;justify-content: center;">
-                                <h4 style="margin:0;font-weight: 600;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #2b2b2b;">
-                                    Email</h4>
-                                <p style="margin:0;font-size: 15px;font-weight: normal;font-stretch:normal;font-style:normal;line-height:normal;letter-spacing:normal;text-align:left;color:#757575;">
-                                    info@darbi.com
-                                </p>
+                <a href="mailto:info@darbi.com">
+                    <div class="card"
+                         style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 15px">
+                        <div class="card-body" style="padding: 15px 26px;">
+                            <div class="row" style="direction: ltr">
+                                <div class="col-3">
+                                    <img src="{{asset('images/email.png')}}" style="width: 50px;height: 50px" alt="">
+                                </div>
+                                <div class="col-9 p-0"
+                                     style="display: flex;flex-direction: column;justify-content: center;">
+                                    <h4 style="margin:0;font-weight: 600;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #2b2b2b;">
+                                        Email</h4>
+                                    <p style="margin:0;font-size: 15px;font-weight: normal;font-stretch:normal;font-style:normal;line-height:normal;letter-spacing:normal;text-align:left;color:#757575;">
+                                        info@darbi.com
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>
