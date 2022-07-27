@@ -46,4 +46,14 @@ class HomeController extends Controller
 
         return view('catalogmodule::pages.contact');
     }
+    /**
+     * Display a listing of the resource.
+     * @return Renderable
+     */
+    public function policy(Request $request)
+    {
+        app()->setLocale(__get_lang());
+
+        return view('catalogmodule::pages.policy');
+    }
 }
