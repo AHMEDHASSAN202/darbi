@@ -19,7 +19,7 @@
                 <div class="justify-content-center align-items-center text-center p-4">
                     <img src="{{asset('images/contact.png')}}" class="img-fluid w-50" alt="">
                 </div>
-                <p style="margin: 25px 52px 40px 2px;font-size: 14px;  font-weight: normal;  font-stretch: normal;  font-style: normal;  line-height: normal;  letter-spacing: normal;  text-align: center;  color: #757575;">
+                <p style="font-size: 14px;  font-weight: normal;  font-stretch: normal;  font-style: normal;  line-height: normal;  letter-spacing: normal;  text-align: center;  color: #757575;">
                     Reach out to our support at
                     the below channels</p>
             </div>
