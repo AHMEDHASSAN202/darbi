@@ -1,4 +1,4 @@
-@extends('catalogmodule::layouts.fullLayout')
+@extends('commonmodule::layouts.fullLayout')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('front/custom.css?v=4') }}"/>
@@ -19,12 +19,10 @@
                 <div class="justify-content-center align-items-center text-center p-4">
                     <img src="{{asset('images/contact.png')}}" class="img-fluid w-50" alt="">
                 </div>
-                <p style="font-size: 14px;  font-weight: normal;  font-stretch: normal;  font-style: normal;  line-height: normal;  letter-spacing: normal;  text-align: center;  color: #757575;">
-                    Reach out to our support at
-                    the below channels</p>
+                <p style="font-size: 14px;  font-weight: normal;  font-stretch: normal;  font-style: normal;  line-height: normal;  letter-spacing: normal;  text-align: center;  color: #757575;">Reach out to our support at the below channels</p>
             </div>
             <div class="col-md-12">
-                <a href="tel:843 4234 243">
+                <a href="tel:{{getOption('darbi_phone', '')}}">
                     <div class="card"
                          style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 15px">
                         <div class="card-body" style="padding: 15px 26px;">
@@ -33,10 +31,10 @@
                                     <img src="{{asset('images/phone.png')}}" style="width: 50px;height: 50px" alt="">
                                 </div>
                                 <div  style="display: flex;flex-direction: column;justify-content: center;width: calc(100% - 65px)">
-                                    <h4 style="margin:0;font-weight: 600;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #2b2b2b;">
-                                        Phone</h4>
+                                    <h4 style="margin:0;font-weight: 600;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #2b2b2b;text-transform: capitalize">
+                                        {{__('phone')}}</h4>
                                     <p style="margin:0;font-size: 15px;font-weight: normal;font-stretch:normal;font-style:normal;line-height:normal;letter-spacing:normal;text-align:left;color:#757575;">
-                                        843 4234 243
+                                        {{getOption('darbi_phone', '')}}
                                     </p>
                                 </div>
                             </div>
@@ -45,7 +43,7 @@
                 </a>
             </div>
             <div class="col-md-12">
-                <a href="https://wa.com/+9664234243">
+                <a href="https://wa.com/+{{getOption('darbi_whatsapp_phone', '')}}">
                     <div class="card"
                          style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 15px">
                         <div class="card-body" style="padding: 15px 26px;">
@@ -54,10 +52,10 @@
                                     <img src="{{asset('images/whatsapp.png')}}" style="width: 50px;height: 50px" alt="">
                                 </div>
                                 <div   style="display: flex;flex-direction: column;justify-content: center;width: calc(100% - 65px)">
-                                    <h4 style="margin:0;font-weight: 600;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #2b2b2b;">
-                                        Whatsapp</h4>
+                                    <h4 style="margin:0;font-weight: 600;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #2b2b2b;text-transform: capitalize">
+                                        {{__('whatsapp')}}</h4>
                                     <p style="margin:0;font-size: 15px;font-weight: normal;font-stretch:normal;font-style:normal;line-height:normal;letter-spacing:normal;text-align:left;color:#757575;">
-                                        +966 4234 243
+                                        {{getOption('darbi_whatsapp_phone', '')}}
                                     </p>
                                 </div>
                             </div>
@@ -66,7 +64,8 @@
                 </a>
             </div>
             <div class="col-md-12">
-                <a href="https://twitter.com/godarbi">
+                <?php $darbiTwitter = getOption('darbi_twitter', 'godarbi') ?>
+                <a href="{{ filter_var($darbiTwitter, FILTER_VALIDATE_URL) ? $darbiTwitter : 'https://twitter.com/' . $darbiTwitter }}">
                     <div class="card"
                          style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 15px">
                         <div class="card-body" style="padding: 15px 26px;">
@@ -75,8 +74,8 @@
                                     <img src="{{asset('images/twitter.png')}}" style="width: 50px;height: 50px" alt="">
                                 </div>
                                 <div style="display: flex;flex-direction: column;justify-content: center;width: calc(100% - 65px)">
-                                    <h4 style="margin:0;font-weight: 600;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #2b2b2b;">
-                                        Twitter</h4>
+                                    <h4 style="margin:0;font-weight: 600;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #2b2b2b;text-transform: capitalize">
+                                        {{__('twitter')}}</h4>
                                     <p style="margin:0;font-size: 15px;font-weight: normal;font-stretch:normal;font-style:normal;line-height:normal;letter-spacing:normal;text-align:left;color:#757575;">
                                         @godarbi
                                     </p>
@@ -87,7 +86,7 @@
                 </a>
             </div>
             <div class="col-md-12">
-                <a href="mailto:info@darbi.com">
+                <a href="mailto:{{getOption('darbi_email', 'info@darbi.com')}}">
                     <div class="card"
                          style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 15px">
                         <div class="card-body" style="padding: 15px 26px;">
@@ -96,10 +95,10 @@
                                     <img src="{{asset('images/email.png')}}" style="width: 50px;height: 50px" alt="">
                                 </div>
                                 <div  style="display: flex;flex-direction: column;justify-content: center;width: calc(100% - 65px)">
-                                    <h4 style="margin:0;font-weight: 600;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #2b2b2b;">
-                                        Email</h4>
+                                    <h4 style="margin:0;font-weight: 600;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #2b2b2b;text-transform: capitalize">
+                                        {{__('email')}}</h4>
                                     <p style="margin:0;font-size: 15px;font-weight: normal;font-stretch:normal;font-style:normal;line-height:normal;letter-spacing:normal;text-align:left;color:#757575;">
-                                        info@darbi.com
+                                        {{getOption('darbi_email', 'info@darbi.com')}}
                                     </p>
                                 </div>
                             </div>

@@ -1,4 +1,4 @@
-@extends('catalogmodule::layouts.fullLayout')
+@extends('commonmodule::layouts.fullLayout')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('front/custom.css?v=4') }}"/>

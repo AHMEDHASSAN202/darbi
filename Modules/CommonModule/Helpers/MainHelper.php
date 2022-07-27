@@ -347,14 +347,15 @@ function phoneCodeCleaning($phoneCode)
 }
 
 
-function __get_lang($default = 'ar'){
+function getLanguage($default = 'ar'){
     if (\Cookie::has('language')) {
-        return \Cookie::get('language');
+        $languageInCookie = explode('|', \Illuminate\Support\Facades\Crypt::decrypt(\Cookie::get('language'), false));
+        return @end($languageInCookie);
     }
     return $default;
 }
 
-function __set_lang($lang){
+function setLanguage($lang){
     if(!empty($lang)){
         $lang = trim(strtolower($lang));
         $lang = substr($lang, 0, 2);

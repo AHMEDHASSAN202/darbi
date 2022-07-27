@@ -1,4 +1,4 @@
-@extends('catalogmodule::layouts.master')
+@extends('commonmodule::layouts.master')
 
 
 @push('styles')
