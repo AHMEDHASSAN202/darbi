@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Naskh+Arabic:wght@400;500;600;700|IBM+Plex+Sans+Arabic&display=swap');
+
+html[lang=ar] body, html[lang=ar] label, html[lang=ar] span, html[lang=ar] button, html[lang=ar] div, html[lang=ar] h4, .arabic,
+body, .section, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6, div, .ui-input, input, button, span {
+    font-family: 'Noto Naskh Arabic', sans-serif !important;
+    /*font-family: 'IBM Plex Sans Arabic', sans-serif !important;*/
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #8baa8c;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.borderGreen {
+    background: #749c76;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+    text-align: center;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s ease-in-out;
+}
+
+.card-gradient-white {
+    background: linear-gradient(#f5f8f8d6,#f5f8f8cc, #f5f8f8d6,#f5f8f8d6 90%);
+    border-radius: 45px 45px 0 0;
+    position: relative;
+    bottom: -70px;
+    border: 0;
+    padding-bottom: 60px;
+}
+
+.card-gradient-white .card-header {
+    border: 0;
+    background: transparent;
+    padding-top: 20px;
+    /*padding-bottom: 30px;*/
+}
+
+.customInput, select {
+    height: 42px !important;
+    border-radius: 12px !important;
+    border: 1.5px solid #acacac !important;
+}
+
+.customInput:focus {
+    border: 1.5px solid #f8ad69 !important;
+    outline: none;
+    box-shadow: none;
+}
+
+html[lang=ar] .leftInput-0 {
+    left: 0;
+    top: 5px;
+}
+
+html[lang=en] .leftInput-0 {
+    right: 0;
+    top: 5px;
+}
+
+html[lang=ar] select {
+    padding-right: 10px !important;
+    padding-left: 18px !important;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAQCAQAAABT0/yuAAAAYklEQVR4AaXSsQ0EIQxEUfrv5AqgF+hhISRC+pugsVY3gSU+6QsAu6AmROX/iHZ+9AztVB6qsKcHLmAF9rQdSGBPR0Dh6Slsvm3wFFueXl9gmmcNT/Wrgu1+BHaw9+uSX8IXlhb1XD65mXYAAAAASUVORK5CYII=) no-repeat scroll left center #fff;
+    background-origin: content-box;
+}
+.alert-success {
+    color: #ffffff;
+    background-color: #749c76;
+    border-color: #dfe7df;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+main {
+    overflow: hidden;
+}
+
+@media screen and (max-width: 767px) {
+    .card-gradient-white {
+        /*padding-bottom: 110px;*/
+    }
+}
+.mobile .iti {
+    width: 100%
+}
+
+.search-panel-wrap {
+    padding: 0;
+}
+
+#header {
+    z-index: 999;
+}
+.search-panel-wrap {
+    background-size: 100% 100%;
+}

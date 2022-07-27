@@ -12,3 +12,10 @@
 */
 
 
+Route::get(''               , 'HomeController@index');
+
+
+Route::get('/lang/{lang}', function ($lang) {
+    __set_lang($lang);
+    return redirect()->back();
+})->whereIn('lang', ['ar', 'en']);

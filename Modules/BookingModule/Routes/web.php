@@ -25,3 +25,10 @@ Route::group([
 ], function () {
     Route::get('bookings/transactions'                           , 'Admin\BookingPaymentTransactionController@export')->name('admin.transactions.export');
 });
+
+
+Route::group([
+    'prefix'    => 'reservation'
+], function () {
+    Route::post(''                                                , 'Web\ReservationController@store')->name('reservation.store');
+});

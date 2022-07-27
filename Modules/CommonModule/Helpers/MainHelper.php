@@ -240,3 +240,21 @@ function convertDateTimeToUTC($me, string $datetime)
 {
     return $datetime;
 }
+
+
+function __get_lang($default = 'ar'){
+    if (\Cookie::has('language')) {
+        return \Cookie::get('language');
+    }
+    return $default;
+}
+
+function __set_lang($lang){
+    if(!empty($lang)){
+        $lang = trim(strtolower($lang));
+        $lang = substr($lang, 0, 2);
+        app()->setLocale($lang);
+        \Cookie::queue('language', $lang, 120);
+    }
+    return $lang;
+}
