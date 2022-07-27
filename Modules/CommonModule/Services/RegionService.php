@@ -126,7 +126,13 @@ class RegionService
             return [];
         }
 
-        return array_map(function ($location) { return [$location['lng'], $location['lat']]; }, $locations);
+        $points = array_map(function ($location) { return [$location['lng'], $location['lat']]; }, $locations);
+
+        if ($points[0] != end($points)) {
+            $points[] = $points[0];
+        }
+
+        return $points;
     }
 
     public function addBranchToRegions(AddBranchToRegionsRequest $addBranchToRegionsRequest)
