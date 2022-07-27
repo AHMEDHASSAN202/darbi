@@ -18,7 +18,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row" style="direction: ltr">
                             <div class="col-3" style="padding: 5px">
                                 <img src="{{asset('images/phone.png')}}" class="img-fluid" alt="">
                             </div>
