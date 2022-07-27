@@ -2,6 +2,13 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('front/custom.css?v=4') }}"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+        body, div, h1, h2, h3, h4, h5, p {
+            font-family: 'Open Sans', sans-serif !important;
+        }
+    </style>
 @endpush
 
 
@@ -16,15 +23,80 @@
                     the below channels</p>
             </div>
             <div class="col-md-12">
-                <div class="card">
+                <div class="card"
+                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;">
                     <div class="card-body" style="padding: 15px 26px;">
                         <div class="row" style="direction: ltr">
                             <div class="col-3">
-                                <img src="{{asset('images/phone.png')}}" class="img-fluid" alt="">
+                                <img src="{{asset('images/phone.png')}}" style="width: 50px;height: 50px" alt="">
                             </div>
-                            <div class="col-9 p-0" style="display: flex;flex-direction: column;justify-content: center;">
-                                <h4 style="font-weight: bold;margin: 0">Phone</h4>
-                                <p style="color: #888;margin: 0">1534 5405 333</p>
+                            <div class="col-9 p-0"
+                                 style="display: flex;flex-direction: column;justify-content: center;">
+                                <h4 style="margin:0;font-weight: 600;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #2b2b2b;">
+                                    Phone</h4>
+                                <p style="margin:0;font-size: 15px;font-weight: normal;font-stretch:normal;font-style:normal;line-height:normal;letter-spacing:normal;text-align:left;color:#757575;">
+                                    843 4234 243
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card"
+                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;">
+                    <div class="card-body" style="padding: 15px 26px;">
+                        <div class="row" style="direction: ltr">
+                            <div class="col-3">
+                                <img src="{{asset('images/whatsapp.png')}}" style="width: 50px;height: 50px" alt="">
+                            </div>
+                            <div class="col-9 p-0"
+                                 style="display: flex;flex-direction: column;justify-content: center;">
+                                <h4 style="margin:0;font-weight: 600;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #2b2b2b;">
+                                    Whatsapp</h4>
+                                <p style="margin:0;font-size: 15px;font-weight: normal;font-stretch:normal;font-style:normal;line-height:normal;letter-spacing:normal;text-align:left;color:#757575;">
+                                    +966 4234 243
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card"
+                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;">
+                    <div class="card-body" style="padding: 15px 26px;">
+                        <div class="row" style="direction: ltr">
+                            <div class="col-3">
+                                <img src="{{asset('images/twitter.png')}}" style="width: 50px;height: 50px" alt="">
+                            </div>
+                            <div class="col-9 p-0"
+                                 style="display: flex;flex-direction: column;justify-content: center;">
+                                <h4 style="margin:0;font-weight: 600;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #2b2b2b;">
+                                    Twitter</h4>
+                                <p style="margin:0;font-size: 15px;font-weight: normal;font-stretch:normal;font-style:normal;line-height:normal;letter-spacing:normal;text-align:left;color:#757575;">
+                                    @godarbi
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card"
+                     style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;">
+                    <div class="card-body" style="padding: 15px 26px;">
+                        <div class="row" style="direction: ltr">
+                            <div class="col-3">
+                                <img src="{{asset('images/email.png')}}" style="width: 50px;height: 50px" alt="">
+                            </div>
+                            <div class="col-9 p-0"
+                                 style="display: flex;flex-direction: column;justify-content: center;">
+                                <h4 style="margin:0;font-weight: 600;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #2b2b2b;">
+                                    Email</h4>
+                                <p style="margin:0;font-size: 15px;font-weight: normal;font-stretch:normal;font-style:normal;line-height:normal;letter-spacing:normal;text-align:left;color:#757575;">
+                                    info@darbi.com
+                                </p>
                             </div>
                         </div>
                     </div>
