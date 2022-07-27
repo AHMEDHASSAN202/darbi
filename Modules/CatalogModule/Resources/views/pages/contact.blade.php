@@ -17,12 +17,12 @@
             </div>
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body" style="padding: 15px 26px;">
                         <div class="row" style="direction: ltr">
-                            <div class="col-3" style="padding: 5px">
+                            <div class="col-3">
                                 <img src="{{asset('images/phone.png')}}" class="img-fluid" alt="">
                             </div>
-                            <div class="col-9">
+                            <div class="col-9 p-0" style="display: flex;flex-direction: column;justify-content: center;">
                                 <h4 style="font-weight: bold">Phone</h4>
                                 <p style="color: #888">1534 5405 333</p>
                             </div>
