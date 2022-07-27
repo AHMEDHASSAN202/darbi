@@ -31,8 +31,6 @@ class BookingPaymentTransactionController extends Controller
 
     public function export(Request $request, $vendorId)
     {
-        $callback = $this->paymentTransactionService->getCallbackExportTransaction($request, $vendorId);
-
-        return response()->stream($callback);
+        return $this->paymentTransactionService->getCallbackExportTransaction($request, $vendorId);
     }
 }

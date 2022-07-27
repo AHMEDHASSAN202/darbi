@@ -14,6 +14,7 @@
 
 
 //plugin routes
+
 Route::group([
     'prefix'    => 'plugins',
     'middleware' => ['auth:admin_api']

@@ -21,7 +21,14 @@ class CityController extends Controller
     public function index(Request $request)
     {
         return $this->apiResponse([
-            'cities'      => $this->cityService->cities($request)
+            'cities'      => $this->cityService->findAll($request)
+        ]);
+    }
+
+    public function find($id)
+    {
+        return $this->apiResponse([
+            'city'      => $this->cityService->find($id)
         ]);
     }
 }

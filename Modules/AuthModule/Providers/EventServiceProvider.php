@@ -8,7 +8,6 @@ use Modules\AuthModule\Entities\Role;
 use Modules\AuthModule\Observers\AdminObserver;
 use Modules\AuthModule\Observers\RoleObserver;
 
-
 class EventServiceProvider extends ServiceProvider
 {
     public function boot()

@@ -9,6 +9,8 @@ class BookingStatusChangedEvent
 {
     use SerializesModels;
 
+    public $booking;
+
     /**
      * Create a new event instance.
      *
@@ -16,16 +18,6 @@ class BookingStatusChangedEvent
      */
     public function __construct(Booking $booking)
     {
-
-    }
-
-    /**
-     * Get the channels the event should be broadcast on.
-     *
-     * @return array
-     */
-    public function broadcastOn()
-    {
-        return [];
+        $this->booking = $booking;
     }
 }

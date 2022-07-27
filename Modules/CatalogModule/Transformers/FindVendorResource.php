@@ -17,14 +17,16 @@ class FindVendorResource extends JsonResource
     {
         return [
             'id'        => $this->_id,
-            'name'      => translateAttribute($this->name),
+            'name'      => $this->name,
             'image'     => imageUrl($this->image),
             'email'     => $this->email,
             'phone'     => $this->phone,
             'country'   => new CountryResource($this->country),
             'type'      => $this->type,
             'darbi_percentage' => $this->darbi_percentage,
-            'settings'  => $this->settings
+            'settings'  => $this->settings,
+            'lat'       => $this->lat,
+            'lng'       => $this->lng
         ];
     }
 }

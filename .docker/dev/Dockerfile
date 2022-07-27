@@ -86,9 +86,14 @@ RUN mkdir /var/log/php
 RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 
 # Deployment steps
-RUN composer require mongodb/mongodb --ignore-platform-reqs && composer require jenssegers/mongodb --ignore-platform-reqs
+RUN composer require jenssegers/mongodb --ignore-platform-reqs --with-all-dependencies
 RUN composer install --ignore-platform-reqs
 RUN chmod +x /var/www/docker/run.sh
+
+
+# Setup cron job
+#RUN (crontab -l ; echo "* * * * * cd /var/www && php artisan schedule:run >> /dev/null 2>&1") | crontab
+
 
 # open port 80
 EXPOSE 80

@@ -16,8 +16,10 @@ class SettingTableSeeder extends Seeder
     public function run()
     {
         $settings = [
-            'time_interval_vendor_accept_min'       => 22,
-            'time_interval_user_accept_min'         => 22,
+            'time_interval_vendor_accept_min'       => 22,   //minute
+            'time_interval_user_accept_min'         => 22,   //minute
+            'time_reminder_before_picked_up'        => 120,  //minute
+            'time_reminder_before_dropped'          => 120,  //minute
             'walk_through_images'                   => [
                 ['title' => ['ar' => 'رحلة تستحقها', 'en' => 'Trip you deserve'], 'desc' => ['ar' => 'يساعدك داربي في العثور على أفضل السيارات واليخوت لقضاء رحلة استثنائية.', 'en' => 'Darbi helps you to find the best exotics and yachts to have an exceptional trip.'], 'image' => 'https://i.ibb.co/bXcRvgx/intro1.png'],
                 ['title' => ['ar' => 'مجموعة واسعة من الخيارات', 'en' => 'Wide range of Choices'], 'desc' => ['ar' => 'يقدم لك داربي مجموعة واسعة من السيارات واليخوت مع خيارات لتخصيص رحلتك.', 'en' => 'Darbi offers you a wide range of exotics & yachts with options to customize your ride.'], 'image' => 'https://i.ibb.co/bXcRvgx/intro1.png']
@@ -36,6 +38,7 @@ class SettingTableSeeder extends Seeder
             'ios_force_updated_link'                => '',
             'default_country'                       => 'AE',
             'default_city'                          => 'DU',
+            'darbi_percentage'                      => 20
         ];
 
         Setting::create($settings);

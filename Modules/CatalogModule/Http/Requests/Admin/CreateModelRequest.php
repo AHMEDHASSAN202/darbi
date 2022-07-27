@@ -22,9 +22,8 @@ class CreateModelRequest extends FormRequest
             'is_active'         => 'nullable|sometimes|boolean',
             'images'            => 'nullable|sometimes|array',
             'images.*'          => 'required|image|max:5120', //5m
-            'specs'             => 'nullable|sometimes|array',
-            'specs.*'           => 'nullable|sometimes|array', //5m
-            'specs.*.key'       => 'required|min:1|max:100',
+            'specs'             => 'required|array',
+            'specs.*'           => 'required|array', //5m
             'specs.*.value'     => 'required|min:1|max:100',
             'specs.*.image'     => 'required|array',
         ];

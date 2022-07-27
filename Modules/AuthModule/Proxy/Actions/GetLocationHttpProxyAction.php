@@ -6,7 +6,7 @@
 
 namespace Modules\AuthModule\Proxy\Actions;
 
-use Illuminate\Http\Request;
+use App\Proxy\InternalRequest;
 use Illuminate\Support\Facades\Route;
 
 class GetLocationHttpProxyAction
@@ -15,7 +15,7 @@ class GetLocationHttpProxyAction
     {
         $url = '/api/mobile/v1/locations/find?lat='.$data['lat'].'&lng='.$data['lng'];
 
-        $req = Request::create($url, 'GET');
+        $req = InternalRequest::create($url, 'GET');
 
         $res = Route::dispatch($req);
 

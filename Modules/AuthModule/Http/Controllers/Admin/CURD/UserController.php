@@ -22,25 +22,25 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $users = $this->userService->findAll($request);
+        $result = $this->userService->findAll($request);
 
-        return $this->apiResponse(compact('users'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function show($userId)
     {
-        $user = $this->userService->find($userId);
+        $result = $this->userService->find($userId);
 
-        return $this->apiResponse(compact('user'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function destroy($userId)
     {
-        $this->userService->destroy($userId);
+        $result = $this->userService->destroy($userId);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
@@ -48,6 +48,6 @@ class UserController extends Controller
     {
         $result = $this->userService->toggleActive($userId);
 
-        return $this->apiResponse($result, 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 }

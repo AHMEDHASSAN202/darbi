@@ -10,8 +10,6 @@ class FindBookingResource extends JsonResource
 {
     use BookingTraitResource;
 
-    private $defaultImage;
-
     /**
      * Transform the resource into an array.
      *

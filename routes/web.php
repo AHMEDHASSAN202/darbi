@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\CatalogModule\Entities\Vendor;
 use MongoDB\BSON\ObjectId;
 
 /*
@@ -18,4 +17,8 @@ use MongoDB\BSON\ObjectId;
 
 Route::get('health-check', function () {
     return 'GOOD';
+});
+
+Route::get('tt', function () {
+    dd(now());
 });

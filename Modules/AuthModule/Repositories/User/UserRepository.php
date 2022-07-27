@@ -26,18 +26,24 @@ class UserRepository
         return $this->model->create([
             'phone' => $phone,
             'phone_code' => $phoneCode,
-            'is_active' => true
+            'is_active' => true,
+            'verification_code' => generateOTPCode()
         ]);
     }
 
     public function findAll(Request $request)
     {
-        return $this->model->search($request)->filter($request)->latest()->paginate($request->get('limit', 20));
+        return $this->model->with('lastBooking')->search($request)->filter($request)->latest()->paginated();
     }
 
-    public function find($userId)
+    public function findAllIds(Request $request)
     {
-        return $this->model->findOrFail($userId);
+        return $this->model->search($request)->filter($request)->latest()->paginated();
+    }
+
+    public function find($userId, $with = [])
+    {
+        return $this->model->with($with)->findOrFail($userId);
     }
 
     public function destroy($userId)
@@ -52,5 +58,10 @@ class UserRepository
         $user->save();
 
         return $user;
+    }
+
+    public function findAllByPhones($phones)
+    {
+        dd($phones);
     }
 }

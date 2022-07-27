@@ -43,7 +43,8 @@ class FindEntityResource extends JsonResource
             $res['port_id'] = (string)$this->port_id;
             $res['port']    = new PortResource($this->port);
         }elseif ($this->resource instanceof Car) {
-            $res['branches'] = BranchResource::collection(convertBsonArrayToCollection($this->branches));
+            $res['branch_id'] = (string)$this->branch_id;
+            $res['branch'] = new BranchResource($this->branch);
         }
 
         return $res;

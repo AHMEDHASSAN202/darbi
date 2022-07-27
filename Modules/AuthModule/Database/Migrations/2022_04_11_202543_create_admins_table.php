@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('admins', function (Blueprint $table) {
+            $table->unique(['email', 'type']);
             $table->index('role_id');
             $table->softDeletes();
             $table->timestamps();

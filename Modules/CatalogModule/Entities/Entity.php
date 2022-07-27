@@ -87,7 +87,7 @@ class Entity extends Base
         if ($city = $request->get('city')) {
             if ($type === EntityType::CAR) {
                 $branchIds = app(BranchRepository::class)->findAllBranchesByCity($city)->pluck('_id')->toArray();
-                $query->whereIn('branch_ids', generateObjectIdOfArrayValues($branchIds));
+                $query->whereIn('branch_id', generateObjectIdOfArrayValues($branchIds));
             }elseif ($type === EntityType::YACHT) {
                 $portIds = app(PortRepository::class)->findAllPortsByCity($city)->pluck('_id')->toArray();
                 $query->whereIn('port_id', generateObjectIdOfArrayValues($portIds));
@@ -100,7 +100,15 @@ class Entity extends Base
 
         if ($region = $request->get('region')) {
             $branchIds = app(BranchRepository::class)->findAllBranchesByRegion($region, true)->pluck('_id')->toArray();
-            $query->whereIn('branch_ids', generateObjectIdOfArrayValues($branchIds));
+            $query->whereIn('branch_id', generateObjectIdOfArrayValues($branchIds));
+        }
+
+        if ($priceFrom = $request->get('price_from')) {
+            $query->where('price', '>=', intval($priceFrom));
+        }
+
+        if ($priceTo = $request->get('price_to')) {
+            $query->where('price', '<=', intval($priceTo));
         }
     }
 
@@ -109,6 +117,10 @@ class Entity extends Base
         $state = $request->get('state');
         if ($state && $state != 'all') {
             $query->where('state', $state);
+        }
+
+        if ($branch = $request->get('branch')) {
+            $query->where('branch_id', new ObjectId($branch));
         }
 
         return $this->scopeFilter($query, $request, $type);

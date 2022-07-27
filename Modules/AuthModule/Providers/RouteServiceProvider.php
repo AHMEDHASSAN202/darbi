@@ -20,6 +20,9 @@ class RouteServiceProvider extends ServiceProvider
 
     protected $moduleNamespaceAdmin = 'Modules\AuthModule\Http\Controllers\Admin';
 
+
+    protected $moduleNamespaceInternal = 'Modules\AuthModule\Http\Controllers\Internal';
+
     /**
      * Called before routes are registered.
      *
@@ -46,6 +49,8 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiAdminRoutes();
 
         $this->mapApiVendorRoutes();
+
+        $this->mapApiInternalRoutes();
     }
 
     /**
@@ -106,5 +111,20 @@ class RouteServiceProvider extends ServiceProvider
             ->middleware('api')
             ->namespace($this->moduleNamespaceAdmin)
             ->group(module_path('AuthModule', '/Routes/vendor.php'));
+    }
+
+    /**
+     * Define the "api vendor" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiInternalRoutes()
+    {
+        Route::prefix('api/internal/v1')
+            ->middleware(['api', 'internal'])
+            ->namespace($this->moduleNamespaceInternal)
+            ->group(module_path('AuthModule', '/Routes/internal.php'));
     }
 }

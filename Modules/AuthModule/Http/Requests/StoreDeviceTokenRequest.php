@@ -15,9 +15,9 @@ class StoreDeviceTokenRequest extends FormRequest
     {
         return [
             'phone_uuid'      => 'required',
-            'device_os'       => 'required|in:android,iphone',
-            'lat'             => 'required',
-            'lng'             => 'required',
+            'device_os'       => 'required|in:android,ios,web',
+            'lat'             => 'sometimes|nullable|numeric',
+            'lng'             => 'sometimes|nullable|numeric',
             'region_id'       => 'sometimes|nullable|exists:regions,_id'
         ];
     }

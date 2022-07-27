@@ -25,7 +25,9 @@ class UpdateVendorRequest extends FormRequest
             'phone_code'        => 'required_with:phone',
             'email'             => 'required|email',
             'darbi_percentage'  => 'nullable|sometimes|numeric',
-            'settings'          => 'nullable|sometimes|array'
+            'settings'          => 'nullable|sometimes|array',
+            'lat'               => 'required|numeric',
+            'lng'               => 'required|numeric',
         ];
     }
 

@@ -20,6 +20,8 @@ class RouteServiceProvider extends ServiceProvider
 
     protected $moduleNamespaceVendor = 'Modules\CatalogModule\Http\Controllers\Admin\Vendor';
 
+    protected $moduleNamespaceInternal = 'Modules\CatalogModule\Http\Controllers\Internal';
+
     /**
      * Called before routes are registered.
      *
@@ -46,6 +48,8 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiAdminRoutes();
 
         $this->mapApiVendorRoutes();
+
+        $this->mapApiInternalRoutes();
     }
 
     /**
@@ -105,5 +109,20 @@ class RouteServiceProvider extends ServiceProvider
             ->middleware('api')
             ->namespace($this->moduleNamespaceVendor)
             ->group(module_path('CatalogModule', '/Routes/vendor.php'));
+    }
+
+    /**
+     * Define the "api internal" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiInternalRoutes()
+    {
+        Route::prefix('api/internal/v1')
+            ->middleware(['api', 'internal'])
+            ->namespace($this->moduleNamespaceInternal)
+            ->group(module_path('CatalogModule', '/Routes/internal.php'));
     }
 }

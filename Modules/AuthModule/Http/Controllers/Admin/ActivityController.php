@@ -21,8 +21,8 @@ class ActivityController extends Controller
 
     public function show($adminId, Request $request)
     {
-        $activities = $this->adminService->getActivities($adminId, $request);
+        $result = $this->adminService->getActivities($adminId, $request);
 
-        return $this->apiResponse(compact('activities'));
+        return $this->apiResponse(...$result);
     }
 }

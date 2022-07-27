@@ -22,16 +22,16 @@ class VendorSettingsController extends Controller
 
     public function getSettings()
     {
-        $vendor = $this->vendorSettingsService->getSettings();
+        $result = $this->vendorSettingsService->getSettings();
 
-        return $this->apiResponse(compact('vendor'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function updateSettings(UpdateVendorSettingsRequest $updateVendorInfoRequest)
     {
-        $vendor = $this->vendorSettingsService->updateSettings($updateVendorInfoRequest);
+        $result = $this->vendorSettingsService->updateSettings($updateVendorInfoRequest);
 
-        return $this->apiResponse(compact('vendor'), 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 }

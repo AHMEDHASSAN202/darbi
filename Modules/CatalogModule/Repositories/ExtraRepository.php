@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Modules\CatalogModule\Entities\Extra;
 use Modules\CommonModule\Traits\CrudRepositoryTrait;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\Regex;
 
 class ExtraRepository
 {
@@ -50,6 +51,16 @@ class ExtraRepository
             ]
         ];
 
+        if ($q = $request->get('q')) {
+            $aggregate[] = [
+                '$match'    => [
+                    'plugin.name.en'       => [
+                        '$regex'        => new Regex(".*$q", 'i')
+                    ]
+                ]
+            ];
+        }
+
 
         if ($entityType = $request->get('entity_type')) {
             $aggregate[] = [
@@ -68,7 +79,7 @@ class ExtraRepository
                     'count' => ['$sum' => 1]
                 ]
             ];
-            $total = $this->model->raw(function ($collection) use ($aggregateCount) { return $collection->aggregate($aggregateCount); })->first()->count;
+            $total = optional($this->model->raw(function ($collection) use ($aggregateCount) { return $collection->aggregate($aggregateCount); })->first())->count;
             $aggregate[] = ['$skip' => ($page - 1) * $limit];
             $aggregate[] = ['$limit' => $limit];
         }

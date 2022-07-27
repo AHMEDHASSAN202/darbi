@@ -31,7 +31,9 @@ class Admin extends BaseAuthenticatable implements JWTSubject
 
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'version'       => config('authmodule.jwt_version'),
+        ];
     }
 
     protected static function newFactory()
@@ -59,7 +61,15 @@ class Admin extends BaseAuthenticatable implements JWTSubject
     public function scopeFilter($query, Request $request)
     {
         if ($role = $request->get('role')) {
-            return $query->where('role_id', new ObjectId($role));
+            $query->where('role_id', new ObjectId($role));
+        }
+
+        if ($type = $request->get('type')) {
+            $query->where('type', $type);
+        }
+
+        if ($vendor = $request->get('vendor')) {
+            $query->where('vendor_id', new ObjectId($vendor));
         }
     }
 

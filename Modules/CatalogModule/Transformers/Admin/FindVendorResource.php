@@ -29,7 +29,9 @@ class FindVendorResource extends JsonResource
             'country'       => new CountryResource($country),
             'is_active'     => (boolean)$this->is_active,
             'type'          => $this->type,
-            'settings'      => is_string($this->settings) ? json_decode($this->settings) : $this->settings
+            'settings'      => is_string($this->settings) ? json_decode($this->settings) : $this->settings,
+            'lat'           => (float)$this->lat,
+            'lng'           => (float)$this->lng
         ];
     }
 }

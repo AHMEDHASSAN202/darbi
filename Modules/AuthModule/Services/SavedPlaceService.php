@@ -27,52 +27,34 @@ class SavedPlaceService
     {
         $userId = auth('api')->id();
 
-        return SavedPlaceResource::collection($this->savedUserRepository->listPlacesByUserId($userId));
+        return successResponse(['places' => SavedPlaceResource::collection($this->savedUserRepository->listPlacesByUserId($userId))]);
     }
 
     public function createPlace(CreatePlaceRequest $createPlaceRequest)
     {
-        $result['responseData'] = [];
-        $result['statusCode'] = 200;
-        $result['message'] = '';
-
         //get location
         $location = (new Proxy(new AuthProxy('GET_LOCATION', ['lat' => $createPlaceRequest->lat, 'lng' => $createPlaceRequest->lng])))->result();
-        $region = (new Proxy(new AuthProxy('GET_REGION', ['lat' => $createPlaceRequest->lat, 'lng' => $createPlaceRequest->lng])))->result();
 
         if (!$location) {
-            $result['message'] = __('location not found!');
-            $result['statusCode'] = 400;
-            return $result;
-        }
-
-        if (!$region) {
-            $result['message'] = __('region not supported!');
-            $result['statusCode'] = 400;
-            return $result;
+            return badResponse([], __('Location not found!'));
         }
 
         try {
 
             $created = $this->savedUserRepository->create([
-                'user_id'       => auth('api')->user()->_id,
+                'user_id'       => new ObjectId(auth('api')->id()),
                 'lat'           => $createPlaceRequest->lat,
                 'lng'           => $createPlaceRequest->lng,
                 'country'       => $location['country'],
                 'city'          => $location['city'],
-                'full_address'  => $location['fully_addressed'],
-                'region_id'     => new ObjectId($region['id'])
+                'full_address'  => $location['fully_addressed']
             ]);
 
-            $result['responseData'] = new SavedPlaceResource($created);
-            $result['message'] = __('Successful created place');
+            return successResponse(new SavedPlaceResource($created), __('Successful created place'));
 
         } catch (\Exception $exception) {
-            $result['message'] = __('something error!');
-            $result['statusCode'] = 500;
-            Log::error('createPlace: ' . $exception->getMessage());
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
+            return serverErrorResponse();
         }
-
-        return $result;
     }
 }

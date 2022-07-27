@@ -6,7 +6,7 @@
 
 namespace Modules\BookingModule\Proxy\Actions;
 
-use Illuminate\Http\Request;
+use App\Proxy\InternalRequest;
 use Illuminate\Support\Facades\Route;
 
 
@@ -14,9 +14,9 @@ class GetVendorHttpProxyAction
 {
     public function __invoke($data)
     {
-        $url = '/api/mobile/v1/vendors/' . $data['vendor_id'];
+        $url = '/api/internal/v1/vendors/' . $data['vendor_id'];
 
-        $req = Request::create($url, 'GET');
+        $req = InternalRequest::create($url, 'GET');
 
         $res = Route::dispatch($req);
 

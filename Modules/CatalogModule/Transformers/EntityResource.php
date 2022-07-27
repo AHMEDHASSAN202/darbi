@@ -3,6 +3,7 @@
 namespace Modules\CatalogModule\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\CatalogModule\Transformers\Admin\BranchResource;
 
 class EntityResource extends JsonResource
 {
@@ -29,11 +30,12 @@ class EntityResource extends JsonResource
             'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit),
             'extras'        => ExtraResource::collection(convertBsonArrayToCollection($this->attachPluginToExtra($this->extras, $this->plugins))),
             'state'         => $this->state,
-            'specs'         => SpecsResource::collection($this->model->addons),
+            'specs'         => SpecsResource::collection($this->model->specs),
             'country'       => $this->country,
-            'city'          => $this->city,
             'vendor_id'     => (string)$this->vendor_id,
-            'entity_type'   => $this->type
+            'entity_type'   => $this->type,
+            'branch_id'     => (string)$this->branch_id,
+            'branch'        => new BranchResource($this->branch)
         ];
     }
 }

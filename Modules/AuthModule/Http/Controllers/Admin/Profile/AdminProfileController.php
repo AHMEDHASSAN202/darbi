@@ -23,16 +23,16 @@ class AdminProfileController extends Controller
 
     public function getProfile()
     {
-        $profile = $this->adminProfileService->getProfile();
+        $result = $this->adminProfileService->getProfile();
 
-        return $this->apiResponse(compact('profile'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function updateProfile(UpdateAdminProfile $updateAdminProfile)
     {
-        $profile = $this->adminProfileService->updateProfile($updateAdminProfile);
+        $result = $this->adminProfileService->updateProfile($updateAdminProfile);
 
-        return $this->apiResponse(compact('profile'), 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 }

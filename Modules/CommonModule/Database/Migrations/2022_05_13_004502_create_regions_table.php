@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->index('city_id');
             $table->index('country_id');
+            $table->index('is_active');
             $table->geospatial('location', '2dsphere');
             $table->softDeletes();
             $table->timestamps();

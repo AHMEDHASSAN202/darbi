@@ -1,8 +1,7 @@
 <?php
 
-namespace Modules\CatalogModule\Http\Controllers\User;
+namespace Modules\CatalogModule\Http\Controllers\Internal;
 
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\CatalogModule\Services\EntityService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
@@ -25,10 +24,10 @@ class EntityController extends Controller
         ]);
     }
 
-    public function changeState($entityId, $state)
+    public function updateState($entityId, $state)
     {
-        $result = $this->entityService->changeState($entityId, $state);
+        $result = $this->entityService->updateState($entityId, $state);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 }

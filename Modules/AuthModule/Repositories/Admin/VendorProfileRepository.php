@@ -32,13 +32,21 @@ class VendorProfileRepository
         $me = auth($this->guardName)->user();
         $me->name = $updateVendorProfile->name;
         $me->email = $updateVendorProfile->email;
+
         if ($updateVendorProfile->password) {
             $me->password = Hash::make($updateVendorProfile->password);
         }
+
+        $oldImage = null;
         if ($updateVendorProfile->hasFile('image')) {
+            $oldImage = $me->image;
             $me->image = $this->uploadAvatar($updateVendorProfile->image);
         }
+
         $me->save();
+
+        $this->_removeImage($oldImage);
+
         return $me;
     }
 }

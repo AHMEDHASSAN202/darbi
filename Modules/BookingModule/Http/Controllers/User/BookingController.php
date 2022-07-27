@@ -31,17 +31,17 @@ class BookingController extends Controller
 
     public function findAllByUser(Request $request)
     {
-        return $this->apiResponse([
-            'bookings'  => $this->bookingService->findAllByAuth($request)
-        ]);
+        $result = $this->bookingService->findAllByAuth($request);
+
+        return $this->apiResponse(...$result);
     }
 
 
     public function find($bookingId)
     {
-        return $this->apiResponse([
-            'booking'   => $this->bookingService->findByAuth($bookingId)
-        ]);
+        $result = $this->bookingService->findByAuth($bookingId);
+
+        return $this->apiResponse(...$result);
     }
 
 
@@ -49,7 +49,7 @@ class BookingController extends Controller
     {
         $result = $this->bookingService->rent($rentRequest);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 
 
@@ -57,7 +57,7 @@ class BookingController extends Controller
     {
         $result = $this->bookingService->addBookDetails($bookingId, $addBookDetailsRequest);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 
 
@@ -65,7 +65,7 @@ class BookingController extends Controller
     {
         $result = $this->bookingService->proceed($bookingId, $proceedRequest);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 
 
@@ -73,6 +73,6 @@ class BookingController extends Controller
     {
         $result = $this->bookingService->cancel($bookingId);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 }

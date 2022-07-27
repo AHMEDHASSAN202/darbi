@@ -24,40 +24,28 @@ class AdminAuthService
 
     public function login(Request $request, $type)
     {
-        $response['data'] = [];
-        $response['statusCode'] = 200;
-        $response['message'] = null;
-        $response['errors'] = [];
-
         $me = $this->adminRepository->findByEmail($request->email, $type, ['vendor']);
 
         if (
             !$me || !Hash::check($request->password, $me->password)
         ) {
-            $response['statusCode'] = 400;
-            $response['message'] = __('Your email or password is incorrect. try again');
-            return $response;
+            return badResponse([], __('Your email or password is incorrect. try again'));
         }
 
         if ($type != 'admin' && (!$me->vendor || $me->vendor->isNotActive())) {
-            $response['data'] = [];
-            $response['statusCode'] = 500;
-            $response['message'] = __('The vendor is not active, please contact support');
-            return $response;
+            return badResponse([], __('The vendor is not active, please contact support'));
         }
 
         try {
-            $response['data'] = [
+
+            return successResponse([
                 'token'     => auth($me->role->guard)->login($me),
                 'profile'   => new AdminProfileResource($me)
-            ];
-        }catch (\Exception $exception) {
-            Log::error($exception->getMessage());
-            $response['data'] = [];
-            $response['statusCode'] = 500;
-            $response['message'] = null;
-        }
+            ]);
 
-        return $response;
+        }catch (\Exception $exception) {
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
+            return serverErrorResponse();
+        }
     }
 }

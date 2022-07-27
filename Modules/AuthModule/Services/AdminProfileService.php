@@ -20,7 +20,7 @@ class AdminProfileService
     {
         $me = auth($this->guardName)->user()->load('role');
 
-        return (new AdminProfileResource($me));
+        return successResponse(['profile' => (new AdminProfileResource($me))]);
     }
 
     public function updateProfile($request)
@@ -33,11 +33,16 @@ class AdminProfileService
             $me->password = Hash::make($request->password);
         }
 
+        $oldImage = null;
         if ($request->hasFile('image')) {
+            $oldImage = $me->image;
             $me->image = $this->uploadImage('admins', $request->image);
         }
 
         $me->save();
-        return (new AdminProfileResource($me));
+
+        $this->_removeImage($oldImage);
+
+        return updatedResponse(['profile' => (new AdminProfileResource($me))]);
     }
 }

@@ -48,7 +48,9 @@ class Vendor extends Base
     public function scopeSearch($query, Request $request)
     {
         if ($q = $request->get('q')) {
-            return $query->where('name', 'LIKE', '%' . $q .'%');
+            return $query->where(function ($query) use ($q) {
+                $query->where('name.ar', 'LIKE', '%' . $q .'%')->orWhere('name.en', 'LIKE', '%' . $q . '%');
+            });
         }
     }
 

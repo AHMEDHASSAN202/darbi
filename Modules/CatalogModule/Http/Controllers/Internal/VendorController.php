@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\CatalogModule\Http\Controllers\User;
+namespace Modules\CatalogModule\Http\Controllers\Internal;
 
 use Illuminate\Routing\Controller;
 use Modules\CatalogModule\Services\VendorService;

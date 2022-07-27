@@ -23,13 +23,13 @@ class TripController extends Controller
     {
         $result = $this->tripService->startTrip($bookingId);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 
     public function endMyTrip($bookingId)
     {
         $result = $this->tripService->endTrip($bookingId);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 }
