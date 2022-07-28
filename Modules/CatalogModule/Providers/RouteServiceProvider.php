@@ -14,6 +14,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $moduleNamespace = 'Modules\CatalogModule\Http\Controllers';
 
+    protected $moduleNamespaceWeb = 'Modules\CatalogModule\Http\Controllers\Web';
+
     protected $moduleNamespaceAdmin = 'Modules\CatalogModule\Http\Controllers\Admin';
 
     protected $moduleNamespaceVendor = 'Modules\CatalogModule\Http\Controllers\Admin\Vendor';
@@ -60,7 +62,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         Route::middleware('web')
-            ->namespace($this->moduleNamespace)
+            ->namespace($this->moduleNamespaceWeb)
             ->group(module_path('CatalogModule', '/Routes/web.php'));
     }
 

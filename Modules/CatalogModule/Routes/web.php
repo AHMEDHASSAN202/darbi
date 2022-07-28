@@ -10,6 +10,3 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
-Route::get('share/{id}-{slug}', \Modules\CatalogModule\Http\Controllers\Web\ShareController::class);

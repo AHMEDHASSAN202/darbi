@@ -25,7 +25,7 @@ class LocalizationMiddleware
         }
 
         if (!$language || !in_array($language, $this->getLanguagesCode())) {
-            $language = $this->getDefaultLanguage();
+            $language = getLanguage(null) ?  : $this->getDefaultLanguage();
         }
 
         app()->setLocale($language);
