@@ -27,11 +27,11 @@ class DarbiResetCommand extends Command
      */
     public function handle()
     {
-        $this->call("route:clear");
-        $this->call("config:clear");
+//        $this->call("route:clear");
+//        $this->call("config:clear");
 //        $this->call("module:migrate-refresh");
 //        $this->call("module:seed");
-        $this->call("cache:clear");
+//        $this->call("cache:clear");
 //        $this->call("optimize");
     }
 }

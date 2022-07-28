@@ -29,8 +29,8 @@ class CreateBranchRequest extends FormRequest
             'phone'         => ['nullable', 'sometimes', 'numeric', new PhoneRule($this->request->get('phone_code'))],
             'phone_code'    => 'required_with:phone',
             'city_id'       => 'required|exists:cities,_id',
-            'regions_ids'    => 'sometimes|nullable|array',
-            'regions_ids.*'  => ['required', new MongoIdRule()]
+            'region_ids'    => 'sometimes|nullable|array',
+            'region_ids.*'  => ['required', new MongoIdRule()]
         ];
     }
 
