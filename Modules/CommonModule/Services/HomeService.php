@@ -4,13 +4,10 @@
  * User: ahmed hasssan
  */
 
-namespace Modules\CatalogModule\Services;
+namespace Modules\CommonModule\Services;
 
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Modules\CatalogModule\Repositories\BrandRepository;
-use Modules\CatalogModule\Transformers\BrandResource;
-use Modules\CommonModule\Transformers\PaginateResource;
+use Modules\CatalogModule\Services\BrandService;
 
 class HomeService
 {

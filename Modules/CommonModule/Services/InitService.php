@@ -43,7 +43,8 @@ class InitService
             'default_country'       => $this->settings->default_country,
             'default_city'          => $this->settings->default_city,
             'pages'                 => $this->pages(),
-            'push_version'          => 23
+            'push_version'          => 23,
+            'show_personal_ID'      => 0
         ];
     }
 
@@ -77,9 +78,9 @@ class InitService
     private function pages()
     {
         return [
-            'aboutUs'         => url('about-us'),
-            'support'         => url('support'),
-            'privacyPolicy'   => url('privacy-policy')
+            'aboutUs'         => url('mobile/about-us'),
+            'support'         => url('mobile/contact-us'),
+            'privacyPolicy'   => url('mobile/privacy')
         ];
     }
 }

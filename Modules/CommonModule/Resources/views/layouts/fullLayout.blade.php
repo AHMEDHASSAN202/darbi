@@ -8,7 +8,7 @@ $bg_n = rand(1, 3);
 $bg = asset("front/header/{$bg_n}.jpg")
 ?>
 <!DOCTYPE html>
-<html lang="{{__get_lang()}}">
+<html lang="{{$lang}}">
 <head>
     <meta charset="utf-8"/>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
