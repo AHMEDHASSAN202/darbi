@@ -20,10 +20,10 @@ class AuthModuleDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        Vendor::factory()->count(5)->create();
+//        Vendor::factory()->count(5)->create();
         $this->call(RoleTableSeeder::class);
         $this->call(AdminTableSeeder::class);
-        User::factory()->count(50)->create();
-        SavedPlace::factory()->count(50)->create();
+//        User::factory()->count(50)->create();
+//        SavedPlace::factory()->count(50)->create();
     }
 }

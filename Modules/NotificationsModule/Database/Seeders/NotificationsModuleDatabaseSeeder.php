@@ -17,6 +17,6 @@ class NotificationsModuleDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        NotificationsCenter::factory()->count(200)->create();
+//        NotificationsCenter::factory()->count(200)->create();
     }
 }

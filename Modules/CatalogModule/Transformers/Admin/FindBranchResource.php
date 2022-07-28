@@ -35,11 +35,11 @@ class FindBranchResource extends JsonResource
 
     private function getRegions()
     {
-        if (empty($this->regions_id)) {
+        if (empty($this->regions_ids)) {
             return [];
         }
 
-        $locationProxy = new CatalogProxy('GET_REGIONS', ['in' => generateStringIdOfArrayValues($this->regions_id)]);
+        $locationProxy = new CatalogProxy('GET_REGIONS', ['in' => generateStringIdOfArrayValues($this->regions_ids)]);
         $proxy = new Proxy($locationProxy);
         return $proxy->result();
     }
