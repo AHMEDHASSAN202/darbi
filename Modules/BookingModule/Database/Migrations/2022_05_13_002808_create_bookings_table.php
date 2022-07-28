@@ -18,6 +18,7 @@ return new class extends Migration
             $table->index('vendor_id');
             $table->index('user_id');
             $table->index('branch_id');
+            $table->index('port_id');
             $table->index('country_id');
             $table->index('entity_id');
             $table->index('city_id');

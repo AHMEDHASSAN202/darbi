@@ -34,7 +34,7 @@ class PhoneRule implements Rule
         ];
 
         if (!isset($phoneRegex[$this->phoneCode])) {
-            return false;
+            return preg_match('/^[0-9]{8,11}$/', $value);
         }
 
         if (!preg_match($phoneRegex[$this->phoneCode], $value)) {
@@ -51,6 +51,6 @@ class PhoneRule implements Rule
      */
     public function message()
     {
-        return 'Not a valid phone number (must not include spaces, country code or special characters)';
+        return __('Not a valid phone number (must not include spaces, country code or special characters)');
     }
 }

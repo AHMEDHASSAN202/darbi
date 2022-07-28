@@ -26,9 +26,9 @@ class CountryService
         $countries = $this->countryRepository->list($request);
 
         if ($countries instanceof LengthAwarePaginator) {
-            return new PaginateResource(CountryResource::collection($countries));
+            return successResponse(['countries' => new PaginateResource(CountryResource::collection($countries))]);
         }
 
-        return CountryResource::collection($countries);
+        return successResponse(['countries' => CountryResource::collection($countries)]);
     }
 }

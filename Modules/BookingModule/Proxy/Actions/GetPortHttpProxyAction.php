@@ -4,18 +4,19 @@
  * User: ahmed hasssan
  */
 
-namespace Modules\CatalogModule\Proxy\Actions;
+namespace Modules\BookingModule\Proxy\Actions;
 
 use App\Proxy\InternalRequest;
 use Illuminate\Support\Facades\Route;
 
-class GetRegionAction
+
+class GetPortHttpProxyAction
 {
     public function __invoke($data)
     {
-        $url = '/api/mobile/v1/regions/find';
+        $url = '/api/internal/v1/ports/' . $data['port_id'];
 
-        $req = InternalRequest::create($url, 'GET', $data);
+        $req = InternalRequest::create($url, 'GET');
 
         $res = Route::dispatch($req);
 
@@ -23,6 +24,6 @@ class GetRegionAction
 
         $jsonData = json_decode($res->getContent(), true);
 
-        return @$jsonData['data']['region'] ?? [];
+        return @$jsonData['data']['port'] ?? [];
     }
 }

@@ -50,6 +50,8 @@ class CarFactory extends Factory
             'is_available'      => true,
             'vendor_id'         => new ObjectId($vendor->_id),
             'branch_id'         => new ObjectId($branch->id),
+            'port_id'           => null,
+            'port'              => [],
             'state'             => 'free',
             'extra_ids'         => $extras,
             'country_id'        => new ObjectId($country->_id),

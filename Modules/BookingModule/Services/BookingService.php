@@ -79,24 +79,49 @@ class BookingService
         $extras = $this->getExtras($entity, $rentRequest->extras);
         $country = $entity['country'];
 
+        $branch = [];
+        $port = [];
+
+        if (entityIsCar($entity['type'])) {
+
+            $branch = $this->getBranch($entity['branch_id']);
+
+            if (empty($branch)) {
+                return badResponse([], __('Port not exists'));
+            }
+
+        }elseif (entityIsYacht($entity['type'])) {
+
+            $port = $this->getPort($entity['port_id']);
+
+            if (empty($port)) {
+                return badResponse([], __('Port not exists'));
+            }
+
+        }else {
+            return badResponse([], __('Something error in entity'));
+        }
+
         $booking = $this->bookingRepository->create([
             'user_id'       => new ObjectId(auth('api')->id()),
             'user'          => auth('api')->user()->only(['_id', 'phone', 'phone_code', 'name', 'email']),
             'vendor'        => $vendor,
             'vendor_id'     => new ObjectId($entity['vendor_id']),
-            'branch_id'     => new ObjectId($entity['branch_id']),
-            'branch'        => @$entity['branch'],
+            'branch_id'     => arrayGet($entity, 'branch_id') ? new ObjectId($entity['branch_id']) : null,
+            'branch'        => $branch,
+            'port_id'       => arrayGet($entity, 'port_id') ? new ObjectId($entity['port_id']) : null,
+            'port'          => $port,
             'entity_id'     => new ObjectId($entity['id']),
-            'entity_type'   => @$entity['entity_type'],
+            'entity_type'   => arrayGet($entity, 'entity_type'),
             'entity_details' => [
-                'name'      => @$entity['name'] ?? "",
-                'price'     => @$entity['price'],
-                'price_unit'=> @$entity['price_unit'],
-                'images'    => @$entity['images'],
+                'name'      => arrayGet($entity, 'name', ''),
+                'price'     => arrayGet($entity, 'price'),
+                'price_unit'=> arrayGet($entity, 'price_unit'),
+                'images'    => arrayGet($entity, 'images'),
                 'model_id'  => isset($entity['model_id']) ? new ObjectId($entity['model_id']) : null,
-                'model_name'=> @$entity['model_name'],
+                'model_name'=> arrayGet($entity, 'model_name'),
                 'brand_id'  => isset($entity['brand_id']) ? new ObjectId($entity['brand_id']) : null,
-                'brand_name'=> @$entity['brand_name'],
+                'brand_name'=> arrayGet($entity, 'brand_name'),
             ],
             'country_id'    => new ObjectId($country['_id']),
             'country'       => $country,
@@ -115,7 +140,7 @@ class BookingService
 
     private function getExtras($entity, $extras) : array
     {
-        $entityExtras = @$entity['extras'];
+        $entityExtras = arrayGet($entity, 'extras');
 
         if (!is_array($extras) || empty($extras) || empty($entity) || !is_array($entityExtras)) return [];
 
@@ -333,5 +358,21 @@ class BookingService
         $proxy = new Proxy($notificationProxy);
         $adminVendors = $proxy->result() ?? [];
         return array_map(function ($admin) { return ['id' => new ObjectId($admin['id']), 'type' => 'admin']; }, $adminVendors);
+    }
+
+
+    private function getBranch($branchId)
+    {
+        $bookingProxy = new BookingProxy('GET_BRANCH', ['branch_id' => $branchId]);
+        $proxy = new Proxy($bookingProxy);
+        return $proxy->result();
+    }
+
+
+    private function getPort($portId)
+    {
+        $bookingProxy = new BookingProxy('GET_PORT', ['port_id' => $portId]);
+        $proxy = new Proxy($bookingProxy);
+        return $proxy->result();
     }
 }

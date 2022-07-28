@@ -6,9 +6,8 @@
 
 namespace Modules\CatalogModule\Transformers;
 
-use App\Proxy\Proxy;
-use Modules\BookingModule\Proxy\BookingProxy;
 use Modules\CatalogModule\Repositories\ExtraRepository;
+use Modules\CatalogModule\Services\VendorService;
 
 trait EntityTrait
 {
@@ -78,10 +77,14 @@ trait EntityTrait
 
     private function getVendor()
     {
-        $vendorId = $this->vendor_id;
-        $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => $vendorId])))->result();
-        if (isset($vendor['darbi_percentage'])) unset($vendor['darbi_percentage']);
-        if (isset($vendor['settings'])) unset($vendor['settings']);
-        return $vendor;
+        $vendor = app(VendorService::class)->findOne($this->vendor_id);
+        return [
+            'id'     => objectGet($vendor, 'id'),
+            'type'   => objectGet($vendor, 'type'),
+            'phone'  => objectGet($vendor, 'phone'),
+            'lat'    => objectGet($vendor, 'lat'),
+            'lng'    => objectGet($vendor, 'lng'),
+            'currency_code' => objectGet($vendor, 'country_currency_code')
+        ];
     }
 }

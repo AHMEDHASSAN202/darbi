@@ -3,6 +3,8 @@
 namespace Modules\CommonModule\Database\factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\CatalogModule\Entities\Vendor;
+use Modules\CatalogModule\Enums\EntityType;
 use Modules\CommonModule\Entities\City;
 use MongoDB\BSON\ObjectId;
 
@@ -23,12 +25,11 @@ class RegionFactory extends Factory
     public function definition()
     {
         $arFaker = \Faker\Factory::create('ar_EG');
-        $city = City::with('country')->get()->random(1)->first();
+        $vendor = Vendor::where('type', EntityType::CAR)->get()->random(1)->first();
 
         return [
             'name'      => ['ar' => $arFaker->streetAddress(), 'en' => $this->faker->streetAddress()],
-            'city_id'   => new ObjectId($city->_id),
-            'country_id'=> new ObjectId($city->country->_id),
+            'vendor_id' => new ObjectId($vendor->id),
             'location'  => [
                 'type'          => 'Polygon',
                 'coordinates'   => [

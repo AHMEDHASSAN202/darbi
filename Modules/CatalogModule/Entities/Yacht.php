@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Jenssegers\Mongodb\Eloquent\Builder;
+use Modules\CatalogModule\Enums\EntityType;
 use MongoDB\BSON\ObjectId;
 
 class Yacht extends Entity
@@ -21,7 +22,7 @@ class Yacht extends Entity
     protected static function booted()
     {
         static::addGlobalScope('yacht', function (Builder $builder) {
-            $builder->where('type', 'yacht');
+            $builder->where('type', EntityType::YACHT);
         });
     }
 

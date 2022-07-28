@@ -4,6 +4,7 @@ namespace Modules\CatalogModule\Database\factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\CatalogModule\Entities\Vendor;
+use Modules\CatalogModule\Enums\EntityType;
 use Modules\CommonModule\Entities\City;
 use Modules\CommonModule\Entities\Region;
 use MongoDB\BSON\ObjectId;
@@ -24,8 +25,16 @@ class BranchFactory extends Factory
      */
     public function definition()
     {
-        $vendor = Vendor::all()->random(1)->first();
-        $region = Region::all()->random(1)->first();
+        $vendor = Vendor::where('type', EntityType::CAR)->get()->random(1)->first();
+        try {
+            $regions = Region::where('vendor_id', new ObjectId($vendor->id))->get()->random(2)->pluck('_id')->toArray();
+        }catch (\Exception $exception) {
+            $region = Region::where('vendor_id', new ObjectId($vendor->id))->first();
+            $regions = [];
+            if ($region) {
+                $regions = [(string)$region->_id];
+            }
+        }
         $arFaker = \Faker\Factory::create('ar_EG');
         $city = City::all()->random(1)->first();
 
@@ -38,7 +47,6 @@ class BranchFactory extends Factory
                 $this->faker->imageUrl(800, 400, null, false, 'Cover'),
             ],
             'is_active'     => true,
-            'is_open'       => true,
             'phone'         => [
                 'phone'        => $this->faker->numberBetween(1111111111, 9999999999),
                 'phone_code'   => 966
@@ -46,8 +54,7 @@ class BranchFactory extends Factory
             'address'       => $this->faker->address,
             'city_id'       => new ObjectId($city->_id),
             'require_activation' => $this->faker->boolean,
-            'darbi_percentage'   => $this->faker->randomFloat(1, 1, 100),
-            'region_id'    => new ObjectId($region->_id),
+            'regions_ids'    => generateObjectIdOfArrayValues($regions),
             'branch_times'  => [
                 ['day_number' => 1, 'day_name' => "Monday", 'from' => "09:00", 'to' => "05:00"],
                 ['day_number' => 2, 'day_name' => "Tuesday", 'from' => "10:00", 'to' => "04:00"],

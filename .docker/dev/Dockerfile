@@ -24,7 +24,8 @@ RUN apt-get update && apt-get install -y \
     lua-zlib-dev \
     libmemcached-dev \
     libssl-dev pkg-config \
-    nginx
+    nginx \
+    cron
 
 
 # Install Mongodb
@@ -68,8 +69,9 @@ RUN useradd -u 1000 -ms /bin/bash -g www www
 RUN chown -R www:www /var/www
 
 # # add root to www group
-RUN chmod 777 /var/www/storage
-RUN chmod 777 /var/www/storage/logs
+#RUN chmod 777 /var/www/storage
+#RUN chmod 777 /var/www/storage/logs
+RUN chmod -R ugo+rwX /var/www/storage
 
 # change ownership for directories to www
 RUN chown -R www /var/www/html && \
@@ -92,8 +94,13 @@ RUN chmod +x /var/www/docker/run.sh
 
 
 # Setup cron job
-#RUN (crontab -l ; echo "* * * * * cd /var/www && php artisan schedule:run >> /dev/null 2>&1") | crontab
+RUN (crontab -l ; echo "* * * * * cd /var/www && php artisan schedule:run >> /dev/null 2>&1") | crontab
 
+# Create the log file to be able to run tail
+RUN touch /var/log/cron.log
+
+# Run the command on container startup
+CMD cron && tail -f /var/log/cron.log
 
 # open port 80
 EXPOSE 80

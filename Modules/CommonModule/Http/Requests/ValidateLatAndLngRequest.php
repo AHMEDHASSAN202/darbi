@@ -15,7 +15,7 @@ class ValidateLatAndLngRequest extends FormRequest
     {
         return [
             'lat'           => 'required|numeric',
-            'lng'           => 'required|numeric'
+            'lng'           => 'required|numeric',
         ];
     }
 

@@ -45,6 +45,11 @@ class Vendor extends Base
     //============= #END# Relations ===================\\
 
     //============= scopes ==============\\
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
     public function scopeSearch($query, Request $request)
     {
         if ($q = $request->get('q')) {

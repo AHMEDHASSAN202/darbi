@@ -78,17 +78,12 @@ return [
         ],
         'admins' => [
             'driver' => 'eloquent',
-            'model' => \Modules\AuthModule\Entities\Admin::class,
+            'model' => \Modules\AuthModule\Entities\SuperAdmin::class,
         ],
         'vendor' => [
             'driver' => 'eloquent',
-            'model' => \Modules\AuthModule\Entities\Admin::class
+            'model' => \Modules\AuthModule\Entities\VendorAdmin::class
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*

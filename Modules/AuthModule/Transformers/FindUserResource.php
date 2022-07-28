@@ -41,10 +41,10 @@ class FindUserResource extends JsonResource
             'image'     => $image,
             'is_active' => (boolean)$this->is_active,
             'identity'      => [
-                'frontside_image'   => imageUrl(@$this->identity['frontside_image']),
-                'backside_image'    => imageUrl(@$this->identity['backside_image'])
+                'frontside_image'   => imageUrl(arrayGet($this->identity, 'frontside_image')),
+                'backside_image'    => imageUrl(arrayGet($this->identity, 'backside_image'))
             ],
-            'is_profile_completed' => (!empty($this->name) && !empty(@$this->identity['frontside_image']) && !empty(@$this->identity['backside_image'])),
+            'is_profile_completed' => (!empty($this->name) && !empty(arrayGet($this->identity, 'frontside_image')) && !empty(arrayGet($this->identity, 'backside_image'))),
             'locations' => SavedPlaceResource::collection($this->savedPlaces),
             'last_booking' => $lastBooking
         ];

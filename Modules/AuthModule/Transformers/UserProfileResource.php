@@ -28,11 +28,11 @@ class UserProfileResource extends JsonResource
             'phone_code'    => $this->phone_code,
             'name'          => $this->name ?? "",
             'identity'      => [
-                'frontside_image'   => imageUrl(@$this->identity['frontside_image']),
-                'backside_image'    => imageUrl(@$this->identity['backside_image'])
+                'frontside_image'   => imageUrl(arrayGet($this->identity, 'frontside_image')),
+                'backside_image'    => imageUrl(arrayGet($this->identity, 'backside_image'))
             ],
             'image'           => $image,
-            'is_profile_completed' => (!empty($this->name) && !empty(@$this->identity['frontside_image']) && !empty(@$this->identity['backside_image']))
+            'is_profile_completed' => (!empty($this->name) && !empty(arrayGet($this->identity, 'frontside_image')) && !empty(arrayGet($this->identity, 'backside_image')))
         ];
     }
 }

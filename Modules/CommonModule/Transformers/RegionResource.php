@@ -6,6 +6,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class RegionResource extends JsonResource
 {
+    use HelperRegionResource;
+
     /**
      * Transform the resource into an array.
      *
@@ -14,21 +16,11 @@ class RegionResource extends JsonResource
      */
     public function toArray($request)
     {
-        $res = [
+        return [
             'id'                => $this->_id,
-            'country_id'        => (string)$this->country_id,
-            'city_id'           => (string)$this->city_id,
             'name'              => translateAttribute($this->name),
+            'is_active'         => (boolean)$this->is_active,
+            'location'          => $this->getLocationPoints(),
         ];
-
-        if ($this->relationLoaded('country')) {
-            $res['country'] = new CountryResource($this->country);
-        }
-
-        if ($this->relationLoaded('city')) {
-            $res['city'] = new CityResource($this->city);
-        }
-
-        return $res;
     }
 }

@@ -23,10 +23,28 @@ Route::group([
 
 
 
-
 //vendor routes
 Route::group([
     'prefix'    => 'vendors',
 ], function () {
     Route::get('{vendor}'               , 'VendorController@show');
+});
+
+
+
+
+//branches routes
+Route::group([
+    'prefix'    => 'branches',
+], function () {
+    Route::get('{branch}'               , 'BranchController@show');
+});
+
+
+
+//ports routes
+Route::group([
+    'prefix'    => 'ports',
+], function () {
+    Route::get('{port}'                 , 'PortController@show');
 });

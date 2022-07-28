@@ -25,6 +25,25 @@ class CountryRepository
 
     public function find($countryId)
     {
-        return $this->model->active()->find($countryId);
+        return $this->model->active()->findOrFail($countryId);
+    }
+
+    public function findAllForDashboard(Request $request)
+    {
+        return $this->model->filter($request)->search($request)->get();
+    }
+
+    public function toggleActive($countryId)
+    {
+        $country = $this->model->findOrFail($countryId);
+        $country->is_active = !$country->is_active;
+        $country->save();
+
+        return $country;
+    }
+
+    public function findForDashboard($countryId)
+    {
+        return $this->model->findOrFail($countryId);
     }
 }
