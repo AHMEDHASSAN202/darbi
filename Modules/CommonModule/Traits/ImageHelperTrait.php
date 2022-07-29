@@ -21,8 +21,8 @@ trait ImageHelperTrait
             $s = explode('x', $size, 2);
             $width = $s[0];
             $height = $s[1];
-            $imageResizeName = $imageInfo['filename'] . '-resize-' . $size . '.' . $imageInfo['extension'];
-            $imageFullPath = $imageInfo['dirname'] . DIRECTORY_SEPARATOR . $imageResizeName;
+            $imageResizeName = arrayGet($imageInfo, 'filename') . '-resize-' . $size . '.' . arrayGet($imageInfo, 'extension');
+            $imageFullPath = arrayGet($imageInfo, 'dirname') . DIRECTORY_SEPARATOR . $imageResizeName;
 
             try {
 
