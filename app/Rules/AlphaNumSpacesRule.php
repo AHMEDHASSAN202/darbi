@@ -27,6 +27,8 @@ class AlphaNumSpacesRule implements Rule
      */
     public function passes($attribute, $value)
     {
+        return true;
+
         $languagesPattern = [
             'ar'            => '/^[\p{Arabic}\s\p{N}]+$/mu',
             'en'            => '/^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$/'
