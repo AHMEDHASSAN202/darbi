@@ -14,10 +14,11 @@ class SigninWithOtpRequest extends FormRequest
      */
     public function rules()
     {
-        $this->request->set('phone_code', phoneCodeCleaning($this->request->get('phone_code')));
+        $phoneCode = phoneCodeCleaning($this->request->get('phone_code'));
+        request()->offsetSet('phone_code', $phoneCode);
 
         return [
-            'phone'         => ['required', 'numeric', new PhoneRule($this->request->get('phone_code'))],
+            'phone'         => ['required', 'numeric', new PhoneRule($phoneCode)],
             'phone_code'    => 'required',
             'otp'           => 'required|numeric'
         ];

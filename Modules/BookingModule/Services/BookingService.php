@@ -13,6 +13,7 @@ use Illuminate\Support\Arr;
 use Modules\BookingModule\Classes\BookingChangeLog;
 use Modules\BookingModule\Classes\Payments\Payment;
 use Modules\BookingModule\Classes\Price;
+use Modules\BookingModule\Classes\Validation\BookingDateValidation;
 use Modules\BookingModule\Enums\BookingStatus;
 use Modules\BookingModule\Events\BookingStatusChangedEvent;
 use Modules\BookingModule\Http\Requests\AddBookDetailsRequest;
@@ -87,7 +88,7 @@ class BookingService
             $branch = $this->getBranch($entity['branch_id']);
 
             if (empty($branch)) {
-                return badResponse([], __('Port not exists'));
+                return badResponse([], __('Branch not exists'));
             }
 
         }elseif (entityIsYacht($entity['type'])) {
@@ -170,7 +171,13 @@ class BookingService
         abort_if(is_null($entity), 404);
 
         if (!entityIsFree($entity['state'])) {
-            return badResponse([], __('booking not allowed'));
+            return badResponse([], __('Booking not allowed'));
+        }
+
+        $dateValidation = (new BookingDateValidation($entity))->validator($addBookDetailsRequest);
+
+        if (!$dateValidation->passes()) {
+            return badResponse([], $dateValidation->error());
         }
 
         $priceSummary = (new Price($entity, $booking->extras, $addBookDetailsRequest->start_at, $addBookDetailsRequest->end_at, $booking->vendor))->getPriceSummary();

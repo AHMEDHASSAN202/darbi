@@ -18,7 +18,7 @@ class BookingModuleDatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-//        Booking::factory()->count(200)->create();
-//        BookingPaymentTransaction::factory()->count(200)->create();
+        Booking::factory()->count(200)->create();
+        BookingPaymentTransaction::factory()->count(200)->create();
     }
 }

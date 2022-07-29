@@ -14,7 +14,6 @@ class BookingTimeout
 {
     public function __invoke()
     {
-        Log::info('TESSSSSSSSSSSSSSSST');
         $bookingProxy = new BookingProxy("TIMEOUT_BOOKINGS");
 
         $proxyResult = (new Proxy($bookingProxy))->result();

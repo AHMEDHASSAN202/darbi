@@ -52,8 +52,8 @@ class Price
         foreach ($this->bookingPlugins as $bookingPlugin) {
             $pluginPrice += $bookingPlugin['price'];
         }
-        $totalEntityPrice = ($entity * $this->getUnitsCount());
-        return round(($totalEntityPrice + $pluginPrice), 2);
+        $totalEntityPrice = (($entity + $pluginPrice) * $this->getUnitsCount());
+        return round($totalEntityPrice, 2);
     }
 
 

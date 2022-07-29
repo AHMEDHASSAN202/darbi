@@ -30,7 +30,7 @@ class LocationService
             $region = app(RegionService::class)->findRegionByLatAndLng($lat, $lng, $request->branch);
 
             if (!$region) {
-                return badResponse([], 'Region not supported');
+                return badResponse([], __('Please select a supported region'));
             }
 
             //check if location exists in darbi database
