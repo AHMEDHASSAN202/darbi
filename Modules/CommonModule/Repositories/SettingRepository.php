@@ -27,11 +27,19 @@ class SettingRepository
         $settings = $this->getSettings();
 
         if (isset($data['time_interval_vendor_accept_min'])) {
-            $settings->time_interval_vendor_accept_min = $data['time_interval_vendor_accept_min'];
+            $settings->time_interval_vendor_accept_min = (int)$data['time_interval_vendor_accept_min'];
         }
 
         if (isset($data['time_interval_user_accept_min'])) {
-            $settings->time_interval_user_accept_min = $data['time_interval_user_accept_min'];
+            $settings->time_interval_user_accept_min = (int)$data['time_interval_user_accept_min'];
+        }
+
+        if (isset($data['time_reminder_before_picked_up'])) {
+            $settings->time_reminder_before_picked_up = (int)$data['time_reminder_before_picked_up'];
+        }
+
+        if (isset($data['time_reminder_before_dropped'])) {
+            $settings->time_reminder_before_dropped = (int)$data['time_reminder_before_dropped'];
         }
 
         if (isset($data['walk_through_images']) && !empty($data['walk_through_images'])) {
@@ -43,11 +51,11 @@ class SettingRepository
         }
 
         if (isset($data['android_app_version'])) {
-            $settings->android_app_version = $data['android_app_version'];
+            $settings->android_app_version = (float)$data['android_app_version'];
         }
 
         if (isset($data['android_force_updated'])) {
-            $settings->android_force_updated = $data['android_force_updated'];
+            $settings->android_force_updated = (boolean)$data['android_force_updated'];
         }
 
         if (isset($data['android_force_updated_link'])) {
@@ -55,7 +63,7 @@ class SettingRepository
         }
 
         if (isset($data['ios_app_version'])) {
-            $settings->ios_app_version = $data['ios_app_version'];
+            $settings->ios_app_version = (float)$data['ios_app_version'];
         }
 
         if (isset($data['ios_force_updated'])) {

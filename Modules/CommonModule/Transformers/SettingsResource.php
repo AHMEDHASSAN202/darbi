@@ -12,23 +12,25 @@ class SettingsResource extends JsonResource
      * @param  \Illuminate\Http\Request
      * @return array
      */
-    public function toArray($setting)
+    public function toArray($request)
     {
         return [
-            'time_interval_vendor_accept_min'           => $setting->time_interval_vendor_accept_min,
-            'time_interval_user_accept_min'             => $setting->time_interval_user_accept_min,
-            'walk_through_images'                       => WalkThroughImageResource::collection($setting->walk_through_images),
+            'time_interval_vendor_accept_min'           => (int)$this->time_interval_vendor_accept_min,
+            'time_interval_user_accept_min'             => (int)$this->time_interval_user_accept_min,
+            'time_reminder_before_picked_up'            => (int)$this->time_reminder_before_picked_up,
+            'time_reminder_before_dropped'              => (int)$this->time_reminder_before_dropped,
+            'walk_through_images'                       => WalkThroughImageResource::collection($this->walk_through_images ?? []),
             'categories'                                => CategoryResource::collection($this->categories),
-            'home_main_theme'                           => imageUrl($setting->home_main_themem, 'original'),
-            'android_app_version'                       => $setting->android_app_version,
-            'android_force_updated'                     => $setting->android_force_updated,
-            'android_force_updated_link'                => $setting->android_force_updated_link,
-            'ios_app_version'                           => $setting->ios_app_version,
-            'ios_force_updated'                         => $setting->ios_force_updated,
-            'ios_force_updated_link'                    => $setting->ios_force_updated_link,
-            'default_country'                           => $setting->default_country,
-            'default_city'                              => $setting->default_city,
-            'darbi_percentage'                          => $setting->darbi_percentage,
+            'home_main_theme'                           => imageUrl($this->home_main_themem, 'original'),
+            'android_app_version'                       => (float)$this->android_app_version,
+            'android_force_updated'                     => (boolean)$this->android_force_updated,
+            'android_force_updated_link'                => $this->android_force_updated_link,
+            'ios_app_version'                           => (float)$this->ios_app_version,
+            'ios_force_updated'                         => (boolean)$this->ios_force_updated,
+            'ios_force_updated_link'                    => $this->ios_force_updated_link,
+            'default_country'                           => $this->default_country,
+            'default_city'                              => $this->default_city,
+            'darbi_percentage'                          => (int)$this->darbi_percentage,
         ];
     }
 }

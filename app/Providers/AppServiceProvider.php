@@ -3,13 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use Jenssegers\Mongodb\Eloquent\Builder;
-use Modules\TelescopeModule\Providers\TelescopeServiceProvider;
-use MongoDB\BSON\ObjectId;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        URL::forceScheme('https');
+
         RateLimiter::for('auth', function (Request $request) {
             return [
                 Limit::perMinute(60)->by($request->ip()),

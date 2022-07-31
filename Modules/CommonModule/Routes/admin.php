@@ -39,3 +39,13 @@ Route::group([
     Route::get(''                        , 'CityController@index');
     Route::put('{city}/toggle-active'    , 'CityController@toggleActive');
 });
+
+
+Route::group([
+    'prefix'        => 'settings',
+    'middleware'    => 'auth:admin_api'
+], function () {
+    Route::get(''                        , 'SettingController@index');
+    Route::post(''                       , 'SettingController@update');
+    Route::post('clear-cache'            , 'SettingController@clearSettingCache');
+});
