@@ -17,7 +17,7 @@ class GetVendorAdminsAction
 
         $originalRequest = request();
 
-        $req = InternalRequest::create($url, 'GET', $data)->replace($data);
+        $req = InternalRequest::create($url, 'GET', $data);
 
         app()->instance('request', $req);
 

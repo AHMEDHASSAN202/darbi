@@ -8,6 +8,7 @@ namespace Modules\AuthModule\Repositories\User;
 
 use Illuminate\Http\Request;
 use Modules\AuthModule\Entities\User;
+use MongoDB\BSON\ObjectId;
 
 class UserRepository
 {
@@ -62,6 +63,25 @@ class UserRepository
 
     public function findAllByPhones($phones)
     {
-        dd($phones);
+        $users = $this->model->raw(function ($collection) use ($phones) {
+            return $collection->aggregate([
+                [
+                    '$project'  => [
+                        "phoneWithCode" => ['$concat'       => ['$phone_code', '$phone']]
+                    ]
+                ],
+                [
+                    '$match'        => [
+                        'phoneWithCode'          => [ '$in' => (array)$phones ],
+                    ]
+                ]
+            ]);
+        });
+
+        if (!$users->count()) {
+            return [];
+        }
+
+        return $users;
     }
 }

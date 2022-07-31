@@ -368,7 +368,7 @@ class BookingService
         $notificationProxy = new BookingProxy('GET_VENDOR_ADMINS_IDS', ['type' => 'vendor', 'vendor' => $vendorId]);
         $proxy = new Proxy($notificationProxy);
         $adminVendors = $proxy->result() ?? [];
-        return array_map(function ($admin) { return ['id' => new ObjectId($admin['id']), 'type' => 'admin']; }, $adminVendors);
+        return array_map(function ($admin) { return ['user_id' => new ObjectId($admin['id']), 'on_model' => 'admin']; }, $adminVendors);
     }
 
 

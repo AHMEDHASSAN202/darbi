@@ -33,9 +33,9 @@ class CreateNotificationRequest extends FormRequest
         ];
 
         if (!$this->hasFile('receivers_file')) {
-            $rules['receivers']         = ['required_if:receiver_type,'.NotificationReceiverTypes::SPECIFIED, '|array'];
+            $rules['receivers']         = ['required_if:receiver_type,'.NotificationReceiverTypes::SPECIFIED, 'array'];
             $rules['receivers.*.id']    = ['required', new MongoIdRule];
-            $rules['receivers.*.type']  = ['required', 'in:user,admin'];
+            $rules['receivers.*.type']  = ['required', 'in:user,vendor,admin'];
         }else {
             $rules['receivers_file'] = 'required|file|mimes:csv,xlsx|max:5120';
         }
