@@ -60,7 +60,7 @@ class YachtFactory extends Factory
             'require_activation'=> $this->faker->boolean,
             'price'             => $this->faker->randomFloat(2, 2000, 10000),
             'price_unit'        => 'hour',
-            'built_date'        => '2017',
+            'built_date'        => 2017,
             'type'              => 'yacht'
         ];
     }
