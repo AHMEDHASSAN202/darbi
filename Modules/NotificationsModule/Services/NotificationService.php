@@ -173,7 +173,21 @@ class NotificationService
             if ($request->hasFile('receivers_file')) {
                 $receivers = $this->getUserReceiversFromExcelFile($request->receivers_file);
             }else {
-                $receivers = array_map(function ($receiver) { return ['user_id' => new ObjectId($receiver['id']), 'on_model' => $receiver['type']]; }, $request->receivers);
+                $vendorIds = [];
+                foreach ($request->receivers as $receiver) {
+                    if ($receiver['type'] !== 'vendor') {
+                        //normal user
+                        $receivers[] = ['user_id' => new ObjectId($receiver['id']), 'on_model' => $receiver['type']];
+                    }else {
+                        //if vendor
+                        //add vendor id in new array
+                        $vendorIds[] = $receiver['id'];
+                    }
+                }
+                if (!empty($vendorIds)) {
+                    $vendorAdmins = $this->getVendorAdminIds($vendorIds);
+                    $receivers = array_merge($receivers, $vendorAdmins);
+                }
             }
         }
 
@@ -190,11 +204,11 @@ class NotificationService
     }
 
 
-    public function getVendorAdminIds($vendorId)
+    public function getVendorAdminIds($vendorIds)
     {
-        $notificationProxy = new NotificationProxy('GET_VENDOR_ADMINS_IDS', ['type' => 'vendor', 'vendor' => $vendorId]);
+        $notificationProxy = new NotificationProxy('GET_VENDOR_ADMINS_IDS', ['type' => 'vendor', 'vendor_in' => $vendorIds]);
         $proxy = new Proxy($notificationProxy);
         $adminVendors = $proxy->result() ?? [];
-        return array_map(function ($admin) { return ['id' => new ObjectId($admin['id']), 'type' => 'admin']; }, $adminVendors);
+        return array_map(function ($admin) { return ['user_id' => new ObjectId($admin['id']), 'on_model' => 'admin']; }, $adminVendors);
     }
 }

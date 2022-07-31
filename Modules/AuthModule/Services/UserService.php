@@ -82,7 +82,7 @@ class UserService
             if (!isset($row['phone_code']) || !isset($row['phone'])) {
                 return;
             }
-            return $row['phone_code'] . $row['phone'];
+            return phoneCodeCleaning($row['phone_code']) . $row['phone'];
         })->toArray();
 
         return array_values($phones);
