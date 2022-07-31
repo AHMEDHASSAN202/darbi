@@ -17,10 +17,13 @@ class UpdateSettingsRequest extends FormRequest
         return [
             'time_interval_vendor_accept_min'       => 'sometimes|nullable|integer|min:1',
             'time_interval_user_accept_min'         => 'sometimes|nullable|integer|min:1',
+            'time_reminder_before_picked_up'        => 'sometimes|nullable|integer|min:1',
+            'time_reminder_before_dropped'          => 'sometimes|nullable|integer|min:1',
             'walk_through_images'                   => 'sometimes|nullable|array',
             'walk_through_images.*.title'           => 'required|array',
             'walk_through_images.*.title.ar'        => ['required', new AlphaNumSpacesRule()],
             'walk_through_images.*.title.en'        => ['required', new AlphaNumSpacesRule()],
+            'walk_through_images.*.desc'            => 'required|array',
             'walk_through_images.*.desc.ar'         => ['required', new AlphaNumSpacesRule()],
             'walk_through_images.*.desc.en'         => ['required', new AlphaNumSpacesRule()],
             'home_main_theme'                       => 'sometimes|nullable|image',

@@ -8,7 +8,7 @@ use Modules\CommonModule\Http\Requests\UpdateSettingsRequest;
 use Modules\CommonModule\Services\SettingService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
-class SettingsController extends Controller
+class SettingController extends Controller
 {
     use ApiResponseTrait;
 
@@ -31,5 +31,12 @@ class SettingsController extends Controller
         $result = $this->settingService->update($updateSettingsRequest);
 
         return $this->apiResponse(...$result);
+    }
+
+    public function clearSettingCache()
+    {
+        $this->settingService->clearSettingsCache();
+
+        return $this->apiResponse([]);
     }
 }
