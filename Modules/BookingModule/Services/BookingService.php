@@ -162,6 +162,10 @@ class BookingService
         $meId = auth('api')->id();
         $me = auth('api')->user();
 
+        if (!$me->is_profile_completed) {
+            return badResponse([], __('Please complete your profile first'));
+        }
+
         $booking = $this->bookingRepository->findByUser($meId, $bookingId);
 
         abort_if((is_null($booking) || $booking->status != BookingStatus::INIT), 404);

@@ -29,6 +29,8 @@ class User extends BaseAuthenticatable implements JWTSubject
 
     public $preventActivityLog = ['password', 'remember_token'];
 
+    protected $appends = ['is_profile_completed'];
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -79,6 +81,11 @@ class User extends BaseAuthenticatable implements JWTSubject
     public function isNotActive()
     {
         return $this->is_active !== true;
+    }
+
+    public function getIsProfileCompletedAttribute()
+    {
+        return (!empty($this->name) && !empty(arrayGet($this->identity, 'frontside_image')));
     }
 
     //=================== #END# helpers ===================\\
