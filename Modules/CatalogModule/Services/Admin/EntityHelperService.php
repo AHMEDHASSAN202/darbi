@@ -87,7 +87,8 @@ trait EntityHelperService
                 'country_id'    => new ObjectId($countryId),
                 'price'         => floatval($request->price),
                 'price_unit'    => $request->price_unit,
-                'unavailable_date'  => $unavailableDate
+                'unavailable_date'  => $unavailableDate,
+                'built_date'    => (int)$request->built_date
             ] + $data;
 
         return $this->repository->create($data);

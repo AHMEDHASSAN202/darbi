@@ -28,7 +28,8 @@ class CreateEntityRequest extends FormRequest
             'price_unit'        => 'required|in:day,hour',
             'unavailable_date'  => 'nullable|array',
             'unavailable_date.*' => 'nullable|date',
-            'is_active'         => 'nullable|sometimes|boolean'
+            'is_active'         => 'nullable|sometimes|boolean',
+            'built_date'        => 'nullable|sometimes|date_format:Y|before_or_equal:today'
         ];
     }
 

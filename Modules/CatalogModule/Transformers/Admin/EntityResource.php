@@ -30,7 +30,8 @@ class EntityResource extends JsonResource
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
             'state'         => $this->state,
-            'is_active'     => (boolean)$this->is_active
+            'is_active'     => (boolean)$this->is_active,
+            'built_date'    => $this->built_date ? (int)$this->built_date : null
         ];
 
         if ($this->resource instanceof Yacht) {
