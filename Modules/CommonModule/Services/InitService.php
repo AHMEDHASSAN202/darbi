@@ -43,7 +43,7 @@ class InitService
             'default_country'       => $this->settings->default_country,
             'default_city'          => $this->settings->default_city,
             'pages'                 => $this->pages(),
-            'push_version'          => 24,
+            'push_version'          => 25,
             'show_personal_ID'      => 1
         ];
     }
