@@ -16,12 +16,12 @@ class ShareController extends Controller
         $this->entityService = $entityService;
     }
 
-    public function __invoke($id)
+    public function __invoke($entityType, $id)
     {
         $entity = $this->entityService->find($id);
 
         return view('catalogmodule::pages.share', [
-            'entity'        => json_decode($entity->toJson(), true)
+            'entity'        => $entity->resource
         ]);
     }
 }
