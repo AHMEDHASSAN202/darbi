@@ -44,7 +44,7 @@ class InitService
             'default_city'          => $this->settings->default_city,
             'pages'                 => $this->pages(),
             'push_version'          => 24,
-            'show_personal_ID'      => 0
+            'show_personal_ID'      => 1
         ];
     }
 
