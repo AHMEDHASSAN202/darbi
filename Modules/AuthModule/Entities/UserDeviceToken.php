@@ -34,7 +34,10 @@ class UserDeviceToken extends Base
                     $query->where('user_details.on_model', User::class);
                     break;
                 case 'vendors':
-                    $query->where('user_details.on_model', Admin::class);
+                    $query->where('user_details.on_model', VendorAdmin::class);
+                    break;
+                case 'admins':
+                    $query->where('user_details.on_model', SuperAdmin::class);
                     break;
                 case 'specified':
                     $users = [];
@@ -52,7 +55,7 @@ class UserDeviceToken extends Base
                         $q->where(function ($qq) use ($users) {
                             $qq->whereIn('user_details.id', $users)->where('user_details.on_model', User::class);
                         })->orWhere(function ($qq) use ($admins) {
-                            $qq->whereIn('user_details.id', $admins)->where('user_details.on_model', Admin::class);
+                            $qq->whereIn('user_details.id', $admins)->whereIn('user_details.on_model', [VendorAdmin::class, SuperAdmin::class]);
                         });
                     });
 
@@ -63,7 +66,7 @@ class UserDeviceToken extends Base
         if ($request->get('vendor')) {
             $vendorAdmins = @app(AdminService::class)->findAllIds($request)['admins'];
             if ($vendorAdmins) {
-                $query->whereIn('user_details.id', generateObjectIdOfArrayValues($vendorAdmins->pluck('id')->toArray($request)))->where('user_details.on_model', Admin::class);
+                $query->whereIn('user_details.id', generateObjectIdOfArrayValues($vendorAdmins->pluck('id')->toArray($request)))->where('user_details.on_model', VendorAdmin::class);
             }
         }
     }

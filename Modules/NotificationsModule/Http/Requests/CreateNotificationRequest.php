@@ -18,26 +18,22 @@ class CreateNotificationRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'title'         => 'required|array',
-            'title.ar'      => 'required|string',
-            'title.en'      => 'required|string',
-            'message'       => 'required|array',
-            'message.ar'    => 'required|string',
-            'message.en'    => 'required|string',
+            'title'         => 'required|string',
+            'message'       => 'required|string',
             'url'           => 'sometimes|nullable|url',
-            'notification_type' => 'required|string|in:'.implode(',', array_values(NotificationTypes::getTypes())),
+            'notification_type' => 'sometimes|nullable|string|in:'.implode(',', array_values(NotificationTypes::getTypes())),
             'receiver_type'     => 'required|in:'.implode(',', array_values(NotificationReceiverTypes::getTypes())),
             'image'             => 'sometimes|nullable|image',
             'extra_data'        => 'sometimes|nullable|array',
             'is_automatic'      => 'sometimes|nullable|boolean'
         ];
 
-        if (!$this->hasFile('receivers_file')) {
+        if (!$this->hasFile('xlFile')) {
             $rules['receivers']         = ['required_if:receiver_type,'.NotificationReceiverTypes::SPECIFIED, 'array'];
             $rules['receivers.*.id']    = ['required', new MongoIdRule];
             $rules['receivers.*.type']  = ['required', 'in:user,vendor,admin'];
         }else {
-            $rules['receivers_file'] = 'required|file|mimes:csv,xlsx|max:5120';
+            $rules['xlFile'] = 'required|file|mimes:csv,xlsx|max:5120';
         }
 
         return $rules;
