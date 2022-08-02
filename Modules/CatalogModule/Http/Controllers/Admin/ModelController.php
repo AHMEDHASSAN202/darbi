@@ -64,10 +64,10 @@ class ModelController extends Controller
     }
 
 
-    public function assets()
+    public function assets(Request $request)
     {
         return $this->apiResponse([
-            'assets'    => $this->modelService->assets()
+            'assets'    => $this->modelService->assets($request)
         ]);
     }
 }
