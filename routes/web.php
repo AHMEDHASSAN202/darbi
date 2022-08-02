@@ -18,7 +18,3 @@ use MongoDB\BSON\ObjectId;
 Route::get('health-check', function () {
     return 'GOOD';
 });
-
-Route::get('tt', function () {
-    dd(now());
-});
