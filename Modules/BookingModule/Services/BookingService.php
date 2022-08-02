@@ -28,8 +28,9 @@ use MongoDB\BSON\ObjectId;
 
 class BookingService
 {
-    private $bookingRepository;
+    use BookingHelperService;
 
+    private $bookingRepository;
 
     public function __construct(BookingRepository $bookingRepository)
     {
@@ -222,7 +223,7 @@ class BookingService
             return badResponse([], __('booking not allowed', ['status' => __('cancel')]));
         }
 
-        $cancelledBeforeAccept = BookingStatus::CANCELLED_BEFORE_ACCEPT;
+        $cancelledBeforeAccept = ($booking->status === BookingStatus::ACCEPT) ? BookingStatus::CANCELLED_AFTER_ACCEPT: BookingStatus::CANCELLED_BEFORE_ACCEPT;
         $this->bookingRepository->update($bookingId, [
             'status_change_log'     => (new BookingChangeLog($booking, $cancelledBeforeAccept, $me))->logs(),
             'status'                => $cancelledBeforeAccept
@@ -277,16 +278,19 @@ class BookingService
     public function updateBookingsTimeout()
     {
         $bookings = $this->bookingRepository->getTimeoutBookings();
+        $bookingTimeoutState = BookingStatus::TIMEOUT;
 
         foreach ($bookings as $booking) {
             try {
 
                 $this->bookingRepository->update($booking->id, [
-                    'status'    => BookingStatus::TIMEOUT,
-                    'status_change_log' => (new BookingChangeLog($booking, BookingStatus::TIMEOUT))->logs()
+                    'status'    => $bookingTimeoutState,
+                    'status_change_log' => (new BookingChangeLog($booking, $bookingTimeoutState))->logs()
                 ]);
 
                 $booking->refresh();
+
+                $this->updateEntityState($bookingTimeoutState, $booking);
 
                 event(new BookingStatusChangedEvent($booking));
 
