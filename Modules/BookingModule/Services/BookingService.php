@@ -309,8 +309,8 @@ class BookingService
 
                 //notification to user
                 $this->createNotification(
-                    getLocalesWord('Reminder'),
-                    getLocalesWord('Booking Reminder Picked up'),
+                    'Reminder',
+                    'Booking Reminder Picked up',
                     [['id' => new ObjectId($booking->user_id), 'type' => 'user']],
                     $booking->id
                 );
@@ -318,8 +318,8 @@ class BookingService
                 //notification to vendor admins
                 $vendorAdminIds = $this->getVendorAdminIds((string)$booking->vendor_id);
                 $this->createNotification(
-                    getLocalesWord('Reminder'),
-                    getLocalesWord('Booking Reminder Picked up'),
+                    'Reminder',
+                    'Booking Reminder Picked up',
                     $vendorAdminIds,
                     $booking->id
                 );
@@ -328,8 +328,8 @@ class BookingService
 
                 //notification to user
                 $this->createNotification(
-                    getLocalesWord('Reminder'),
-                    getLocalesWord('Booking Reminder Dropped'),
+                    'Reminder',
+                    'Booking Reminder Dropped',
                     [['id' => new ObjectId($booking->user_id), 'type' => 'user']],
                     $booking->id
                 );
@@ -337,8 +337,8 @@ class BookingService
                 //notification to vendor admin
                 $vendorAdminIds = $this->getVendorAdminIds((string)$booking->vendor_id);
                 $this->createNotification(
-                    getLocalesWord('Reminder'),
-                    getLocalesWord('Booking Reminder Dropped'),
+                    'Reminder',
+                    'Booking Reminder Dropped',
                     $vendorAdminIds,
                     $booking->id
                 );
@@ -350,7 +350,7 @@ class BookingService
     }
 
 
-    public function createNotification(array $title, array $message, array $receivers, $bookingId)
+    public function createNotification(string $title, string $message, array $receivers, $bookingId)
     {
         $bookingProxy = new BookingProxy('CREATE_NOTIFICATION', [
             'title'             => $title,
