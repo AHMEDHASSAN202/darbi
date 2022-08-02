@@ -113,4 +113,9 @@ class BookingRepository
 
         })->get();
     }
+
+    public function checkIfIHaveBookingsNow($entityId)
+    {
+        return $this->booking->where('user_id', new ObjectId(auth('api')->id()))->where('entity_id', new ObjectId($entityId))->where('status', BookingStatus::PENDING)->exists();
+    }
 }

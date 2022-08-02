@@ -27,7 +27,8 @@ class FindVendorResource extends JsonResource
             'settings'  => $this->settings,
             'lat'       => $this->lat,
             'lng'       => $this->lng,
-            'country_currency_code' => $this->country_currency_code
+            'country_currency_code' => $this->country_currency_code,
+            'is_active' => (boolean)$this->is_active
         ];
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+use Carbon\Carbon;
+
 /**
  * Created by PhpStorm.
  * User: ahmed hasssan
@@ -390,4 +393,25 @@ function getTwitterUsernameFromUrl($url)
     }
     $path = parse_url($url,PHP_URL_PATH);
     return @explode('/', trim($path, '/'))[0];
+}
+
+function getBookingEndDate($priceUnit, $startDate, $endDate)
+{
+    $startAt = Carbon::parse($startDate);
+    $endAy = Carbon::parse($endDate);
+
+    if ($priceUnit === 'hour') {
+
+        $hours = ceil($startAt->floatDiffInHours($endAy));
+
+        return $startAt->addHours($hours)->format('Y-m-d H:i:00');
+
+    }elseif ($priceUnit === 'day') {
+
+        $days = ceil($startAt->floatDiffInDays($endAy));
+
+        return $startAt->addDays($days)->format('Y-m-d H:i:00');
+    }
+
+    throw new \Exception("Price unit not exists");
 }

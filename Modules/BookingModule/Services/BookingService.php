@@ -73,8 +73,10 @@ class BookingService
 
         abort_if((is_null($vendor) || is_null($city)), 404);
 
-        if (!entityIsFree($entity['state'])) {
-            return badResponse([], __('booking not allowed'));
+        $rentValidation = $this->rentValidation($entity, $vendor);
+
+        if ($rentValidation !== true) {
+            return $rentValidation;
         }
 
         $extras = $this->getExtras($entity, $rentRequest->extras);
@@ -170,11 +172,14 @@ class BookingService
         abort_if((is_null($booking) || $booking->status != BookingStatus::INIT), 404);
 
         $entity = (new Proxy(new BookingProxy('GET_ENTITY', ['entity_id' => $booking->entity_id])))->result();
+        $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => $entity['vendor_id']])))->result();
 
-        abort_if(is_null($entity), 404);
+        abort_if(is_null($entity) || is_null($vendor), 404);
 
-        if (!entityIsFree($entity['state'])) {
-            return badResponse([], __('Booking not allowed'));
+        $rentValidation = $this->rentValidation($entity, $vendor);
+
+        if ($rentValidation !== true) {
+            return $rentValidation;
         }
 
         $dateValidation = (new BookingDateValidation($entity))->validator($addBookDetailsRequest);
@@ -183,15 +188,18 @@ class BookingService
             return badResponse([], $dateValidation->error());
         }
 
-        $priceSummary = (new Price($entity, $booking->extras, $addBookDetailsRequest->start_at, $addBookDetailsRequest->end_at, $booking->vendor))->getPriceSummary();
+        $startDate = $addBookDetailsRequest->start_at;
+        $endDate = getBookingEndDate($entity['price_unit'], $addBookDetailsRequest->start_at, $addBookDetailsRequest->end_at);
+
+        $priceSummary = (new Price($entity, $booking->extras, $startDate, $endDate, $booking->vendor))->getPriceSummary();
         $this->bookingRepository->update($bookingId, [
             'price_summary'                 => $priceSummary,
             'pickup_location_address'       => Arr::only($addBookDetailsRequest->pickup_location, [...locationInfoKeys()]),
             'drop_location_address'         => Arr::only($addBookDetailsRequest->drop_location, [...locationInfoKeys()]),
             'status_change_log'             => (new BookingChangeLog($booking, BookingStatus::PENDING, $me))->logs(),
             'status'                        => BookingStatus::PENDING,
-            'start_booking_at'              => convertDateTimeToUTC($me, $addBookDetailsRequest->start_at),
-            'end_booking_at'                => convertDateTimeToUTC($me, $addBookDetailsRequest->end_at),
+            'start_booking_at'              => convertDateTimeToUTC($me, $startDate),
+            'end_booking_at'                => convertDateTimeToUTC($me, $endDate),
             'pending_at'                    => new \MongoDB\BSON\UTCDateTime(),
             'note'                          => $addBookDetailsRequest->note
         ]);
@@ -206,10 +214,9 @@ class BookingService
 
     public function cancel($bookingId)
     {
-        $meId = auth('api')->id();
         $me = auth('api')->user();
 
-        $booking = $this->bookingRepository->findByUser($meId, $bookingId);
+        $booking = $this->bookingRepository->findByUser($me->id, $bookingId);
 
         if (!in_array($booking->status, [BookingStatus::INIT, BookingStatus::PENDING, BookingStatus::ACCEPT])) {
             return badResponse([], __('booking not allowed', ['status' => __('cancel')]));
@@ -231,10 +238,9 @@ class BookingService
 
     public function proceed($bookingId, ProceedRequest $proceedRequest)
     {
-        $meId = auth('api')->id();
         $me = auth('api')->user();
 
-        $booking = $this->bookingRepository->findByUser($meId, $bookingId);
+        $booking = $this->bookingRepository->findByUser($me->id, $bookingId);
 
         if ($booking->status != BookingStatus::ACCEPT) {
             return badResponse([], __('booking not allowed', ['status' => __('proceed')]));
@@ -384,5 +390,23 @@ class BookingService
         $bookingProxy = new BookingProxy('GET_PORT', ['port_id' => $portId]);
         $proxy = new Proxy($bookingProxy);
         return $proxy->result();
+    }
+
+
+    private function rentValidation($entity, $vendor)
+    {
+        if (!entityIsFree($entity['state'])) {
+            return badResponse([], __('Booking not allowed now'));
+        }
+
+        if ($vendor['is_active'] !== true) {
+            return badResponse([], __('Vendor is not active now'));
+        }
+
+        if ($this->bookingRepository->checkIfIHaveBookingsNow($entity['id'])) {
+            return badResponse([], __('Sorry, you have a booking pending approval'));
+        }
+
+        return true;
     }
 }

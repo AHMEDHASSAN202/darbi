@@ -66,6 +66,10 @@ class User extends BaseAuthenticatable implements JWTSubject
             $query->where('phone', 'LIKE', '%' . $phone . '%');
         }
 
+        if ($name = $request->get('q')) {
+            $query->where('name', 'LIKE', '%'. $name .'%');
+        }
+
         if ($request->get('active')) {
             $query->where('is_active', true);
         }
