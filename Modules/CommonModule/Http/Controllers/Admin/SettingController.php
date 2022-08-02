@@ -3,6 +3,7 @@
 namespace Modules\CommonModule\Http\Controllers\Admin;
 
 
+use http\Env\Request;
 use Illuminate\Routing\Controller;
 use Modules\CommonModule\Http\Requests\UpdateSettingsRequest;
 use Modules\CommonModule\Services\SettingService;
@@ -38,5 +39,12 @@ class SettingController extends Controller
         $this->settingService->clearSettingsCache();
 
         return $this->apiResponse([]);
+    }
+
+    public function removeWalkThroughImage($index)
+    {
+        $result = $this->settingService->removeWalkThroughImage($index);
+
+        return $this->apiResponse(...$result);
     }
 }

@@ -53,21 +53,42 @@ class SettingService
             $data['home_main_theme'] = $this->uploadImage('settings', $data['home_main_theme'], []);
         }
 
-        $walkThroughImages = [];
+        $walkThroughImages = $this->getSettings()->walk_through_images ?? [];
+
         if (!empty($data['walk_through_images'])) {
-            foreach ($data['walk_through_images'] as $walkThroughImage) {
+            foreach ($data['walk_through_images'] as $key => $walkThroughImage) {
+                $walkThroughImages[$key] = [
+                    'title' => $walkThroughImage['title'],
+                    'desc'  => $walkThroughImage['desc'],
+                    'image' => $walkThroughImages[$key]['image'] ?? ""
+                ];
+
                 if (isset($walkThroughImage['image']) && $walkThroughImage['image'] instanceof UploadedFile) {
-                    $walkThroughImages[] = [
-                        'title' => $walkThroughImage['title'],
-                        'desc'  => $walkThroughImage['desc'],
-                        'image' => $this->uploadImage('walk_through_images', $walkThroughImage['image'], [])
-                    ];
+                    $walkThroughImages[$key]['image'] = $this->uploadImage('walk_through_images', $walkThroughImage['image'], []);
                 }
             }
         }
         $data['walk_through_images'] = $walkThroughImages;
 
         $this->settingRepository->updateSettings($data);
+
+        $this->clearSettingsCache();
+
+        return successResponse([]);
+    }
+
+
+    public function removeWalkThroughImage($index)
+    {
+        $walkThroughImages = $this->getSettings()->walk_through_images;
+
+        if (!isset($walkThroughImages[$index])) {
+            return badResponse([], __('Walk through is not exists'));
+        }
+
+        unset($walkThroughImages[$index]);
+
+        $this->settingRepository->updateSettings(['walk_through_images' => $walkThroughImages]);
 
         $this->clearSettingsCache();
 
