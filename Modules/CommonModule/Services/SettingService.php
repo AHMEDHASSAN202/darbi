@@ -8,7 +8,6 @@ namespace Modules\CommonModule\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
-use Modules\CommonModule\Entities\Setting;
 use Modules\CommonModule\Http\Requests\UpdateSettingsRequest;
 use Modules\CommonModule\Repositories\SettingRepository;
 use Modules\CommonModule\Traits\ImageHelperTrait;

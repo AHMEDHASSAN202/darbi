@@ -19,7 +19,8 @@ class NotificationResource extends JsonResource
             'title'         => translateAttribute($this->title),
             'message'       => translateAttribute($this->message),
             'extra_data'    => (object)$this->extra_data,
-            'notification_type' => $this->notification_type
+            'notification_type' => $this->notification_type,
+            'created_at'    => $this->created_at
         ];
     }
 }
