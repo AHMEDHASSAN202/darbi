@@ -27,7 +27,7 @@ class BookingResource extends JsonResource
             'status'        => $this->status,
             'type'          => $this->entity_type,
             'image'         => imageUrl(@$this->entity_details['images'][0] ?? $this->defaultImage, 'thumbnail'),
-            'booking_number' => $this->sequencial_id
+            'booking_number' => $this->booking_number
         ];
     }
 }

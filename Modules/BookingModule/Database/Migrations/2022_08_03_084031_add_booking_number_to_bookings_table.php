@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->unique('sequencial_id');
+            $table->unique('booking_number');
         });
     }
 

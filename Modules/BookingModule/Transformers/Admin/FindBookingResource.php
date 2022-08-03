@@ -42,7 +42,7 @@ class FindBookingResource extends JsonResource
             ],
             'created_at'    => $this->created_at,
             'expired_at'    => $this->expired_at,
-            'booking_number'=> $this->sequencial_id
+            'booking_number' => $this->booking_number
         ];
     }
 

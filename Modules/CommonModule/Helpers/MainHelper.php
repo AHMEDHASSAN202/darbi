@@ -416,15 +416,7 @@ function getBookingEndDate($priceUnit, $startDate, $endDate)
     throw new \Exception("Price unit not exists");
 }
 
-function getNextId($ref)
+function getBookingNumber()
 {
-    $seq = \Illuminate\Support\Facades\DB::connection('mongodb')
-        ->getCollection('counters')
-        ->findOneAndUpdate(
-            ['ref' => $ref],
-            ['$inc' => ['seq' => 1]],
-            ['new' => true, 'upsert' => true, 'returnDocument' => \MongoDB\Operation\FindOneAndUpdate::RETURN_DOCUMENT_AFTER]
-        );
-
-    return (int)$seq->seq;
+    return intval(date('ymd').mt_rand(000000,999999));
 }

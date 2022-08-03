@@ -14,7 +14,7 @@ class BookingObserver
      */
     public function creating(Booking $booking)
     {
-        $booking->sequencial_id = getNextId($booking->getTable());
+        $booking->booking_number = getBookingNumber();
     }
 
     /**

@@ -10,6 +10,7 @@ use App\Proxy\Proxy;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Modules\BookingModule\Classes\BookingChangeLog;
 use Modules\BookingModule\Classes\Payments\Payment;
 use Modules\BookingModule\Classes\Price;
@@ -223,17 +224,34 @@ class BookingService
             return badResponse([], __('booking not allowed', ['status' => __('cancel')]));
         }
 
-        $cancelledBeforeAccept = ($booking->status === BookingStatus::ACCEPT) ? BookingStatus::CANCELLED_AFTER_ACCEPT: BookingStatus::CANCELLED_BEFORE_ACCEPT;
-        $this->bookingRepository->update($bookingId, [
-            'status_change_log'     => (new BookingChangeLog($booking, $cancelledBeforeAccept, $me))->logs(),
-            'status'                => $cancelledBeforeAccept
-        ]);
+        $session = DB::connection('mongodb')->getMongoClient()->startSession();
+        $session->startTransaction();
 
-        $booking->refresh();
+        try {
 
-        event(new BookingStatusChangedEvent($booking));
+            $cancelledBeforeAccept = ($booking->status === BookingStatus::ACCEPT) ? BookingStatus::CANCELLED_AFTER_ACCEPT: BookingStatus::CANCELLED_BEFORE_ACCEPT;
+            $data = [
+                'status_change_log'     => (new BookingChangeLog($booking, $cancelledBeforeAccept, $me))->logs(),
+                'status'                => $cancelledBeforeAccept
+            ];
 
-        return successResponse(['booking_id' => $bookingId]);
+            $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
+
+            $this->updateEntityState($cancelledBeforeAccept, $booking);
+
+            $session->commitTransaction();
+
+            $booking->refresh();
+
+            event(new BookingStatusChangedEvent($booking));
+
+            return successResponse(['booking_id' => $bookingId]);
+
+        }catch (\Exception $exception) {
+            $session->abortTransaction();
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
+            return serverErrorResponse();
+        }
     }
 
 
