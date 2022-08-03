@@ -16,7 +16,7 @@
 //branches routes
 Route::group([
     'prefix'    => 'regions',
-    'middleware'=> ['auth:vendor_api', 'type:car']
+    'middleware'=> ['auth:vendor_api', 'type:car', 'active_vendor']
 ], function () {
     Route::get(''                  , 'RegionController@index');
     Route::post(''                 , 'RegionController@store');

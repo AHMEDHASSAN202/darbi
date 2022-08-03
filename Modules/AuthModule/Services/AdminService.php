@@ -150,6 +150,8 @@ class AdminService
             return badResponse([], __('Admin not exists'));
         }
 
+        $admin->setCustomClaims('super_admin_login_as_vendor', true);
+
         $token = auth('vendor_api')->login($admin);
 
         return successResponse(['token' => $token]);

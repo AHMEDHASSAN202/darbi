@@ -25,7 +25,7 @@ Route::group([
 //user vendor profile
 Route::group([
     'prefix'     => 'profile',
-    'middleware' => 'auth:vendor_api',
+    'middleware' => ['auth:vendor_api', 'active_vendor'],
     'namespace'  => 'Profile'
 ], function () {
     Route::get(''                       , 'VendorProfileController@getProfile');
@@ -38,7 +38,7 @@ Route::post('device-token'              , 'UserDeviceTokenController@storeDevice
 //vendor profile
 Route::group([
     'prefix'     => 'settings',
-    'middleware' => 'auth:vendor_api',
+    'middleware' => ['auth:vendor_api', 'active_vendor'],
     'namespace'  => 'Settings'
 ], function () {
     Route::get(''                       , 'VendorSettingsController@getSettings');
