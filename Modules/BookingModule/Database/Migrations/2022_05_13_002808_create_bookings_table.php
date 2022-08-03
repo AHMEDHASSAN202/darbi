@@ -23,7 +23,6 @@ return new class extends Migration
             $table->index('entity_id');
             $table->index('city_id');
             $table->index('status');
-            $table->index('invoice_number');
             $table->index('created_at');
             $table->index('accepted_at');
             $table->index('pending_at');

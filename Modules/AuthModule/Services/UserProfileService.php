@@ -92,4 +92,16 @@ class UserProfileService
 
         return successResponse(['image' => null], __('Identity removed successfully'));
     }
+
+
+    public function deleteAccount()
+    {
+        $me = auth('api')->user();
+
+        auth('api')->logout();
+
+        $me->delete();
+
+        return successResponse();
+    }
 }

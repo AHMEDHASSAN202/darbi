@@ -51,4 +51,12 @@ class ProfileController extends Controller
 
         return $this->apiResponse(...$result);
     }
+
+
+    public function deleteAccount()
+    {
+        $result = $this->userProfileService->deleteAccount();
+
+        return $this->apiResponse(...$result);
+    }
 }
