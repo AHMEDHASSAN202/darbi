@@ -36,7 +36,8 @@ class FindBookingResource extends JsonResource
             'price'         => ['total_price' => @$this->price_summary['total_price']],
             'created_at'    => $this->created_at,
             'expired_at'    => $this->expired_at,
-            'vendor'        => $this->getVendor()
+            'vendor'        => $this->getVendor(),
+            'booking_number'=> $this->sequencial_id
         ];
     }
 
