@@ -118,4 +118,18 @@ class BookingRepository
     {
         return $this->booking->where('user_id', new ObjectId(auth('api')->id()))->where('entity_id', new ObjectId($entityId))->where('status', BookingStatus::PENDING)->exists();
     }
+
+    public function checkIfEntityHaveBooking($entityId, $startDate, $endDate)
+    {
+        return $this->booking
+                    ->where('user_id', new ObjectId(auth('api')->id()))
+                    ->where('entity_id', new ObjectId($entityId))
+                    ->whereIn('status', [BookingStatus::ACCEPT, BookingStatus::PAID, BookingStatus::PICKED_UP])
+                    ->where(function ($query) use ($startDate, $endDate) {
+                        $startDate = new \DateTime($startDate);
+                        $endDate = new \DateTime($endDate);
+                        $query->whereBetween('start_booking_at', [$startDate, $endDate])->orWhereBetween('end_booking_at', [$startDate, $endDate]);
+                    })
+                    ->exists();
+    }
 }

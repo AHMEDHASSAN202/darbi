@@ -29,7 +29,6 @@ class YachtRepository
                            ->filterDate($request)
                            ->active()
                            ->available()
-                           ->free()
                            ->with(['model' => function ($q) { $q->withTrashed(); }])
                            ->whereHas('port', function ($query) { $query->active(); })
                            ->whereHas('vendor', function ($query) { $query->active(); })

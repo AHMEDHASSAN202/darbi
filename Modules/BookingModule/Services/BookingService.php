@@ -178,7 +178,10 @@ class BookingService
 
         abort_if(is_null($entity) || is_null($vendor), 404);
 
-        $rentValidation = $this->rentValidation($entity, $vendor);
+        $startDate = $addBookDetailsRequest->start_at;
+        $endDate = getBookingEndDate($entity['price_unit'], $addBookDetailsRequest->start_at, $addBookDetailsRequest->end_at);
+
+        $rentValidation = $this->rentValidation($entity, $vendor, $startDate, $endDate);
 
         if ($rentValidation !== true) {
             return $rentValidation;
@@ -190,11 +193,9 @@ class BookingService
             return badResponse([], $dateValidation->error());
         }
 
-        $startDate = $addBookDetailsRequest->start_at;
-        $endDate = getBookingEndDate($entity['price_unit'], $addBookDetailsRequest->start_at, $addBookDetailsRequest->end_at);
-
         $priceSummary = (new Price($entity, $booking->extras, $startDate, $endDate, $booking->vendor))->getPriceSummary();
         $this->bookingRepository->update($bookingId, [
+            'user'                          => auth('api')->user()->only(['_id', 'phone', 'phone_code', 'name', 'email']),
             'price_summary'                 => $priceSummary,
             'pickup_location_address'       => Arr::only($addBookDetailsRequest->pickup_location, [...locationInfoKeys()]),
             'drop_location_address'         => Arr::only($addBookDetailsRequest->drop_location, [...locationInfoKeys()]),
@@ -415,10 +416,15 @@ class BookingService
     }
 
 
-    private function rentValidation($entity, $vendor)
+    private function rentValidation($entity, $vendor, $startDate = null, $endDate = null)
     {
         if (!entityIsFree($entity['state'])) {
-            return badResponse([], __('Booking not allowed now'));
+            //check if entity have booking in the same time
+            if ($startDate && $endDate) {
+                if ($this->bookingRepository->checkIfEntityHaveBooking($entity['id'], $startDate, $endDate)) {
+                    return badResponse([], __('Booking not allowed now'));
+                }
+            }
         }
 
         if ($vendor['is_active'] !== true) {

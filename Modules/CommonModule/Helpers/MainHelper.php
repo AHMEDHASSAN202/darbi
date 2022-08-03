@@ -130,6 +130,11 @@ function entityIsFree($state) : bool
     return ($state === \Modules\CatalogModule\Enums\EntityStatus::FREE);
 }
 
+function entityIsReserved($state) : bool
+{
+    return ($state === \Modules\CatalogModule\Enums\EntityStatus::RESERVED);
+}
+
 function entityIsCar($type) : bool
 {
     return ($type === \Modules\CatalogModule\Enums\EntityType::CAR);
