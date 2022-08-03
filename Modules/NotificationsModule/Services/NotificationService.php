@@ -104,15 +104,19 @@ class NotificationService
     {
         try {
 
-            OneSignal::sendNotificationToAll(
-                $message,
-                $url,
-                $data,
-                $buttons,
-                $schedule,
-                $title,
-                $subtitle
-            );
+            if (app()->environment('production')) {
+
+                OneSignal::sendNotificationToAll(
+                    $message,
+                    $url,
+                    $data,
+                    $buttons,
+                    $schedule,
+                    $title,
+                    $subtitle
+                );
+
+            }
 
             return serviceResponse([]);
 
