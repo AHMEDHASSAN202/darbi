@@ -51,6 +51,11 @@ class Entity extends Base
         return $query->where('state', EntityStatus::FREE);
     }
 
+    public function scopeFreeOrPending($query)
+    {
+        return $query->whereIn('state', [EntityStatus::FREE, EntityStatus::PENDING]);
+    }
+
     public function scopeFilterDate($query, Request $request)
     {
         if ($fromDate = $request->get('from_date')) {

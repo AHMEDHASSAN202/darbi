@@ -31,6 +31,7 @@ class DarbiResetCommand extends Command
         $this->call("config:clear");
 //        $this->call("module:migrate-refresh");
 //        $this->call("module:seed");
+        $this->call("migrate");
         $this->call("cache:clear");
         $this->call("optimize");
     }

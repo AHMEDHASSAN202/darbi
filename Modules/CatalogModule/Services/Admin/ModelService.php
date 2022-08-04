@@ -140,33 +140,75 @@ class ModelService
         return $specs;
     }
 
-    public function assets()
+    public function assets(Request $request)
     {
-        return [
+        $assets = [
             [
                 'key'       => 'engine_type',
                 'value'     => 'https://i.ibb.co/q0bSNT5/liter.png',
                 'full_url'  => 'https://i.ibb.co/q0bSNT5/liter.png',
-                'name'      => 'engine_type'
+                'name'      => 'engine_type',
+                'entity_type' => 'car'
+            ],
+            [
+                'key'       => 'automatic',
+                'value'     => 'https://i.ibb.co/jzRk5FC/Group-564-3x.png',
+                'full_url'  => 'https://i.ibb.co/jzRk5FC/Group-564-3x.png',
+                'name'      => 'automatic',
+                'entity_type' => 'car'
+            ],
+            [
+                'key'       => 'wheels',
+                'value'     => 'https://i.ibb.co/SBZzsHQ/Group-2999-3x.png',
+                'full_url'  => 'https://i.ibb.co/SBZzsHQ/Group-2999-3x.png',
+                'name'      => 'wheels',
+                'entity_type' => 'car'
+            ],
+            [
+                'key'       => 'bags',
+                'value'     => 'https://i.ibb.co/H7GHjWx/Path-1749-3x.png',
+                'full_url'  => 'https://i.ibb.co/H7GHjWx/Path-1749-3x.png',
+                'name'      => 'bags',
+                'entity_type' => 'car'
+            ],
+            [
+                'key'       => 'speed',
+                'value'     => 'https://i.ibb.co/5rDYxS9/Group-3001-3x.png',
+                'full_url'  => 'https://i.ibb.co/5rDYxS9/Group-3001-3x.png',
+                'name'      => 'speed',
+                'entity_type' => 'car'
             ],
             [
                 'key'       => 'seats',
-                'value'     => 'https://i.ibb.co/N1tNCy4/bedroom.png',
-                'full_url'  => 'https://i.ibb.co/N1tNCy4/bedroom.png',
-                'name'      => 'seats'
+                'value'     => 'https://i.ibb.co/dkd6n0b/Group-3002-3x.png',
+                'full_url'  => 'https://i.ibb.co/dkd6n0b/Group-3002-3x.png',
+                'name'      => 'seats',
+                'entity_type' => 'car'
             ],
             [
                 'key'       => 'passengers',
                 'value'     => 'https://i.ibb.co/nBjwmhP/passengers.png',
                 'full_url'  => 'https://i.ibb.co/nBjwmhP/passengers.png',
-                'name'      => 'passengers'
+                'name'      => 'passengers',
+                'entity_type' => 'yacht'
             ],
             [
-                'key'       => 'pilot',
+                'key'       => 'captain',
                 'value'     => 'https://i.ibb.co/1vrxW5B/pilot.png',
                 'full_url'  => 'https://i.ibb.co/1vrxW5B/pilot.png',
-                'name'      => 'pilot'
+                'name'      => 'captain',
+                'entity_type' => 'car'
             ]
         ];
+
+        return array_values(array_filter($assets, function ($asset) use ($request) {
+            if ($entityType = $request->get('entity_type')) {
+                if (in_array($asset['entity_type'], ['all', $entityType])) {
+                    return true;
+                }
+                return false;
+            }
+            return true;
+        }));
     }
 }

@@ -16,7 +16,7 @@ trait BookingHelperService
     {
         $entityState = match ($newState) {
             BookingStatus::ACCEPT => 'pending',
-            BookingStatus::CANCELLED_AFTER_ACCEPT, BookingStatus::REJECTED, BookingStatus::FORCE_CANCELLED, BookingStatus::COMPLETED => 'free',
+            BookingStatus::CANCELLED_AFTER_ACCEPT, BookingStatus::REJECTED, BookingStatus::CANCELLED_BEFORE_ACCEPT, BookingStatus::FORCE_CANCELLED, BookingStatus::COMPLETED, BookingStatus::TIMEOUT => 'free',
             BookingStatus::PICKED_UP => 'reserved',
             default => null,
         };

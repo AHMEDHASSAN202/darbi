@@ -19,7 +19,7 @@ class SettingsResource extends JsonResource
             'time_interval_user_accept_min'             => (int)$this->time_interval_user_accept_min,
             'time_reminder_before_picked_up'            => (int)$this->time_reminder_before_picked_up,
             'time_reminder_before_dropped'              => (int)$this->time_reminder_before_dropped,
-            'walk_through_images'                       => WalkThroughImageResource::collection($this->walk_through_images ?? []),
+            'walk_through_images'                       => $this->getWalkThroughImages(),
             'categories'                                => CategoryResource::collection($this->categories),
             'home_main_theme'                           => imageUrl($this->home_main_themem, 'original'),
             'android_app_version'                       => (float)$this->android_app_version,
@@ -32,5 +32,19 @@ class SettingsResource extends JsonResource
             'default_city'                              => $this->default_city,
             'darbi_percentage'                          => (int)$this->darbi_percentage,
         ];
+    }
+
+
+    private function getWalkThroughImages()
+    {
+        $walk_through_images = $this->walk_through_images ?? [];
+
+        return array_map(
+            function ($walkThrough) {
+                $walkThrough['image'] = isset($walkThrough['image']) ? imageUrl($walkThrough['image']) : '';
+                return $walkThrough;
+            },
+            $walk_through_images
+        );
     }
 }

@@ -28,8 +28,7 @@ class FindBookingResource extends JsonResource
             'vendor_id'     => (string)$this->vendor_id,
             'vendor'        => $this->vendor,
             'entity'        => $this->entity(),
-            'start'         => ['month' => $this->start_booking_at->format('m F'), 'time' => $this->start_booking_at->format('H:s A')],
-            'end'           => ['month' => $this->end_booking_at->format('m F'), 'time' => $this->end_booking_at->format('H:s A')],
+            'date'          => ['start_at' => $this->start_booking_at, 'end_at' => $this->end_booking_at],
             'extras'        => $this->extras ?? [],
             'pickup_location_address' => $this->pickup_location_address,
             'drop_location_address'   => $this->drop_location_address,
@@ -42,7 +41,7 @@ class FindBookingResource extends JsonResource
             ],
             'created_at'    => $this->created_at,
             'expired_at'    => $this->expired_at,
-            'invoice_number' => $this->invoice_number,
+            'booking_number' => $this->booking_number
         ];
     }
 

@@ -26,7 +26,9 @@ class FindVendorResource extends JsonResource
             'darbi_percentage' => $this->darbi_percentage,
             'settings'  => $this->settings,
             'lat'       => $this->lat,
-            'lng'       => $this->lng
+            'lng'       => $this->lng,
+            'country_currency_code' => $this->country_currency_code,
+            'is_active' => (boolean)$this->is_active
         ];
     }
 }

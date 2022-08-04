@@ -7,6 +7,17 @@ use Modules\BookingModule\Entities\Booking;
 class BookingObserver
 {
     /**
+     * Handle the Booking "creating" event.
+     *
+     * @param  Booking  $booking
+     * @return void
+     */
+    public function creating(Booking $booking)
+    {
+        $booking->booking_number = getBookingNumber();
+    }
+
+    /**
      * Handle the Booking "created" event.
      *
      * @param  Booking  $booking

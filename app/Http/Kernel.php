@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Modules\CommonModule\Http\Middleware\ActiveVendorMiddleware;
 use Modules\CommonModule\Http\Middleware\LocalizationMiddleware;
 use Modules\CommonModule\Http\Middleware\PermissionMiddleware;
 use Modules\CommonModule\Http\Middleware\PreventAccessInternal;
@@ -70,6 +71,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'permission' => PermissionMiddleware::class,
         'type'       => VendorTypeMiddleware::class,
-        'internal'   => PreventAccessInternal::class
+        'internal'   => PreventAccessInternal::class,
+        'active_vendor' => ActiveVendorMiddleware::class
     ];
 }

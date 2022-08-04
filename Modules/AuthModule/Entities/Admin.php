@@ -26,6 +26,8 @@ class Admin extends BaseAuthenticatable implements JWTSubject
 
     protected $with = ['role'];
 
+    protected $jwtCustomClaims = [];
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -33,9 +35,15 @@ class Admin extends BaseAuthenticatable implements JWTSubject
 
     public function getJWTCustomClaims()
     {
-        return [
+        return array_merge([
             'version'       => config('authmodule.jwt_version'),
-        ];
+        ], $this->jwtCustomClaims);
+    }
+
+    public function setCustomClaims($key, $value)
+    {
+        $this->jwtCustomClaims[$key] = $value;
+        return $this;
     }
 
     protected static function newFactory()

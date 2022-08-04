@@ -12,6 +12,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CommonModule\Traits\ImageHelperTrait;
 use Modules\CommonModule\Transformers\PaginateResource;
 use Modules\NotificationsModule\Enums\NotificationReceiverTypes;
+use Modules\NotificationsModule\Enums\NotificationTypes;
 use Modules\NotificationsModule\Http\Requests\CreateNotificationRequest;
 use Modules\NotificationsModule\Proxy\NotificationProxy;
 use Modules\NotificationsModule\Repositories\NotificationRepository;
@@ -103,15 +104,19 @@ class NotificationService
     {
         try {
 
-            OneSignal::sendNotificationToAll(
-                $message,
-                $url,
-                $data,
-                $buttons,
-                $schedule,
-                $title,
-                $subtitle
-            );
+            if (app()->environment('production')) {
+
+                OneSignal::sendNotificationToAll(
+                    $message,
+                    $url,
+                    $data,
+                    $buttons,
+                    $schedule,
+                    $title,
+                    $subtitle
+                );
+
+            }
 
             return serviceResponse([]);
 
@@ -145,7 +150,7 @@ class NotificationService
                 'url'               => $createNotificationRequest->url,
                 'image'             => $image,
                 'receivers'         => $receiversPart,
-                'notification_type' => $createNotificationRequest->notification_type,
+                'notification_type' => $createNotificationRequest->notification_type ?? NotificationTypes::getDefault(),
                 'receiver_type'     => $createNotificationRequest->receiver_type,
                 'extra_data'        => $createNotificationRequest->extra_data ?? [],
                 'triggered_by'      => [
@@ -170,8 +175,8 @@ class NotificationService
         $receivers = [];
 
         if ($request->receiver_type == NotificationReceiverTypes::SPECIFIED) {
-            if ($request->hasFile('receivers_file')) {
-                $receivers = $this->getUserReceiversFromExcelFile($request->receivers_file);
+            if ($request->hasFile('xlFile')) {
+                $receivers = $this->getUserReceiversFromExcelFile($request->xlFile);
             }else {
                 $vendorIds = [];
                 foreach ($request->receivers as $receiver) {

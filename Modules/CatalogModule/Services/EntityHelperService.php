@@ -11,13 +11,13 @@ use Modules\CatalogModule\Repositories\EntityRepository;
 
 trait EntityHelperService
 {
-    public function getShareLink($entityId)
+    public function getShareLink($entityId, $entityType)
     {
         $entity = app(EntityRepository::class)->findWithBasicData($entityId);
 
         $name = $this->getEntityName($entity);
 
-        return url('/share/' . $entity->_id . '-' . slugify($name));
+        return url('/share/' . $entityType . '/' . $entity->_id . '-' . slugify($name));
     }
 
 

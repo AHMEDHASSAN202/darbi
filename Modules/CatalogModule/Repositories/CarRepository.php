@@ -31,7 +31,6 @@ class CarRepository
                            ->filterDate($request)
                            ->active()
                            ->available()
-                           ->free()
                            ->latest()
                            ->paginated();
     }

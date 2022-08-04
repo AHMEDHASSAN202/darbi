@@ -20,7 +20,7 @@ class BookingPaymentTransactionExportResource extends JsonResource
             'amount'        => $this->amount,
             'status'        => $this->status ? 'Success' : 'Failed',
             'payment_method'=> $this->payment_method,
-            'created_at'    => optional($this->created_at)->format('Y-m-d H:m')
+            'created_at'    => $this->created_at
         ];
     }
 }

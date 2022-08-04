@@ -34,7 +34,7 @@ class UpdateSettingsRequest extends FormRequest
             'ios_force_updated'                     => 'sometimes|nullable|boolean',
             'ios_force_updated_link'                => 'sometimes|nullable|url',
             'default_country'                       => 'sometimes|nullable|exists:countries,code',
-            'default_city'                          => 'sometimes|nullable|cities:cities,code',
+            'default_city'                          => 'sometimes|nullable|exists:cities,code',
             'darbi_percentage'                      => 'sometimes|nullable|numeric'
         ];
     }

@@ -38,8 +38,8 @@ class SendNotificationJob implements ShouldQueue
     public function handle()
     {
         $notificationService = app(NotificationService::class);
-        $title = translateAttribute($this->notificationsCenter->title);
-        $message = translateAttribute($this->notificationsCenter->message);
+        $title = $this->notificationsCenter->title;
+        $message = $this->notificationsCenter->message;
 
         if ($this->notificationsCenter->receiver_type == NotificationReceiverTypes::ALL) {
             return $notificationService->sendToAll($title, $message);

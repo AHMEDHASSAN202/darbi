@@ -59,5 +59,5 @@ class ProfileController extends Controller
 
         return $this->apiResponse(...$result);
     }
-
 }
+ 

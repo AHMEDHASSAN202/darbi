@@ -56,7 +56,9 @@ class User extends BaseAuthenticatable implements JWTSubject
     public function scopeSearch($query, Request $request)
     {
         if ($q = $request->get('q')) {
-            return $query->where('name', 'LIKE', '%' . $q .'%');
+            return $query->where(function ($query) use ($q) {
+                $query->where('name', 'LIKE', '%'. $q .'%')->orWhere('phone', 'LIKE', '%' . $q . '%');
+            });
         }
     }
 

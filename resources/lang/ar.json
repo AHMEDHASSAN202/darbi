@@ -23,6 +23,8 @@
     "Identity removed successfully": "",
     ":status booking not allowed": "",
     "booking not allowed": "",
+    "Booking not allowed now": "",
+    "Vendor is not active now": "",
     "Payment Failed": "",
     "Payment Successful": "",
     "Please pay first": "",
@@ -71,5 +73,6 @@
     "force_cancelled": "",
     "free_state": "",
     "reserved_state": "",
-    "pending_state": ""
+    "pending_state": "",
+    "Sorry, you have a booking pending approval": ""
 }

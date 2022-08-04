@@ -8,6 +8,7 @@ namespace Modules\AuthModule\Repositories;
 
 use Illuminate\Http\Request;
 use Modules\AuthModule\Entities\UserDeviceToken;
+use MongoDB\BSON\ObjectId;
 
 class UserDeviceTokenRepository
 {

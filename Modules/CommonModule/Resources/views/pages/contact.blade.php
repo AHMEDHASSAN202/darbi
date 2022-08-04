@@ -43,7 +43,7 @@
                 </a>
             </div>
             <div class="col-md-12">
-                <a href="https://wa.com/+{{getOption('darbi_whatsapp_phone', '9668003041666')}}">
+                <a href="https://wa.me/{{getOption('darbi_whatsapp_phone', '9668003041666')}}">
                     <div class="card"
                          style="border-radius: 12px;box-shadow: 0 10px 15px 0 rgba(43, 43, 43, 0.05);border: solid 1px #eaeaea;margin-bottom: 15px">
                         <div class="card-body" style="padding: 15px 26px;">

@@ -36,7 +36,8 @@ class FindBookingResource extends JsonResource
             'price'         => ['total_price' => @$this->price_summary['total_price']],
             'created_at'    => $this->created_at,
             'expired_at'    => $this->expired_at,
-            'vendor'        => $this->getVendor()
+            'vendor'        => $this->getVendor(),
+            'booking_number' => $this->booking_number
         ];
     }
 
@@ -81,11 +82,14 @@ class FindBookingResource extends JsonResource
 
     private function getVendor()
     {
-//        $vendorId = $this->vendor_id;
-//        $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => $vendorId])))->result();
         $vendor = $this->vendor;
-        if (isset($vendor['darbi_percentage'])) unset($vendor['darbi_percentage']);
-        if (isset($vendor['settings'])) unset($vendor['settings']);
-        return $vendor;
+        return [
+            'id'     => arrayGet($vendor, 'id'),
+            'type'   => arrayGet($vendor, 'type'),
+            'phone'  => arrayGet($vendor, 'phone'),
+            'lat'    => arrayGet($vendor, 'lat'),
+            'lng'    => arrayGet($vendor, 'lng'),
+            'currency_code' => arrayGet($vendor, 'country_currency_code')
+        ];
     }
 }
