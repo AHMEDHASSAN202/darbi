@@ -54,7 +54,7 @@ class UserAuthService
 
         //sendOTP
         //we will execute this code after response as a background job
-        SendOtpJob::dispatch($user->phone, $user->phone_code, $user->verification_code)->afterResponse();
+        SendOtpJob::dispatch($user->phone, $user->phone_code, $user->verification_code);//->afterResponse();
 
         return successResponse([], __('OTP is successfully sent'));
     }
