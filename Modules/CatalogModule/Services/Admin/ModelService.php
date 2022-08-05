@@ -152,36 +152,36 @@ class ModelService
             ],
             [
                 'key'       => 'automatic',
-                'value'     => 'https://i.ibb.co/jzRk5FC/Group-564-3x.png',
-                'full_url'  => 'https://i.ibb.co/jzRk5FC/Group-564-3x.png',
+                'value'     => 'https://i.ibb.co/8YFYNND/automatic.png',
+                'full_url'  => 'https://i.ibb.co/8YFYNND/automatic.png',
                 'name'      => 'automatic',
                 'entity_type' => 'car'
             ],
             [
                 'key'       => 'wheels',
-                'value'     => 'https://i.ibb.co/SBZzsHQ/Group-2999-3x.png',
-                'full_url'  => 'https://i.ibb.co/SBZzsHQ/Group-2999-3x.png',
+                'value'     => 'https://i.ibb.co/TqMDkf4/wheels.png',
+                'full_url'  => 'https://i.ibb.co/TqMDkf4/wheels.png',
                 'name'      => 'wheels',
                 'entity_type' => 'car'
             ],
             [
                 'key'       => 'bags',
-                'value'     => 'https://i.ibb.co/H7GHjWx/Path-1749-3x.png',
-                'full_url'  => 'https://i.ibb.co/H7GHjWx/Path-1749-3x.png',
+                'value'     => 'https://i.ibb.co/N7V7pCV/bags.png',
+                'full_url'  => 'https://i.ibb.co/N7V7pCV/bags.png',
                 'name'      => 'bags',
                 'entity_type' => 'car'
             ],
             [
                 'key'       => 'speed',
-                'value'     => 'https://i.ibb.co/5rDYxS9/Group-3001-3x.png',
-                'full_url'  => 'https://i.ibb.co/5rDYxS9/Group-3001-3x.png',
+                'value'     => 'https://i.ibb.co/cy6FT6Y/speed.png',
+                'full_url'  => 'https://i.ibb.co/cy6FT6Y/speed.png',
                 'name'      => 'speed',
                 'entity_type' => 'car'
             ],
             [
                 'key'       => 'seats',
-                'value'     => 'https://i.ibb.co/dkd6n0b/Group-3002-3x.png',
-                'full_url'  => 'https://i.ibb.co/dkd6n0b/Group-3002-3x.png',
+                'value'     => 'https://i.ibb.co/stLWkxg/seats.png',
+                'full_url'  => 'https://i.ibb.co/stLWkxg/seats.png',
                 'name'      => 'seats',
                 'entity_type' => 'car'
             ],
@@ -198,6 +198,76 @@ class ModelService
                 'full_url'  => 'https://i.ibb.co/1vrxW5B/pilot.png',
                 'name'      => 'captain',
                 'entity_type' => 'car'
+            ],
+            [
+                'key'       => 'automatic',
+                'value'     => 'https://i.ibb.co/hswT78v/automatic.png',
+                'full_url'  => 'https://i.ibb.co/hswT78v/automatic.png',
+                'name'      => 'automatic',
+                'entity_type' => 'yacht'
+            ],
+            [
+                'key'       => 'bathing_ladder',
+                'value'     => 'https://i.ibb.co/Q9psc4d/bathing-ladder.png',
+                'full_url'  => 'https://i.ibb.co/Q9psc4d/bathing-ladder.png',
+                'name'      => 'Bathing ladder',
+                'entity_type' => 'yacht'
+            ],
+            [
+                'key'       => 'bed',
+                'value'     => 'https://i.ibb.co/Rzy85qr/bed.png',
+                'full_url'  => 'https://i.ibb.co/Rzy85qr/bed.png',
+                'name'      => 'Bed',
+                'entity_type' => 'yacht'
+            ],
+            [
+                'key'       => 'cabins',
+                'value'     => 'https://i.ibb.co/DpW68yv/cabins.png',
+                'full_url'  => 'https://i.ibb.co/DpW68yv/cabins.png',
+                'name'      => 'Cabins',
+                'entity_type' => 'yacht'
+            ],
+            [
+                'key'       => 'fuel_consumption',
+                'value'     => 'https://i.ibb.co/YPkzkHc/fuel-consumption.png',
+                'full_url'  => 'https://i.ibb.co/YPkzkHc/fuel-consumption.png',
+                'name'      => 'Fuel consumption',
+                'entity_type' => 'yacht'
+            ],
+            [
+                'key'       => 'guests_sleeping',
+                'value'     => 'https://i.ibb.co/k3tjgqP/guests-sleeping.png',
+                'full_url'  => 'https://i.ibb.co/k3tjgqP/guests-sleeping.png',
+                'name'      => 'Guests sleeping',
+                'entity_type' => 'yacht'
+            ],
+            [
+                'key'       => 'length',
+                'value'     => 'https://i.ibb.co/QC0mj35/length.png',
+                'full_url'  => 'https://i.ibb.co/QC0mj35/length.png',
+                'name'      => 'Length',
+                'entity_type' => 'yacht'
+            ],
+            [
+                'key'       => 'motor',
+                'value'     => 'https://i.ibb.co/kMgwTZF/motor.png',
+                'full_url'  => 'https://i.ibb.co/kMgwTZF/motor.png',
+                'name'      => 'Motor',
+                'entity_type' => 'yacht'
+            ],
+            [
+                'key'       => 'restrooms',
+                'value'     => 'https://i.ibb.co/fFzrGtD/restrooms.png',
+                'full_url'  => 'https://i.ibb.co/fFzrGtD/restrooms.png',
+                'name'      => 'Restrooms',
+                'entity_type' => 'yacht'
+            ],
+            [
+                'key'       => 'speed',
+                'value'     => 'https://i.ibb.co/h7DfmCw/speed.png',
+                'full_url'  => 'https://i.ibb.co/h7DfmCw/speed.png',
+                'name'      => 'Speed',
+                'entity_type' => 'yacht'
             ]
         ];
 
