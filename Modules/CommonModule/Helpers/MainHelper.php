@@ -113,7 +113,7 @@ function generatePriceLabelFromPrice(?float $price, $priceUnit) : string
 
 function generateOTPCode()
 {
-    return (!app()->environment('production')) ? 1234 : mt_rand(1000,9999);
+    return config('authmodule.used_otp_provider') ? mt_rand(1000,9999) : 1234;
 }
 
 function hasEmbed($param) : bool

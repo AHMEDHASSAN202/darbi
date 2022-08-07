@@ -39,8 +39,6 @@ class SnsOTP implements OTPInterface
                 ],
             ]);
 
-            dd($phoneNumber, $msg, $response);
-
             $metaData = $response->get('@metadata');
 
             if (!$metaData || arrayGet($metaData, 'statusCode') !== 200) {
@@ -48,7 +46,6 @@ class SnsOTP implements OTPInterface
             }
 
         }catch (\Exception $exception) {
-            dd($exception->getMessage());
             Log::error('OTP Msegat exception: ' . $exception->getMessage());
         }
     }
