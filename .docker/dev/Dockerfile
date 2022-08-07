@@ -90,6 +90,7 @@ RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 # Deployment steps
 RUN composer require jenssegers/mongodb --ignore-platform-reqs --with-all-dependencies
 RUN composer install --ignore-platform-reqs
+RUN composer require aws/aws-sdk-php-laravel
 RUN chmod +x /var/www/docker/run.sh
 
 
