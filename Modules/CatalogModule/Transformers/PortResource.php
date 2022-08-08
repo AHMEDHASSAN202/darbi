@@ -15,10 +15,10 @@ class PortResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'              => $this->_id,
+            'id'              => (string)$this->_id,
             'name'            => translateAttribute($this->name),
-            'country'         => translateAttribute($this->country->name),
-            'city'            => translateAttribute($this->city->name),
+            'country'         => translateAttribute(optional($this->country)->name),
+            'city'            => translateAttribute(optional($this->city)->name),
             'fully_addressed' => $this->fully_addressed,
             'lat'             => $this->lat,
             'lng'             => $this->lng,

@@ -20,3 +20,33 @@ Route::group([
     Route::post('move'                  , 'FileManagerController@move');
     Route::post('create-directory'      , 'FileManagerController@createDirectory');
 });
+
+
+
+Route::group([
+    'prefix'        => 'countries',
+    'middleware'    => 'auth:admin_api'
+], function () {
+    Route::get(''                        , 'CountryController@index');
+    Route::put('{country}/toggle-active' , 'CountryController@toggleActive');
+});
+
+
+Route::group([
+    'prefix'        => 'cities',
+    'middleware'    => 'auth:admin_api'
+], function () {
+    Route::get(''                        , 'CityController@index');
+    Route::put('{city}/toggle-active'    , 'CityController@toggleActive');
+});
+
+
+Route::group([
+    'prefix'        => 'settings',
+    'middleware'    => 'auth:admin_api'
+], function () {
+    Route::get(''                        , 'SettingController@index');
+    Route::post(''                       , 'SettingController@update');
+    Route::post('clear-cache'            , 'SettingController@clearSettingCache');
+    Route::delete('walk-through/{index}' , 'SettingController@removeWalkThroughImage');
+});

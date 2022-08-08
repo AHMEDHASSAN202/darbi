@@ -21,14 +21,21 @@ class CityService
         $this->cityRepository = $cityRepository;
     }
 
-    public function cities(Request $request)
+    public function findAll(Request $request)
     {
         $cities = $this->cityRepository->list($request);
 
         if ($cities instanceof LengthAwarePaginator) {
-            return new PaginateResource(CityResource::collection($cities));
+            return successResponse(['cities' => new PaginateResource(CityResource::collection($cities))]);
         }
 
-        return CityResource::collection($cities);
+        return successResponse(['cities' => CityResource::collection($cities)]);
+    }
+
+    public function find($id)
+    {
+        $city = $this->cityRepository->find($id);
+
+        return successResponse(['city' => new CityResource($city)]);
     }
 }

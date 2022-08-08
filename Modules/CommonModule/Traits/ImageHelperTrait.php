@@ -7,41 +7,51 @@
 namespace Modules\CommonModule\Traits;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 trait ImageHelperTrait
 {
-    public function resizeImage($folder, $image, $sizes = ['400x400'])
+    private $sizes = ['200x200', '600x600'];
+
+    public function resizeImage($disc, $imageFullPath, UploadedFile $imageSrc, $sizes)
     {
-        $imageInfo = pathinfo($image);
-        $imageResizeName = $imageInfo['filename'];
+        $imageInfo = pathinfo($imageFullPath);
+
         foreach ($sizes as $size) {
             $s = explode('x', $size, 2);
             $width = $s[0];
             $height = $s[1];
-            $imageResizeName .= '-resize-' . $size . '.' . $imageInfo['extension'];
+            $imageResizeName = arrayGet($imageInfo, 'filename') . '-resize-' . $size . '.' . arrayGet($imageInfo, 'extension');
+            $imageFullPath = arrayGet($imageInfo, 'dirname') . DIRECTORY_SEPARATOR . $imageResizeName;
 
             try {
-                \Image::make(Storage::path($image))->fit($width, $height)->save($folder . DIRECTORY_SEPARATOR . $imageResizeName);
+
+                $img = \Image::make($imageSrc)->resize($width, $height, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+
+                Storage::disk($disc)->put($imageFullPath, $img->stream());
+                Storage::disk($disc)->setVisibility($imageFullPath, 'public');
+
             }catch (\Exception $exception) {
-                Log::error($exception->getMessage());
-                if (app()->environment('local')) {
-                    dd($exception);
-                }
+                helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
             }
         }
     }
 
-    public function uploadImage($folder, UploadedFile $image, $resizes = [], $disc = 's3')
+    public function uploadImage($folder, UploadedFile $image, $resizes = null, $disc = 's3')
     {
+        if (!$resizes) {
+            $resizes = $this->sizes;
+        }
+
         $imagePath = $image->store($folder, $disc);
 
         Storage::disk($disc)->setVisibility($imagePath, 'public');
 
         if (!empty($resizes)) {
-//            $folderPath = Storage::disk($disc)->path($folder);
-//            $this->resizeImage($folderPath, $imagePath, $resizes);
+            $this->resizeImage($disc, $imagePath, $image, $resizes);
         }
 
         return $imagePath;
@@ -58,15 +68,41 @@ trait ImageHelperTrait
             try {
                 $imagePaths[] = $this->uploadImage($folder, $image, $resizes, $disc);
             }catch (\Exception $exception) {
-                Log::error($exception->getMessage(), $images);
+                helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
             }
         }
 
         return $imagePaths;
     }
 
-    public function uploadAvatar(UploadedFile $avatar, $folder = 'avatars', $sizes =  ['300x300'])
+    public function uploadAvatar(UploadedFile $avatar, $folder = 'avatars', $sizes = ['200x200'])
     {
         return $this->uploadImage($folder, $avatar, $sizes);
+    }
+
+    public function _removeImage(null|string|array $images, $disc = 's3')
+    {
+        if (!$images) {
+            return;
+        }
+
+        if (is_string($images)) {
+            $images = [$images];
+        }
+
+        try {
+            $deleted = Storage::disk($disc)->delete($images);
+
+            if ($deleted) {
+                foreach ($images as $image) {
+                    foreach ($this->sizes as $size) {
+                        Storage::disk($disc)->delete(addSizeToImageLink($image, $size));
+                    }
+                }
+            }
+
+        } catch (\Exception $exception) {
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
+        }
     }
 }

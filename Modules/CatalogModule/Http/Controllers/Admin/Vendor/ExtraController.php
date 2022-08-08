@@ -30,17 +30,17 @@ class ExtraController extends Controller
 
     public function store(CreateExtraRequest $createExtraRequest)
     {
-        $extra = $this->extraService->create($createExtraRequest);
+        $result = $this->extraService->create($createExtraRequest);
 
-        return $this->apiResponse(compact('extra'), 201, __('Data has been added successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function update($id, UpdateExtraRequest $updateExtraRequest)
     {
-        $extra = $this->extraService->update($id, $updateExtraRequest);
+        $result = $this->extraService->update($id, $updateExtraRequest);
 
-        return $this->apiResponse(compact('extra'), 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
@@ -53,8 +53,8 @@ class ExtraController extends Controller
 
     public function destroy($id)
     {
-        $this->extraService->delete($id);
+        $result = $this->extraService->delete($id);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse(...$result);
     }
 }

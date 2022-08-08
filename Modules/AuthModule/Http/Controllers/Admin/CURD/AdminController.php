@@ -30,41 +30,41 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
-        $admins = $this->adminService->findAll($request);
+        $result = $this->adminService->findAll($request);
 
-        return $this->apiResponse(compact('admins'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function show($adminId)
     {
-        $admin = $this->adminService->find($adminId);
+        $result = $this->adminService->find($adminId);
 
-        return $this->apiResponse(compact('admin'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function store(CreateAdminRequest $createAdminRequest)
     {
-        $admin = $this->adminService->create($createAdminRequest);
+        $result = $this->adminService->create($createAdminRequest);
 
-        return $this->apiResponse(compact('admin'), 201, __('Data has been added successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function update($adminId, UpdateAdminRequest $updateAdminRequest)
     {
-        $admin = $this->adminService->update($adminId, $updateAdminRequest);
+        $result = $this->adminService->update($adminId, $updateAdminRequest);
 
-        return $this->apiResponse(compact('admin'), 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function updatePassword($adminId, UpdateAdminPasswordRequest $updateAdminPasswordRequest)
     {
-        $admin = $this->adminService->updatePassword($adminId, $updateAdminPasswordRequest);
+        $result = $this->adminService->updatePassword($adminId, $updateAdminPasswordRequest);
 
-        return $this->apiResponse(compact('admin'), 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
@@ -72,6 +72,6 @@ class AdminController extends Controller
     {
         $result = $this->adminService->destroy($adminId);
 
-        return $this->apiResponse([], $result['statusCode'], $result['message'], $result['errors']);
+        return $this->apiResponse(...$result);
     }
 }

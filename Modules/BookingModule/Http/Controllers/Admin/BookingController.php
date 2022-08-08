@@ -22,17 +22,17 @@ class BookingController extends Controller
 
     public function index(Request $request)
     {
-        $bookings = $this->bookingService->findAll($request);
+        $result = $this->bookingService->findAll($request);
 
-        return $this->apiResponse(compact('bookings'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function show($bookingId)
     {
-        $booking = $this->bookingService->find($bookingId);
+        $result = $this->bookingService->find($bookingId);
 
-        return $this->apiResponse(compact('booking'));
+        return $this->apiResponse(...$result);
     }
 
 
@@ -40,6 +40,6 @@ class BookingController extends Controller
     {
         $result = $this->bookingService->cancelByAdmin($bookingId);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 }

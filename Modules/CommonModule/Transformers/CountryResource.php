@@ -22,7 +22,8 @@ class CountryResource extends JsonResource
             'capital'       => $this->capital,
             'calling_code'  => $this->calling_code,
             'currency_code' => $this->currency_code,
-            'currency'      => $this->currency
+            'currency'      => $this->currency,
+            'is_active'     => (boolean)$this->is_active
         ];
     }
 }

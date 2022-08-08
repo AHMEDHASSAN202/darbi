@@ -34,14 +34,18 @@ class PortService
 
         $ports = $this->portRepository->listOfPortsForDashboard($request, $wheres);
 
-        return new PaginateResource(PortResource::collection($ports));
+        if ($ports instanceof LengthAwarePaginator) {
+            return new PaginateResource(PortResource::collection($ports));
+        }
+
+        return PortResource::collection($ports);
     }
 
     public function find($portId)
     {
         $port = $this->portRepository->findOne($portId);
 
-        return new FindPortResource($port);
+        return new \Modules\CatalogModule\Transformers\PortResource($port);
     }
 
     public function create(CreatePortRequest $createPortRequest)
@@ -55,9 +59,7 @@ class PortService
             'is_active'  => ($createPortRequest->is_active === null) || (boolean)$createPortRequest->is_active
         ]);
 
-        return [
-            'id'        => $port->id
-        ];
+        return createdResponse(['id' => $port->id]);
     }
 
     public function update($id, UpdatePortRequest $updatePortRequest)
@@ -71,13 +73,13 @@ class PortService
             'is_active'  => ($updatePortRequest->is_active === null) || (boolean)$updatePortRequest->is_active
         ]);
 
-        return [
-            'id'    => $port->id
-        ];
+        return updatedResponse(['id' => $port->id]);
     }
 
     public function delete($id)
     {
-        return $this->portRepository->destroy($id);
+        $this->portRepository->destroy($id);
+
+        return deletedResponse();
     }
 }

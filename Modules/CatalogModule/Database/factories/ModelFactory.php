@@ -35,29 +35,41 @@ class ModelFactory extends Factory
             ],
             'specs'         => [
                 'engine_type'   => [
-                    'name'          => ['ar' => 'automatic', 'en' => 'automatic'],
-                    'image'         => 'https://i.ibb.co/q0bSNT5/liter.png',
-                    'order_weight'  => 2,
-                    'value'         => '',
-                    'group_details' => ['ar' => 'Details', 'en' => 'Details', 'key' => 'general']
+                    'value'         => 'automatic',
+                    'image'         => [
+                        'key'           => 'engine_type',
+                        'value'         => 'https://i.ibb.co/q0bSNT5/liter.png',
+                        'full_url'      => 'https://i.ibb.co/q0bSNT5/liter.png',
+                        'name'          => 'Engine type'
+                    ]
                 ],
                 'seats'   => [
-                    'name'          => ['ar' => 'seats', 'en' => 'seats'],
-                    'image'         => 'https://i.ibb.co/N1tNCy4/bedroom.png',
-                    'order_weight'  => 3,
-                    'value'         => 3,
-                    'group_details' => ['ar' => 'Details', 'en' => 'Details', 'key' => 'general']
+                    'value'         => '4 seats',
+                    'image'         => [
+                        'key'           => 'seats',
+                        'value'         => 'https://i.ibb.co/N1tNCy4/bedroom.png',
+                        'full_url'      => 'https://i.ibb.co/N1tNCy4/bedroom.png',
+                        'name'          => 'Seats'
+                    ]
                 ],
                 'passengers'   => [
-                    'name'          => ['ar' => 'passengers', 'en' => 'passengers'],
-                    'image'         => 'https://i.ibb.co/nBjwmhP/passengers.png',
-                    'order_weight'  => 1,
-                    'value'         => [
-                        'minimum'           => 4,
-                        'maximum'           => 10
-                    ],
-                    'group_details' => ['ar' => 'Details', 'en' => 'Details', 'key' => 'general']
+                    'value'         => '14 - 18 passengers',
+                    'image'         => [
+                        'key'           => 'passengers',
+                        'value'         => 'https://i.ibb.co/nBjwmhP/passengers.png',
+                        'full_url'      => 'https://i.ibb.co/nBjwmhP/passengers.png',
+                        'name'          => 'Passengers'
+                    ]
                 ],
+                'pilot'   => [
+                    'value'         => 'pilot',
+                    'image'         => [
+                        'key'           => 'pilot',
+                        'value'         => 'https://i.ibb.co/1vrxW5B/pilot.png',
+                        'full_url'      => 'https://i.ibb.co/1vrxW5B/pilot.png',
+                        'name'          => 'Pilot'
+                    ]
+                ]
             ],
             'is_active'      => true,
             'entity_type' => ['car', 'yacht'][mt_rand(0,1)],

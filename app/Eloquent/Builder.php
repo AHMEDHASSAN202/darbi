@@ -38,4 +38,17 @@ class Builder extends \Jenssegers\Mongodb\Eloquent\Builder
 
         return $this->whereIn($this->getRelatedConstraintKey($relation), $relatedIds, $boolean, $not);
     }
+
+
+    public function paginated($limit = null)
+    {
+        $limit = (request('limit') && is_numeric(request('limit'))) ? request('limit') : $limit;
+
+        if (request('paginated')) {
+            $limit = $limit ?? config('options.per_page');
+            return $this->paginate($limit);
+        }
+
+        return $this->when($limit, function ($q) use ($limit) { $q->limit($limit); })->get();
+    }
 }

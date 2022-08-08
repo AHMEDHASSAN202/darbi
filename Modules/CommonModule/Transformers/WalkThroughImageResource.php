@@ -16,7 +16,7 @@ class WalkThroughImageResource extends JsonResource
     {
         return [
             'title'             => translateAttribute($this['title']),
-            'image'             => imageUrl($this['image']),
+            'image'             => imageUrl($this['image'], 'original'),
             'desc'              => translateAttribute($this['desc']),
         ];
     }

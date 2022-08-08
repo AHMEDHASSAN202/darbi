@@ -31,4 +31,11 @@ class YachtController extends Controller
             'yacht'       => $this->yachtService->find($yachtId)
         ]);
     }
+
+    public function share($yachtId)
+    {
+        return $this->apiResponse([
+            'shareLink' => $this->yachtService->getShareLink($yachtId, 'yachts')
+        ]);
+    }
 }

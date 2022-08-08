@@ -21,8 +21,8 @@ class BrandController extends Controller
 
     public function index(Request $request)
     {
-        $brands = $this->brandService->findAllForDashboard($request);
+        $result = $this->brandService->findAllForDashboard($request);
 
-        return $this->apiResponse(compact('brands'));
+        return $this->apiResponse(...$result);
     }
 }

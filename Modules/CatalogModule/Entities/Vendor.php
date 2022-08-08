@@ -45,10 +45,17 @@ class Vendor extends Base
     //============= #END# Relations ===================\\
 
     //============= scopes ==============\\
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
     public function scopeSearch($query, Request $request)
     {
         if ($q = $request->get('q')) {
-            return $query->where('name', 'LIKE', '%' . $q .'%');
+            return $query->where(function ($query) use ($q) {
+                $query->where('name.ar', 'LIKE', '%' . $q .'%')->orWhere('name.en', 'LIKE', '%' . $q . '%');
+            });
         }
     }
 

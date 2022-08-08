@@ -35,10 +35,11 @@ Route::group([
 ], function () {
     Route::get(''                   , 'ProfileController@getProfile')->middleware('auth:api');
     Route::put(''                   , 'ProfileController@updateProfile')->middleware('auth:api');
+    Route::post('delete-account'    , 'ProfileController@deleteAccount')->middleware('auth:api');
     Route::put('identity/{type}'    , 'ProfileController@updateIdentityProfile')->whereIn('type', ['front', 'back'])->middleware('auth:api');
     Route::delete('identity/{type}' , 'ProfileController@deleteIdentityProfile')->whereIn('type', ['front', 'back'])->middleware('auth:api');
 });
 
 
 //device token
-Route::post('device-token'      , 'UserDeviceTokenController@storeDeviceToken')->middleware('auth:api');
+Route::post('device-token'      , 'UserDeviceTokenController@storeDeviceToken');

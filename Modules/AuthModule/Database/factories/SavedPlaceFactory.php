@@ -28,8 +28,7 @@ class SavedPlaceFactory extends Factory
             'lat'           => $this->faker->latitude(),
             'lng'           => $this->faker->longitude(),
             'city'          => $this->faker->city(),
-            'country'       => $this->faker->country(),
-            'region_id'     => new ObjectId(Region::all()->random(1)->first()->_id)
+            'country'       => $this->faker->country()
         ];
     }
 }

@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\AuthModule\Database\factories\UserFactory;
+use Modules\BookingModule\Entities\Booking;
 use Modules\CommonModule\Entities\Country;
 use MongoDB\BSON\ObjectId;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -28,6 +29,8 @@ class User extends BaseAuthenticatable implements JWTSubject
 
     public $preventActivityLog = ['password', 'remember_token'];
 
+    protected $appends = ['is_profile_completed'];
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -35,14 +38,15 @@ class User extends BaseAuthenticatable implements JWTSubject
 
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'version'       => config('authmodule.jwt_version'),
+        ];
     }
 
     protected static function newFactory()
     {
         return UserFactory::new();
     }
-
     //============= Relations ===================\\
 
 
@@ -52,7 +56,9 @@ class User extends BaseAuthenticatable implements JWTSubject
     public function scopeSearch($query, Request $request)
     {
         if ($q = $request->get('q')) {
-            return $query->where('name', 'LIKE', '%' . $q .'%');
+            return $query->where(function ($query) use ($q) {
+                $query->where('name', 'LIKE', '%'. $q .'%')->orWhere('phone', 'LIKE', '%' . $q . '%');
+            });
         }
     }
 
@@ -79,5 +85,24 @@ class User extends BaseAuthenticatable implements JWTSubject
         return $this->is_active !== true;
     }
 
+    public function getIsProfileCompletedAttribute()
+    {
+        return (!empty($this->name) && !empty(arrayGet($this->identity, 'frontside_image')));
+    }
+
     //=================== #END# helpers ===================\\
+
+    //=================== Bookings =========================\\
+
+    public function lastBooking()
+    {
+        return $this->hasOne(Booking::class, 'user_id')->latest();
+    }
+
+    public function savedPlaces()
+    {
+        return $this->hasMany(SavedPlace::class)->latest()->limit(10);
+    }
+
+    //=================== #END# Bookings =========================\\
 }

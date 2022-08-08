@@ -22,22 +22,17 @@ class PortRepository
 
     public function listOfPorts(Request $request)
     {
-        $query = $this->model->search($request)
-                             ->filters($request)
-                             ->with(['country' => function ($q) { $q->withTrashed(); }, 'city' => function ($q) { $q->withTrashed(); }])
-                             ->active()
-                             ->latest();
-
-        if ($request->has('paginated')) {
-            return $query->paginate($request->get('limit', 20));
-        }
-
-        return $query->get();
+        return $this->model->search($request)
+                           ->filters($request)
+                           ->with(['country' => function ($q) { $q->withTrashed(); }, 'city' => function ($q) { $q->withTrashed(); }])
+                           ->active()
+                           ->latest()
+                           ->paginated();
     }
 
     public function listOfPortsForDashboard(Request $request, $wheres = [])
     {
-        return $this->model->adminSearch($request)->adminFilters($request)->with(['country' => function ($q) { $q->withTrashed(); }, 'city' => function ($q) { $q->withTrashed(); }])->latest()->where($wheres)->paginate($request->get('limit', 20));
+        return $this->model->adminSearch($request)->adminFilters($request)->with(['country' => function ($q) { $q->withTrashed(); }, 'city' => function ($q) { $q->withTrashed(); }])->latest()->where($wheres)->paginated();
     }
 
     public function findAllPortsByCity($cityId)

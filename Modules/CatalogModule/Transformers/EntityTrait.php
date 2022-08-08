@@ -6,9 +6,8 @@
 
 namespace Modules\CatalogModule\Transformers;
 
-use App\Proxy\Proxy;
-use Modules\BookingModule\Proxy\BookingProxy;
 use Modules\CatalogModule\Repositories\ExtraRepository;
+use Modules\CatalogModule\Services\VendorService;
 
 trait EntityTrait
 {
@@ -16,7 +15,7 @@ trait EntityTrait
 
 
     //this object maybe car or yacht
-    private function getMainImage() : string
+    private function getMainImage($displayType = 'middle') : string
     {
         $entityMainImage = @$this->images[0];
 
@@ -27,12 +26,12 @@ trait EntityTrait
             }
         }
 
-        return imageUrl($entityMainImage ?? $this->defaultImage);
+        return imageUrl($entityMainImage ?? $this->defaultImage, $displayType);
     }
 
 
     //get entity images
-    private function getImagesFullPath($onlyEntityImages = false) : array
+    private function getImagesFullPath($onlyEntityImages = false, $displayType = 'middle') : array
     {
         $entityMainImages = @(array)$this->images;
 
@@ -44,7 +43,7 @@ trait EntityTrait
             return [];
         }
 
-        return array_map(function ($image) { return imageUrl($image); }, $entityMainImages);
+        return array_map(function ($image) use ($displayType) { return imageUrl($image, $displayType); }, $entityMainImages);
     }
 
 
@@ -78,10 +77,14 @@ trait EntityTrait
 
     private function getVendor()
     {
-        $vendorId = $this->vendor_id;
-        $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => $vendorId])))->result();
-        if (isset($vendor['darbi_percentage'])) unset($vendor['darbi_percentage']);
-        if (isset($vendor['settings'])) unset($vendor['settings']);
-        return $vendor;
+        $vendor = app(VendorService::class)->findOne($this->vendor_id);
+        return [
+            'id'     => objectGet($vendor, 'id'),
+            'type'   => objectGet($vendor, 'type'),
+            'phone'  => objectGet($vendor, 'phone'),
+            'lat'    => objectGet($vendor, 'lat'),
+            'lng'    => objectGet($vendor, 'lng'),
+            'currency_code' => objectGet($vendor, 'country_currency_code')
+        ];
     }
 }

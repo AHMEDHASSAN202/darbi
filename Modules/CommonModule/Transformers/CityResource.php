@@ -21,7 +21,8 @@ class CityResource extends JsonResource
             'city_code'         => $this->code,
             'name'              => translateAttribute($this->name) . ' - ' . $this->country_code,
             'lat'               => $this->lat,
-            'lng'               => $this->lng
+            'lng'               => $this->lng,
+            'is_active'         => (boolean)$this->is_active
         ];
 
         if ($this->relationLoaded('country')) {

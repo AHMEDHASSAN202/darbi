@@ -23,20 +23,18 @@ class YachtResource extends JsonResource
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
             'passengers'    => $this->passengers(),
-            'currency_code' => optional($this->country)->currency_code
+            'currency_code' => optional($this->vendor)->country_currency_code
         ];
     }
 
 
     private function passengers()
     {
-        $passengers = @$this->model->specs['passengers'];
+        $passengers = arrayGet($this->model->specs, 'passengers');
         if (!$passengers) {
             return null;
         }
-        return [
-            'minimum'       => $passengers['value']['minimum'],
-            'maximum'       => $passengers['value']['maximum']
-        ];
+
+        return arrayGet($passengers, 'value');
     }
 }

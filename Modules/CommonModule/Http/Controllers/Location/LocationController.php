@@ -21,8 +21,8 @@ class LocationController extends Controller
 
     public function find(ValidateLatAndLngRequest $latAndLngRequest)
     {
-        $result = $this->locationService->handleLocation($latAndLngRequest->lat, $latAndLngRequest->lng);
+        $result = $this->locationService->handleLocation($latAndLngRequest);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 }

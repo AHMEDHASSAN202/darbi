@@ -4,6 +4,7 @@ namespace Modules\CatalogModule\Http\Controllers\Admin\Vendor;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
 use Modules\CatalogModule\Http\Requests\Admin\CreateCarRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateCarRequest;
 use Modules\CatalogModule\Services\Admin\CarService;
@@ -37,29 +38,29 @@ class CarController extends Controller
 
     public function store(CreateCarRequest $createCarRequest)
     {
-        $car = $this->carService->create($createCarRequest);
+        $result = $this->carService->create($createCarRequest);
 
-        return $this->apiResponse(compact('car'), 201, __('Data has been added successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function update($id, UpdateCarRequest $updateCarRequest)
     {
-        $car = $this->carService->update($id, $updateCarRequest);
+        $result = $this->carService->update($id, $updateCarRequest);
 
-        return $this->apiResponse(compact('car'), 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function destroy($id)
     {
         $result = $this->carService->delete($id);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 
     public function deleteImage($id, $imageIndex)
     {
-        $this->carService->removeImage($id, $imageIndex);
+        $result = $this->carService->removeImage($id, $imageIndex);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse(...$result);
     }
 }

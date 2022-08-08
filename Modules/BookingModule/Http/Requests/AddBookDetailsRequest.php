@@ -16,20 +16,10 @@ class AddBookDetailsRequest extends FormRequest
     {
         return [
             'pickup_location'   => 'required|array',
-//            'pickup_location.lat' => 'required|numeric',
-//            'pickup_location.lng' => 'required|numeric',
-//            'pickup_location.fully_addressed' => 'required|string',
-//            'pickup_location.city' => 'required|string',
-//            'pickup_location.country' => 'required|string',
-//            'pickup_location.region_id' => ['required', new MongoIdRule()],
+            'pickup_location.id'=> ['required', new MongoIdRule()],
             'drop_location'     => 'required|array',
-//            'drop_location.lat' => 'required|numeric',
-//            'drop_location.lng' => 'required|numeric',
-//            'drop_location.fully_addressed' => 'required|string',
-//            'drop_location.city' => 'required|string',
-//            'drop_location.country' => 'required|string',
-//            'drop_location.region_id' => ['required', new MongoIdRule()],
-            'note'               => 'sometimes|nullable|max:500',
+            'drop_location.id'  => ['required', new MongoIdRule()],
+            'note'              => 'sometimes|nullable|max:500',
             'start_at'          => 'required|date|after_or_equal:today',
             'end_at'            => 'required|date|after_or_equal:start_at',
         ];

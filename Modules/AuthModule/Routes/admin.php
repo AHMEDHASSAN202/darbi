@@ -25,7 +25,6 @@ Route::group([
     Route::post(''                      , 'RoleController@store');
     Route::put('{role}'                 , 'RoleController@update');
     Route::delete('{role}'              , 'RoleController@destroy');
-    Route::get('vendor-role/find'       , 'RoleController@findVendorRole');
 });
 
 
@@ -96,3 +95,8 @@ Route::group([
     Route::get(''                       , 'AdminProfileController@getProfile');
     Route::put(''                       , 'AdminProfileController@updateProfile');
 });
+
+
+
+
+Route::post('device-token'              , 'UserDeviceTokenController@storeDeviceToken')->middleware('auth:admin_api');

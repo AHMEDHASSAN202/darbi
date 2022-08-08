@@ -21,9 +21,8 @@ class CountryController extends Controller
 
     public function index(Request $request)
     {
-        $countries = $this->countryService->countries($request);
+        $result = $this->countryService->countries($request);
 
-        return $this->apiResponse(compact('countries'));
+        return $this->apiResponse(...$result);
     }
 }
-//booking-cart

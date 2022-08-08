@@ -21,8 +21,8 @@ class NotificationController extends Controller
 
     public function findAll(Request $request)
     {
-        return $this->apiResponse([
-            'notifications' => $this->notificationService->listOfMyNotifications($request)
-        ]);
+        $result = $this->notificationService->listOfMyNotifications($request);
+
+        return $this->apiResponse(...$result);
     }
 }

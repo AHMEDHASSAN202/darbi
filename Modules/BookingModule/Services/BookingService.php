@@ -8,12 +8,13 @@ namespace Modules\BookingModule\Services;
 
 use App\Proxy\Proxy;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Modules\BookingModule\Classes\BookingChangeLog;
 use Modules\BookingModule\Classes\Payments\Payment;
 use Modules\BookingModule\Classes\Price;
+use Modules\BookingModule\Classes\Validation\BookingDateValidation;
 use Modules\BookingModule\Enums\BookingStatus;
 use Modules\BookingModule\Events\BookingStatusChangedEvent;
 use Modules\BookingModule\Http\Requests\AddBookDetailsRequest;
@@ -28,8 +29,9 @@ use MongoDB\BSON\ObjectId;
 
 class BookingService
 {
-    private $bookingRepository;
+    use BookingHelperService;
 
+    private $bookingRepository;
 
     public function __construct(BookingRepository $bookingRepository)
     {
@@ -41,9 +43,13 @@ class BookingService
     {
         $userId = auth('api')->id();
 
-        $bookings = $this->bookingRepository->findAllByUser($userId, $request->get('limit', 20));
+        $bookings = $this->bookingRepository->findAllByUser($userId, $request);
 
-        return new PaginateResource(BookingResource::collection($bookings));
+        if ($bookings instanceof LengthAwarePaginator) {
+            return successResponse(['bookings' => new PaginateResource(BookingResource::collection($bookings))]);
+        }
+
+        return successResponse(['bookings' => BookingResource::collection($bookings)]);
     }
 
 
@@ -53,68 +59,93 @@ class BookingService
 
         $booking = $this->bookingRepository->findByUser($userId, $bookingId);
 
-        return new FindBookingResource($booking);
+        return successResponse(['booking' => new FindBookingResource($booking)]);
     }
 
 
     public function rent(RentRequest $rentRequest)
     {
-
         $entity = (new Proxy(new BookingProxy('GET_ENTITY', ['entity_id' => $rentRequest->entity_id])))->result();
+
+        abort_if(is_null($entity), 404);
+
         $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => $entity['vendor_id']])))->result();
 
-        abort_if((is_null($entity) || is_null($vendor)), 404);
+        $city = (new Proxy(new BookingProxy('GET_CITY', ['city_id' => $rentRequest->city_id])))->result();
 
-        if (!entityIsFree($entity['state'])) {
-            return [
-                'statusCode'    => 400,
-                'data'          => [],
-                'message'       => __('booking not allowed')
-            ];
+        abort_if((is_null($vendor) || is_null($city)), 404);
+
+        $rentValidation = $this->rentValidation($entity, $vendor);
+
+        if ($rentValidation !== true) {
+            return $rentValidation;
         }
 
         $extras = $this->getExtras($entity, $rentRequest->extras);
         $country = $entity['country'];
+
+        $branch = [];
+        $port = [];
+
+        if (entityIsCar($entity['type'])) {
+
+            $branch = $this->getBranch($entity['branch_id']);
+
+            if (empty($branch)) {
+                return badResponse([], __('Branch not exists'));
+            }
+
+        }elseif (entityIsYacht($entity['type'])) {
+
+            $port = $this->getPort($entity['port_id']);
+
+            if (empty($port)) {
+                return badResponse([], __('Port not exists'));
+            }
+
+        }else {
+            return badResponse([], __('Something error in entity'));
+        }
 
         $booking = $this->bookingRepository->create([
             'user_id'       => new ObjectId(auth('api')->id()),
             'user'          => auth('api')->user()->only(['_id', 'phone', 'phone_code', 'name', 'email']),
             'vendor'        => $vendor,
             'vendor_id'     => new ObjectId($entity['vendor_id']),
+            'branch_id'     => arrayGet($entity, 'branch_id') ? new ObjectId($entity['branch_id']) : null,
+            'branch'        => $branch,
+            'port_id'       => arrayGet($entity, 'port_id') ? new ObjectId($entity['port_id']) : null,
+            'port'          => $port,
             'entity_id'     => new ObjectId($entity['id']),
-            'entity_type'   => @$entity['entity_type'],
+            'entity_type'   => arrayGet($entity, 'entity_type'),
             'entity_details' => [
-                'name'      => @$entity['name'] ?? "",
-                'price'     => @$entity['price'],
-                'price_unit'=> @$entity['price_unit'],
-                'images'    => @$entity['images'],
+                'name'      => arrayGet($entity, 'name', ''),
+                'price'     => arrayGet($entity, 'price'),
+                'price_unit'=> arrayGet($entity, 'price_unit'),
+                'images'    => arrayGet($entity, 'images'),
                 'model_id'  => isset($entity['model_id']) ? new ObjectId($entity['model_id']) : null,
-                'model_name'=> @$entity['model_name'],
+                'model_name'=> arrayGet($entity, 'model_name'),
                 'brand_id'  => isset($entity['brand_id']) ? new ObjectId($entity['brand_id']) : null,
-                'brand_name'=> @$entity['brand_name'],
+                'brand_name'=> arrayGet($entity, 'brand_name'),
             ],
             'country_id'    => new ObjectId($country['_id']),
             'country'       => $country,
             'currency_code' => $country['currency_code'],
+            'city_id'       => new ObjectId($city['id']),
+            'city'          => $city,
             'status'        => BookingStatus::INIT,
             'extras'        => $extras,
             'start_booking_at' => $rentRequest->start_at,
             'end_booking_at'   => $rentRequest->end_at
         ]);
 
-        return [
-            'statusCode'    => 201,
-            'message'       => '',
-            'data'          => [
-                'booking_id'    => $booking->_id
-            ]
-        ];
+        return createdResponse(['booking_id' => $booking->_id]);
     }
 
 
     private function getExtras($entity, $extras) : array
     {
-        $entityExtras = @$entity['extras'];
+        $entityExtras = arrayGet($entity, 'extras');
 
         if (!is_array($extras) || empty($extras) || empty($entity) || !is_array($entityExtras)) return [];
 
@@ -132,59 +163,66 @@ class BookingService
 
     public function addBookDetails($bookingId, AddBookDetailsRequest $addBookDetailsRequest)
     {
-        $meId = auth('api')->id();
         $me = auth('api')->user();
 
-        $booking = $this->bookingRepository->findByUser($meId, $bookingId);
+        if (!$me->is_profile_completed) {
+            return badResponse([], __('Please complete your profile first'));
+        }
+
+        $booking = $this->bookingRepository->findByUser($me->id, $bookingId);
 
         abort_if((is_null($booking) || $booking->status != BookingStatus::INIT), 404);
 
         $entity = (new Proxy(new BookingProxy('GET_ENTITY', ['entity_id' => $booking->entity_id])))->result();
+        $vendor = (new Proxy(new BookingProxy('GET_VENDOR', ['vendor_id' => $entity['vendor_id']])))->result();
 
-        abort_if(is_null($entity), 404);
+        abort_if(is_null($entity) || is_null($vendor), 404);
 
-        if (!entityIsFree($entity['state'])) {
-            return [
-                'statusCode'    => 400,
-                'data'          => [],
-                'message'       => __('booking not allowed')
-            ];
+        $startDate = $addBookDetailsRequest->start_at;
+        $endDate = getBookingEndDate($entity['price_unit'], $addBookDetailsRequest->start_at, $addBookDetailsRequest->end_at);
+
+        $rentValidation = $this->rentValidation($entity, $vendor, $startDate, $endDate);
+
+        if ($rentValidation !== true) {
+            return $rentValidation;
         }
 
-        $priceSummary = (new Price($entity, $booking->extras, $addBookDetailsRequest->start_at, $addBookDetailsRequest->end_at))->getPriceSummary();
-        $booking->price_summary = $priceSummary;
-        $booking->pickup_location_address = Arr::only($addBookDetailsRequest->pickup_location, [...locationInfoKeys()]);
-        $booking->drop_location_address = Arr::only($addBookDetailsRequest->drop_location, [...locationInfoKeys()]);
-        $booking->status_change_log = (new BookingChangeLog($booking, BookingStatus::PENDING, $me))->logs();
-        $booking->status = BookingStatus::PENDING;
-        $booking->start_booking_at = convertDateTimeToUTC($me, $addBookDetailsRequest->start_at);
-        $booking->end_booking_at = convertDateTimeToUTC($me, $addBookDetailsRequest->end_at);
-        $booking->note = $addBookDetailsRequest->note;
-        $booking->save();
+        $dateValidation = (new BookingDateValidation($entity))->validator($addBookDetailsRequest);
 
-        return [
-            'data'          => [],
-            'message'       => '',
-            'statusCode'    => 200
-        ];
+        if (!$dateValidation->passes()) {
+            return badResponse([], $dateValidation->error());
+        }
+
+        $priceSummary = (new Price($entity, $booking->extras, $startDate, $endDate, $booking->vendor))->getPriceSummary();
+        $this->bookingRepository->update($bookingId, [
+            'user'                          => auth('api')->user()->only(['_id', 'phone', 'phone_code', 'name', 'email']),
+            'price_summary'                 => $priceSummary,
+            'pickup_location_address'       => Arr::only($addBookDetailsRequest->pickup_location, [...locationInfoKeys()]),
+            'drop_location_address'         => Arr::only($addBookDetailsRequest->drop_location, [...locationInfoKeys()]),
+            'status_change_log'             => (new BookingChangeLog($booking, BookingStatus::PENDING, $me))->logs(),
+            'status'                        => BookingStatus::PENDING,
+            'start_booking_at'              => convertDateTimeToUTC($me, $startDate),
+            'end_booking_at'                => convertDateTimeToUTC($me, $endDate),
+            'pending_at'                    => new \MongoDB\BSON\UTCDateTime(),
+            'note'                          => $addBookDetailsRequest->note
+        ]);
+
+        $booking->refresh();
+
+        event(new BookingStatusChangedEvent($booking));
+
+        return successResponse();
     }
 
 
     public function cancel($bookingId)
     {
-        $meId = auth('api')->id();
         $me = auth('api')->user();
 
-        $booking = $this->bookingRepository->findByUser($meId, $bookingId);
-
-        abort_if(is_null($booking), 404);
+        $booking = $this->bookingRepository->findByUser($me->id, $bookingId);
 
         if (!in_array($booking->status, [BookingStatus::INIT, BookingStatus::PENDING, BookingStatus::ACCEPT])) {
-            return [
-                'data'      => [],
-                'message'   => __('cancel booking not allowed'),
-                'statusCode'=> 400
-            ];
+            return badResponse([], __('booking not allowed', ['status' => __('cancel')]));
         }
 
         $session = DB::connection('mongodb')->getMongoClient()->startSession();
@@ -192,97 +230,211 @@ class BookingService
 
         try {
 
-            $data['status_change_log'] = (new BookingChangeLog($booking, BookingStatus::CANCELLED_BEFORE_ACCEPT, $me))->logs();
-            $data['status'] = BookingStatus::CANCELLED_BEFORE_ACCEPT;
+            $cancelledBeforeAccept = ($booking->status === BookingStatus::ACCEPT) ? BookingStatus::CANCELLED_AFTER_ACCEPT: BookingStatus::CANCELLED_BEFORE_ACCEPT;
+            $data = [
+                'status_change_log'     => (new BookingChangeLog($booking, $cancelledBeforeAccept, $me))->logs(),
+                'status'                => $cancelledBeforeAccept
+            ];
+
             $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
 
-            event(new BookingStatusChangedEvent($booking));
+            $this->updateEntityState($cancelledBeforeAccept, $booking);
 
             $session->commitTransaction();
 
-            return [
-                'data'       => [
-                    'booking_id'    => $bookingId
-                ],
-                'message'    => '',
-                'statusCode' => 200
-            ];
+            $booking->refresh();
+
+            event(new BookingStatusChangedEvent($booking));
+
+            return successResponse(['booking_id' => $bookingId]);
 
         }catch (\Exception $exception) {
-            Log::error($exception->getMessage());
             $session->abortTransaction();
-            return [
-                'data'       => [],
-                'message'    => null,
-                'statusCode' => 500
-            ];
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
+            return serverErrorResponse();
         }
     }
 
 
     public function proceed($bookingId, ProceedRequest $proceedRequest)
     {
-        $meId = auth('api')->id();
         $me = auth('api')->user();
 
-        $booking = $this->bookingRepository->findByUser($meId, $bookingId);
-
-        abort_if((is_null($booking) || $booking->status != BookingStatus::ACCEPT), 404);
+        $booking = $this->bookingRepository->findByUser($me->id, $bookingId);
 
         if ($booking->status != BookingStatus::ACCEPT) {
-            return [
-                'data'      => [],
-                'message'   => __('proceed booking not allowed'),
-                'statusCode'=> 400
-            ];
+            return badResponse([], __('booking not allowed', ['status' => __('proceed')]));
         }
 
-        $session = DB::connection('mongodb')->getMongoClient()->startSession();
-        $session->startTransaction();
+        $payment = new Payment($proceedRequest->payment_method, $proceedRequest->all());
 
-        try {
-            $payment = new Payment($proceedRequest->payment_method, $proceedRequest->all());
+        $data['payment_method'] = [
+            'type'       => $proceedRequest->payment_method,
+            'extra_info' => $payment->storeData()
+        ];
 
-            $data['payment_method'] = [
-                'type'       => $proceedRequest->payment_method,
-                'extra_info' => $payment->storeData()
-            ];
+        if (!$payment->successTransaction()) {
+            $this->bookingRepository->update($bookingId, $data);
 
-            if (!$payment->successTransaction()) {
-                $this->bookingRepository->updateBookingCollection($bookingId, $data, $session);
+            helperLog(__CLASS__, __FUNCTION__, 'Payment Failed');
 
-                $session->commitTransaction();
+            return badResponse([], __('Payment Failed'));
+        }
 
-                Log::error('payment failed', $booking->toArray());
-                return [
-                    'statusCode'       => 400,
-                    'message'          => __('something error'),
-                    'data'             => []
-                ];
+        $data['status'] = BookingStatus::PAID;
+        $data['status_change_log'] = (new BookingChangeLog($booking, BookingStatus::PAID, $me))->logs();
+
+        $this->bookingRepository->update($bookingId, $data);
+
+        $booking->refresh();
+
+        event(new BookingStatusChangedEvent($booking));
+
+        return successResponse([], __('Payment Successful'));
+    }
+
+
+    public function updateBookingsTimeout()
+    {
+        $bookings = $this->bookingRepository->getTimeoutBookings();
+        $bookingTimeoutState = BookingStatus::TIMEOUT;
+
+        foreach ($bookings as $booking) {
+            try {
+
+                $this->bookingRepository->update($booking->id, [
+                    'status'    => $bookingTimeoutState,
+                    'status_change_log' => (new BookingChangeLog($booking, $bookingTimeoutState))->logs()
+                ]);
+
+                $booking->refresh();
+
+                $this->updateEntityState($bookingTimeoutState, $booking);
+
+                event(new BookingStatusChangedEvent($booking));
+
+            }catch (\Exception $exception) {
+                helperLog(__CLASS__, __FUNCTION__, $exception->getMessage(), $booking->toArray());
             }
-
-            $data['status'] = BookingStatus::PAID;
-            $data['status_change_log'] = (new BookingChangeLog($booking, BookingStatus::PAID, $me))->logs();
-            DB::collection('bookings')->where('_id', new ObjectId($bookingId))->update($data, ['session' => $session]);
-
-            event(new BookingStatusChangedEvent($booking));
-
-            $session->commitTransaction();
-
-            return [
-                'statusCode'       => 200,
-                'message'          => __('payment successful'),
-                'data'             => []
-            ];
-
-        }catch (\Exception $exception) {
-            Log::error($exception->getMessage());
-            $session->abortTransaction();
-            return [
-                'data'       => [],
-                'message'    => null,
-                'statusCode' => 500
-            ];
         }
+
+        return successResponse();
+    }
+
+
+    public function reminderBookings()
+    {
+        $bookings = $this->bookingRepository->getReminderBookings();
+
+        foreach ($bookings as $booking) {
+
+            if ($booking->status === BookingStatus::PAID) {
+
+                //notification to user
+                $this->createNotification(
+                    'Reminder',
+                    'Booking Reminder Picked up',
+                    [['id' => new ObjectId($booking->user_id), 'type' => 'user']],
+                    $booking->id
+                );
+
+                //notification to vendor admins
+                $vendorAdminIds = $this->getVendorAdminIds((string)$booking->vendor_id);
+                $this->createNotification(
+                    'Reminder',
+                    'Booking Reminder Picked up',
+                    $vendorAdminIds,
+                    $booking->id
+                );
+
+            }elseif ($booking->status === BookingStatus::PICKED_UP) {
+
+                //notification to user
+                $this->createNotification(
+                    'Reminder',
+                    'Booking Reminder Dropped',
+                    [['id' => new ObjectId($booking->user_id), 'type' => 'user']],
+                    $booking->id
+                );
+
+                //notification to vendor admin
+                $vendorAdminIds = $this->getVendorAdminIds((string)$booking->vendor_id);
+                $this->createNotification(
+                    'Reminder',
+                    'Booking Reminder Dropped',
+                    $vendorAdminIds,
+                    $booking->id
+                );
+
+            }
+        }
+
+        return successResponse();
+    }
+
+
+    public function createNotification(string $title, string $message, array $receivers, $bookingId)
+    {
+        $bookingProxy = new BookingProxy('CREATE_NOTIFICATION', [
+            'title'             => $title,
+            'message'           => $message,
+            'notification_type' => 'booking',
+            'receiver_type'     => 'specified',
+            'receivers'         => $receivers,
+            'extra_data'        => ['booking_id' => $bookingId],
+            'is_automatic'      => true,
+        ]);
+
+        $proxy = new Proxy($bookingProxy);
+
+        return $proxy->result();
+    }
+
+
+    public function getVendorAdminIds($vendorId)
+    {
+        $notificationProxy = new BookingProxy('GET_VENDOR_ADMINS_IDS', ['type' => 'vendor', 'vendor' => $vendorId]);
+        $proxy = new Proxy($notificationProxy);
+        $adminVendors = $proxy->result() ?? [];
+        return array_map(function ($admin) { return ['user_id' => new ObjectId($admin['id']), 'on_model' => 'admin']; }, $adminVendors);
+    }
+
+
+    private function getBranch($branchId)
+    {
+        $bookingProxy = new BookingProxy('GET_BRANCH', ['branch_id' => $branchId]);
+        $proxy = new Proxy($bookingProxy);
+        return $proxy->result();
+    }
+
+
+    private function getPort($portId)
+    {
+        $bookingProxy = new BookingProxy('GET_PORT', ['port_id' => $portId]);
+        $proxy = new Proxy($bookingProxy);
+        return $proxy->result();
+    }
+
+
+    private function rentValidation($entity, $vendor, $startDate = null, $endDate = null)
+    {
+        if (!entityIsFree($entity['state'])) {
+            //check if entity have booking in the same time
+            if ($startDate && $endDate) {
+                if ($this->bookingRepository->checkIfEntityHaveBooking($entity['id'], $startDate, $endDate)) {
+                    return badResponse([], __('Booking not allowed now'));
+                }
+            }
+        }
+
+        if ($vendor['is_active'] !== true) {
+            return badResponse([], __('Vendor is not active now'));
+        }
+
+        if ($this->bookingRepository->checkIfIHaveBookingsNow($entity['id'])) {
+            return badResponse([], __('Sorry, you have a booking pending approval'));
+        }
+
+        return true;
     }
 }

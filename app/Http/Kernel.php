@@ -3,8 +3,11 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Modules\CommonModule\Http\Middleware\ActiveVendorMiddleware;
 use Modules\CommonModule\Http\Middleware\LocalizationMiddleware;
 use Modules\CommonModule\Http\Middleware\PermissionMiddleware;
+use Modules\CommonModule\Http\Middleware\PreventAccessInternal;
+use Modules\CommonModule\Http\Middleware\VendorTypeMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -23,6 +26,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        LocalizationMiddleware::class
     ];
 
     /**
@@ -43,8 +47,7 @@ class Kernel extends HttpKernel
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            LocalizationMiddleware::class
+            \Illuminate\Routing\Middleware\SubstituteBindings::class
         ],
     ];
 
@@ -66,6 +69,9 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'permission' => PermissionMiddleware::class
+        'permission' => PermissionMiddleware::class,
+        'type'       => VendorTypeMiddleware::class,
+        'internal'   => PreventAccessInternal::class,
+        'active_vendor' => ActiveVendorMiddleware::class
     ];
 }

@@ -28,21 +28,14 @@ class VendorProfileService
     {
         $me = auth($this->guardName)->user();
 
-        return (new AdminProfileResource($me));
+        return successResponse(['profile' => (new AdminProfileResource($me))]);
     }
 
     public function updateProfile($request)
     {
         $me = $this->vendorProfileRepository->updateProfile($request);
 
-        return (new AdminProfileResource($me));
-    }
-
-    public function updateVendorInfo(UpdateVendorSettingsRequest $updateVendorInfoRequest)
-    {
-        $vendor = $this->vendorProfileRepository->updateVendorInfo($updateVendorInfoRequest);
-
-        return new FindVendorResource($vendor);
+        return updatedResponse(['profile' => (new AdminProfileResource($me))]);
     }
 
     public function getVendor()

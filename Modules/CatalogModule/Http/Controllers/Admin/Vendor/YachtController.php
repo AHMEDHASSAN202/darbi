@@ -37,17 +37,17 @@ class YachtController extends Controller
 
     public function store(CreateYachtRequest $createYachtRequest)
     {
-        $yacht = $this->yachtService->create($createYachtRequest);
+        $result = $this->yachtService->create($createYachtRequest);
 
-        return $this->apiResponse(compact('yacht'), 201, __('Data has been added successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function update($id, UpdateYachtRequest $updateYachtRequest)
     {
-        $yacht = $this->yachtService->update($id, $updateYachtRequest);
+        $result = $this->yachtService->update($id, $updateYachtRequest);
 
-        return $this->apiResponse(compact('yacht'), 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
@@ -55,14 +55,14 @@ class YachtController extends Controller
     {
         $result = $this->yachtService->delete($id);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 
 
     public function deleteImage($id, $imageIndex)
     {
-        $this->yachtService->removeImage($id, $imageIndex);
+        $result = $this->yachtService->removeImage($id, $imageIndex);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse(...$result);
     }
 }

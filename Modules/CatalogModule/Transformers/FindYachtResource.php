@@ -23,10 +23,10 @@ class FindYachtResource extends JsonResource
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
             'state'         => $this->state,
-            'built_date'    => $this->built_date,
+            'built_date'    => $this->built_date ? (int)$this->built_date : null,
             'port'          => translateAttribute(optional($this->port)->name),
             'extras'        => $this->getExtras(),
-            'specs'         => $this->model ? SpecsResource::collection($this->model->addons) : [],
+            'specs'         => optional($this->model)->specs ? SpecsResource::collection(@array_values($this->model->specs)) : [],
             'vendor'        => $this->getVendor()
         ];
     }

@@ -58,8 +58,6 @@ class BranchService
 
     public function createByVendor(CreateBranchRequest $createBranchRequest)
     {
-        $regionId = @$this->getRegion($createBranchRequest->lat, $createBranchRequest->lng)['id'];
-
         $branch = $this->branchRepository->create([
             'vendor_id'                 => new ObjectId(getVendorId()),
             'name'                      => $createBranchRequest->name,
@@ -69,13 +67,11 @@ class BranchService
             'cover_images'              => $this->uploadImages('branches', $createBranchRequest->cover_images),
             'is_active'                 => ($createBranchRequest->is_active === null) || (boolean)$createBranchRequest->is_active,
             'phone'                     => ['phone' => $createBranchRequest->phone, 'phone_code' => $createBranchRequest->phone_code],
-            'region_id'                 => $regionId ? new ObjectId($regionId) : null,
+            'regions_ids'               => generateObjectIdOfArrayValues($createBranchRequest->region_ids),
             'city_id'                   => new ObjectId($createBranchRequest->city_id)
         ]);
 
-        return [
-            'id'        => $branch->_id
-        ];
+        return createdResponse(['id' => $branch->_id]);
     }
 
 
@@ -85,9 +81,7 @@ class BranchService
 
         $branch = $this->branchRepository->find($branchId, ['vendor_id' => $vendorId]);
 
-        $branchCoverImages  = array_merge($branch->cover_images ?? [], $this->uploadImages('branches', $updateBranchRequest->cover_images));;
-
-        $regionId = @$this->getRegion($updateBranchRequest->lat, $updateBranchRequest->lng)['id'];
+        $branchCoverImages  = array_merge($branch->cover_images ?? [], $this->uploadImages('branches', $updateBranchRequest->cover_images));
 
         $branch = $this->branchRepository->update(new ObjectId($branchId), [
             'name'                          => $updateBranchRequest->name,
@@ -97,13 +91,11 @@ class BranchService
             'cover_images'                  => $branchCoverImages,
             'is_active'                     => ($updateBranchRequest->is_active === null) || (boolean)$updateBranchRequest->is_active,
             'phone'                         => ['phone' => $updateBranchRequest->phone, 'phone_code' => $updateBranchRequest->phone_code],
-            'region_id'                     => $regionId ? new ObjectId($regionId) : null,
+            'regions_ids'                    => generateObjectIdOfArrayValues($updateBranchRequest->region_ids),
             'city_id'                       => new ObjectId($updateBranchRequest->city_id)
         ], ['vendor_id' => $vendorId]);
 
-        return [
-            'id'        => $branch->_id
-        ];
+        return updatedResponse(['id' => $branch->_id]);
     }
 
 
@@ -111,7 +103,9 @@ class BranchService
     {
         $vendorId = new ObjectId(getVendorId());
 
-        return $this->branchRepository->destroy($branchId, ['vendor_id' => $vendorId]);
+        $this->branchRepository->destroy($branchId, ['vendor_id' => $vendorId]);
+
+        return deletedResponse();
     }
 
 
@@ -127,18 +121,22 @@ class BranchService
             return null;
         }
 
+        $image = $images[$imageIndex];
+
         unset($images[$imageIndex]);
 
         $branch->update(['cover_images' => array_values($images)]);
 
-        return $branch;
+        $this->_removeImage($image);
+
+        return deletedResponse($branch);
     }
 
 
-    private function getRegion($lat, $lng)
+    public function find($branchId)
     {
-        $locationProxy = new CatalogProxy('GET_REGION', ['lat' => $lat, 'lng' => $lng]);
-        $proxy = new Proxy($locationProxy);
-        return $proxy->result();
+        $branch = $this->branchRepository->find($branchId);
+
+        return new BranchResource($branch);
     }
 }

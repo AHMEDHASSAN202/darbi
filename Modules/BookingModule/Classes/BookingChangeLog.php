@@ -16,7 +16,7 @@ class BookingChangeLog
     private $newStatus;
     private $me;
 
-    public function __construct(Booking $booking, $newStatus, $me)
+    public function __construct(Booking $booking, $newStatus, $me = null)
     {
         $this->booking = $booking;
         $this->newStatus = $newStatus;
@@ -33,11 +33,11 @@ class BookingChangeLog
         $logs[] = [
             'old_status'    => $this->booking->status,
             'new_status'    => $this->newStatus,
-            'created_at'    => new \MongoDB\BSON\UTCDateTime(now()->timestamp),
-            'changed_by'    => [
+            'created_at'    => new \MongoDB\BSON\UTCDateTime(),
+            'changed_by'    => $this->me ? [
                 'id'            => new ObjectId($this->me->_id),
                 'model'         => get_class($this->me)
-            ]
+            ] : null
         ];
 
         return $logs;

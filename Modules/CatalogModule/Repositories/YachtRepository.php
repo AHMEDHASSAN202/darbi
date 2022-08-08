@@ -29,17 +29,17 @@ class YachtRepository
                            ->filterDate($request)
                            ->active()
                            ->available()
-                           ->free()
-                           ->with(['model' => function ($q) { $q->withTrashed(); }, 'country' => function ($q) { $q->withTrashed(); }])
+                           ->with(['model' => function ($q) { $q->withTrashed(); }])
                            ->whereHas('port', function ($query) { $query->active(); })
+                           ->whereHas('vendor', function ($query) { $query->active(); })
                            ->latest()
-                           ->paginate($request->get('limit', 20));
+                           ->paginated();
     }
 
 
     public function findYachtWithDetailsById($yachtId)
     {
-        return $this->model->with(['model' => function ($q) { $q->withTrashed(); }, 'port' => function ($q) { $q->withTrashed(); }])->find($yachtId);
+        return $this->model->with(['model' => function ($q) { $q->withTrashed(); }, 'port' => function ($q) { $q->active()->withTrashed(); }])->whereHas('vendor', function ($query) { $query->active(); })->find($yachtId);
     }
 
     public function findAllByVendor(Request $request, $vendorId)
@@ -52,7 +52,7 @@ class YachtRepository
                             ->adminFilter($request, EntityType::YACHT)
                             ->latest()
                             ->where('vendor_id', new ObjectId($vendorId))
-                            ->paginate($request->get('limit', 20));
+                            ->paginated();
     }
 
     public function findAll(Request $request)
@@ -64,6 +64,6 @@ class YachtRepository
                             ])
                             ->adminFilter($request, EntityType::YACHT)
                             ->latest()
-                            ->paginate($request->get('limit', 20));
+                            ->paginated();
     }
 }

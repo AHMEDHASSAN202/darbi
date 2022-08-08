@@ -36,14 +36,16 @@ class FindEntityResource extends JsonResource
             'state'         => $this->state,
             'is_active'     => (boolean)$this->is_active,
             'unavailable_date'  => $this->unavailable_date,
-            'extras'        => FindExtraResource::collection(convertBsonArrayToCollection($this->attachPluginToExtra($this->extras, $this->plugins)))
+            'extras'        => FindExtraResource::collection(convertBsonArrayToCollection($this->attachPluginToExtra($this->extras, $this->plugins))),
+            'built_date'    => $this->built_date ? (int)$this->built_date : null
         ];
 
         if ($this->resource instanceof Yacht) {
             $res['port_id'] = (string)$this->port_id;
             $res['port']    = new PortResource($this->port);
         }elseif ($this->resource instanceof Car) {
-            $res['branches'] = BranchResource::collection(convertBsonArrayToCollection($this->branches));
+            $res['branch_id'] = (string)$this->branch_id;
+            $res['branch'] = new BranchResource($this->branch);
         }
 
         return $res;

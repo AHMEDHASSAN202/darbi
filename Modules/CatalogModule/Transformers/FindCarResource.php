@@ -25,8 +25,10 @@ class FindCarResource extends JsonResource
             'price_unit'    => $this->price_unit,
             'extras'        => $this->getExtras(),
             'state'         => $this->state,
-            'specs'         => SpecsResource::collection($this->model->addons),
-            'vendor'        => $this->getVendor()
+            'specs'         => optional($this->model)->specs ? SpecsResource::collection(@array_values($this->model->specs)) : [],
+            'vendor'        => $this->getVendor(),
+            'branch_id'     => (string)$this->branch_id,
+            'built_date'    => $this->built_date ? (int)$this->built_date : null
         ];
     }
 }

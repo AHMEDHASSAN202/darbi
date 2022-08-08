@@ -8,6 +8,7 @@ namespace Modules\CatalogModule\Services\Admin;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Enums\EntityStatus;
 use Modules\CatalogModule\Repositories\ModelRepository;
 use Modules\CatalogModule\Transformers\Admin\EntityResource;
@@ -47,13 +48,20 @@ trait EntityHelperService
         $images = $car->images;
 
         if (empty($images)) {
-            return null;
+            return badResponse();
         }
 
-        unset($images[$imageIndex]);
-        $car->update(['images' => array_values($images)]);
+        $image = $images[$imageIndex];
 
-        return $car;
+        unset($images[$imageIndex]);
+
+        $updated = $car->update(['images' => array_values($images)]);
+
+        if ($updated) {
+            $this->_removeImage($image);
+        }
+
+        return deletedResponse($car);
     }
 
 
@@ -79,7 +87,8 @@ trait EntityHelperService
                 'country_id'    => new ObjectId($countryId),
                 'price'         => floatval($request->price),
                 'price_unit'    => $request->price_unit,
-                'unavailable_date'  => $unavailableDate
+                'unavailable_date'  => $unavailableDate,
+                'built_date'    => (int)$request->built_date
             ] + $data;
 
         return $this->repository->create($data);
@@ -122,20 +131,12 @@ trait EntityHelperService
         $entity = $this->repository->find($id, ['vendor_id' => new ObjectId(getVendorId())]);
 
         if ($entity->state != EntityStatus::FREE) {
-            return [
-                'statusCode'    => 400,
-                'message'       => __('Entity is not free'),
-                'data'          => []
-            ];
+            return badResponse([], __('Entity is not free'));
         }
 
         $entity->delete();
 
-        return [
-            'statusCode'    => 200,
-            'message'       => __('Data has been deleted successfully'),
-            'data'          => []
-        ];
+        return deletedResponse();
     }
 
 
@@ -144,28 +145,24 @@ trait EntityHelperService
         $entity = $this->repository->find($id);
 
         if ($entity->state != EntityStatus::FREE) {
-            return [
-                'statusCode'    => 400,
-                'message'       => __('Entity is not free'),
-                'data'          => []
-            ];
+            return badResponse([], __('Entity is not free'));
         }
 
         $entity->delete();
 
-        return [
-            'statusCode'    => 200,
-            'message'       => __('Data has been deleted successfully'),
-            'data'          => []
-        ];
+        return deletedResponse();
     }
 
 
     public function findAllByVendor(Request $request)
     {
-        $entity = $this->repository->findAllByVendor($request, getVendorId());
+        $entities = $this->repository->findAllByVendor($request, getVendorId());
 
-        return new PaginateResource(EntityResource::collection($entity));
+        if ($entities instanceof LengthAwarePaginator) {
+            return new PaginateResource(EntityResource::collection($entities));
+        }
+
+        return EntityResource::collection($entities);
     }
 
 
@@ -183,7 +180,11 @@ trait EntityHelperService
     {
         $cars = $this->repository->findAll($request);
 
-        return new PaginateResource(EntityResource::collection($cars));
+        if ($cars instanceof LengthAwarePaginator) {
+            return new PaginateResource(EntityResource::collection($cars));
+        }
+
+        return EntityResource::collection($cars);
     }
 
 

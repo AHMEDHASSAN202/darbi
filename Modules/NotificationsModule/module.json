@@ -5,7 +5,8 @@
     "keywords": [],
     "priority": 6,
     "providers": [
-        "Modules\\NotificationsModule\\Providers\\NotificationsModuleServiceProvider"
+        "Modules\\NotificationsModule\\Providers\\NotificationsModuleServiceProvider",
+        "Modules\\NotificationsModule\\Providers\\EventServiceProvider"
     ],
     "aliases": {},
     "files": [],

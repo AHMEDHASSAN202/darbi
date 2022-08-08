@@ -1,4 +1,7 @@
 <?php
+
+use Carbon\Carbon;
+
 /**
  * Created by PhpStorm.
  * User: ahmed hasssan
@@ -11,6 +14,9 @@ function getCurrentGuard() {
     }
     if (auth('vendor_api')->check()) {
         return 'vendor_api';
+    }
+    if (auth('api')->check()) {
+        return 'api';
     }
     return null;
 }
@@ -31,22 +37,35 @@ function assetsHelper() {
     return \Modules\CommonModule\Helpers\Assets::instance();
 }
 
-function imageUrl(?string $image, $dir = '', $size = null) {
+function imageUrl(?string $image, $displayType = 'middle', $customSize = null) {
     if (!$image) {
         return '';
     }
 
-    $image = filter_var($image, FILTER_VALIDATE_URL) ? $image : \Illuminate\Support\Facades\Storage::disk('s3')->url($image);
+    if (filter_var($image, FILTER_VALIDATE_URL)) {
+        return $image;
+    }
 
-    if ($size) {
-        $image = addSizeToImageLink($image, $size);
+    $image = \Illuminate\Support\Facades\Storage::disk('s3')->url($image);
+
+    if ($displayType === 'thumbnail') {
+        $image = addSizeToImageLink($image, 200);
+    }elseif ($displayType === 'middle') {
+        $image = addSizeToImageLink($image, 600);
+    }elseif ($displayType === 'original') {
+        return $image;
+    }
+
+    if ($customSize) {
+        $image = addSizeToImageLink($image, $customSize);
     }
 
     return $image;
 }
 
-function imagesUrl(array $images, $dir = '', $size = null) {
-    return array_map(function ($image) use ($dir, $size) { return imageUrl($image, $dir, $size); }, $images);
+
+function imagesUrl(array $images, $displayType = 'middle') {
+    return array_map(function ($image) use ($displayType) { return imageUrl($image, $displayType); }, $images);
 }
 
 function addSizeToImageLink($imageLink, $size)
@@ -55,16 +74,20 @@ function addSizeToImageLink($imageLink, $size)
     if (!isset($imageInfo['extension'])) {
         return $imageLink;
     }
-    return $imageInfo['dirname'] . '/' . $imageInfo['filename'] . '-resize-' . $size . '.' . $imageInfo['extension'];
+    return $imageInfo['dirname'] . '/' . $imageInfo['filename'] . '-resize-' . $size . 'x' . $size . '.' . $imageInfo['extension'];
 }
 
-function translateAttribute(array | object | null $attribute, $locale = null) {
+function translateAttribute(array | object | null | string $attribute, $locale = null) {
     if (!$attribute) {
         return '';
     }
 
     if (empty($attribute)) {
         return '';
+    }
+
+    if (is_string($attribute)) {
+        return $attribute;
     }
 
     if (!$locale) {
@@ -90,7 +113,7 @@ function generatePriceLabelFromPrice(?float $price, $priceUnit) : string
 
 function generateOTPCode()
 {
-    return (!app()->environment('production')) ? 1234 : mt_rand(1000,9999);
+    return config('authmodule.used_otp_provider') ? mt_rand(1000,9999) : 1234;
 }
 
 function hasEmbed($param) : bool
@@ -104,7 +127,22 @@ function hasEmbed($param) : bool
 
 function entityIsFree($state) : bool
 {
-    return ($state === 'free');
+    return ($state === \Modules\CatalogModule\Enums\EntityStatus::FREE);
+}
+
+function entityIsReserved($state) : bool
+{
+    return ($state === \Modules\CatalogModule\Enums\EntityStatus::RESERVED);
+}
+
+function entityIsCar($type) : bool
+{
+    return ($type === \Modules\CatalogModule\Enums\EntityType::CAR);
+}
+
+function entityIsYacht($type) : bool
+{
+    return ($type === \Modules\CatalogModule\Enums\EntityType::YACHT);
 }
 
 function getCarTestImages()
@@ -191,6 +229,15 @@ function generateObjectIdOfArrayValues($ids) : array
     return array_map(function ($id) { return new \MongoDB\BSON\ObjectId($id); }, $ids);
 }
 
+function generateStringIdOfArrayValues($ids) : array
+{
+    if (empty($ids)) {
+        return [];
+    }
+
+    return array_map(function ($id) { return (string)$id; }, $ids);
+}
+
 function locationInfoKeys() : array
 {
     return [
@@ -216,27 +263,165 @@ function convertBsonArrayToNormalArray($bsonArray)
 
 function exportData($filename, array $columns, array $data)
 {
-    return function () use ($filename, $columns, $data) {
-        header("Content-Description: File Transfer");
-        header("Content-Disposition: attachment; filename=".$filename);
-        header("Content-Type: application/csv; ");
+    array_unshift($data, $columns);
 
-        $file = fopen('php://output', 'w');
-        fputcsv($file, array_values($columns));
-
-        foreach ($data as $lines){
-            $row = [];
-            foreach (array_keys($columns) as $columnKey) {
-                $row[] = \Illuminate\Support\Arr::get($lines, $columnKey);
-            }
-            fputcsv($file, [...$row]);
-        }
-
-        fclose($file);
-    };
+    return fastexcel()->data(collect($data))->download($filename);
 }
 
 function convertDateTimeToUTC($me, string $datetime)
 {
-    return $datetime;
+    return new \MongoDB\BSON\UTCDateTime(new DateTime($datetime));
+}
+
+function arrayGet($array, $key, $default = null)
+{
+    if (!is_array($array)) {
+        return null;
+    }
+    return @$array[$key] ?? $default;
+}
+
+function objectGet($obj, $property, $default = null)
+{
+    if (!is_object($obj)) {
+        return null;
+    }
+    return @$obj->{$property} ?? $default;
+}
+
+function slugify($text, string $divider = '-') {
+    if (is_null($text)) {
+        return '';
+    }
+
+    if (strlen($text) > 2000) {
+        $text = substr($text, 0, 2000);
+    }
+
+    $text = trim($text);
+
+    $text = mb_strtolower($text, "UTF-8");
+
+    $text = preg_replace('/[^\x{0600}-\x{06FF}a-z0-9_] /u','', $text);
+
+    $text = preg_replace("/[!@#$%^&?<>*()]+/", " ", $text);
+
+    $text = preg_replace("/[\s-]+/", " ", $text);
+
+    $text = preg_replace("/[\s_]/", $divider, $text);
+
+    return $text;
+}
+
+function serviceResponse($data, $statusCode = 200, $message = '')
+{
+    return [
+        'data'          => $data,
+        'statusCode'    => $statusCode,
+        'message'       => $message
+    ];
+}
+
+function successResponse($data = [], $message = null)
+{
+    return serviceResponse($data, 200, $message);
+}
+
+function createdResponse($data = [], $message = null)
+{
+    return serviceResponse($data, 201, $message ?? __('Data has been added successfully'));
+}
+
+function updatedResponse($data = [], $message = null)
+{
+    return serviceResponse($data, 200, $message ?? __('Data has been updated successfully'));
+}
+
+function deletedResponse($data = [], $message = null)
+{
+    return serviceResponse($data, 200, $message ?? __('Data has been deleted successfully'));
+}
+
+function badResponse($data = [], $message = null)
+{
+    return serviceResponse($data, 400, $message);
+}
+
+function serverErrorResponse($data = [], $message = null)
+{
+    return serviceResponse($data, 500, $message ?? __('Internal server error'));
+}
+
+function helperLog($class, $method, $message = null, $context = [])
+{
+    \Illuminate\Support\Facades\Log::error($class . ' -> ' . $method . ' -> ' . $message, (empty($context) ? request()->all() : $context));
+}
+
+function getLocalesWord($key, $replace = [])
+{
+    return ['ar' => __($key, $replace, 'ar'), 'en' => __($key, $replace, 'en')];
+}
+
+function phoneCodeCleaning($phoneCode)
+{
+    if (str_starts_with($phoneCode, '+')) {
+        $phoneCode = substr($phoneCode, 1);
+    }
+    if (str_starts_with($phoneCode, '00')) {
+        $phoneCode = substr($phoneCode, 2);
+    }
+    return $phoneCode;
+}
+
+function getLanguage($default = 'ar'){
+    if (\Cookie::has('language')) {
+        $languageInCookie = explode('|', \Illuminate\Support\Facades\Crypt::decrypt(\Cookie::get('language'), false));
+        return @end($languageInCookie);
+    }
+    return $default;
+}
+
+function setLanguage($lang){
+    if(!empty($lang)){
+        $lang = trim(strtolower($lang));
+        $lang = substr($lang, 0, 2);
+        app()->setLocale($lang);
+        \Cookie::queue('language', $lang, 120);
+    }
+    return $lang;
+}
+
+function getTwitterUsernameFromUrl($url)
+{
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        return $url;
+    }
+    $path = parse_url($url,PHP_URL_PATH);
+    return @explode('/', trim($path, '/'))[0];
+}
+
+function getBookingEndDate($priceUnit, $startDate, $endDate)
+{
+    $startAt = Carbon::parse($startDate);
+    $endAy = Carbon::parse($endDate);
+
+    if ($priceUnit === 'hour') {
+
+        $hours = ceil($startAt->floatDiffInHours($endAy));
+
+        return $startAt->addHours($hours)->format('Y-m-d H:i:00');
+
+    }elseif ($priceUnit === 'day') {
+
+        $days = ceil($startAt->floatDiffInDays($endAy));
+
+        return $startAt->addDays($days)->format('Y-m-d H:i:00');
+    }
+
+    throw new \Exception("Price unit not exists");
+}
+
+function getBookingNumber()
+{
+    return intval(date('ymd').mt_rand(000000,999999));
 }

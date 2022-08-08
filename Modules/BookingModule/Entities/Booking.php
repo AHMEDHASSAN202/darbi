@@ -5,6 +5,8 @@ namespace Modules\BookingModule\Entities;
 use App\Eloquent\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Modules\BookingModule\Enums\BookingStatus;
 use MongoDB\BSON\ObjectId;
 
 class Booking extends Base
@@ -17,6 +19,11 @@ class Booking extends Base
 
     protected $appends = ['expired_at'];
 
+    const TIME_INTERVAL_USER_ACCEPT_MIN = 60;
+    const TIME_INTERVAL_VENDOR_ACCEPT_MIN = 60;
+    const TIME_REMINDER_BEFORE_PICKED_UP = 120;
+    const TIME_REMINDER_BEFORE_DROPPED = 120;
+
     protected static function newFactory()
     {
         return \Modules\BookingModule\Database\factories\BookingFactory::new();
@@ -25,7 +32,7 @@ class Booking extends Base
     //=============== Appends =====================\\
     public function getExpiredAtAttribute()
     {
-        $time_interval_user_accept_min = getOption('time_interval_user_accept_min', 22);
+        $time_interval_user_accept_min = getOption('time_interval_user_accept_min', self::TIME_INTERVAL_USER_ACCEPT_MIN);
 
         return optional($this->accepted_at)->addMinutes($time_interval_user_accept_min);
     }
@@ -46,8 +53,13 @@ class Booking extends Base
     public function scopeAdminFilter($query, Request $request)
     {
         $status = $request->get('status');
+
         if ($status && $status !== 'all') {
-            $query->where('status', $status);
+            if ($status === 'canceled') {
+                $query->whereIn('status', [BookingStatus::CANCELLED_AFTER_ACCEPT, BookingStatus::CANCELLED_BEFORE_ACCEPT, BookingStatus::FORCE_CANCELLED]);
+            }else {
+                $query->where('status', $status);
+            }
         }
 
         if ($vendor = $request->get('vendor')) {
@@ -63,11 +75,24 @@ class Booking extends Base
         }
 
         if ($city = $request->get('city')) {
-
+            $query->where('city_id', new ObjectId($city));
         }
 
         if ($country = $request->get('country')) {
             $query->where('country_id', new ObjectId($country));
+        }
+    }
+
+
+    public function scopeUserFilter($query, Request $request)
+    {
+        if ($status = $request->get('status')) {
+            $request->validate(['status' => Rule::in([...BookingStatus::getStatus(), 'canceled'])]);
+            if ($status === 'canceled') {
+                $query->whereIn('status', [BookingStatus::CANCELLED_AFTER_ACCEPT, BookingStatus::CANCELLED_BEFORE_ACCEPT, BookingStatus::FORCE_CANCELLED]);
+            }else {
+                $query->where('status', $status);
+            }
         }
     }
 

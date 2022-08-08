@@ -26,7 +26,13 @@ class UserProfileService
 
     public function getProfile()
     {
-        return new UserProfileResource(auth('api')->user());
+        $me = auth('api')->user();
+
+        if (!$me) {
+            return serverErrorResponse();
+        }
+
+        return successResponse(['profile' => new UserProfileResource($me)]);
     }
 
 
@@ -50,13 +56,7 @@ class UserProfileService
         //save data
         $me->save();
 
-        return [
-            'message'   => __('Your account has been updated'),
-            'statusCode'=>  200,
-            'data'      => [
-                'profile'       => new UserProfileResource($me)
-            ]
-        ];
+        return successResponse(['profile' => new UserProfileResource($me)], __('Your account has been updated'));
     }
 
 
@@ -73,13 +73,7 @@ class UserProfileService
         $me->identity = $myIdentity;
         $me->save();
 
-        return [
-            'message'    => __('Identity has been uploaded successfully'),
-            'statusCode'=>  200,
-            'data'      => [
-                'image'       => imageUrl($path)
-            ]
-        ];
+        return successResponse(['image' => imageUrl($path)], __('Identity has been uploaded successfully'));
     }
 
 
@@ -96,12 +90,18 @@ class UserProfileService
         $me->identity = $myIdentity;
         $me->save();
 
-        return [
-            'message'    => __('Identity removed successfully'),
-            'statusCode'=>  200,
-            'data'      => [
-                'image'       => null
-            ]
-        ];
+        return successResponse(['image' => null], __('Identity removed successfully'));
+    }
+
+
+    public function deleteAccount()
+    {
+        $me = auth('api')->user();
+
+        auth('api')->logout();
+
+        $me->delete();
+
+        return successResponse();
     }
 }

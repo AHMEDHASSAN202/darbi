@@ -38,55 +38,36 @@ class ModelController extends Controller
     {
         $result = $this->modelService->create($createModelRequest);
 
-        return $this->apiResponse($result, 201, __('Data has been added successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function update($id, UpdateModelRequest $updateModelRequest)
     {
         $result = $this->modelService->update($id, $updateModelRequest);
 
-        return $this->apiResponse($result, 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function destroy($id)
     {
-        $this->modelService->delete($id);
+        $result = $this->modelService->delete($id);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
     public function deleteImage($id, $imageIndex)
     {
-        $this->modelService->removeImage($id, $imageIndex);
+        $result = $this->modelService->removeImage($id, $imageIndex);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse(...$result);
     }
 
 
-    public function assets()
+    public function assets(Request $request)
     {
         return $this->apiResponse([
-            'assets'    => [
-                [
-                    'key'       => 'engine_type',
-                    'value'     => 'https://i.ibb.co/q0bSNT5/liter.png',
-                    'full_url'  => 'https://i.ibb.co/q0bSNT5/liter.png',
-                    'name'      => 'engine_type'
-                ],
-                [
-                    'key'       => 'seats',
-                    'value'     => 'https://i.ibb.co/N1tNCy4/bedroom.png',
-                    'full_url'  => 'https://i.ibb.co/N1tNCy4/bedroom.png',
-                    'name'      => 'seats'
-                ],
-                [
-                    'key'       => 'passengers',
-                    'value'     => 'https://i.ibb.co/nBjwmhP/passengers.png',
-                    'full_url'  => 'https://i.ibb.co/nBjwmhP/passengers.png',
-                    'name'      => 'passengers'
-                ]
-            ]
+            'assets'    => $this->modelService->assets($request)
         ]);
     }
 }

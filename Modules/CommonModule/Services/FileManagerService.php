@@ -68,7 +68,7 @@ class FileManagerService
         $imagePathInfo = pathinfo($imagePath);
 
         if (!$this->storageDisk->exists($request->image)) {
-            return ['status' => false, 'msg' => __('the image does not exist')];
+            return ['status' => false, 'msg' => __('The image does not exist')];
         }
 
         try {
@@ -110,7 +110,7 @@ class FileManagerService
         $fullPath = $request->path;
 
         if (!$this->storageDisk->exists($fullPath)) {
-            return ['status' => false, 'msg' => __('the file does not exist')];
+            return ['status' => false, 'msg' => __('The file does not exist')];
         }
 
         if (is_dir($this->storageDisk->path($fullPath))) {
@@ -131,7 +131,7 @@ class FileManagerService
         $directoryFullPath = $request->path . DIRECTORY_SEPARATOR . $request->directory_name;
 
         if ($this->storageDisk->exists($directoryFullPath)) {
-            return ['status' => false, 'msg' => __('the directory does not exist')];
+            return ['status' => false, 'msg' => __('The directory does not exist')];
         }
 
         $created = $this->storageDisk->makeDirectory($directoryFullPath);
@@ -157,13 +157,13 @@ class FileManagerService
         }
 
         if ($this->storageDisk->exists($newPath)) {
-            return ['status' => false, 'msg' => __('the file does not exist')];
+            return ['status' => false, 'msg' => __('The file does not exist')];
         }
 
         $moved = $this->storageDisk->move($path, $newPath);
 
         if (!$moved) {
-            return ['status' => false, 'msg' => __('sometimes error!')];
+            return ['status' => false, 'msg' => __('Sometimes error!')];
         }
 
         return ['status' => true];

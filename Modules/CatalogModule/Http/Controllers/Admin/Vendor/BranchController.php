@@ -37,29 +37,29 @@ class BranchController extends Controller
 
     public function store(CreateBranchRequest $createBranchRequest)
     {
-        $branch = $this->branchService->createByVendor($createBranchRequest);
+        $result = $this->branchService->createByVendor($createBranchRequest);
 
-        return $this->apiResponse(compact('branch'), 201, __('Data has been added successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function update($branchId, UpdateBranchRequest $updateBranchRequest)
     {
-        $branch = $this->branchService->updateByVendor($branchId, $updateBranchRequest);
+        $result = $this->branchService->updateByVendor($branchId, $updateBranchRequest);
 
-        return $this->apiResponse(compact('branch'), 200, __('Data has been updated successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function destroy($branchId)
     {
-        $this->branchService->destroyByVendor($branchId);
+        $result = $this->branchService->destroyByVendor($branchId);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse(...$result);
     }
 
     public function deleteImage($id, $imageIndex)
     {
-        $this->branchService->removeImage($id, $imageIndex);
+        $result = $this->branchService->removeImage($id, $imageIndex);
 
-        return $this->apiResponse([], 200, __('Data has been deleted successfully'));
+        return $this->apiResponse(...$result);
     }
 }

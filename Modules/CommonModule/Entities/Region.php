@@ -39,8 +39,17 @@ class Region extends Base
             $query->where('country_id', new ObjectId($countryId));
         }
 
-        if ($cityId = $request->get('city')) {
-            $query->where('city_id', new ObjectId($cityId));
+        if ($vendorId = $request->get('vendor')) {
+            $query->where('vendor_id', new ObjectId($vendorId));
+        }
+
+        $in = $request->get('in');
+        if (is_array($in)) {
+            $query->whereIn('_id', generateObjectIdOfArrayValues($in));
+        }
+
+        if ($branch = $request->get('branch')) {
+            $query->where('branches_ids', new ObjectId($branch));
         }
     }
 
@@ -57,11 +66,6 @@ class Region extends Base
     public function country()
     {
         return $this->belongsTo(Country::class);
-    }
-
-    public function city()
-    {
-        return $this->belongsTo(City::class);
     }
 
     //=============== #END# =====================\\

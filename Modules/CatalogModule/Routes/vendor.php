@@ -16,7 +16,7 @@
 //plugins routes
 Route::group([
     'prefix'    => 'plugins',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'active_vendor']
 ], function () {
     Route::get(''               , 'PluginController@index');
 });
@@ -25,7 +25,7 @@ Route::group([
 //plugins routes
 Route::group([
     'prefix'    => 'extras',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'active_vendor']
 ], function () {
     Route::get(''               , 'ExtraController@index');
     Route::post(''              , 'ExtraController@store');
@@ -38,7 +38,7 @@ Route::group([
 //cars routes
 Route::group([
     'prefix'    => 'cars',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'type:car', 'active_vendor']
 ], function () {
     Route::get(''               , 'CarController@index');
     Route::post(''              , 'CarController@store');
@@ -52,7 +52,7 @@ Route::group([
 //yachts routes
 Route::group([
     'prefix'    => 'yachts',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'type:yacht', 'active_vendor']
 ], function () {
     Route::get(''                 , 'YachtController@index');
     Route::post(''                , 'YachtController@store');
@@ -67,7 +67,7 @@ Route::group([
 //brands routes
 Route::group([
     'prefix'    => 'brands',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'active_vendor']
 ], function () {
     Route::get(''                 , 'BrandController@index');
 });
@@ -77,7 +77,7 @@ Route::group([
 //models routes
 Route::group([
     'prefix'    => 'models',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'active_vendor']
 ], function () {
     Route::get(''                 , 'ModelController@index');
 });
@@ -87,7 +87,7 @@ Route::group([
 //ports routes
 Route::group([
     'prefix'    => 'ports',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'type:yacht', 'active_vendor']
 ], function () {
     Route::get(''                 , 'PortController@index');
 });
@@ -97,7 +97,7 @@ Route::group([
 //branches routes
 Route::group([
     'prefix'    => 'branches',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'type:car', 'active_vendor']
 ], function () {
     Route::get(''                  , 'BranchController@index');
     Route::post(''                 , 'BranchController@store');

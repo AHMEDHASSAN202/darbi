@@ -7,6 +7,7 @@
 namespace Modules\BookingModule\Services\Admin;
 
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\BookingModule\Repositories\BookingPaymentTransactionRepository;
 use Modules\BookingModule\Transformers\Admin\AdminBookingPaymentTransactionExportResource;
 use Modules\BookingModule\Transformers\Admin\AdminBookingPaymentTransactionResource;
@@ -31,7 +32,11 @@ class BookingPaymentTransactionService
 
         $transactions = $this->bookingPaymentTransactionRepository->findAllByVendor($request, $vendorId);
 
-        return new PaginateResource(BookingPaymentTransactionResource::collection($transactions));
+        if ($transactions instanceof LengthAwarePaginator) {
+            return new PaginateResource(BookingPaymentTransactionResource::collection($transactions));
+        }
+
+        return BookingPaymentTransactionResource::collection($transactions);
     }
 
     public function findAllByVendorForExport($vendorId)
@@ -60,7 +65,11 @@ class BookingPaymentTransactionService
     {
         $transactions = $this->bookingPaymentTransactionRepository->findAll($request);
 
-        return new PaginateResource(AdminBookingPaymentTransactionResource::collection($transactions));
+        if ($transactions instanceof LengthAwarePaginator) {
+            return new PaginateResource(AdminBookingPaymentTransactionResource::collection($transactions));
+        }
+
+        return AdminBookingPaymentTransactionResource::collection($transactions);
     }
 
     public function getAdminCallbackExportTransaction(Request $request)

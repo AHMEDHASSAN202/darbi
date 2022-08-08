@@ -7,8 +7,10 @@
 namespace Modules\CommonModule\Services;
 
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CommonModule\Repositories\CountryRepository;
 use Modules\CommonModule\Transformers\CountryResource;
+use Modules\CommonModule\Transformers\PaginateResource;
 
 class CountryService
 {
@@ -23,6 +25,10 @@ class CountryService
     {
         $countries = $this->countryRepository->list($request);
 
-        return CountryResource::collection($countries);
+        if ($countries instanceof LengthAwarePaginator) {
+            return successResponse(['countries' => new PaginateResource(CountryResource::collection($countries))]);
+        }
+
+        return successResponse(['countries' => CountryResource::collection($countries)]);
     }
 }

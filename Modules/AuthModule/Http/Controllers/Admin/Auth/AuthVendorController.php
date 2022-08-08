@@ -28,6 +28,6 @@ class AuthVendorController extends Controller
     {
         $result = $this->adminAuthService->login($loginToDashboardRequest, 'vendor');
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message'], @$result['errors']);
+        return $this->apiResponse(...$result);
     }
 }

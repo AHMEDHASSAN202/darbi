@@ -2,10 +2,7 @@
 
 namespace Modules\AuthModule\Http\Controllers\User;
 
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\AuthModule\Http\Requests\User\UpdateProfilePhoneRequest;
 use Modules\AuthModule\Http\Requests\User\UpdateProfileRequest;
 use Modules\AuthModule\Http\Requests\User\UploadIdentityImageRequest;
 use Modules\AuthModule\Services\UserProfileService;
@@ -26,9 +23,9 @@ class ProfileController extends Controller
 
     public function getProfile()
     {
-        return $this->apiResponse([
-            'profile'       => $this->userProfileService->getProfile()
-        ]);
+        $result = $this->userProfileService->getProfile();
+
+        return $this->apiResponse(...$result);
     }
 
 
@@ -36,7 +33,7 @@ class ProfileController extends Controller
     {
         $result = $this->userProfileService->updateProfile($updateProfileRequest);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 
 
@@ -44,7 +41,7 @@ class ProfileController extends Controller
     {
         $result = $this->userProfileService->updateIdentityProfile($uploadIdentityImageRequest, $type);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
     }
 
 
@@ -52,6 +49,15 @@ class ProfileController extends Controller
     {
         $result = $this->userProfileService->removeIdentityProfile($type);
 
-        return $this->apiResponse($result['data'], $result['statusCode'], $result['message']);
+        return $this->apiResponse(...$result);
+    }
+
+
+    public function deleteAccount()
+    {
+        $result = $this->userProfileService->deleteAccount();
+
+        return $this->apiResponse(...$result);
     }
 }
+ 

@@ -17,19 +17,21 @@ use Illuminate\Http\Request;
 //vendor booking routes
 Route::group([
     'prefix'    => 'bookings',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'active_vendor']
 ], function () {
     Route::get(''                       , 'BookingController@index');
     Route::get('{booking}'              , 'BookingController@show');
     Route::post('{booking}/cancel'      , 'BookingController@cancel');
     Route::post('{booking}/accept'      , 'BookingController@accept');
+    Route::post('{booking}/paid'        , 'BookingController@paid');
+    Route::post('{booking}/complete'    , 'BookingController@complete');
 });
 
 
 //vendor statistics
 Route::group([
     'prefix'    => 'bookings/statistics/find',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'active_vendor']
 ], function () {
     Route::get(''                       , 'BookingStatisticController');
 });
@@ -39,7 +41,7 @@ Route::group([
 //vendor transactions
 Route::group([
     'prefix'    => 'transactions',
-    'middleware'=> ['auth:vendor_api']
+    'middleware'=> ['auth:vendor_api', 'active_vendor']
 ], function () {
     Route::get(''                       , 'BookingPaymentTransactionController@index');
 });

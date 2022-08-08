@@ -6,18 +6,9 @@
 
 namespace Modules\AuthModule\Services;
 
-use Illuminate\Support\Facades\Log;
-use Jenssegers\Mongodb\Eloquent\Model;
-use Modules\AuthModule\Events\AfterUserLoginEvent;
+use Illuminate\Http\Request;
 use Modules\AuthModule\Http\Requests\StoreDeviceTokenRequest;
-use Modules\AuthModule\Http\Requests\User\SendOtpRequest;
-use Modules\AuthModule\Http\Requests\User\SigninRequest;
-use Modules\AuthModule\Http\Requests\User\SigninWithOtpRequest;
-use Modules\AuthModule\Jobs\SendOtpJob;
-use Modules\AuthModule\Repositories\User\UserRepository;
 use Modules\AuthModule\Repositories\UserDeviceTokenRepository;
-use Modules\AuthModule\Transformers\UserProfileResource;
-use Modules\CommonModule\Repositories\CountryRepository;
 use MongoDB\BSON\ObjectId;
 
 class UserDeviceTokenService
@@ -34,29 +25,68 @@ class UserDeviceTokenService
     {
         $me = app(UserAuthService::class)->authUser();
 
-        return $this->storeDeviceToken($storeDeviceTokenRequest, 'user', $me);
+        $this->handleDeviceToken($storeDeviceTokenRequest, $me);
+
+        return successResponse([], __('Token Saved'));
     }
 
 
-    private function storeDeviceToken(StoreDeviceTokenRequest $storeDeviceTokenRequest, $appType, Model $user)
+    public function handleAdminDeviceToken(StoreDeviceTokenRequest $storeDeviceTokenRequest)
     {
-        $exists = $this->deviceTokenRepository->exists($storeDeviceTokenRequest->phone_uuid, $storeDeviceTokenRequest->device_os);
+        $me = auth(getCurrentGuard())->user();
 
-        if (!$exists) {
-            $this->deviceTokenRepository->create([
-                'phone_uuid'        => $storeDeviceTokenRequest->phone_uuid,
-                'app_type'          => $appType,
-                'device_os'         => $storeDeviceTokenRequest->device_os,
-                'lat'               => $storeDeviceTokenRequest->lat,
-                'lng'               => $storeDeviceTokenRequest->lng,
-                'region_id'         => $storeDeviceTokenRequest->region_id ? new ObjectId($storeDeviceTokenRequest->region_id) : null,
-                'user_details'      => [
-                    'id'                => new ObjectId($user->_id),
-                    'on_model'          => get_class($user)
-                ]
-            ]);
+        if (!$me) {
+            return badResponse();
         }
 
-        return null;
+        $this->handleDeviceToken($storeDeviceTokenRequest, $me);
+
+        return successResponse([], __('Token Saved'));
+    }
+
+
+    private function handleDeviceToken(StoreDeviceTokenRequest $storeDeviceTokenRequest, $user = null)
+    {
+        $token = $this->deviceTokenRepository->findByPlatform($storeDeviceTokenRequest->phone_uuid, $storeDeviceTokenRequest->device_os);
+
+        if (!$token) {
+            $this->deviceTokenRepository->create([
+                'phone_uuid'        => $storeDeviceTokenRequest->phone_uuid,
+                'device_os'         => $storeDeviceTokenRequest->device_os,
+                'lat'               => $storeDeviceTokenRequest->lat ? (float)$storeDeviceTokenRequest->lat : null,
+                'lng'               => $storeDeviceTokenRequest->lng ? (float)$storeDeviceTokenRequest->lng : null,
+                'user_details'      => $user ? [
+                    'id'                => new ObjectId($user->_id),
+                    'on_model'          => get_class($user)
+                ] : []
+            ]);
+
+        }else {
+            //update token with current user
+            if (empty($token->user_details) && $user) {
+                $token->update([
+                    'user_details'      => [
+                        'id'                => new ObjectId($user->_id),
+                        'on_model'          => get_class($user)
+                    ]
+                ]);
+            }
+        }
+    }
+
+
+    public function findAll(Request $request)
+    {
+        $request->validate(['receivers' => 'required_if:type,specified']);
+
+        try {
+            $players = $this->deviceTokenRepository->findAll($request);
+
+            return serviceResponse(['players' => $players]);
+
+        }catch (\Exception $exception) {
+            helperLog(__CLASS__, __FUNCTION__, $exception->getMessage());
+            return serviceResponse([], 500, __('Unable get data'));
+        }
     }
 }

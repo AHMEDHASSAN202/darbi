@@ -14,6 +14,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $moduleNamespace = 'Modules\CommonModule\Http\Controllers';
 
+    protected $moduleNamespaceAdmin = 'Modules\CommonModule\Http\Controllers\Admin';
+
+    protected $moduleNamespaceVendor = 'Modules\CommonModule\Http\Controllers\Admin\Vendor';
+
+    protected $moduleNamespaceInternal = 'Modules\CommonModule\Http\Controllers\Internal';
+
     /**
      * Called before routes are registered.
      *
@@ -40,6 +46,10 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiAdminRoutes();
 
         $this->mapApiCommonRoutes();
+
+        $this->mapApiVendorRoutes();
+
+        $this->mapApiInternalRoutes();
     }
 
     /**
@@ -82,7 +92,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('api/admin/v1')
             ->middleware('api')
-            ->namespace($this->moduleNamespace)
+            ->namespace($this->moduleNamespaceAdmin)
             ->group(module_path('CommonModule', '/Routes/admin.php'));
     }
 
@@ -100,5 +110,37 @@ class RouteServiceProvider extends ServiceProvider
             ->middleware('api')
             ->namespace($this->moduleNamespace)
             ->group(module_path('CommonModule', '/Routes/common.php'));
+    }
+
+
+    /**
+     * Define the "api common" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiVendorRoutes()
+    {
+        Route::prefix('api/vendor/v1')
+            ->middleware('api')
+            ->namespace($this->moduleNamespaceVendor)
+            ->group(module_path('CommonModule', '/Routes/vendor.php'));
+    }
+
+
+    /**
+     * Define the "api common" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiInternalRoutes()
+    {
+        Route::prefix('api/internal/v1')
+            ->middleware(['api', 'internal'])
+            ->namespace($this->moduleNamespaceInternal)
+            ->group(module_path('CommonModule', '/Routes/internal.php'));
     }
 }

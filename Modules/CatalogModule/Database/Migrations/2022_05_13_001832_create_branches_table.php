@@ -17,6 +17,11 @@ return new class extends Migration
             $table->id();
             $table->index('vendor_id');
             $table->index('city_id');
+            $table->index('regions_ids');
+            $table->index('is_active');
+            $table->index('is_open');
+            $table->index('lat');
+            $table->index('lng');
             $table->softDeletes();
             $table->timestamps();
         });

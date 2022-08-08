@@ -13,6 +13,7 @@ use Modules\CatalogModule\Transformers\FindCarResource;
 use Modules\CatalogModule\Transformers\CarResource;
 use Modules\CatalogModule\Transformers\EntityResource;
 use Modules\CommonModule\Transformers\PaginateResource;
+use MongoDB\BSON\ObjectId;
 
 class EntityService
 {
@@ -32,22 +33,14 @@ class EntityService
         return new EntityResource($entity);
     }
 
-    public function changeState($entityId, $state)
+    public function updateState($id, $state)
     {
-        $changed = $this->entityRepository->changeState($entityId, $state);
+        $updated = $this->entityRepository->updateState($id, $state);
 
-        if (!$changed) {
-            return [
-                'statusCode'       => 400,
-                'message'          => '',
-                'data'             => []
-            ];
+        if (!$updated) {
+            return serverErrorResponse([], __("Sorry! can't update state"));
         }
 
-        return [
-            'statusCode'       => 200,
-            'message'          => '',
-            'data'             => []
-        ];
+        return updatedResponse(['id' => $id]);
     }
 }

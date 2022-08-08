@@ -16,6 +16,8 @@ class Admin extends BaseAuthenticatable implements JWTSubject
 {
     use HasFactory, SoftDeletes, RoleHelperTrait;
 
+    protected $table = 'admins';
+
     protected $guarded = [];
 
     protected $hidden = ['password', 'deleted_at'];
@@ -24,6 +26,8 @@ class Admin extends BaseAuthenticatable implements JWTSubject
 
     protected $with = ['role'];
 
+    protected $jwtCustomClaims = [];
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -31,7 +35,15 @@ class Admin extends BaseAuthenticatable implements JWTSubject
 
     public function getJWTCustomClaims()
     {
-        return [];
+        return array_merge([
+            'version'       => config('authmodule.jwt_version'),
+        ], $this->jwtCustomClaims);
+    }
+
+    public function setCustomClaims($key, $value)
+    {
+        $this->jwtCustomClaims[$key] = $value;
+        return $this;
     }
 
     protected static function newFactory()
@@ -59,7 +71,19 @@ class Admin extends BaseAuthenticatable implements JWTSubject
     public function scopeFilter($query, Request $request)
     {
         if ($role = $request->get('role')) {
-            return $query->where('role_id', new ObjectId($role));
+            $query->where('role_id', new ObjectId($role));
+        }
+
+        if ($type = $request->get('type')) {
+            $query->where('type', $type);
+        }
+
+        if ($vendor = $request->get('vendor')) {
+            $query->where('vendor_id', new ObjectId($vendor));
+        }
+
+        if ($vendorIn = $request->get('vendor_in')) {
+            $query->whereIn('vendor_id', generateObjectIdOfArrayValues($vendorIn));
         }
     }
 

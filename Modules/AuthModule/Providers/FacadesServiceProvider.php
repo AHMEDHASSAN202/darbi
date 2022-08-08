@@ -4,6 +4,7 @@ namespace Modules\AuthModule\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Modules\AuthModule\Facades\OTP\MsegatOTP;
+use Modules\AuthModule\Facades\OTP\SnsOTP;
 
 class FacadesServiceProvider extends ServiceProvider
 {
@@ -15,7 +16,8 @@ class FacadesServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('OTP', function () {
-            return new MsegatOTP();
+//            return new MsegatOTP();
+            return new SnsOTP();
         });
     }
 
