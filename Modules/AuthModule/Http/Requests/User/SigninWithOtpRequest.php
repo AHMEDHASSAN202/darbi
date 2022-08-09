@@ -2,7 +2,6 @@
 
 namespace Modules\AuthModule\Http\Requests\User;
 
-use App\Rules\PhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SigninWithOtpRequest extends FormRequest
@@ -14,11 +13,8 @@ class SigninWithOtpRequest extends FormRequest
      */
     public function rules()
     {
-        $phoneCode = phoneCodeCleaning($this->request->get('phone_code'));
-        request()->offsetSet('phone_code', $phoneCode);
-
         return [
-            'phone'         => ['required', 'numeric', new PhoneRule($phoneCode)],
+            'phone'         => ['required', 'numeric', 'phone:phone_country,mobile'],
             'phone_code'    => 'required',
             'otp'           => 'required|numeric'
         ];
@@ -32,5 +28,19 @@ class SigninWithOtpRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    /**
+     * Validation Data
+     *
+     * @param $key
+     * @param $default
+     * @return array
+     */
+    public function validationData()
+    {
+        $data  = parent::validationData();
+        $data['phone_country'] = getCountryCodeFromPhoneCode(phoneCodeCleaning($this->request->get('phone_code')));
+        return $data;
     }
 }

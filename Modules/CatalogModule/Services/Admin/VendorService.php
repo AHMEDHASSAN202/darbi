@@ -69,7 +69,7 @@ class VendorService
             'name'          => $createVendorRequest->name,
             'image'         => $this->uploadImage('vendors', $createVendorRequest->image),
             'phone'         => $createVendorRequest->phone,
-            'phone_code'    => $createVendorRequest->phone_code,
+            'phone_code'    => phoneCodeCleaning($createVendorRequest->phone_code),
             'is_active'     => ($createVendorRequest->is_active === null) || (boolean)$createVendorRequest->is_active,
             'country_id'    => new ObjectId($createVendorRequest->country_id),
             'country_currency_code' => arrayGet($country, 'currency_code'),
@@ -127,7 +127,7 @@ class VendorService
         $data = [
             'name'          => $updateVendorRequest->name,
             'phone'         => $updateVendorRequest->phone,
-            'phone_code'    => $updateVendorRequest->phone_code,
+            'phone_code'    => phoneCodeCleaning($updateVendorRequest->phone_code),
             'is_active'     => ($updateVendorRequest->is_active === null) || (boolean)$updateVendorRequest->is_active,
             'email'         => $updateVendorRequest->email,
             'darbi_percentage'  => $updateVendorRequest->darbi_percentage ? (int)$updateVendorRequest->darbi_percentage : null,

@@ -14,7 +14,7 @@ return [
     ],
     'default_vendor_role' => 'vendor_manager',
     'system_roles' => ['super_admin', 'vendor_manager'],
-    'used_otp_provider' => false,
+    'used_otp_provider' => true,
     'otp_messages'  => [
         'Your darbi verification code is: %s',
         'Darbi OTP: %s هذا الكود سري يرجى عدم مشاركته مع أحد',
