@@ -47,7 +47,7 @@ class PortService
     {
         $port = $this->portRepository->findOne($portId);
 
-        return new \Modules\CatalogModule\Transformers\PortResource($port);
+        return new FindPortResource($port);
     }
 
     public function create(CreatePortRequest $createPortRequest)
