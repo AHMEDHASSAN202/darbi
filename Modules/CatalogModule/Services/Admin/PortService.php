@@ -6,10 +6,12 @@
 
 namespace Modules\CatalogModule\Services\Admin;
 
+use App\Proxy\Proxy;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Http\Requests\Admin\CreatePortRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdatePortRequest;
+use Modules\CatalogModule\Proxy\CatalogProxy;
 use Modules\CatalogModule\Repositories\PortRepository;
 use Modules\CatalogModule\Transformers\Admin\FindPortResource;
 use Modules\CatalogModule\Transformers\Admin\PortResource;
@@ -56,7 +58,8 @@ class PortService
             'city_id'    => new ObjectId($createPortRequest->city_id),
             'lat'        => $createPortRequest->lat,
             'lng'        => $createPortRequest->lng,
-            'is_active'  => ($createPortRequest->is_active === null) || (boolean)$createPortRequest->is_active
+            'is_active'  => ($createPortRequest->is_active === null) || (boolean)$createPortRequest->is_active,
+            'fully_addressed' => $this->getFullyAddressed($createPortRequest->lat, $createPortRequest->lng)
         ]);
 
         return createdResponse(['id' => $port->id]);
@@ -70,7 +73,8 @@ class PortService
             'city_id'    => new ObjectId($updatePortRequest->city_id),
             'lat'        => $updatePortRequest->lat,
             'lng'        => $updatePortRequest->lng,
-            'is_active'  => ($updatePortRequest->is_active === null) || (boolean)$updatePortRequest->is_active
+            'is_active'  => ($updatePortRequest->is_active === null) || (boolean)$updatePortRequest->is_active,
+            'fully_addressed' => $this->getFullyAddressed($updatePortRequest->lat, $updatePortRequest->lng)
         ]);
 
         return updatedResponse(['id' => $port->id]);
@@ -81,5 +85,12 @@ class PortService
         $this->portRepository->destroy($id);
 
         return deletedResponse();
+    }
+
+    private function getFullyAddressed($lat, $lng)
+    {
+        $location = (new Proxy(new CatalogProxy('GET_LOCATION', ['lat' => $lat, 'lng' => $lng])))->result();
+
+        return arrayGet($location, 'fully_addressed');
     }
 }

@@ -10,6 +10,7 @@ use App\Proxy\BaseProxy;
 use Modules\CatalogModule\Proxy\Actions\AddBranchToRegionsAction;
 use Modules\CatalogModule\Proxy\Actions\CreateVendorAdminAction;
 use Modules\CatalogModule\Proxy\Actions\GetCountryAction;
+use Modules\CatalogModule\Proxy\Actions\GetLocationHttpProxyAction;
 use Modules\CatalogModule\Proxy\Actions\GetRegionsAction;
 use Modules\CatalogModule\Proxy\Actions\GetVendorAdminTokenAction;
 use Modules\CatalogModule\Proxy\Actions\GetVendorRoleAction;
@@ -25,6 +26,7 @@ class CatalogProxy extends BaseProxy
         'GET_VENDOR_ADMIN_TOKEN'=> GetVendorAdminTokenAction::class,
         'ADD_BRANCH_TO_REGIONS' => AddBranchToRegionsAction::class,
         'REMOVE_BRANCH_FROM_REGIONS' => RemoveBranchToRegionsAction::class,
-        'GET_COUNTRY'           => GetCountryAction::class
+        'GET_COUNTRY'           => GetCountryAction::class,
+        'GET_LOCATION'          => GetLocationHttpProxyAction::class
     ];
 }

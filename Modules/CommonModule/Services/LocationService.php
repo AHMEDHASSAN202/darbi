@@ -20,17 +20,19 @@ class LocationService
         $this->locationRepository = $locationRepository;
     }
 
-    public function handleLocation($request)
+    public function handleLocation($request, $fromAdmin = false)
     {
         try {
 
             $lat = $request->lat;
             $lng = $request->lng;
 
-            $region = app(RegionService::class)->findRegionByLatAndLng($lat, $lng, $request->branch);
+            if (!$fromAdmin) {
+                $region = app(RegionService::class)->findRegionByLatAndLng($lat, $lng, $request->branch);
 
-            if (!$region) {
-                return badResponse([], __('Please select a supported region'));
+                if (!$region) {
+                    return badResponse([], __('Please select a supported region'));
+                }
             }
 
             //check if location exists in darbi database
