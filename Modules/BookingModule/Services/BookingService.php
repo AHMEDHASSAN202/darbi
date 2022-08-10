@@ -12,6 +12,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Modules\BookingModule\Classes\BookingChangeLog;
+use Modules\BookingModule\Classes\EntityAreas\Area;
 use Modules\BookingModule\Classes\Payments\Payment;
 use Modules\BookingModule\Classes\Price;
 use Modules\BookingModule\Classes\Validation\BookingDateValidation;
@@ -84,27 +85,12 @@ class BookingService
         $extras = $this->getExtras($entity, $rentRequest->extras);
         $country = $entity['country'];
 
-        $branch = [];
-        $port = [];
+        $area = new Area($entity);
 
-        if (entityIsCar($entity['type'])) {
+        $entityArea = $area->getDetails();
 
-            $branch = $this->getBranch($entity['branch_id']);
-
-            if (empty($branch)) {
-                return badResponse([], __('Branch not exists'));
-            }
-
-        }elseif (entityIsYacht($entity['type'])) {
-
-            $port = $this->getPort($entity['port_id']);
-
-            if (empty($port)) {
-                return badResponse([], __('Port not exists'));
-            }
-
-        }else {
-            return badResponse([], __('Something error in entity'));
+        if (empty($entityArea)) {
+            return badResponse([], $area->getError());
         }
 
         $booking = $this->bookingRepository->create([
@@ -112,10 +98,8 @@ class BookingService
             'user'          => auth('api')->user()->only(['_id', 'phone', 'phone_code', 'name', 'email']),
             'vendor'        => $vendor,
             'vendor_id'     => new ObjectId($entity['vendor_id']),
-            'branch_id'     => arrayGet($entity, 'branch_id') ? new ObjectId($entity['branch_id']) : null,
-            'branch'        => $branch,
-            'port_id'       => arrayGet($entity, 'port_id') ? new ObjectId($entity['port_id']) : null,
-            'port'          => $port,
+            'area_id'       => new ObjectId(arrayGet($entityArea, 'id')),
+            'area'          => $entityArea,
             'entity_id'     => new ObjectId($entity['id']),
             'entity_type'   => arrayGet($entity, 'entity_type'),
             'entity_details' => [
@@ -397,22 +381,6 @@ class BookingService
         $proxy = new Proxy($notificationProxy);
         $adminVendors = $proxy->result() ?? [];
         return array_map(function ($admin) { return ['user_id' => new ObjectId($admin['id']), 'on_model' => 'admin']; }, $adminVendors);
-    }
-
-
-    private function getBranch($branchId)
-    {
-        $bookingProxy = new BookingProxy('GET_BRANCH', ['branch_id' => $branchId]);
-        $proxy = new Proxy($bookingProxy);
-        return $proxy->result();
-    }
-
-
-    private function getPort($portId)
-    {
-        $bookingProxy = new BookingProxy('GET_PORT', ['port_id' => $portId]);
-        $proxy = new Proxy($bookingProxy);
-        return $proxy->result();
     }
 
 
