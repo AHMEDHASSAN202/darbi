@@ -25,8 +25,9 @@ class SettingTableSeeder extends Seeder
                 ['title' => ['ar' => 'مجموعة واسعة من الخيارات', 'en' => 'Wide range of Choices'], 'desc' => ['ar' => 'يقدم لك داربي مجموعة واسعة من السيارات واليخوت مع خيارات لتخصيص رحلتك.', 'en' => 'Darbi offers you a wide range of exotics & yachts with options to customize your ride.'], 'image' => 'https://i.ibb.co/bXcRvgx/intro1.png']
             ],
             'categories'                            => [
-                ['name' => ['ar' => 'سيارات', 'en' => 'Exotics'], 'desc' => ['ar' => 'سيارات فاخرة راقية.', 'en' => 'High-end luxury exotics.'], 'image' => 'https://i.ibb.co/QbpZh9c/cars.png', 'template' => 0],
-                ['name' => ['ar' => 'اليخوت', 'en' => 'Yachts'], 'desc' => ['ar' => 'اليخوت الفاخرة لك.', 'en' => 'Premium yachts for you.'], 'image' => 'https://i.ibb.co/b5mGQHx/yachts-1.png', 'template' => 1],
+                ['name' => ['ar' => 'سيارات', 'en' => 'Exotics'], 'desc' => ['ar' => 'سيارات فاخرة راقية.', 'en' => 'High-end luxury exotics.'], 'image' => 'https://i.ibb.co/QbpZh9c/cars.png', 'template' => 0, 'webview' => ''],
+                ['name' => ['ar' => 'اليخوت', 'en' => 'Yachts'], 'desc' => ['ar' => 'اليخوت الفاخرة لك.', 'en' => 'Premium yachts for you.'], 'image' => 'https://i.ibb.co/b5mGQHx/yachts-1.png', 'template' => 1, 'webview' => ''],
+                ['name' => ['ar' => 'طائرات', 'en' => 'Private Jets'], 'desc' => ['ar' => 'طائرات خاصة لك.', 'en' => 'Private jets on-demand.'], 'image' => 'https://i.ibb.co/kGvJg7L/Mask-Group-14-2x.png', 'template' => null, 'webview' => url('mobile/private-jets')],
             ],
             'home_main_theme'                       => 'https://i.ibb.co/r0j7mGx/home-Header.png',
             'specs_keys'                            => ['engine_type'],
@@ -42,7 +43,14 @@ class SettingTableSeeder extends Seeder
             'darbi_phone'                           => '9668003041666',
             'darbi_whatsapp_phone'                  => '9668003041666',
             'darbi_twitter'                         => 'godarbi',
-            'darbi_email'                           => 'apps@godarbi.com'
+            'darbi_email'                           => 'apps@godarbi.com',
+            'private_jets_info'                     => [
+                'images'            => [],
+                'title'             => ['ar' => 'طائرات', 'en' => 'Private Jets'],
+                'desc'              => ['ar' => 'طائرات خاصة لك.', 'en' => 'Private jets on-demand.'],
+                'phone'             => '9668003041666',
+                'whatsapp'          => '9668003041666'
+            ]
         ];
 
         Setting::create($settings);

@@ -69,6 +69,18 @@ class SettingService
         }
         $data['walk_through_images'] = $walkThroughImages;
 
+        $privateJetsImages = $this->getSettings()->private_jets_info['images'] ?? [];
+
+        if (!empty($data['private_jets_images'])) {
+            foreach ($data['private_jets_images'] as $key => $privateJetsImage) {
+                if ($privateJetsImage instanceof UploadedFile) {
+                    $privateJetsImages[$key] = $this->uploadImage('private_jets_images', $privateJetsImage, []);
+                }
+            }
+        }
+
+        $data['private_jets_images'] = $privateJetsImages;
+
         $this->settingRepository->updateSettings($data);
 
         $this->clearSettingsCache();
@@ -77,20 +89,46 @@ class SettingService
     }
 
 
-    public function removeWalkThroughImage($index)
+    public function removeImage($group, $index)
     {
-        $walkThroughImages = $this->getSettings()->walk_through_images;
+        $images = $this->getGroupImages($group);
 
-        if (!isset($walkThroughImages[$index])) {
-            return badResponse([], __('Walk through is not exists'));
+        if (!isset($images[$index])) {
+            return badResponse([], __('Image is not exists'));
         }
 
-        unset($walkThroughImages[$index]);
+        unset($images[$index]);
 
-        $this->settingRepository->updateSettings(['walk_through_images' => $walkThroughImages]);
+        $this->updateGroupImage($group, $images);
 
         $this->clearSettingsCache();
 
         return successResponse([]);
+    }
+
+
+    private function getGroupImages($group)
+    {
+        switch ($group) {
+            case 'walk-through':
+                return $this->getSettings()->walk_through_images;
+            case 'private-jets':
+                return $this->getSettings()->private_jets_info['images'];
+            default:
+                return [];
+        }
+    }
+
+
+    private function updateGroupImage($group, $images)
+    {
+        switch ($group) {
+            case 'walk-through':
+                return $this->settingRepository->updateSettings(['walk_through_images' => $images]);
+            case 'private-jets':
+                return $this->settingRepository->updateSettings(['private_jets_images' => $images]);
+            default:
+                return [];
+        }
     }
 }

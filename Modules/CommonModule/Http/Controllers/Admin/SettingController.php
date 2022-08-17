@@ -41,9 +41,9 @@ class SettingController extends Controller
         return $this->apiResponse([]);
     }
 
-    public function removeWalkThroughImage($index)
+    public function removeImage($group, $index)
     {
-        $result = $this->settingService->removeWalkThroughImage($index);
+        $result = $this->settingService->removeImage($group, $index);
 
         return $this->apiResponse(...$result);
     }

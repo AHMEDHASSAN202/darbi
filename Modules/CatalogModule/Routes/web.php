@@ -12,3 +12,4 @@
 */
 
 Route::get('share/{entityType}/{id}-{slug?}'           , 'ShareController');
+Route::get('mobile/private-jets'                       , 'PrivateJetController');

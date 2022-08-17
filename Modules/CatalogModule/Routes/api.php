@@ -54,3 +54,12 @@ Route::group([
 ], function () {
     Route::get(''               , 'PortController@index');
 });
+
+
+
+Route::group([
+    'prefix'    => 'private-jets',
+    'namespace' => 'User'
+], function () {
+    Route::get(''               , 'PrivateJetController@index');
+});

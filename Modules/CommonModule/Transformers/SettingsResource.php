@@ -31,6 +31,11 @@ class SettingsResource extends JsonResource
             'default_country'                           => $this->default_country,
             'default_city'                              => $this->default_city,
             'darbi_percentage'                          => (int)$this->darbi_percentage,
+            'private_jets_images'                       => isset($this->private_jets_info['images']) ? array_map(function ($image) { return imageUrl($image,'original'); }, $this->private_jets_info['images']) : [],
+            'private_jets_title'                        => $this->private_jets_info['title'],
+            'private_jets_desc'                         => $this->private_jets_info['desc'],
+            'private_jets_phone'                        => $this->private_jets_info['phone'],
+            'private_jets_whatsapp'                     => $this->private_jets_info['whatsapp'],
         ];
     }
 
@@ -41,7 +46,7 @@ class SettingsResource extends JsonResource
 
         return array_map(
             function ($walkThrough) {
-                $walkThrough['image'] = isset($walkThrough['image']) ? imageUrl($walkThrough['image']) : '';
+                $walkThrough['image'] = isset($walkThrough['image']) ? imageUrl($walkThrough['image'], 'original') : '';
                 return $walkThrough;
             },
             $walk_through_images

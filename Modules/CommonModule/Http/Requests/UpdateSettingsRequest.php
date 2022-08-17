@@ -35,7 +35,17 @@ class UpdateSettingsRequest extends FormRequest
             'ios_force_updated_link'                => 'sometimes|nullable|url',
             'default_country'                       => 'sometimes|nullable|exists:countries,code',
             'default_city'                          => 'sometimes|nullable|exists:cities,code',
-            'darbi_percentage'                      => 'sometimes|nullable|numeric'
+            'darbi_percentage'                      => 'sometimes|nullable|numeric',
+            'private_jets_images'                   => 'sometimes|nullable|array',
+            'private_jets_images.*'                 => 'sometimes|nullable|image',
+            'private_jets_title'                    => 'required|array',
+            'private_jets_title.ar'                 => ['required', new AlphaNumSpacesRule()],
+            'private_jets_title.en'                 => ['required', new AlphaNumSpacesRule()],
+            'private_jets_desc'                     => 'required|array',
+            'private_jets_desc.ar'                  => ['required', new AlphaNumSpacesRule()],
+            'private_jets_desc.en'                  => ['required', new AlphaNumSpacesRule()],
+            'private_jets_phone'                    => 'sometimes|nullable|numeric',
+            'private_jets_whatsapp'                 => 'sometimes|nullable|numeric',
         ];
     }
 

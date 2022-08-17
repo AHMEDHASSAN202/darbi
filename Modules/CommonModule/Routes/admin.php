@@ -48,5 +48,5 @@ Route::group([
     Route::get(''                        , 'SettingController@index');
     Route::post(''                       , 'SettingController@update');
     Route::post('clear-cache'            , 'SettingController@clearSettingCache');
-    Route::delete('walk-through/{index}' , 'SettingController@removeWalkThroughImage');
+    Route::delete('{group}/{index}'      , 'SettingController@removeImage')->whereIn('group', ['walk-through', 'private-jets']);
 });
