@@ -87,4 +87,19 @@ trait EntityTrait
             'currency_code' => objectGet($vendor, 'country_currency_code')
         ];
     }
+
+
+    private function getAttributes()
+    {
+        $attributes = $this->attributes ? convertBsonArrayToArray($this->attributes) : [];
+
+        if (empty($attributes) || !is_array($attributes)) {
+            return [];
+        }
+
+        return array_map(function ($attribute) {
+            $attribute['image'] = imageUrl($attribute['image']);
+            return $attribute;
+        }, $attributes);
+    }
 }

@@ -25,7 +25,7 @@ class UpdateModelRequest extends FormRequest
             'specs'             => 'required|array',
             'specs.*'           => 'required|array', //5m
             'specs.*.value'     => 'required|min:1|max:100',
-            'specs.*.image'     => 'required|array',
+            'specs.*.image'     => 'required|url',
         ];
     }
 

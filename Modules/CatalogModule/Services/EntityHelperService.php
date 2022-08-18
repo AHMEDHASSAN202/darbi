@@ -23,7 +23,7 @@ trait EntityHelperService
 
     private function getEntityName($entity)
     {
-        if ($entity->type == EntityType::YACHT) {
+        if ($entity->type != EntityType::CAR) {
             return translateAttribute($entity->name);
         }
         return translateAttribute(optional($entity->model)->name) . ' ' . translateAttribute(optional($entity->brand)->name);

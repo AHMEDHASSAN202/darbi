@@ -40,7 +40,7 @@ class VendorFactory extends Factory
             'country_currency_code' => $country->currency_code,
             'require_activation'    => $this->faker->boolean,
             'settings'              => [],
-            'type'                  => ['car', 'yacht'][mt_rand(0,1)],
+            'type'                  => ['car', 'yacht', 'villa'][mt_rand(0,2)],
             'lat'                   => 21.509020,
             'lng'                   => 39.182270
         ];

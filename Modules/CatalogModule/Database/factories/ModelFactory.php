@@ -35,40 +35,29 @@ class ModelFactory extends Factory
             ],
             'specs'         => [
                 'engine_type'   => [
-                    'value'         => 'automatic',
-                    'image'         => [
-                        'key'           => 'engine_type',
-                        'value'         => 'https://i.ibb.co/q0bSNT5/liter.png',
-                        'full_url'      => 'https://i.ibb.co/q0bSNT5/liter.png',
-                        'name'          => 'Engine type'
-                    ]
+                    'key'       => 'engine_type',
+                    'value'     => '4.0-liter V-8',
+                    'image'     => 'https://i.ibb.co/q0bSNT5/liter.png',
                 ],
                 'seats'   => [
-                    'value'         => '4 seats',
-                    'image'         => [
-                        'key'           => 'seats',
-                        'value'         => 'https://i.ibb.co/N1tNCy4/bedroom.png',
-                        'full_url'      => 'https://i.ibb.co/N1tNCy4/bedroom.png',
-                        'name'          => 'Seats'
-                    ]
+                    'key'       => 'seats',
+                    'value'     => '4 Seats',
+                    'image'     => 'https://i.ibb.co/stLWkxg/seats.png',
                 ],
                 'passengers'   => [
-                    'value'         => '14 - 18 passengers',
-                    'image'         => [
-                        'key'           => 'passengers',
-                        'value'         => 'https://i.ibb.co/nBjwmhP/passengers.png',
-                        'full_url'      => 'https://i.ibb.co/nBjwmhP/passengers.png',
-                        'name'          => 'Passengers'
-                    ]
+                    'key'       => 'passengers',
+                    'value'     => '4 passengers',
+                    'image'     => 'https://i.ibb.co/nBjwmhP/passengers.png',
                 ],
                 'pilot'   => [
-                    'value'         => 'pilot',
-                    'image'         => [
-                        'key'           => 'pilot',
-                        'value'         => 'https://i.ibb.co/1vrxW5B/pilot.png',
-                        'full_url'      => 'https://i.ibb.co/1vrxW5B/pilot.png',
-                        'name'          => 'Pilot'
-                    ]
+                    'key'       => 'captain',
+                    'value'     => 'Captain',
+                    'image'     => 'https://i.ibb.co/1vrxW5B/pilot.png',
+                ],
+                'cabins'   => [
+                    'key'       => 'cabins',
+                    'value'     => 'Cabins',
+                    'image'     => 'https://i.ibb.co/DpW68yv/cabins.png',
                 ]
             ],
             'is_active'      => true,

@@ -25,6 +25,7 @@ trait EntityHelperRepository
     {
         $match = [
             '_id'          => [ '$eq' => $entityId ],
+            'deleted_at'   => [ '$eq' => null ]
         ];
 
         if ($vendorId) {

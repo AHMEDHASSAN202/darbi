@@ -85,12 +85,14 @@ class BookingService
         $extras = $this->getExtras($entity, $rentRequest->extras);
         $country = $entity['country'];
 
-        $area = new Area($entity);
+        if (!entityIsVilla($entity['type'])) {
+            $area = new Area($entity);
 
-        $entityArea = $area->getDetails();
+            $entityArea = $area->getDetails();
 
-        if (empty($entityArea)) {
-            return badResponse([], $area->getError());
+            if (empty($entityArea)) {
+                return badResponse([], $area->getError());
+            }
         }
 
         $booking = $this->bookingRepository->create([
@@ -98,8 +100,8 @@ class BookingService
             'user'          => auth('api')->user()->only(['_id', 'phone', 'phone_code', 'name', 'email']),
             'vendor'        => $vendor,
             'vendor_id'     => new ObjectId($entity['vendor_id']),
-            'area_id'       => new ObjectId(arrayGet($entityArea, 'id')),
-            'area'          => $entityArea,
+            'area_id'       => isset($entityArea) ? new ObjectId($entityArea['id']) : null,
+            'area'          => $entityArea ?? null,
             'entity_id'     => new ObjectId($entity['id']),
             'entity_type'   => arrayGet($entity, 'entity_type'),
             'entity_details' => [
@@ -107,9 +109,9 @@ class BookingService
                 'price'     => arrayGet($entity, 'price'),
                 'price_unit'=> arrayGet($entity, 'price_unit'),
                 'images'    => arrayGet($entity, 'images'),
-                'model_id'  => isset($entity['model_id']) ? new ObjectId($entity['model_id']) : null,
+                'model_id'  => (isset($entity['model_id']) && !empty($entity['model_id'])) ? new ObjectId($entity['model_id']) : null,
                 'model_name'=> arrayGet($entity, 'model_name'),
-                'brand_id'  => isset($entity['brand_id']) ? new ObjectId($entity['brand_id']) : null,
+                'brand_id'  => (isset($entity['model_id']) && !empty($entity['model_id'])) ? new ObjectId($entity['brand_id']) : null,
                 'brand_name'=> arrayGet($entity, 'brand_name'),
             ],
             'country_id'    => new ObjectId($country['_id']),
@@ -123,7 +125,7 @@ class BookingService
             'end_booking_at'   => $rentRequest->end_at
         ]);
 
-        return createdResponse(['booking_id' => $booking->_id]);
+        return createdResponse(['booking_id' => $booking->id]);
     }
 
 
@@ -181,8 +183,8 @@ class BookingService
         $this->bookingRepository->update($bookingId, [
             'user'                          => auth('api')->user()->only(['_id', 'phone', 'phone_code', 'name', 'email']),
             'price_summary'                 => $priceSummary,
-            'pickup_location_address'       => Arr::only($addBookDetailsRequest->pickup_location, [...locationInfoKeys()]),
-            'drop_location_address'         => Arr::only($addBookDetailsRequest->drop_location, [...locationInfoKeys()]),
+            'pickup_location_address'       => is_array($entity['location'] ?? $addBookDetailsRequest->pickup_location) ? Arr::only($entity['location'] ?? $addBookDetailsRequest->pickup_location, [...locationInfoKeys()]) : null,
+            'drop_location_address'         => is_array($addBookDetailsRequest->pickup_location) ? Arr::only($addBookDetailsRequest->drop_location, [...locationInfoKeys()]) : null,
             'status_change_log'             => (new BookingChangeLog($booking, BookingStatus::PENDING, $me))->logs(),
             'status'                        => BookingStatus::PENDING,
             'start_booking_at'              => convertDateTimeToUTC($me, $startDate),

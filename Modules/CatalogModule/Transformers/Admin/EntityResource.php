@@ -4,6 +4,7 @@ namespace Modules\CatalogModule\Transformers\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\CatalogModule\Entities\Car;
+use Modules\CatalogModule\Entities\Villa;
 use Modules\CatalogModule\Entities\Yacht;
 use Modules\CatalogModule\Transformers\EntityTrait;
 
@@ -25,8 +26,6 @@ class EntityResource extends JsonResource
             'vendor_name'   => translateAttribute(optional($this->vendor)->name),
             'name'          => translateAttribute($this->name),
             'image'         => $this->getMainImage('thumbnail'),
-            'brand'         => translateAttribute(optional($this->brand)->name),
-            'model'         => translateAttribute(optional($this->model)->name),
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
             'state'         => $this->state,
@@ -40,6 +39,14 @@ class EntityResource extends JsonResource
         }elseif ($this->resource instanceof Car) {
             $res['branch'] = translateAttribute(optional($this->branch)->name);
             $res['branch_id'] = (string)$this->branch_id;
+        }
+
+        if ($this->resource instanceof Villa) {
+            $res['city_id'] = (string)$this->city_id;
+            $res['city_name'] = translateAttribute(optional($this->city)->name);
+        }else {
+            $res['brand'] = translateAttribute(optional($this->brand)->name);
+            $res['model'] = translateAttribute(optional($this->model)->name);
         }
 
         return $res;

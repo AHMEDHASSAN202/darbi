@@ -29,7 +29,12 @@ class CreateEntityRequest extends FormRequest
             'unavailable_date'  => 'nullable|array',
             'unavailable_date.*' => 'nullable|date',
             'is_active'         => 'nullable|sometimes|boolean',
-            'built_date'        => 'nullable|sometimes|date_format:Y|before_or_equal:today'
+            'built_date'        => 'nullable|sometimes|date_format:Y|before_or_equal:today',
+            'attributes'        => 'sometimes|nullable|array',
+            'attributes.*'      => 'sometimes|nullable|array', //5m
+            'attributes.*.key'  => 'required|min:1|max:100',
+            'attributes.*.value'=> 'required|min:1|max:100',
+            'attributes.*.image'=> 'required|url',
         ];
     }
 

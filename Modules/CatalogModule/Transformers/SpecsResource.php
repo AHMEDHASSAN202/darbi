@@ -15,9 +15,9 @@ class SpecsResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'key'       => $this->resource['image']['key'],
+            'key'       => $this->resource['key'],
             'value'     => $this->resource['value'],
-            'image'     => $this->resource['image']['full_url']
+            'image'     => $this->resource['image']
         ];
     }
 }

@@ -9,6 +9,7 @@ use Modules\CatalogModule\Entities\Extra;
 use Modules\CatalogModule\Entities\Model;
 use Modules\CatalogModule\Entities\Plugin;
 use Modules\CatalogModule\Entities\Vendor;
+use Modules\CatalogModule\Enums\EntityType;
 use Modules\CommonModule\Entities\City;
 use Modules\CommonModule\Entities\Country;
 use MongoDB\BSON\ObjectId;
@@ -22,7 +23,7 @@ class CarFactory extends Factory
      */
     protected $model = \Modules\CatalogModule\Entities\Car::class;
 
-    private $type = 'car';
+    private $type = EntityType::CAR;
 
 
     /**
@@ -52,13 +53,11 @@ class CarFactory extends Factory
             'branch_id'         => new ObjectId($branch->id),
             'port_id'           => null,
             'port'              => [],
-            'state'             => 'free',
             'extra_ids'         => $extras,
             'country_id'        => new ObjectId($country->_id),
             'require_activation'=> $this->faker->boolean,
             'price'             => $this->faker->randomFloat(2, 2000, 10000),
             'price_unit'        => 'day',
-            'type'              => 'car',
 //            'unavailable_date'  => $this->faker->boolean ? ['from' => new \MongoDB\BSON\UTCDateTime(now()->subDay()->toDateTime()), 'to' => new \MongoDB\BSON\UTCDateTime(now()->addMonth()->toDateTime())] : null
         ];
     }

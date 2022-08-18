@@ -28,6 +28,7 @@ class SettingTableSeeder extends Seeder
                 ['name' => ['ar' => 'سيارات', 'en' => 'Exotics'], 'desc' => ['ar' => 'سيارات فاخرة راقية.', 'en' => 'High-end luxury exotics.'], 'image' => 'https://i.ibb.co/QbpZh9c/cars.png', 'template' => 0, 'webview' => ''],
                 ['name' => ['ar' => 'اليخوت', 'en' => 'Yachts'], 'desc' => ['ar' => 'اليخوت الفاخرة لك.', 'en' => 'Premium yachts for you.'], 'image' => 'https://i.ibb.co/b5mGQHx/yachts-1.png', 'template' => 1, 'webview' => ''],
                 ['name' => ['ar' => 'طائرات', 'en' => 'Private Jets'], 'desc' => ['ar' => 'طائرات خاصة لك.', 'en' => 'Private jets on-demand.'], 'image' => 'https://i.ibb.co/kGvJg7L/Mask-Group-14-2x.png', 'template' => null, 'webview' => url('mobile/private-jets')],
+                ['name' => ['ar' => 'فلل', 'en' => 'Villas'], 'desc' => ['ar' => 'إقامة فاخرة حول العالم', 'en' => 'Luxury stays around the world.'], 'image' => 'https://i.ibb.co/b5mGQHx/yachts-1.png', 'template' => null, 'webview' => ''],
             ],
             'home_main_theme'                       => 'https://i.ibb.co/r0j7mGx/home-Header.png',
             'specs_keys'                            => ['engine_type'],
