@@ -56,6 +56,15 @@ class AdminTableSeeder extends Seeder
                 'vendor_id'  => new ObjectId(Vendor::where('type', 'yacht')->first()->id),
                 'type'       => 'vendor',
                 'image'      => $avatars[mt_rand(0, (count($avatars) - 1))]
+            ],
+            [
+                'name'       => 'Villa Vendor',
+                'email'      => 'villa-vendor@gmail.com',
+                'password'   => Hash::make(123456),
+                'role_id'    => new ObjectId(Role::where('guard', 'vendor_api')->first()->id),
+                'vendor_id'  => new ObjectId(Vendor::where('type', 'villa')->first()->id),
+                'type'       => 'vendor',
+                'image'      => $avatars[mt_rand(0, (count($avatars) - 1))]
             ]
         ];
 

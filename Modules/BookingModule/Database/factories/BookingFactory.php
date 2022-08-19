@@ -51,6 +51,7 @@ class BookingFactory extends Factory
                 'city'              => $this->faker->city,
                 'country'           => $this->faker->country,
                 'state'             => $this->faker->streetAddress,
+                'name'              => $this->faker->streetAddress,
                 'region_id'         => new ObjectId($region->_id)
             ],
             'drop_location_address' => [
@@ -60,6 +61,7 @@ class BookingFactory extends Factory
                 'city'              => $this->faker->city,
                 'country'           => $this->faker->country,
                 'state'             => $this->faker->streetAddress,
+                'name'              => $this->faker->streetAddress,
                 'region_id'         => new ObjectId($region->_id)
             ],
             'entity_details'         => [

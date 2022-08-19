@@ -4,7 +4,7 @@ namespace Modules\CatalogModule\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FindYachtResource extends JsonResource
+class FindVillaResource extends JsonResource
 {
     use EntityTrait;
 
@@ -16,8 +16,6 @@ class FindYachtResource extends JsonResource
      */
     public function toArray($request)
     {
-        $specs = array_values(objectGet($this->model, 'specs', [])) + $this->getAttributes();
-
         return [
             'id'            => $this->_id,
             'name'          => translateAttribute($this->name),
@@ -26,10 +24,10 @@ class FindYachtResource extends JsonResource
             'price_unit'    => $this->price_unit,
             'state'         => $this->state,
             'built_date'    => $this->built_date ? (int)$this->built_date : null,
-            'port'          => translateAttribute(optional($this->port)->name),
             'extras'        => $this->getExtras(),
-            'specs'         => @SpecsResource::collection($specs) ?? [],
-            'vendor'        => $this->getVendor()
+            'vendor'        => $this->getVendor(),
+            'location'      => $this->location,
+            'specs'         => SpecsResource::collection($this->getAttributes())
         ];
     }
 }

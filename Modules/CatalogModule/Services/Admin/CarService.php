@@ -9,6 +9,7 @@ namespace Modules\CatalogModule\Services\Admin;
 use Modules\CatalogModule\Http\Requests\Admin\CreateEntityRequest;
 use Modules\CatalogModule\Http\Requests\Admin\UpdateEntityRequest;
 use Modules\CatalogModule\Repositories\CarRepository;
+use Modules\CatalogModule\Repositories\ModelRepository;
 use Modules\CatalogModule\Transformers\Admin\FindEntityResource;
 use Modules\CommonModule\Traits\ImageHelperTrait;
 use MongoDB\BSON\ObjectId;
@@ -39,8 +40,12 @@ class CarService
 
     public function create(CreateEntityRequest $createCarRequest)
     {
+        $model = app(ModelRepository::class)->find($createCarRequest->model_id);
+
         $car = $this->createEntity($createCarRequest, [
-            'branch_id'    => new ObjectId($createCarRequest->branch_id)
+            'branch_id'    => new ObjectId($createCarRequest->branch_id),
+            'model_id'     => new ObjectId($model->_id),
+            'brand_id'     => new ObjectId($model->brand_id),
         ]);
 
         return createdResponse(['id' => $car->_id]);
@@ -49,8 +54,12 @@ class CarService
 
     public function update($id, UpdateEntityRequest $updateCarRequest)
     {
+        $model = app(ModelRepository::class)->find($updateCarRequest->model_id);
+
         $car = $this->updateEntity($id, $updateCarRequest, [
-            'branch_id'    => new ObjectId($updateCarRequest->branch_id)
+            'branch_id'    => new ObjectId($updateCarRequest->branch_id),
+            'model_id'     => new ObjectId($model->_id),
+            'brand_id'     => new ObjectId($model->brand_id),
         ]);
 
         return updatedResponse(['id' => $car->_id]);

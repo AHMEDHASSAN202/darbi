@@ -26,7 +26,7 @@ class PluginFactory extends Factory
             'name'          => ['ar' => $arFaker->text(50), 'en' => $this->faker->text(50)],
             'desc'          => [['ar' => $arFaker->text(50), 'en' => $this->faker->text(50)], ['ar' => '', 'en' => '']][mt_rand(0,1)],
             'is_active'     => $this->faker->boolean(),
-            'entity_type'   => ['car', 'yacht'][mt_rand(0,1)]
+            'entity_type'   => ['car', 'yacht', 'villa'][mt_rand(0,2)]
         ];
     }
 }

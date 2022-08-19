@@ -4,6 +4,8 @@ namespace Modules\BookingModule\Http\Requests;
 
 use App\Rules\MongoIdRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Modules\CatalogModule\Enums\EntityType;
 
 class RentRequest extends FormRequest
 {
@@ -16,7 +18,7 @@ class RentRequest extends FormRequest
     {
         return [
             'entity_id'         => 'required',
-            'entity_type'       => 'required|in:car,yacht',
+            'entity_type'       => ['required', Rule::in(array_values(EntityType::getTypes()))],
             'plugins'           => 'nullable|array',
             'city_id'           => ['required', new MongoIdRule]
         ];

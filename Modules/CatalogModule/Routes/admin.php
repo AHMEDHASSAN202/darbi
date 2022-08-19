@@ -59,7 +59,6 @@ Route::group([
     'middleware'=> ['auth:admin_api']
 ], function () {
     Route::get(''             , 'ModelController@index');
-    Route::get('assets'       , 'ModelController@assets');
     Route::get('{model}'      , 'ModelController@show');
     Route::post(''            , 'ModelController@store');
     Route::put('{model}'      , 'ModelController@update');
@@ -105,4 +104,14 @@ Route::group([
     Route::get(''             , 'YachtController@index');
     Route::get('{yacht}'      , 'YachtController@show');
     Route::delete('{yacht}'   , 'YachtController@destroy');
+});
+
+
+
+//attributes routes
+Route::group([
+    'prefix'    => 'attributes',
+    'middleware'=> ['auth:admin_api']
+], function () {
+    Route::get(''                 , 'AttributeController@index');
 });

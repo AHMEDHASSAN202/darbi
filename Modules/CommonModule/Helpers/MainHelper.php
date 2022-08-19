@@ -145,6 +145,11 @@ function entityIsYacht($type) : bool
     return ($type === \Modules\CatalogModule\Enums\EntityType::YACHT);
 }
 
+function entityIsVilla($type) : bool
+{
+    return ($type === \Modules\CatalogModule\Enums\EntityType::VILLA);
+}
+
 function getCarTestImages()
 {
     return [
@@ -181,6 +186,18 @@ function getYatchTestImages()
         'https://i.ibb.co/2qXy1QY/Rectangle-7513.png',
         'https://i.ibb.co/mSkD0zt/Rectangle-8230.png',
         'https://i.ibb.co/KVgGG9C/Rectangle-8229.png'
+    ];
+}
+
+function getVillaTestImages()
+{
+    return [
+        'https://i.ibb.co/bKC4wxX/Rectangle-8263-4-3x.png',
+        'https://i.ibb.co/pj2Twq4/Rectangle-8263-5-3x.png',
+        'https://i.ibb.co/DtyWyRv/Rectangle-8263-6-3x.png',
+        'https://i.ibb.co/zX9pX8h/Rectangle-8263-3x.png',
+        'https://i.ibb.co/Qkrqfgx/Rectangle-8263-2-3x.png',
+        'https://i.ibb.co/47n9C67/Rectangle-8263-3-3x.png'
     ];
 }
 
@@ -250,6 +267,11 @@ function convertBsonArrayToCollection($bsonArray)
     $objects = array_map(function ($object) { return (object)$object; }, (array)$bsonArray);
 
     return collect($objects);
+}
+
+function convertBsonArrayToArray($bsonArray)
+{
+    return array_map(function ($object) { return (array)$object; }, (array)$bsonArray);
 }
 
 function convertBsonArrayToNormalArray($bsonArray)

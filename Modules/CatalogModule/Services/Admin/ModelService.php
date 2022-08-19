@@ -131,9 +131,10 @@ class ModelService
 
         foreach ($newSpecs as $spec) {
             //add
-            $specs[$spec['image']['key']] = [
+            $specs[$spec['key']] = [
                 'value' => $spec['value'],
-                'image' => $spec['image']
+                'image' => $spec['image'],
+                'key'   => $spec['key']
             ];
         }
 
