@@ -49,7 +49,8 @@ class SettingTableSeeder extends Seeder
                 'title'             => ['ar' => 'طائرات', 'en' => 'Private Jets'],
                 'desc'              => ['ar' => 'طائرات خاصة لك.', 'en' => 'Private jets on-demand.'],
                 'phone'             => '9668003041666',
-                'whatsapp'          => '9668003041666'
+                'whatsapp'          => '9668003041666',
+                'email'             => 'apps@godarbi.com'
             ]
         ];
 

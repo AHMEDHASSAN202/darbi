@@ -46,6 +46,7 @@ class UpdateSettingsRequest extends FormRequest
             'private_jets_desc.en'                  => ['required', new AlphaNumSpacesRule()],
             'private_jets_phone'                    => 'sometimes|nullable|numeric',
             'private_jets_whatsapp'                 => 'sometimes|nullable|numeric',
+            'private_jets_email'                    => 'sometimes|nullable|email',
         ];
     }
 

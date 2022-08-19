@@ -34,7 +34,8 @@ class PrivateJetService
             'title'        => translateAttribute($privateJetsInfo['title'] ?? ''),
             'desc'         => translateAttribute($privateJetsInfo['desc'] ?? ''),
             'phone'        => $privateJetsInfo['phone'] ?? '',
-            'whatsapp'     => $privateJetsInfo['whatsapp'] ?? ''
+            'whatsapp'     => $privateJetsInfo['whatsapp'] ?? '',
+            'email'        => $privateJetsInfo['email'] ?? ''
         ];
     }
 

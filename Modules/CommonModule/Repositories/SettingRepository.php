@@ -108,6 +108,10 @@ class SettingRepository
             $privateJetInfo['whatsapp'] = $data['private_jets_whatsapp'];
         }
 
+        if (isset($data['private_jets_email'])) {
+            $privateJetInfo['email'] = $data['private_jets_email'];
+        }
+
         $settings->private_jets_info = $privateJetInfo;
 
         return $settings->save();
