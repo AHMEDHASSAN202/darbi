@@ -2,7 +2,6 @@
 
 namespace Modules\AuthModule\Http\Requests\User;
 
-use App\Rules\PhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SendOtpRequest extends FormRequest
@@ -14,10 +13,8 @@ class SendOtpRequest extends FormRequest
      */
     public function rules()
     {
-        $this->request->set('phone_code', phoneCodeCleaning($this->request->get('phone_code')));
-
         return [
-            'phone'         => ['required', 'numeric', new PhoneRule($this->request->get('phone_code'))],
+            'phone'         => ['required', 'numeric', 'phone:phone_country,mobile'],
             'phone_code'    => 'required'
         ];
     }
@@ -30,5 +27,19 @@ class SendOtpRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    /**
+     * Validation Data
+     *
+     * @param $key
+     * @param $default
+     * @return array
+     */
+    public function validationData()
+    {
+        $data  = parent::validationData();
+        $data['phone_country'] = getCountryCodeFromPhoneCode(phoneCodeCleaning($this->request->get('phone_code')));
+        return $data;
     }
 }

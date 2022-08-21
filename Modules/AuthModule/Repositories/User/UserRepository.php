@@ -19,14 +19,14 @@ class UserRepository
 
     public function findByMobile($phone, $phoneCode, $with = [])
     {
-        return $this->model->where('phone', $phone)->where('phone_code', $phoneCode)->with($with)->first();
+        return $this->model->where('phone', $phone)->where('phone_code', phoneCodeCleaning($phoneCode))->with($with)->first();
     }
 
     public function createUserFromSignin($phone, $phoneCode)
     {
         return $this->model->create([
             'phone' => $phone,
-            'phone_code' => $phoneCode,
+            'phone_code' => phoneCodeCleaning($phoneCode),
             'is_active' => true,
             'verification_code' => generateOTPCode()
         ]);

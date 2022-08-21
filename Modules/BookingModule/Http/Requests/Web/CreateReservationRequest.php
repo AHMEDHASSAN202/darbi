@@ -4,7 +4,6 @@ namespace Modules\BookingModule\Http\Requests\Web;
 
 use App\Rules\AlphaNumSpacesRule;
 use App\Rules\MobileDigits;
-use App\Rules\PhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateReservationRequest extends FormRequest
@@ -19,7 +18,7 @@ class CreateReservationRequest extends FormRequest
         return [
             'name'                  => ['required', new AlphaNumSpacesRule()],
             'age'                   => 'required|numeric',
-            'mobile'                => ['required', 'numeric', new PhoneRule($this->request->get('mobile_code'))],
+            'mobile'                => ['required', 'numeric', 'phone'],
             'email'                 => 'nullable|email',
             'country'               => ['required', new AlphaNumSpacesRule()],
             'annual_travels_count'  => 'required|numeric',

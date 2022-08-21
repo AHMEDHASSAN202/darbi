@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.7",
         "league/flysystem-aws-s3-v3": "3.0",
         "nwidart/laravel-modules": "^9.0",
+        "propaganistas/laravel-phone": "^4.3",
         "rap2hpoutre/fast-excel": "^4.1",
         "symfony/console": "6.0.*",
         "symfony/deprecation-contracts": "3.0.*",

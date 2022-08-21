@@ -3,7 +3,6 @@
 namespace Modules\AuthModule\Http\Requests\Admin;
 
 use App\Rules\AlphaNumSpacesRule;
-use App\Rules\PhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateVendorSettingsRequest extends FormRequest
@@ -20,7 +19,7 @@ class UpdateVendorSettingsRequest extends FormRequest
             'name.ar'   => ['required', 'max:100', new AlphaNumSpacesRule('ar')],
             'name.en'   => ['required', 'max:100', new AlphaNumSpacesRule('en')],
             'email'     => ['required', 'email'],
-            'phone'     => ['required', 'numeric', new PhoneRule($this->request->get('phone_code'))],
+            'phone'     => ['required', 'numeric', 'phone'],
             'phone_code' => 'required|exists:countries,calling_code',
             'image'     => 'sometimes|image|max:5120', //5m
             'settings'  => 'nullable|sometimes|array'
@@ -35,5 +34,19 @@ class UpdateVendorSettingsRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    /**
+     * Validation Data
+     *
+     * @param $key
+     * @param $default
+     * @return array
+     */
+    public function validationData()
+    {
+        $data  = parent::validationData();
+        $data['phone_country'] = getCountryCodeFromPhoneCode(phoneCodeCleaning($this->request->get('phone_code')));
+        return $data;
     }
 }

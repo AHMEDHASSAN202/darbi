@@ -13,7 +13,7 @@ class SnsOTP implements OTPInterface
 {
     public function send($phone, $phoneCode, $otp)
     {
-        if (config('authmodule.used_otp_provider') === false) {
+        if (!app()->environment('production')) {
             return;
         }
 

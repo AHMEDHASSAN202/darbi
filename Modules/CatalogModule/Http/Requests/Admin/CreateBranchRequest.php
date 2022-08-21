@@ -4,7 +4,6 @@ namespace Modules\CatalogModule\Http\Requests\Admin;
 
 use App\Rules\AlphaNumSpacesRule;
 use App\Rules\MongoIdRule;
-use App\Rules\PhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateBranchRequest extends FormRequest
@@ -26,7 +25,7 @@ class CreateBranchRequest extends FormRequest
             'cover_images'  => 'nullable|sometimes|array',
             'cover_images.*'=> 'nullable|sometimes|image|max:5120',
             'is_active'     => 'nullable|sometimes|boolean',
-            'phone'         => ['nullable', 'sometimes', 'numeric', new PhoneRule($this->request->get('phone_code'))],
+            'phone'         => ['nullable', 'sometimes', 'numeric', 'phone:phone_country,mobile'],
             'phone_code'    => 'required_with:phone',
             'city_id'       => 'required|exists:cities,_id',
             'region_ids'    => 'sometimes|nullable|array',
@@ -42,5 +41,19 @@ class CreateBranchRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    /**
+     * Validation Data
+     *
+     * @param $key
+     * @param $default
+     * @return array
+     */
+    public function validationData()
+    {
+        $data  = parent::validationData();
+        $data['phone_country'] = getCountryCodeFromPhoneCode(phoneCodeCleaning($this->request->get('phone_code')));
+        return $data;
     }
 }
