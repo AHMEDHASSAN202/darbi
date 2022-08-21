@@ -30,7 +30,7 @@ class CatalogModuleDatabaseSeeder extends Seeder
         Brand::factory(22)->create();
         \Modules\CatalogModule\Entities\Model::factory(150)->create();
         Plugin::factory(100)->create();
-        Vendor::factory(20)->create();
+        Vendor::factory(40)->create();
         Region::factory()->count(150)->create();
         $this->call(RegionsTableSeeder::class);
         Extra::factory(300)->create();

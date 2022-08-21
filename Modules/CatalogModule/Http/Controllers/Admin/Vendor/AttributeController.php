@@ -4,7 +4,7 @@ namespace Modules\CatalogModule\Http\Controllers\Admin\Vendor;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\CatalogModule\Services\AttributeService;
+use Modules\CatalogModule\Services\Admin\AttributeService;
 use Modules\CommonModule\Traits\ApiResponseTrait;
 
 class AttributeController extends Controller

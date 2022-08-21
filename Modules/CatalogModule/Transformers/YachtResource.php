@@ -3,6 +3,7 @@
 namespace Modules\CatalogModule\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 
 class YachtResource extends JsonResource
 {
@@ -30,7 +31,11 @@ class YachtResource extends JsonResource
 
     private function passengers()
     {
-        $passengers = arrayGet($this->model->specs, 'passengers');
+        $passengers =  Arr::first(
+            optional($this->model)->specs ?? $this->attributes ?? [],
+            function ($spec) { return $spec['key'] == 'passengers'; }
+        );
+
         if (!$passengers) {
             return null;
         }

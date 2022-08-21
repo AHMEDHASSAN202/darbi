@@ -114,4 +114,8 @@ Route::group([
     'middleware'=> ['auth:admin_api']
 ], function () {
     Route::get(''                 , 'AttributeController@index');
+    Route::get('{attribute}'      , 'AttributeController@show');
+    Route::post(''                , 'AttributeController@store');
+    Route::put('{attribute}'      , 'AttributeController@update');
+    Route::delete('{attribute}'   , 'AttributeController@destroy');
 });

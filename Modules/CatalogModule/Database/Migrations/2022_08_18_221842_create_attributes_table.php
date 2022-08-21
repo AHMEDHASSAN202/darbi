@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('attributes', function (Blueprint $table) {
             $table->id();
+            $table->index('key');
             $table->index('entity_type');
             $table->index('type');
             $table->timestamps();

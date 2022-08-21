@@ -40,7 +40,11 @@ class CarFactory extends Factory
         $vendor = Vendor::where('type', $this->type)->first();
         $branch = Branch::where('vendor_id', new ObjectId($vendor->_id))->first();
         $plugins = Plugin::where('entity_type', $this->type)->get()->pluck('id')->toArray();
-        $extras = generateObjectIdOfArrayValues(Extra::whereIn('plugin_id', generateObjectIdOfArrayValues($plugins))->where('vendor_id', new ObjectId($vendor->_id))->get()->random(2)->pluck('_id')->toArray());
+        try {
+            $extras = generateObjectIdOfArrayValues(Extra::whereIn('plugin_id', generateObjectIdOfArrayValues($plugins))->where('vendor_id', new ObjectId($vendor->_id))->get()->random(2)->pluck('_id')->toArray());
+        }catch (\Exception $exception) {
+            $extras = [];
+        }
 
         return [
             'name'              => ['en' => $this->faker->company, 'ar' => $arFaker->company],

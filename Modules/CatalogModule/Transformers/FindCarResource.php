@@ -16,8 +16,6 @@ class FindCarResource extends JsonResource
      */
     public function toArray($request)
     {
-        $specs = array_values(objectGet($this->model, 'specs', [])) + $this->getAttributes();
-
         return [
             'id'            => $this->_id,
             'images'        => $this->getImagesFullPath(),
@@ -27,7 +25,7 @@ class FindCarResource extends JsonResource
             'price_unit'    => $this->price_unit,
             'extras'        => $this->getExtras(),
             'state'         => $this->state,
-            'specs'         => @SpecsResource::collection($specs) ?? [],
+            'specs'         => $this->getAttributes(),
             'vendor'        => $this->getVendor(),
             'branch_id'     => (string)$this->branch_id,
             'built_date'    => $this->built_date ? (int)$this->built_date : null,

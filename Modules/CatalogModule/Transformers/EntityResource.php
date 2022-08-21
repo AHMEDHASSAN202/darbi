@@ -31,7 +31,7 @@ class EntityResource extends JsonResource
             'extras'        => ExtraResource::collection(convertBsonArrayToCollection($this->attachPluginToExtra($this->extras, $this->plugins))),
             'state'         => $this->state,
             'type'          => $this->type,
-            'specs'         => $this->model ? SpecsResource::collection($this->model->specs) : [],
+            'specs'         => $this->getAttributes(),
             'country'       => $this->country,
             'vendor_id'     => (string)$this->vendor_id,
             'entity_type'   => $this->type,
