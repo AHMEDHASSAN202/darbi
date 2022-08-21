@@ -280,6 +280,10 @@ function convertBsonArrayToNormalArray($bsonArray)
         return $bsonArray;
     }
 
+    if (!$bsonArray) {
+        return [];
+    }
+
     return (array)$bsonArray->jsonSerialize();
 }
 

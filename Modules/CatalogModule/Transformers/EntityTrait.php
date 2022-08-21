@@ -91,7 +91,10 @@ trait EntityTrait
 
     private function getAttributes()
     {
-        $attributes = ($this->attributes ?? []) + (optional($this->model)->specs ?? []);
+        $privateAttributes = $this->attributes ? convertBsonArrayToNormalArray($this->attributes) : [];
+        $specs = optional($this->model)->specs ? convertBsonArrayToNormalArray(optional($this->model)->specs) : [];
+
+        $attributes = $privateAttributes + $specs;
 
         if (empty($attributes) || !is_array($attributes)) {
             return [];
