@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\CatalogModule\Transformers;
+namespace Modules\CatalogModule\Transformers\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,9 +15,11 @@ class SpecsResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id'        => $this->resource['id'],
             'key'       => $this->resource['key'],
-            'value'     => $this->resource['value'],
-            'image'     => imageUrl($this->resource['image'])
+            'image'     => imageUrl($this->resource['image'], 'original'),
+            'entity_type' => $this->resource['entity_type'],
+            'type'      => $this->resource['type']
         ];
     }
 }

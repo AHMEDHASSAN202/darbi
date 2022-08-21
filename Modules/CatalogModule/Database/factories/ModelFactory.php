@@ -3,6 +3,7 @@
 namespace Modules\CatalogModule\Database\factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\CatalogModule\Entities\Attribute;
 use Modules\CatalogModule\Entities\Brand;
 use MongoDB\BSON\ObjectId;
 
@@ -24,6 +25,7 @@ class ModelFactory extends Factory
     {
         $arFaker = \Faker\Factory::create('ar_EG');
         $brand = Brand::all()->random(1)->first();
+        $specs = generateObjectIdOfArrayValues(Attribute::whereIn('key', ['engine_type', 'seats', 'passengers', 'captain', 'cabins'])->get()->map(function ($attr) { return ['id' => $attr->id, 'key' => $attr->key, 'value' => $attr->value, 'image' => $attr->image]; })->toArray());
 
         return [
             'brand_id'      => new ObjectId($brand->_id),
@@ -33,33 +35,7 @@ class ModelFactory extends Factory
                 $this->faker->imageUrl(300, 300, null, false, 'Model'),
                 $this->faker->imageUrl(300, 300, null, false, 'Model')
             ],
-            'specs'         => [
-                'engine_type'   => [
-                    'key'       => 'engine_type',
-                    'value'     => '4.0-liter V-8',
-                    'image'     => 'https://i.ibb.co/q0bSNT5/liter.png',
-                ],
-                'seats'   => [
-                    'key'       => 'seats',
-                    'value'     => '4 Seats',
-                    'image'     => 'https://i.ibb.co/stLWkxg/seats.png',
-                ],
-                'passengers'   => [
-                    'key'       => 'passengers',
-                    'value'     => '4 passengers',
-                    'image'     => 'https://i.ibb.co/nBjwmhP/passengers.png',
-                ],
-                'pilot'   => [
-                    'key'       => 'captain',
-                    'value'     => 'Captain',
-                    'image'     => 'https://i.ibb.co/1vrxW5B/pilot.png',
-                ],
-                'cabins'   => [
-                    'key'       => 'cabins',
-                    'value'     => 'Cabins',
-                    'image'     => 'https://i.ibb.co/DpW68yv/cabins.png',
-                ]
-            ],
+            'specs'         => $specs,
             'is_active'      => true,
             'entity_type' => ['car', 'yacht'][mt_rand(0,1)],
         ];

@@ -35,7 +35,7 @@ class FindEntityResource extends JsonResource
             'unavailable_date'  => $this->unavailable_date,
             'extras'        => FindExtraResource::collection(convertBsonArrayToCollection($this->attachPluginToExtra($this->extras, $this->plugins))),
             'built_date'    => $this->built_date ? (int)$this->built_date : null,
-            'attributes'    => $this->getAttributes()
+            'attributes'    => convertBsonArrayToArray($this->attributes)
         ];
 
         if ($this->resource instanceof Yacht) {

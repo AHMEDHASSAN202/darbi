@@ -16,8 +16,6 @@ class FindYachtResource extends JsonResource
      */
     public function toArray($request)
     {
-        $specs = array_values(objectGet($this->model, 'specs', [])) + $this->getAttributes();
-
         return [
             'id'            => $this->_id,
             'name'          => translateAttribute($this->name),
@@ -28,7 +26,7 @@ class FindYachtResource extends JsonResource
             'built_date'    => $this->built_date ? (int)$this->built_date : null,
             'port'          => translateAttribute(optional($this->port)->name),
             'extras'        => $this->getExtras(),
-            'specs'         => @SpecsResource::collection($specs) ?? [],
+            'specs'         => $this->getAttributes(),
             'vendor'        => $this->getVendor()
         ];
     }

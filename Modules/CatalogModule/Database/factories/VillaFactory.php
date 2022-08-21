@@ -3,6 +3,7 @@
 namespace Modules\CatalogModule\Database\factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\CatalogModule\Entities\Attribute;
 use Modules\CatalogModule\Entities\Branch;
 use Modules\CatalogModule\Entities\Brand;
 use Modules\CatalogModule\Entities\Extra;
@@ -39,8 +40,13 @@ class VillaFactory extends Factory
         $vendor = Vendor::where('type', $this->type)->get()->random(1)->first();
         $arFaker = \Faker\Factory::create('ar_EG');
         $plugins = Plugin::where('entity_type', $this->type)->get()->pluck('id')->toArray();
-        $extras = generateObjectIdOfArrayValues(Extra::whereIn('plugin_id', generateObjectIdOfArrayValues($plugins))->where('vendor_id', new ObjectId($vendor->_id))->get()->random(2)->pluck('_id')->toArray());
+        try {
+            $extras = generateObjectIdOfArrayValues(Extra::whereIn('plugin_id', generateObjectIdOfArrayValues($plugins))->where('vendor_id', new ObjectId($vendor->_id))->get()->random(2)->pluck('_id')->toArray());
+        }catch (\Exception $exception) {
+            $extras = [];
+        }
         $city = City::all()->where('country_id', new ObjectId($country->id))->random(1)->first();
+        $attributes = generateObjectIdOfArrayValues(Attribute::whereIn('key', ['length', 'restrooms', 'guests', 'pool', 'beds'])->get()->map(function ($attr) { return ['id' => $attr->id, 'key' => $attr->key, 'value' => $attr->value, 'image' => $attr->image]; })->toArray());;
 
         return [
             'name'              => ['en' => $this->faker->company, 'ar' => $arFaker->company],
@@ -66,6 +72,7 @@ class VillaFactory extends Factory
                 'region_id'         => null
             ],
             'city_id'           => new ObjectId($city->id), //when entity is villa
+            'attributes'        => $attributes
         ];
     }
 }

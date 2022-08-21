@@ -3,6 +3,7 @@
 namespace Modules\CatalogModule\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 
 class VillaResource extends JsonResource
 {
@@ -31,6 +32,15 @@ class VillaResource extends JsonResource
 
     private function guests()
     {
-        return '';
+        $guests =  Arr::first(
+            $this->attributes ?? [],
+            function ($spec) { return $spec['key'] == 'guests'; }
+        );
+
+        if (!$guests) {
+            return null;
+        }
+
+        return arrayGet($guests, 'value');
     }
 }

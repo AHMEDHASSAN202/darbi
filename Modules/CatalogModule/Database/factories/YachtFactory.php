@@ -42,7 +42,11 @@ class YachtFactory extends Factory
         $port = Port::with(['country', 'city'])->get()->random(1)->first();
         $arFaker = \Faker\Factory::create('ar_EG');
         $plugins = Plugin::where('entity_type', $this->type)->get()->pluck('id')->toArray();
-        $extras = generateObjectIdOfArrayValues(Extra::whereIn('plugin_id', generateObjectIdOfArrayValues($plugins))->where('vendor_id', new ObjectId($vendor->_id))->get()->random(1)->pluck('_id')->toArray());
+        try {
+            $extras = generateObjectIdOfArrayValues(Extra::whereIn('plugin_id', generateObjectIdOfArrayValues($plugins))->where('vendor_id', new ObjectId($vendor->_id))->get()->random(1)->pluck('_id')->toArray());
+        }catch (\Exception $exception) {
+            $extras = [];
+        }
 
         return [
             'model_id'          => new ObjectId($model->_id),

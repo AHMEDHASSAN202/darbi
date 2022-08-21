@@ -91,15 +91,12 @@ trait EntityTrait
 
     private function getAttributes()
     {
-        $attributes = $this->attributes ? convertBsonArrayToArray($this->attributes) : [];
+        $attributes = ($this->attributes ?? []) + (optional($this->model)->specs ?? []);
 
         if (empty($attributes) || !is_array($attributes)) {
             return [];
         }
 
-        return array_map(function ($attribute) {
-            $attribute['image'] = imageUrl($attribute['image']);
-            return $attribute;
-        }, $attributes);
+        return SpecsResource::collection($attributes);
     }
 }

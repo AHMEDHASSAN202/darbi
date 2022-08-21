@@ -27,7 +27,7 @@ class FindVillaResource extends JsonResource
             'extras'        => $this->getExtras(),
             'vendor'        => $this->getVendor(),
             'location'      => $this->location,
-            'specs'         => SpecsResource::collection($this->getAttributes())
+            'specs'         => $this->getAttributes()
         ];
     }
 }

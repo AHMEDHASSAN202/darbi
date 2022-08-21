@@ -6,16 +6,14 @@
 
 namespace Modules\CatalogModule\Services;
 
-use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\CatalogModule\Repositories\AttributeRepository;
-use Modules\CatalogModule\Repositories\BrandRepository;
-use Modules\CatalogModule\Transformers\BrandResource;
 use Modules\CatalogModule\Transformers\SpecsResource;
-use Modules\CommonModule\Transformers\PaginateResource;
+use Modules\CommonModule\Traits\ImageHelperTrait;
 
 class AttributeService
 {
+    use ImageHelperTrait;
+
     private $attributeRepository;
 
     public function __construct(AttributeRepository $attributeRepository)
@@ -23,9 +21,9 @@ class AttributeService
         $this->attributeRepository = $attributeRepository;
     }
 
-    public function findAll(Request $request)
+    public function findByIds($ids)
     {
-        $attributes = $this->attributeRepository->findAll($request);
+        $attributes = $this->attributeRepository->findByIds($ids);
 
         return SpecsResource::collection($attributes);
     }

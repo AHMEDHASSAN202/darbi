@@ -32,6 +32,7 @@ class CreateEntityRequest extends FormRequest
             'built_date'        => 'nullable|sometimes|date_format:Y|before_or_equal:today',
             'attributes'        => 'sometimes|nullable|array',
             'attributes.*'      => 'sometimes|nullable|array', //5m
+            'attributes.*.id'   => ['required', new MongoIdRule()],
             'attributes.*.key'  => 'required|min:1|max:100',
             'attributes.*.value'=> 'required|min:1|max:100',
             'attributes.*.image'=> 'required|url',
