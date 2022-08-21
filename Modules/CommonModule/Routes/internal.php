@@ -29,3 +29,11 @@ Route::group([
 ], function () {
     Route::get('{country}'         , 'CountryController@find');
 });
+
+
+//locations routes
+Route::group([
+    'prefix'    => 'locations',
+], function () {
+    Route::get('find'             , 'LocationController@find');
+});
