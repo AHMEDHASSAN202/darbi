@@ -39,7 +39,7 @@ class UpdateSettingsRequest extends FormRequest
             'private_jets_images'                   => 'sometimes|nullable|array',
             'private_jets_images.*'                 => 'sometimes|nullable|image',
             'private_jets_title'                    => 'sometimes|nullable|array',
-            'private_jets_title.ar'                 => ['required', new AlphaNumSpacesRule()],
+            'private_jets_title.ar'                 => ['sometimes|nullable', new AlphaNumSpacesRule()],
             'private_jets_title.en'                 => ['sometimes|nullable', new AlphaNumSpacesRule()],
             'private_jets_desc'                     => 'sometimes|nullable|array',
             'private_jets_desc.ar'                  => ['sometimes|nullable', new AlphaNumSpacesRule()],
