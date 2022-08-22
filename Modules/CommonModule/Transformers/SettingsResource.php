@@ -36,6 +36,7 @@ class SettingsResource extends JsonResource
             'private_jets_desc'                         => $this->private_jets_info['desc'],
             'private_jets_phone'                        => $this->private_jets_info['phone'],
             'private_jets_whatsapp'                     => $this->private_jets_info['whatsapp'],
+            'private_jets_email'                        => $this->private_jets_info['email']
         ];
     }
 
