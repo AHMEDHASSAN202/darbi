@@ -18,7 +18,7 @@ class UpdateAttributeRequest extends FormRequest
         $id = $this->route('attribute');
 
         return [
-            'key'           => ['required', Rule::unique('attributes')->ignore(new ObjectId($id), '_id'), 'min:2', 'max:100'],
+            'key'           => ['required', Rule::unique('attributes')->ignore(new ObjectId($id), '_id'), 'min:2', 'max:100', 'alpha_dash'],
             'image'         => 'sometimes|nullable|image|max:5120',
             'entity_type'   => 'required|array',
             'entity_type.*' => 'required|in:car,yacht,villa',

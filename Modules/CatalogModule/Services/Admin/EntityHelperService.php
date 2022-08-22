@@ -110,6 +110,7 @@ trait EntityHelperService
                 'extra_ids'     => generateObjectIdOfArrayValues($request->extra_ids),
                 'price'         => floatval($request->price),
                 'price_unit'    => $request->price_unit,
+                'built_date'    => (int)$request->built_date,
                 'unavailable_date'  => $unavailableDate,
                 'attributes'    => $request->get('attributes')
             ];

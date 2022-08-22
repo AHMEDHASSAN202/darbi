@@ -14,7 +14,7 @@ class CreateAttributeRequest extends FormRequest
     public function rules()
     {
         return [
-            'key'           => 'required|unique:attributes|min:2|max:100',
+            'key'           => 'required|unique:attributes|min:2|max:100|alpha_dash',
             'image'         => 'required|image|max:5120',
             'entity_type'   => 'required|array',
             'entity_type.*' => 'required|in:car,yacht,villa',
