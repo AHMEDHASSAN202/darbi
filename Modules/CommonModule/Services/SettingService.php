@@ -72,9 +72,9 @@ class SettingService
         $privateJetsImages = $this->getSettings()->private_jets_info['images'] ?? [];
 
         if (!empty($data['private_jets_images'])) {
-            foreach ($data['private_jets_images'] as $key => $privateJetsImage) {
+            foreach ($data['private_jets_images'] as $privateJetsImage) {
                 if ($privateJetsImage instanceof UploadedFile) {
-                    $privateJetsImages[$key] = $this->uploadImage('private_jets_images', $privateJetsImage, []);
+                    $privateJetsImages[] = $this->uploadImage('private_jets_images', $privateJetsImage, []);
                 }
             }
         }
