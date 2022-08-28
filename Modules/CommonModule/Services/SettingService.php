@@ -91,7 +91,7 @@ class SettingService
 
     public function removeImage($group, $index)
     {
-        $images = $this->getGroupImages($group);
+        $images = @array_values($this->getGroupImages($group)) ?? [];
 
         if (!isset($images[$index])) {
             return badResponse([], __('Image is not exists'));
