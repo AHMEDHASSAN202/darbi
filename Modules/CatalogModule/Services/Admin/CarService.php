@@ -46,6 +46,7 @@ class CarService
             'branch_id'    => new ObjectId($createCarRequest->branch_id),
             'model_id'     => new ObjectId($model->_id),
             'brand_id'     => new ObjectId($model->brand_id),
+            'color'        => $createCarRequest->color
         ]);
 
         return createdResponse(['id' => $car->_id]);
@@ -60,6 +61,7 @@ class CarService
             'branch_id'    => new ObjectId($updateCarRequest->branch_id),
             'model_id'     => new ObjectId($model->_id),
             'brand_id'     => new ObjectId($model->brand_id),
+            'color'        => $updateCarRequest->color
         ]);
 
         return updatedResponse(['id' => $car->_id]);
