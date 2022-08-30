@@ -71,8 +71,8 @@ class FindBookingResource extends JsonResource
             return [
                 'id'         => (string)$extra['id']['$oid'],
                 'plugin_id'  => (string)$extra['plugin_id'],
-                'name'       => $extra['name'],
-                'desc'       => $extra['desc'],
+                'name'       => translateAttribute($extra['name']),
+                'desc'       => translateAttribute($extra['desc']),
                 'price'      => $extra['price'],
                 'price_unit' => $this->entity_details['price_unit']
             ];
