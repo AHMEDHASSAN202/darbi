@@ -25,7 +25,7 @@ class VendorRepository
 
     public function listOfVendors(Request $request)
     {
-        return $this->model->search($request)->filter($request)->latest()->with(['country' => function ($q) { $q->withTrashed(); }, 'createdBy' => function ($q) { $q->withTrashed(); }])->paginated();
+        return $this->model->search($request)->filter($request)->latest()->with(['country' => function ($q) { $q->withTrashed(); } /*,'createdBy' => function ($q) { $q->withTrashed(); } */])->paginated();
     }
 
     public function findOne($vendorId)

@@ -42,6 +42,12 @@ class Vendor extends Base
     {
         return $this->belongsTo(Admin::class, 'created_by');
     }
+
+    //not working
+    public function admins()
+    {
+        return $this->hasMany(Admin::class);
+    }
     //============= #END# Relations ===================\\
 
     //============= scopes ==============\\
@@ -80,5 +86,10 @@ class Vendor extends Base
     public function isYacht()
     {
         return $this->type === 'yacht';
+    }
+
+    public function getCountAdmin()
+    {
+        return Admin::where('vendor_id', new ObjectId($this->id))->count();
     }
 }
