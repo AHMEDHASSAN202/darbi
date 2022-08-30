@@ -32,11 +32,11 @@ class SettingsResource extends JsonResource
             'default_city'                              => $this->default_city,
             'darbi_percentage'                          => (int)$this->darbi_percentage,
             'private_jets_images'                       => isset($this->private_jets_info['images']) ? array_map(function ($image) { return imageUrl($image,'original'); }, $this->private_jets_info['images']) : [],
-            'private_jets_title'                        => $this->private_jets_info['title'],
-            'private_jets_desc'                         => $this->private_jets_info['desc'],
-            'private_jets_phone'                        => $this->private_jets_info['phone'],
-            'private_jets_whatsapp'                     => $this->private_jets_info['whatsapp'],
-            'private_jets_email'                        => $this->private_jets_info['email']
+            'private_jets_title'                        => arrayGet($this->private_jets_info, 'title', ''),
+            'private_jets_desc'                         => arrayGet($this->private_jets_info, 'desc', ''),
+            'private_jets_phone'                        => arrayGet($this->private_jets_info, 'phone', ''),
+            'private_jets_whatsapp'                     => arrayGet($this->private_jets_info, 'whatsapp', ''),
+            'private_jets_email'                        => arrayGet($this->private_jets_info, 'email', '')
         ];
     }
 

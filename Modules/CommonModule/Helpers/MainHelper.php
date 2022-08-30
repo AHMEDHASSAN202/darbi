@@ -302,7 +302,7 @@ function convertDateTimeToUTC($me, string $datetime)
 function arrayGet($array, $key, $default = null)
 {
     if (!is_array($array)) {
-        return null;
+        return $default;
     }
     return @$array[$key] ?? $default;
 }
