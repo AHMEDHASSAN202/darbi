@@ -29,8 +29,8 @@ class FindCarResource extends JsonResource
             'vendor'        => $this->getVendor(),
             'branch_id'     => (string)$this->branch_id,
             'built_date'    => $this->built_date ? (int)$this->built_date : null,
-            'color'         => arrayGet($this->color, 'color'),
-            'color_name'    => arrayGet($this->color, 'name')
+            'color'         => arrayGet((array)$this->color, 'color'),
+            'color_name'    => arrayGet((array)$this->color, 'name')
         ];
     }
 }

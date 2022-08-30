@@ -15,8 +15,8 @@ class CreateCarRequest extends CreateEntityRequest
     {
         $rules = parent::rules();
         $rules['branch_id'] = ['required', Rule::exists('branches', '_id')->where('vendor_id', [getVendorId()])];
-        $rules['color.name'] = 'sometimes|nullable|required_with:color.name|string|min:2|max:100';
-        $rules['color.color'] = ['sometimes', 'nullable', 'required_with:color.color', 'regex:/^#([a-f0-9]{8})$/i'];
+        $rules['color.name'] = 'required_with:color.color|string|min:2|max:100';
+        $rules['color.color'] = ['required_with:color.name', 'regex:/^#([a-f0-9]{8})$/i'];
         return $rules;
     }
 
