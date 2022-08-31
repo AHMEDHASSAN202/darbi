@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Str;
 
 return [
@@ -14,6 +13,7 @@ return [
     | you may use many connections at once using the Database library.
     |
     */
+
 
     'default' => env('DB_CONNECTION', 'mysql'),
 
@@ -32,6 +32,7 @@ return [
     | choice installed on your machine before you begin development.
     |
     */
+
 
     'connections' => [
 
@@ -140,7 +141,6 @@ return [
         'client' => env('REDIS_CLIENT', 'phpredis'),
 
         'default' => [
-//            'scheme' => 'tls',
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', 6379),
