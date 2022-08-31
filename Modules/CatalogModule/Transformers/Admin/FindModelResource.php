@@ -21,7 +21,7 @@ class FindModelResource extends JsonResource
             'brand'     => new BrandResource($this->brand),
             'images'    => imagesUrl($this->images),
             'is_active' => (boolean)$this->is_active,
-            'specs'     => $this->specs ? array_values((array)$this->specs) : [],
+            'specs'     => convertBsonArrayToArray($this->specs),
             'entity_type' => $this->entity_type
         ];
     }

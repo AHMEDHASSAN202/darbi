@@ -87,4 +87,19 @@ trait EntityTrait
             'currency_code' => objectGet($vendor, 'country_currency_code')
         ];
     }
+
+
+    private function getAttributes()
+    {
+        $privateAttributes = $this->attributes ? convertBsonArrayToNormalArray($this->attributes) : [];
+        $specs = optional($this->model)->specs ? convertBsonArrayToNormalArray(optional($this->model)->specs) : [];
+
+        $attributes = $privateAttributes + $specs;
+
+        if (empty($attributes) || !is_array($attributes)) {
+            return [];
+        }
+
+        return SpecsResource::collection($attributes);
+    }
 }

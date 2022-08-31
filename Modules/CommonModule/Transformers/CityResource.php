@@ -19,7 +19,7 @@ class CityResource extends JsonResource
             'country_id'        => (string)$this->country_id,
             'country_code'      => (string)$this->country_code,
             'city_code'         => $this->code,
-            'name'              => translateAttribute($this->name) . ' - ' . $this->country_code,
+            'name'              => translateAttribute($this->name),
             'lat'               => $this->lat,
             'lng'               => $this->lng,
             'is_active'         => (boolean)$this->is_active

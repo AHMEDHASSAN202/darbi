@@ -37,6 +37,18 @@ Route::group([
 });
 
 
+
+//villas routes
+Route::group([
+    'prefix'  => 'villas',
+    'namespace' => 'User'
+], function () {
+    Route::get(''               , 'VillaController@index');
+    Route::get('{villa}'        , 'VillaController@show');
+    Route::get('{villa}/share'  , 'VillaController@share');
+});
+
+
 //brand routes
 Route::group([
     'prefix'    => 'brands',
@@ -53,4 +65,13 @@ Route::group([
     'namespace' => 'User'
 ], function () {
     Route::get(''               , 'PortController@index');
+});
+
+
+
+Route::group([
+    'prefix'    => 'private-jets',
+    'namespace' => 'User'
+], function () {
+    Route::get(''               , 'PrivateJetController@index');
 });

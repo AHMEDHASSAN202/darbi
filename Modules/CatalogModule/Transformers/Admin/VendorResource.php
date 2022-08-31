@@ -28,11 +28,12 @@ class VendorResource extends JsonResource
             'country_id'    => (string)$this->country_id,
             'country'       => new CountryResource($country),
             'type'          => $this->type,
-            'created_by'    => $this->created_by ? (string)$this->created_by : null,
-            'created_by_name' => optional($this->createdBy)->name,
+//            'created_by'    => $this->created_by ? (string)$this->created_by : null,
+//            'created_by_name' => optional($this->createdBy)->name,
             'is_active'     => (boolean)$this->is_active,
             'lat'           => (float)$this->lat,
-            'lng'           => (float)$this->lng
+            'lng'           => (float)$this->lng,
+            'admins_count'  => $this->getCountAdmin()
         ];
     }
 }

@@ -16,7 +16,9 @@ class UpdateCarRequest extends UpdateEntityRequest
     public function rules()
     {
         $rules = parent::rules();
-        $rules['branch_id']  = ['required', Rule::exists('branches', '_id')->where('vendor_id', [new ObjectId(getVendorId())])];
+        $rules['branch_id'] = ['required', Rule::exists('branches', '_id')->where('vendor_id', [new ObjectId(getVendorId())])];
+        $rules['color.name'] = 'required_with:color.color|string|min:2|max:100';
+        $rules['color.color'] = ['required_with:color.name', 'regex:/^#([a-f0-9]{6})$/i'];
         return $rules;
     }
 

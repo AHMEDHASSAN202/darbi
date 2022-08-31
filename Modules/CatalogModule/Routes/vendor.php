@@ -106,3 +106,28 @@ Route::group([
     Route::delete('{branch}'       , 'BranchController@destroy');
     Route::delete('{branch}/images/{index}'  , 'BranchController@deleteImage');
 });
+
+
+
+//villas routes
+Route::group([
+    'prefix'    => 'villas',
+    'middleware'=> ['auth:vendor_api', 'type:villa', 'active_vendor']
+], function () {
+    Route::get(''                 , 'VillaController@index');
+    Route::post(''                , 'VillaController@store');
+    Route::get('{villa}'          , 'VillaController@show');
+    Route::put('{villa}'          , 'VillaController@update');
+    Route::delete('{villa}'       , 'VillaController@destroy');
+    Route::delete('{villa}/images/{index}'  , 'VillaController@deleteImage');
+});
+
+
+
+//attributes routes
+Route::group([
+    'prefix'    => 'attributes',
+    'middleware'=> ['auth:vendor_api', 'active_vendor']
+], function () {
+    Route::get(''                 , 'AttributeController@index');
+});

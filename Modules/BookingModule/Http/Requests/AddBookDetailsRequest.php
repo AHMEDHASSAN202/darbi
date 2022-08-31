@@ -15,10 +15,10 @@ class AddBookDetailsRequest extends FormRequest
     public function rules()
     {
         return [
-            'pickup_location'   => 'required|array',
-            'pickup_location.id'=> ['required', new MongoIdRule()],
-            'drop_location'     => 'required|array',
-            'drop_location.id'  => ['required', new MongoIdRule()],
+            'pickup_location'   => 'sometimes|nullable|array',
+            'pickup_location.id'=> ['sometimes', new MongoIdRule()],
+            'drop_location'     => 'sometimes|nullable|array',
+            'drop_location.id'  => ['sometimes', new MongoIdRule()],
             'note'              => 'sometimes|nullable|max:500',
             'start_at'          => 'required|date|after_or_equal:today',
             'end_at'            => 'required|date|after_or_equal:start_at',

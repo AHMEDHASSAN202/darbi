@@ -84,7 +84,7 @@ class VendorService
 
         $admin = $this->createVendorAdmin([
             'name'          => $createVendorRequest->name['en'],
-            'email'         => $createVendorRequest->email,
+            'email'         => $createVendorRequest->admin_email,
             'password'      => $createVendorRequest->password,
             'password_confirmation' => $createVendorRequest->password,
             'role_id'       => $role['id'],

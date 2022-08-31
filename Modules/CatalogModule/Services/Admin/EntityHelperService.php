@@ -67,8 +67,6 @@ trait EntityHelperService
 
     public function createEntity(Request $request, $data = [])
     {
-        $model = app(ModelRepository::class)->find($request->model_id);
-
         $images = $this->handleImages($request->images, $this->uploadDirectory);
 
         $unavailableDate = $this->prepareUnavailableDate($request->unavailable_date);
@@ -78,8 +76,6 @@ trait EntityHelperService
         $data = [
                 'name'          => $request->name,
                 'vendor_id'     => new ObjectId(getVendorId()),
-                'model_id'      => new ObjectId($model->_id),
-                'brand_id'      => new ObjectId($model->brand_id),
                 'images'        => $images,
                 'is_active'     => ($request->is_active === null) || (boolean)$request->is_active,
                 'is_available'  => true,
@@ -88,7 +84,8 @@ trait EntityHelperService
                 'price'         => floatval($request->price),
                 'price_unit'    => $request->price_unit,
                 'unavailable_date'  => $unavailableDate,
-                'built_date'    => (int)$request->built_date
+                'built_date'    => (int)$request->built_date,
+                'attributes'    => $request->get('attributes')
             ] + $data;
 
         return $this->repository->create($data);
@@ -100,8 +97,6 @@ trait EntityHelperService
     {
         $entity = $this->repository->find($id, ['vendor_id' => new ObjectId(getVendorId())]);
 
-        $model = app(ModelRepository::class)->find($request->model_id);
-
         $images = $entity->images ?? [];
 
         $images = array_merge($images, $this->handleImages($request->images, $this->uploadDirectory));
@@ -110,14 +105,14 @@ trait EntityHelperService
 
         $data = $data + [
                 'name'          => $request->name,
-                'model_id'      => new ObjectId($model->_id),
-                'brand_id'      => new ObjectId($model->brand_id),
                 'images'        => $images,
                 'is_active'     => ($request->is_active === null) || (boolean)$request->is_active,
                 'extra_ids'     => generateObjectIdOfArrayValues($request->extra_ids),
                 'price'         => floatval($request->price),
                 'price_unit'    => $request->price_unit,
-                'unavailable_date'  => $unavailableDate
+                'built_date'    => (int)$request->built_date,
+                'unavailable_date'  => $unavailableDate,
+                'attributes'    => $request->get('attributes')
             ];
 
        $entity->update($data);
@@ -195,5 +190,26 @@ trait EntityHelperService
         $entity = $this->repository->findOne($id);
 
         return new FindEntityResource($entity);
+    }
+
+
+    private function handleAttributes(array $attributes)
+    {
+        if (empty($attributes)) {
+            return [];
+        }
+
+        $storeAttributes = [];
+
+        foreach ($attributes as $attribute) {
+            //add
+            $storeAttributes[$attribute['key']] = [
+                'value' => $attribute['value'],
+                'image' => $attribute['image'],
+                'key'   => $attribute['key'],
+            ];
+        }
+
+        return $storeAttributes;
     }
 }

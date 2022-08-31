@@ -62,12 +62,4 @@ class ModelController extends Controller
 
         return $this->apiResponse(...$result);
     }
-
-
-    public function assets(Request $request)
-    {
-        return $this->apiResponse([
-            'assets'    => $this->modelService->assets($request)
-        ]);
-    }
 }

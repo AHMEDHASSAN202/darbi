@@ -96,6 +96,8 @@ class Entity extends Base
             }elseif ($type === EntityType::YACHT) {
                 $portIds = app(PortRepository::class)->findAllPortsByCity($city)->pluck('_id')->toArray();
                 $query->whereIn('port_id', generateObjectIdOfArrayValues($portIds));
+            }elseif ($type === EntityType::VILLA) {
+                $query->where('city_id', new ObjectId($city));
             }
         }
 

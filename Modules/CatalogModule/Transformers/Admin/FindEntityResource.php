@@ -4,6 +4,7 @@ namespace Modules\CatalogModule\Transformers\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\CatalogModule\Entities\Car;
+use Modules\CatalogModule\Entities\Villa;
 use Modules\CatalogModule\Entities\Yacht;
 use Modules\CatalogModule\Transformers\EntityTrait;
 use Modules\CommonModule\Transformers\CityResource;
@@ -27,17 +28,14 @@ class FindEntityResource extends JsonResource
             'images'        => $this->getImagesFullPath(true),
             'vendor_id'     => (string)$this->vendor_id,
             'vendor'        => new VendorResource($this->vendor),
-            'brand'         => new BrandResource($this->brand),
-            'brand_id'      => (string)$this->brand_id,
-            'model'         => new ModelResource($this->model),
-            'model_id'      => (string)$this->model_id,
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
             'state'         => $this->state,
             'is_active'     => (boolean)$this->is_active,
             'unavailable_date'  => $this->unavailable_date,
             'extras'        => FindExtraResource::collection(convertBsonArrayToCollection($this->attachPluginToExtra($this->extras, $this->plugins))),
-            'built_date'    => $this->built_date ? (int)$this->built_date : null
+            'built_date'    => $this->built_date ? (int)$this->built_date : null,
+            'attributes'    => convertBsonArrayToArray($this->attributes)
         ];
 
         if ($this->resource instanceof Yacht) {
@@ -46,6 +44,18 @@ class FindEntityResource extends JsonResource
         }elseif ($this->resource instanceof Car) {
             $res['branch_id'] = (string)$this->branch_id;
             $res['branch'] = new BranchResource($this->branch);
+            $res['color'] = ['name' => arrayGet((array)$this->color, 'name'), 'color' => arrayGet((array)$this->color, 'color')];
+        }
+
+        if ($this->resource instanceof Villa) {
+            $res['city_id'] = (string)$this->city_id;
+            $res['city'] = new CityResource($this->city);
+            $res['location'] = $this->location;
+        }else {
+            $res['brand'] = new BrandResource($this->brand);
+            $res['brand_id'] = (string)$this->brand_id;
+            $res['model'] = new ModelResource($this->model);
+            $res['model_id'] = (string)$this->model_id;
         }
 
         return $res;

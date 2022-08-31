@@ -10,6 +10,7 @@ class EntityType
 {
     const CAR = 'car';
     const YACHT = 'yacht';
+    const VILLA = 'villa';
 
     public static function getTypes()
     {

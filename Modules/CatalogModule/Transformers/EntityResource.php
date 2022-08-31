@@ -28,15 +28,16 @@ class EntityResource extends JsonResource
             'price'         => $this->price,
             'price_unit'    => $this->price_unit,
             'price_label'   => generatePriceLabelFromPrice($this->price, $this->price_unit),
-            'extras'        => ExtraResource::collection(convertBsonArrayToCollection($this->attachPluginToExtra($this->extras, $this->plugins))),
+            'extras'        => FindExtraResource::collection(convertBsonArrayToCollection($this->attachPluginToExtra($this->extras, $this->plugins))),
             'state'         => $this->state,
             'type'          => $this->type,
-            'specs'         => SpecsResource::collection($this->model->specs),
+            'specs'         => $this->getAttributes(),
             'country'       => $this->country,
             'vendor_id'     => (string)$this->vendor_id,
             'entity_type'   => $this->type,
             'branch_id'     => (string)$this->branch_id,
             'port_id'       => (string)$this->port_id,
+            'location'      => $this->location
         ];
     }
 }

@@ -29,8 +29,8 @@ class FindBookingResource extends JsonResource
             'start_trip_at' => $this->start_trip_at,
             'end_trip_at'   => $this->end_trip_at,
             'extras'        => $this->extrasResource(),
-            'pickup_location_address' => $this->pickup_location_address,
-            'drop_location_address'   => $this->drop_location_address,
+            'pickup_location_address' => !empty($this->pickup_location_address) ? $this->pickup_location_address : null,
+            'drop_location_address'   => !empty($this->drop_location_address) ? $this->drop_location_address : null,
             'payment_method'=> @$this->payment_method['type'] ?? "",
             'note'          => $this->note ?? "",
             'price'         => ['total_price' => @$this->price_summary['total_price']],
@@ -71,8 +71,8 @@ class FindBookingResource extends JsonResource
             return [
                 'id'         => (string)$extra['id']['$oid'],
                 'plugin_id'  => (string)$extra['plugin_id'],
-                'name'       => $extra['name'],
-                'desc'       => $extra['desc'],
+                'name'       => translateAttribute($extra['name']),
+                'desc'       => translateAttribute($extra['desc']),
                 'price'      => $extra['price'],
                 'price_unit' => $this->entity_details['price_unit']
             ];

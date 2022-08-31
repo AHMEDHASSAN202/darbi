@@ -10,6 +10,8 @@ use Modules\CatalogModule\Entities\Model;
 use Modules\CatalogModule\Entities\Plugin;
 use Modules\CatalogModule\Entities\Port;
 use Modules\CatalogModule\Entities\Vendor;
+use Modules\CatalogModule\Enums\EntityStatus;
+use Modules\CatalogModule\Enums\EntityType;
 use Modules\CatalogModule\Transformers\PortResource;
 use Modules\CommonModule\Entities\City;
 use Modules\CommonModule\Entities\Country;
@@ -24,7 +26,7 @@ class YachtFactory extends Factory
      */
     protected $model = \Modules\CatalogModule\Entities\Yacht::class;
 
-    private $type = 'yacht';
+    private $type = EntityType::YACHT;
 
     /**
      * Define the model's default state.
@@ -40,7 +42,11 @@ class YachtFactory extends Factory
         $port = Port::with(['country', 'city'])->get()->random(1)->first();
         $arFaker = \Faker\Factory::create('ar_EG');
         $plugins = Plugin::where('entity_type', $this->type)->get()->pluck('id')->toArray();
-        $extras = generateObjectIdOfArrayValues(Extra::whereIn('plugin_id', generateObjectIdOfArrayValues($plugins))->where('vendor_id', new ObjectId($vendor->_id))->get()->random(2)->pluck('_id')->toArray());
+        try {
+            $extras = generateObjectIdOfArrayValues(Extra::whereIn('plugin_id', generateObjectIdOfArrayValues($plugins))->where('vendor_id', new ObjectId($vendor->_id))->get()->random(1)->pluck('_id')->toArray());
+        }catch (\Exception $exception) {
+            $extras = [];
+        }
 
         return [
             'model_id'          => new ObjectId($model->_id),
@@ -54,14 +60,13 @@ class YachtFactory extends Factory
             'port'              => new PortResource($port),
             'branch_id'         => null,
             'branch'            => [],
-            'state'             => ['free', 'reserved', 'pending'][mt_rand(0,2)],
+            'state'             => array_values(EntityStatus::getTypes())[mt_rand(0,2)],
             'extra_ids'         => generateObjectIdOfArrayValues($extras),
             'country_id'        => new ObjectId($country->_id),
             'require_activation'=> $this->faker->boolean,
             'price'             => $this->faker->randomFloat(2, 2000, 10000),
             'price_unit'        => 'hour',
             'built_date'        => 2017,
-            'type'              => 'yacht'
         ];
     }
 }
