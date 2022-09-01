@@ -14,10 +14,20 @@ class SpecsResource extends JsonResource
      */
     public function toArray($request)
     {
+        if (isset($this->resource['image']) && is_array($this->resource['image'])) {
+            $key = arrayGet($this->resource['image'], 'key');
+            $value = arrayGet($this->resource, 'value');
+            $image = arrayGet($this->resource['image'], 'full_url');
+        }else {
+            $key = arrayGet($this->resource, 'key');
+            $value = arrayGet($this->resource, 'value');
+            $image = arrayGet($this->resource, 'image');
+        }
+
         return [
-            'key'       => $this->resource['key'],
-            'value'     => $this->resource['value'],
-            'image'     => imageUrl($this->resource['image'])
+            'key'       => $key,
+            'value'     => $value,
+            'image'     => $image
         ];
     }
 }
