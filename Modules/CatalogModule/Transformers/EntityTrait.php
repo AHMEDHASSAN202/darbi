@@ -100,6 +100,6 @@ trait EntityTrait
             return [];
         }
 
-        return SpecsResource::collection($attributes);
+        return SpecsResource::collection(array_values($attributes));
     }
 }
