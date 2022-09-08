@@ -28,6 +28,7 @@ class UpdateBranchRequest extends FormRequest
             'phone'         => 'nullable|sometimes|array',
             'phone'         => ['nullable', 'sometimes', 'numeric', 'phone:phone_country,mobile'],
             'phone_code'    => 'required_with:phone',
+            'country_id'    => 'required|exists:countries,_id',
             'city_id'       => 'required|exists:cities,_id',
             'region_ids'    => 'sometimes|nullable|array',
             'region_ids.*'  => ['required', new MongoIdRule()]

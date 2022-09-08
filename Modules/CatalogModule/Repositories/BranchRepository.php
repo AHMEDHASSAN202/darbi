@@ -32,11 +32,11 @@ class BranchRepository
 
     public function findAllByVendor(ObjectId $vendorId, Request $request)
     {
-        return $this->model->where('vendor_id', $vendorId)->adminSearch($request)->adminFilters($request)->latest()->paginated();
+        return $this->model->where('vendor_id', $vendorId)->adminSearch($request)->adminFilters($request)->latest()->with('country')->paginated();
     }
 
     public function findByVendor(ObjectId $vendorId, ObjectId $branchId)
     {
-        return $this->model->where('vendor_id', $vendorId)->where('_id', $branchId)->with('city')->firstOrFail();
+        return $this->model->where('vendor_id', $vendorId)->where('_id', $branchId)->with(['country', 'city'])->firstOrFail();
     }
 }

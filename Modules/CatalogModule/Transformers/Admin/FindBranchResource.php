@@ -5,6 +5,8 @@ namespace Modules\CatalogModule\Transformers\Admin;
 use App\Proxy\Proxy;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\CatalogModule\Proxy\CatalogProxy;
+use Modules\CommonModule\Transformers\CityResource;
+use Modules\CommonModule\Transformers\CountryResource;
 use Modules\CommonModule\Transformers\FindCityResource;
 
 class FindBranchResource extends JsonResource
@@ -27,7 +29,9 @@ class FindBranchResource extends JsonResource
             'lat'        => $this->lat ? floatval($this->lat) : null,
             'lng'        => $this->lng ? floatval($this->lng) : null,
             'city_id'    => (string)$this->city_id,
-            'city'       => new FindCityResource($this->city),
+            'country_id' => (string)$this->country_id,
+            'city'       => new CityResource($this->city),
+            'country'    => new CountryResource($this->country),
             'regions'    => $this->getRegions()
         ];
     }

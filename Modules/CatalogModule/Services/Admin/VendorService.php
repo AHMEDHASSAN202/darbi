@@ -72,7 +72,7 @@ class VendorService
             'phone_code'    => phoneCodeCleaning($createVendorRequest->phone_code),
             'is_active'     => ($createVendorRequest->is_active === null) || (boolean)$createVendorRequest->is_active,
             'country_id'    => new ObjectId($createVendorRequest->country_id),
-            'country_currency_code' => arrayGet($country, 'currency_code'),
+            'country_currency_code' => $createVendorRequest->currency_code ?? arrayGet($country, 'currency_code'),
             'email'         => $createVendorRequest->email,
             'darbi_percentage'  => $createVendorRequest->darbi_percentage ? (int)$createVendorRequest->darbi_percentage : null,
             'settings'      => $createVendorRequest->settings,
@@ -133,7 +133,8 @@ class VendorService
             'darbi_percentage'  => $updateVendorRequest->darbi_percentage ? (int)$updateVendorRequest->darbi_percentage : null,
             'settings'      => $updateVendorRequest->settings,
             'lat'           => (float)$updateVendorRequest->lat,
-            'lng'           => (float)$updateVendorRequest->lng
+            'lng'           => (float)$updateVendorRequest->lng,
+            'country_currency_code' => $updateVendorRequest->currency_code,
         ];
 
         $oldImage = null;

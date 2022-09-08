@@ -31,7 +31,8 @@ class FindVendorResource extends JsonResource
             'type'          => $this->type,
             'settings'      => is_string($this->settings) ? json_decode($this->settings) : $this->settings,
             'lat'           => (float)$this->lat,
-            'lng'           => (float)$this->lng
+            'lng'           => (float)$this->lng,
+            'currency_code' => $this->country_currency_code
         ];
     }
 }

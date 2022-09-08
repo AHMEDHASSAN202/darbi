@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Modules\CommonModule\Entities\City;
+use Modules\CommonModule\Entities\Country;
 use Modules\CommonModule\Entities\Region;
 use MongoDB\BSON\ObjectId;
 
@@ -73,6 +74,11 @@ class Branch extends Base
     public function city()
     {
         return $this->belongsTo(City::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 
     //============= #END# Relations ===================\\

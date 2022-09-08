@@ -25,7 +25,8 @@ class FindVendorResource extends JsonResource
             'image'     => imageUrl($this->image),
             'type'      => $this->type,
             'country'   => new CountryResource($this->country),
-            'settings'  => $this->settings
+            'settings'  => $this->settings,
+            'currency_code'=> $this->country_currency_code
         ];
     }
 }

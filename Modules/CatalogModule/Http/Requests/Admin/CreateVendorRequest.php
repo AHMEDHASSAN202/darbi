@@ -4,6 +4,7 @@ namespace Modules\CatalogModule\Http\Requests\Admin;
 
 use App\Rules\AlphaNumSpacesRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class CreateVendorRequest extends FormRequest
@@ -31,7 +32,8 @@ class CreateVendorRequest extends FormRequest
             'password'          => ['required', Password::min(8)->letters(), 'confirmed'],
             'lat'               => 'required|numeric',
             'lng'               => 'required|numeric',
-            'type'              => 'required|in:car,yacht,villa'
+            'type'              => 'required|in:car,yacht,villa',
+            'currency_code'     => ['required', Rule::in(array_keys(currencies()))]
         ];
     }
 

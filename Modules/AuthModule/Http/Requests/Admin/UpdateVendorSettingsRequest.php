@@ -4,6 +4,7 @@ namespace Modules\AuthModule\Http\Requests\Admin;
 
 use App\Rules\AlphaNumSpacesRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateVendorSettingsRequest extends FormRequest
 {
@@ -22,7 +23,8 @@ class UpdateVendorSettingsRequest extends FormRequest
             'phone'     => ['required', 'numeric', 'phone'],
             'phone_code' => 'required|exists:countries,calling_code',
             'image'     => 'sometimes|image|max:5120', //5m
-            'settings'  => 'nullable|sometimes|array'
+            'settings'  => 'nullable|sometimes|array',
+            'currency_code' => ['required', Rule::in(array_keys(currencies()))]
         ];
     }
 

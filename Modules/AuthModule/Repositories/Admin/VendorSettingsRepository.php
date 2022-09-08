@@ -33,6 +33,7 @@ class VendorSettingsRepository
             $vendor->image = $this->uploadImage('vendors', $updateVendorInfoRequest->image);
         }
         $vendor->settings = $updateVendorInfoRequest->settings ?? [];
+        $vendor->country_currency_code = $updateVendorInfoRequest->currency_code;
         $vendor->save();
         return $vendor;
     }

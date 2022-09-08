@@ -33,7 +33,8 @@ class VendorResource extends JsonResource
             'is_active'     => (boolean)$this->is_active,
             'lat'           => (float)$this->lat,
             'lng'           => (float)$this->lng,
-            'admins_count'  => $this->getCountAdmin()
+            'admins_count'  => $this->getCountAdmin(),
+            'currency_code' => $this->country_currency_code
         ];
     }
 }

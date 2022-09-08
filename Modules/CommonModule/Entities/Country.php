@@ -42,7 +42,7 @@ class Country extends Base
     public function scopeFilter($query, Request $request)
     {
         if ($me = auth(getCurrentGuard())->user()) {
-            if ($me->isVendor()) {
+            if ($me->isVendor() && $request->get('only-my-country')) {
                 $query->where('_id', new ObjectId(optional($me->vendor)->country_id));
             }
         }

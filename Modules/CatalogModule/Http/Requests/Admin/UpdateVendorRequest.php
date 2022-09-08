@@ -4,6 +4,7 @@ namespace Modules\CatalogModule\Http\Requests\Admin;
 
 use App\Rules\AlphaNumSpacesRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateVendorRequest extends FormRequest
 {
@@ -27,6 +28,7 @@ class UpdateVendorRequest extends FormRequest
             'settings'          => 'nullable|sometimes|array',
             'lat'               => 'required|numeric',
             'lng'               => 'required|numeric',
+            'currency_code'     => ['required', Rule::in(array_keys(currencies()))]
         ];
     }
 

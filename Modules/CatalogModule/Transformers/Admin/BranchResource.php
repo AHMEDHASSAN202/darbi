@@ -3,6 +3,7 @@
 namespace Modules\CatalogModule\Transformers\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\CommonModule\Transformers\CountryResource;
 
 class BranchResource extends JsonResource
 {
@@ -23,6 +24,7 @@ class BranchResource extends JsonResource
             'address'    => $this->address,
             'lat'        => $this->lat ? floatval($this->lat) : null,
             'lng'        => $this->lng ? floatval($this->lng) : null,
+            'country'    => new CountryResource($this->country),
             'city_id'    => (string)$this->city_id,
         ];
     }

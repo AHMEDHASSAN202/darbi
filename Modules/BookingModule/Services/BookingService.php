@@ -167,7 +167,7 @@ class BookingService
         $startDate = $addBookDetailsRequest->start_at;
         $endDate = getBookingEndDate($entity['price_unit'], $addBookDetailsRequest->start_at, $addBookDetailsRequest->end_at);
 
-        $rentValidation = $this->rentValidation($entity, $vendor, $startDate, $endDate);
+        $rentValidation = $this->rentValidation($entity, $vendor, $startDate, $endDate, $addBookDetailsRequest);
 
         if ($rentValidation !== true) {
             return $rentValidation;
@@ -386,7 +386,7 @@ class BookingService
     }
 
 
-    private function rentValidation($entity, $vendor, $startDate = null, $endDate = null)
+    private function rentValidation($entity, $vendor, $startDate = null, $endDate = null, AddBookDetailsRequest $addBookDetailsRequest = null)
     {
         if (!entityIsFree($entity['state'])) {
             //check if entity have booking in the same time
@@ -403,6 +403,20 @@ class BookingService
 
         if ($this->bookingRepository->checkIfIHaveBookingsNow($entity['id'])) {
             return badResponse([], __('Sorry, you have a booking pending approval'));
+        }
+
+        if (!entityIsVilla($entity['type']) && $addBookDetailsRequest) {
+            if (
+                !$addBookDetailsRequest->pickup_location
+                ||
+                !is_array($addBookDetailsRequest->pickup_location)
+                ||
+                !$addBookDetailsRequest->drop_location
+                ||
+                !is_array($addBookDetailsRequest->drop_location)
+            ) {
+                return badResponse([], __('Sorry, pickup location and drop of location are required'));
+            }
         }
 
         return true;
