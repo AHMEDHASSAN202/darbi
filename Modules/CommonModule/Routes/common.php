@@ -27,3 +27,6 @@ Route::group([
     Route::get('regions/find'       , 'RegionController@findRegionByLatAndLng');
     Route::get('locations/find'     , 'LocationController@find');
 });
+
+
+Route::get('currencies'             , 'CurrencyController');
