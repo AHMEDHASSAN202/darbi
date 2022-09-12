@@ -16,9 +16,9 @@ class FindExtraResource extends JsonResource
     {
         return [
             'id'            => $this->_id,
-            'plugin_id'     => (string) $this->plugin_id,
-            'name'          => @(array)$this->name ?? @(array)$this->plugin->name,
-            'desc'          => @(array)$this->desc ?? @(array)$this->plugin->desc,
+            'plugin_id'     => (string)$this->plugin_id,
+            'name'          => (!empty($this->name)) ? (array)$this->name : (array)$this->plugin->name,
+            'desc'          => (!empty($this->desc)) ? (array)$this->desc : (array)$this->plugin->desc,
             'price'         => $this->price,
             'price_unit'    => @$this->price_unit,
             'entity_type'   => optional($this->plugin)->entity_type

@@ -23,7 +23,8 @@ class CountryResource extends JsonResource
             'calling_code'  => $this->calling_code,
             'currency_code' => $this->currency_code,
             'currency'      => $this->currency,
-            'is_active'     => (boolean)$this->is_active
+            'is_active'     => (boolean)$this->is_active,
+            'image'         => imageUrl($this->image)
         ];
     }
 }

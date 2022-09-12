@@ -22,7 +22,8 @@ class CityResource extends JsonResource
             'name'              => translateAttribute($this->name),
             'lat'               => $this->lat,
             'lng'               => $this->lng,
-            'is_active'         => (boolean)$this->is_active
+            'is_active'         => (boolean)$this->is_active,
+            'image'             => objectGet($this->country, 'image') ? imageUrl($this->country->image) : null
         ];
 
         if ($this->relationLoaded('country')) {

@@ -116,7 +116,7 @@ class BookingService
             ],
             'country_id'    => new ObjectId($country['_id']),
             'country'       => $country,
-            'currency_code' => $country['currency_code'],
+            'currency_code' => arrayGet($vendor, 'country_currency_code', ''),
             'city_id'       => new ObjectId($city['id']),
             'city'          => $city,
             'status'        => BookingStatus::INIT,
