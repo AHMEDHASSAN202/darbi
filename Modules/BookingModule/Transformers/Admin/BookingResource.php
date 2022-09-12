@@ -35,7 +35,8 @@ class BookingResource extends JsonResource
                 'darbi_price'   => arrayGet($this->price_summary, 'darbi_price')
             ],
             'created_at'    => $this->created_at,
-            'booking_number' => $this->booking_number
+            'booking_number' => $this->booking_number,
+            'currency_code'  => $this->currency_code
         ];
     }
 }
