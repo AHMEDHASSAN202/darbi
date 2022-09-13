@@ -78,9 +78,9 @@ class InitService
     private function pages()
     {
         return [
-            'aboutUs'         => url('mobile/about-us'),
-            'support'         => url('mobile/contact-us'),
-            'privacyPolicy'   => url('mobile/privacy')
+            'aboutUs'         => url('mobile/about-us', [], true),
+            'support'         => url('mobile/contact-us', [], true),
+            'privacyPolicy'   => url('mobile/privacy', [], true)
         ];
     }
 }
