@@ -8,6 +8,7 @@ namespace Modules\BookingModule\Services\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Modules\BookingModule\Entities\Booking;
 use Modules\BookingModule\Repositories\BookingPaymentTransactionRepository;
 use Modules\BookingModule\Transformers\Admin\AdminBookingPaymentTransactionExportResource;
 use Modules\BookingModule\Transformers\Admin\AdminBookingPaymentTransactionResource;
@@ -78,5 +79,24 @@ class BookingPaymentTransactionService
         $transactions = AdminBookingPaymentTransactionExportResource::collection($transactions);
 
         return exportData('transactions.csv', ['id' => 'ID', 'vendor_name' => 'Vendor', 'name' => 'Name', 'amount' => 'Amount', 'status' => 'Status', 'payment_method' => 'Payment method', 'created_at' => 'Created at'],  $transactions->toArray($request));
+    }
+
+    public function createBookingPayment(Booking $booking, $req = [], $res = [], $paymentMethod = 'cash', $status = 'SUCCESS')
+    {
+        $this->bookingPaymentTransactionRepository->create([
+            'vendor_id'     => new ObjectId($booking->vendor_id),
+            'booking_id'    => new ObjectId($booking->id),
+            'entity_id'     => new ObjectId($booking->entity_id),
+            'user_id'       => new ObjectId($booking->user_id),
+            'entity_type'   => $booking->entity_type,
+            'currency_code' => $booking->currency_code,
+            'amount'        => arrayGet($booking->price_summary, 'total_price'),
+            'price_summary' => $booking->price_summary,
+            'req'           => $req,
+            'res'           => $res,
+            'name'          => arrayGet($booking->entity_details, 'name'),
+            'payment_method' => $paymentMethod,
+            'status'        => $status
+        ]);
     }
 }

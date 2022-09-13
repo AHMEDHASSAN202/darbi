@@ -39,4 +39,9 @@ class BookingPaymentTransactionRepository
     {
         return $this->bookingPaymentTransaction->latest()->adminSearch($request)->with('vendor')->adminFilter($request)->get();
     }
+
+    public function create($data)
+    {
+        return $this->bookingPaymentTransaction->create($data);
+    }
 }

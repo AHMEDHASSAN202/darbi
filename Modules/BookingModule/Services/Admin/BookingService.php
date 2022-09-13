@@ -143,7 +143,16 @@ class BookingService
         try {
 
             if ($status === BookingStatus::ACCEPT) {
+
                 $data['accepted_at'] = new \MongoDB\BSON\UTCDateTime();
+
+            }elseif ($status === BookingStatus::PAID) {
+
+                $data['payment_method'] = [
+                    'type'  => 'cash',
+                    'extra_info' => []
+                ];
+
             }
 
             $data['status'] = $handleNewStatus ? $handleNewStatus($booking) : $status;

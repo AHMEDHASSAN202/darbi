@@ -25,7 +25,13 @@ class BookingPaymentTransactionResource extends JsonResource
             'res'           => $this->res,
             'status'        => $this->status,
             'payment_method'=> $this->payment_method,
-            'created_at'    => $this->created_at
+            'created_at'    => $this->created_at,
+            'price'         => [
+                'total_price'   => arrayGet($this->price_summary, 'total_price'),
+                'vendor_price'  => arrayGet($this->price_summary, 'vendor_price'),
+                'darbi_price'   => arrayGet($this->price_summary, 'darbi_price')
+            ],
+            'currency_code' => $this->currency_code
         ];
     }
 }
