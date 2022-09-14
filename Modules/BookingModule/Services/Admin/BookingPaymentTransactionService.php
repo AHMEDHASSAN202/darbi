@@ -86,6 +86,7 @@ class BookingPaymentTransactionService
         $this->bookingPaymentTransactionRepository->create([
             'vendor_id'     => new ObjectId($booking->vendor_id),
             'booking_id'    => new ObjectId($booking->id),
+            'booking_number' => $booking->booking_number,
             'entity_id'     => new ObjectId($booking->entity_id),
             'user_id'       => new ObjectId($booking->user_id),
             'entity_type'   => $booking->entity_type,

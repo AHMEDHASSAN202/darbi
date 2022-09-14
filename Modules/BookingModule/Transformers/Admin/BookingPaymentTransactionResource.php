@@ -18,6 +18,7 @@ class BookingPaymentTransactionResource extends JsonResource
             'id'            => (string)$this->id,
             'vendor_id'     => (string)$this->vendor_id,
             'booking_id'    => (string)$this->booking_id,
+            'booking_number' => (string)$this->booking_number,
             'entity_id'     => (string)$this->entity_id,
             'name'          => translateAttribute($this->name),
             'amount'        => $this->amount,
