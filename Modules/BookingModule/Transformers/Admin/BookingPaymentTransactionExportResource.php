@@ -20,7 +20,9 @@ class BookingPaymentTransactionExportResource extends JsonResource
             'amount'        => $this->amount,
             'status'        => $this->status ? 'Success' : 'Failed',
             'payment_method'=> $this->payment_method,
-            'created_at'    => $this->created_at
+            'created_at'    => $this->created_at,
+            'vendor_price'  => arrayGet($this->price_summary, 'vendor_price'),
+            'darbi_price'   => arrayGet($this->price_summary, 'darbi_price')
         ];
     }
 }

@@ -51,7 +51,7 @@ class BookingPaymentTransactionService
     {
         $transactions = $this->findAllByVendorForExport($vendorId)->collection->map->toArray($request);
 
-        return exportData('transactions.csv', ['id' => 'ID', 'name' => 'Name', 'amount' => 'Amount', 'status' => 'Status', 'payment_method' => 'Payment method', 'created_at' => 'Created at'],  $transactions->toArray());
+        return exportData('transactions.csv', ['id' => 'ID', 'name' => 'Name', 'amount' => 'Amount', 'vendor_price' => 'Vendor price', 'darbi_price' => 'Darbi price', 'status' => 'Status', 'payment_method' => 'Payment method', 'created_at' => 'Created at'],  $transactions->toArray());
     }
 
     public function getExportUrl($adminUrl=false)
@@ -78,7 +78,7 @@ class BookingPaymentTransactionService
         $transactions = $this->bookingPaymentTransactionRepository->findAllForExport($request);
         $transactions = AdminBookingPaymentTransactionExportResource::collection($transactions);
 
-        return exportData('transactions.csv', ['id' => 'ID', 'vendor_name' => 'Vendor', 'name' => 'Name', 'amount' => 'Amount', 'status' => 'Status', 'payment_method' => 'Payment method', 'created_at' => 'Created at'],  $transactions->toArray($request));
+        return exportData('transactions.csv', ['id' => 'ID', 'vendor_name' => 'Vendor', 'name' => 'Name', 'amount' => 'Amount', 'vendor_price' => 'Vendor price', 'darbi_price' => 'Darbi price',  'status' => 'Status', 'payment_method' => 'Payment method', 'created_at' => 'Created at'],  $transactions->toArray($request));
     }
 
     public function createBookingPayment(Booking $booking, $req = [], $res = [], $paymentMethod = 'cash', $status = 'SUCCESS')
