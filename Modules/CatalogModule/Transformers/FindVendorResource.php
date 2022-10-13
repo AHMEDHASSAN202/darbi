@@ -22,7 +22,7 @@ class FindVendorResource extends JsonResource
             'email'     => $this->email,
             'phone'     => $this->phone,
             'country'   => new CountryResource($this->country),
-            'type'      => is_array($this->type) ? $this->type : [$this->type],
+            'type'      => $this->type,
             'darbi_percentage' => $this->darbi_percentage,
             'settings'  => $this->settings,
             'lat'       => $this->lat,
