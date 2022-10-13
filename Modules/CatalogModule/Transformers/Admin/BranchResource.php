@@ -26,6 +26,7 @@ class BranchResource extends JsonResource
             'lng'        => $this->lng ? floatval($this->lng) : null,
             'country'    => new CountryResource($this->country),
             'city_id'    => (string)$this->city_id,
+            'currency_code' => $this->currency_code ?? ""
         ];
     }
 }

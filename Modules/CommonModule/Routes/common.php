@@ -30,3 +30,4 @@ Route::group([
 
 
 Route::get('currencies'             , 'CurrencyController');
+Route::get('car-types'              , 'CarTypeController');

@@ -38,7 +38,7 @@ class CarRepository
 
     public function findCarWithDetailsById($carId)
     {
-        return $this->model->with(['model' => function ($q) { $q->withTrashed(); }, 'brand' => function ($q) { $q->withTrashed(); }])->whereHas('branch', function ($query) { $query->active(); })->whereHas('vendor', function ($query) { $query->active(); })->findOrFail($carId);
+        return $this->model->with(['model' => function ($q) { $q->withTrashed(); }, 'brand' => function ($q) { $q->withTrashed(); }, 'car_type'])->whereHas('branch', function ($query) { $query->active(); })->whereHas('vendor', function ($query) { $query->active(); })->findOrFail($carId);
     }
 
 

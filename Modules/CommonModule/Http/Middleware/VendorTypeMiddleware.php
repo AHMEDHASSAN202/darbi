@@ -18,8 +18,9 @@ class VendorTypeMiddleware
     public function handle(Request $request, Closure $next, $type)
     {
         $me = auth(getCurrentGuard())->user();
+        $vendorTypes = is_array($me->vendor->type) ? $me->vendor->type : [$me->vendor->type];
 
-        if (optional($me->vendor)->type !== $type) {
+        if (!in_array($type, $vendorTypes)) {
             if (!($request instanceof InternalRequest)) {
                 abort(403);
             }

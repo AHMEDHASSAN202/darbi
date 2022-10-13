@@ -69,7 +69,8 @@ class BranchService
             'phone'                     => ['phone' => $createBranchRequest->phone, 'phone_code' => $createBranchRequest->phone ? $createBranchRequest->phone_code : null],
             'regions_ids'               => generateObjectIdOfArrayValues($createBranchRequest->region_ids),
             'country_id'                => new ObjectId($createBranchRequest->country_id),
-            'city_id'                   => new ObjectId($createBranchRequest->city_id)
+            'city_id'                   => new ObjectId($createBranchRequest->city_id),
+            'currency_code'             => $createBranchRequest->currency_code
         ]);
 
         return createdResponse(['id' => $branch->_id]);
@@ -94,7 +95,8 @@ class BranchService
             'phone'                         => ['phone' => $updateBranchRequest->phone, 'phone_code' => $updateBranchRequest->phone ? $updateBranchRequest->phone_code : null],
             'regions_ids'                   => generateObjectIdOfArrayValues($updateBranchRequest->region_ids),
             'country_id'                    => new ObjectId($updateBranchRequest->country_id),
-            'city_id'                       => new ObjectId($updateBranchRequest->city_id)
+            'city_id'                       => new ObjectId($updateBranchRequest->city_id),
+            'currency_code'                 => $updateBranchRequest->currency_code
         ], ['vendor_id' => $vendorId]);
 
         return updatedResponse(['id' => $branch->_id]);

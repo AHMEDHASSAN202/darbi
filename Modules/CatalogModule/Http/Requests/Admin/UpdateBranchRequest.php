@@ -5,6 +5,7 @@ namespace Modules\CatalogModule\Http\Requests\Admin;
 use App\Rules\AlphaNumSpacesRule;
 use App\Rules\MongoIdRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateBranchRequest extends FormRequest
 {
@@ -25,13 +26,13 @@ class UpdateBranchRequest extends FormRequest
             'cover_images'  => 'nullable|sometimes|array',
             'cover_images.*'=> 'nullable|sometimes|image|max:5120',
             'is_active'     => 'nullable|sometimes|boolean',
-            'phone'         => 'nullable|sometimes|array',
             'phone'         => ['nullable', 'sometimes', 'numeric', 'phone:phone_country,mobile'],
             'phone_code'    => 'required_with:phone',
             'country_id'    => 'required|exists:countries,_id',
             'city_id'       => 'required|exists:cities,_id',
             'region_ids'    => 'sometimes|nullable|array',
-            'region_ids.*'  => ['required', new MongoIdRule()]
+            'region_ids.*'  => ['required', new MongoIdRule()],
+            'currency_code' => ['required', Rule::in(array_keys(currencies()))]
         ];
     }
 

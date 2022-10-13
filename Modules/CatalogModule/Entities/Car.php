@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Modules\CatalogModule\Enums\EntityType;
+use Modules\CommonModule\Entities\CarType;
 use MongoDB\BSON\ObjectId;
 
 class Car extends Entity
@@ -47,6 +48,11 @@ class Car extends Entity
     public function branch()
     {
         return $this->belongsTo(Branch::class);
+    }
+
+    public function car_type()
+    {
+        return $this->belongsTo(CarType::class);
     }
 
     //=============== #END# relation =====================\\

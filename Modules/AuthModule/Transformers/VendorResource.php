@@ -19,7 +19,7 @@ class VendorResource extends JsonResource
             'id'        => $this->_id,
             'name'      => translateAttribute($this->name),
             'image'     => imageUrl($this->image, 'thumbnail'),
-            'type'      => $this->type,
+            'type'      => is_array($this->type) ? $this->type : [$this->type],
             'currency_code' => $this->country_currency_code,
             'lat'           => (float)$this->lat,
             'lng'           => (float)$this->lng,

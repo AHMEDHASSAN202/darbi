@@ -37,7 +37,8 @@ class FindBookingResource extends JsonResource
             'created_at'    => $this->created_at,
             'expired_at'    => $this->expired_at,
             'vendor'        => $this->getVendor(),
-            'booking_number' => $this->booking_number
+            'booking_number' => $this->booking_number,
+            'currency_code' => $this->currency_code
         ];
     }
 

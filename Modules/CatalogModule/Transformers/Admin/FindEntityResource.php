@@ -7,6 +7,7 @@ use Modules\CatalogModule\Entities\Car;
 use Modules\CatalogModule\Entities\Villa;
 use Modules\CatalogModule\Entities\Yacht;
 use Modules\CatalogModule\Transformers\EntityTrait;
+use Modules\CommonModule\Transformers\CarTypeResource;
 use Modules\CommonModule\Transformers\CityResource;
 use Modules\CommonModule\Transformers\CountryResource;
 
@@ -44,7 +45,9 @@ class FindEntityResource extends JsonResource
         }elseif ($this->resource instanceof Car) {
             $res['branch_id'] = (string)$this->branch_id;
             $res['branch'] = new BranchResource($this->branch);
-            $res['color'] = ['name' => arrayGet((array)$this->color, 'name'), 'color' => arrayGet((array)$this->color, 'color')];
+            $res['color'] = $this->color;
+            $res['car_type_id'] = (string)$this->car_type_id;
+            $res['car_type'] = new CarTypeResource($this->car_type);
         }
 
         if ($this->resource instanceof Villa) {

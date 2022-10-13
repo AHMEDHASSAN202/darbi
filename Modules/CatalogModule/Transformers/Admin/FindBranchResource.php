@@ -32,7 +32,8 @@ class FindBranchResource extends JsonResource
             'country_id' => (string)$this->country_id,
             'city'       => new CityResource($this->city),
             'country'    => new CountryResource($this->country),
-            'regions'    => $this->getRegions()
+            'regions'    => $this->getRegions(),
+            "currency_code" => $this->currency_code ?? ""
         ];
     }
 

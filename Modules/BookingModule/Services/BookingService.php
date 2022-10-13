@@ -84,6 +84,7 @@ class BookingService
 
         $extras = $this->getExtras($entity, $rentRequest->extras);
         $country = $entity['country'];
+        $entityArea = null;
 
         if (!entityIsVilla($entity['type'])) {
             $area = new Area($entity);
@@ -100,8 +101,8 @@ class BookingService
             'user'          => auth('api')->user()->only(['_id', 'phone', 'phone_code', 'name', 'email']),
             'vendor'        => $vendor,
             'vendor_id'     => new ObjectId($entity['vendor_id']),
-            'area_id'       => isset($entityArea) ? new ObjectId($entityArea['id']) : null,
-            'area'          => $entityArea ?? null,
+            'area_id'       => $entityArea ? new ObjectId($entityArea['id']) : null,
+            'area'          => $entityArea,
             'entity_id'     => new ObjectId($entity['id']),
             'entity_type'   => arrayGet($entity, 'entity_type'),
             'entity_details' => [
@@ -116,7 +117,7 @@ class BookingService
             ],
             'country_id'    => new ObjectId($country['_id']),
             'country'       => $country,
-            'currency_code' => arrayGet($vendor, 'country_currency_code', ''),
+            'currency_code' => arrayGet($entityArea, 'currency_code', arrayGet($vendor, 'country_currency_code', '')),
             'city_id'       => new ObjectId($city['id']),
             'city'          => $city,
             'status'        => BookingStatus::INIT,

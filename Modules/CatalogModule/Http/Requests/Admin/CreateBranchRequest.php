@@ -5,6 +5,7 @@ namespace Modules\CatalogModule\Http\Requests\Admin;
 use App\Rules\AlphaNumSpacesRule;
 use App\Rules\MongoIdRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateBranchRequest extends FormRequest
 {
@@ -30,7 +31,8 @@ class CreateBranchRequest extends FormRequest
             'country_id'    => 'required|exists:countries,_id',
             'city_id'       => 'required|exists:cities,_id',
             'region_ids'    => 'sometimes|nullable|array',
-            'region_ids.*'  => ['required', new MongoIdRule()]
+            'region_ids.*'  => ['required', new MongoIdRule()],
+            'currency_code' => ['required', Rule::in(array_keys(currencies()))]
         ];
     }
 

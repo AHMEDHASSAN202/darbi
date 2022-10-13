@@ -150,6 +150,20 @@ trait EntityHelperRepository
                         "path"      => '$port',
                         "preserveNullAndEmptyArrays" => true
                     ],
+                ],
+                [
+                    '$lookup'   => [
+                        'from'          => 'car_types',
+                        'localField'    => 'car_type_id',
+                        'foreignField'  => '_id',
+                        'as'            => 'car_type'
+                    ],
+                ],
+                [
+                    '$unwind'    => [
+                        "path"      => '$car_type',
+                        "preserveNullAndEmptyArrays" => true
+                    ],
                 ]
             ]);
         });

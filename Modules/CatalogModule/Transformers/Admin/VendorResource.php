@@ -27,7 +27,7 @@ class VendorResource extends JsonResource
             'image'         => imageUrl($this->image, 'thumbnail'),
             'country_id'    => (string)$this->country_id,
             'country'       => new CountryResource($country),
-            'type'          => $this->type,
+            'type'          => is_array($this->type) ? $this->type : [$this->type],
 //            'created_by'    => $this->created_by ? (string)$this->created_by : null,
 //            'created_by_name' => optional($this->createdBy)->name,
             'is_active'     => (boolean)$this->is_active,
