@@ -45,7 +45,7 @@ class FindEntityResource extends JsonResource
         }elseif ($this->resource instanceof Car) {
             $res['branch_id'] = (string)$this->branch_id;
             $res['branch'] = new BranchResource($this->branch);
-            $res['color'] = $this->color;
+            $res['color'] = (!empty($this->color) && is_array($this->color)) ? $this->color : [];
             $res['car_type_id'] = (string)$this->car_type_id;
             $res['car_type'] = new CarTypeResource($this->car_type);
         }
