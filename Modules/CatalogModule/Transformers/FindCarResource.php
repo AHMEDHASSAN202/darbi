@@ -31,7 +31,7 @@ class FindCarResource extends JsonResource
             'vendor'        => $this->getVendor(),
             'branch_id'     => (string)$this->branch_id,
             'built_date'    => $this->built_date ? (int)$this->built_date : null,
-            'color'         => (!empty($this->color) && is_array($this->color)) ? $this->color : [],
+            'color'         => convertBsonArrayToArray($this->color),
             'car_type_id'   => (string)$this->car_type_id,
             'car_type'      => new CarTypeResource($this->car_type)
         ];

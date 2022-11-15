@@ -271,17 +271,18 @@ function convertBsonArrayToCollection($bsonArray)
 
 function convertBsonArrayToArray($bsonArray)
 {
+    if (!$bsonArray) { return []; }
     return array_map(function ($object) { return (array)$object; }, (array)$bsonArray);
 }
 
 function convertBsonArrayToNormalArray($bsonArray)
 {
-    if (is_array($bsonArray)) {
-        return $bsonArray;
-    }
-
     if (!$bsonArray) {
         return [];
+    }
+
+    if (is_array($bsonArray)) {
+        return $bsonArray;
     }
 
     return (array)$bsonArray->jsonSerialize();
